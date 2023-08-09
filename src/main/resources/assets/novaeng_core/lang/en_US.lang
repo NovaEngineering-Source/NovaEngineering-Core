@@ -3,9 +3,9 @@ item.hypernet_connect_card.tooltip.2=§9将其输入到支持 HyperNet 计算网
 item.hypernet_connect_card.tooltip.3=§a存储卡可以重复使用。
 item.hypernet_connect_card.tooltip.4=§c警告：使用时请保持 HyperNet 计算网络中心在线。HyperNet 通讯距离无限，但是无法跨越维度。
 item.hypernet_connect_card.tooltip.no_pos.tip.0=§b存储卡中保存的坐标：§e空
-item.hypernet_connect_card.tooltip.no_pos.tip.1=§2蹲下并右击任意等级的计算网络中心来写入数据。
+item.hypernet_connect_card.tooltip.no_pos.tip.1=§2右击任意等级的计算网络中心控制器来写入数据。
 item.hypernet_connect_card.tooltip.pos.tip.0=§b存储卡中保存的坐标：§a（X: %s, Y: %s, Z: %s）
-item.hypernet_connect_card.tooltip.pos.tip.1=§2蹲下并右击任意等级的计算网络中心来覆写数据。
+item.hypernet_connect_card.tooltip.pos.tip.1=§2右击任意等级的计算网络中心控制器来写入数据。
 
 upgrade.data_processor.module.cpu.tip.0=§9CPU 模块为数据处理计算机提供算力。
 upgrade.data_processor.module.cpu.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c50%%。

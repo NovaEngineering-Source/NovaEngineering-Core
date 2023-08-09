@@ -10,7 +10,6 @@ import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.Tuple;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -187,6 +186,12 @@ public class ComputationCenter {
         }
 
         computationPointCounter -= totalGenerated;
+        if (amount > totalGenerated) {
+            if (totalGenerated + 0.01F > amount) {
+                return amount;
+            }
+        }
+
         return totalGenerated;
     }
 
