@@ -1,0 +1,15 @@
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        maven { url = 'https://maven.minecraftforge.net/' }
+        maven {
+            name 'Garden of Fancy'
+            url 'https://gitlab.com/api/v4/projects/26758973/packages/maven'
+        }
+    }
+}
+
+rootProject.name = 'NovaEngineering-Core'
+
+//include ':ModularMachinery-CE'
+//project(':ModularMachinery-CE').projectDir = new File(settingsDir, '../ModularMachinery')
