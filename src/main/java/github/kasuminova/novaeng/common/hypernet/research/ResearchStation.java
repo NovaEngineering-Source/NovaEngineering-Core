@@ -70,6 +70,7 @@ public class ResearchStation extends NetNode {
         }
         if (center == null) {
             event.setFailed(false, "未连接至计算网络！");
+            return;
         }
 
         this.computationPointConsumption = computationPointConsumption;

@@ -72,6 +72,8 @@ dependencies {
     implementation fg.deobf("curse.maven:zenutil-401178:4394263")
     implementation fg.deobf("curse.maven:libvulpes-236541:3801015")
     implementation fg.deobf("curse.maven:advanced-rocketry-236542:4671856")
+    implementation fg.deobf("curse.maven:immersive-engineering-231951:2974106")
+    implementation fg.deobf("curse.maven:environmental-tech-245453:2691536")
 }
 
 jar {

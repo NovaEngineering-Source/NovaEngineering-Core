@@ -187,7 +187,7 @@ public class ComputationCenter {
 
         computationPointCounter -= totalGenerated;
         if (amount > totalGenerated) {
-            if (totalGenerated + 0.01F > amount) {
+            if (totalGenerated + 0.05F > amount) {
                 return amount;
             }
         }

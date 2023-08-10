@@ -12,7 +12,6 @@ import github.kasuminova.novaeng.common.util.RandomUtils;
 import hellfirepvp.modularmachinery.common.lib.RequirementTypesMM;
 import hellfirepvp.modularmachinery.common.machine.IOType;
 import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
-import hellfirepvp.modularmachinery.common.tiles.TileUpgradeBus;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import hellfirepvp.modularmachinery.common.util.MiscUtils;
 import io.netty.util.internal.shaded.org.jctools.queues.SpscLinkedQueue;
@@ -32,9 +31,13 @@ public class DataProcessor extends NetNode {
     private final SpscLinkedQueue<Long> recentCalculation = new SpscLinkedQueue<>();
 
     private final DataProcessorType type;
+    private final LinkedList<Float> computationalLoadHistory = new LinkedList<>();
+
     private int circuitDurability = 0;
     private int storedHU = 0;
     private boolean overheat = false;
+    private float computationalLoadHistoryCache = 0;
+    private float lastGenerated = 0;
     private float computationalLoad = 0;
     private float maxGeneration = 0;
 
@@ -45,6 +48,17 @@ public class DataProcessor extends NetNode {
         );
 
         readNBT(customData);
+    }
+
+    @ZenMethod
+    public static DataProcessor from(final IMachineController machine) {
+        TileMultiblockMachineController ctrl = machine.getController();
+        return CACHED_DATA_PROCESSOR.computeIfAbsent(ctrl, v ->
+                new DataProcessor(ctrl, ctrl.getCustomDataTag()));
+    }
+
+    public static void clearCache() {
+        CACHED_DATA_PROCESSOR.clear();
     }
 
     @ZenMethod
@@ -103,6 +117,14 @@ public class DataProcessor extends NetNode {
                     IOType.INPUT, mul, 1, false
             ));
         }
+
+        computationalLoadHistory.addFirst(lastGenerated);
+        computationalLoadHistoryCache += lastGenerated;
+        if (computationalLoadHistory.size() > 100) {
+            computationalLoadHistoryCache -= computationalLoadHistory.pollLast();
+        }
+
+        computationalLoad = computationalLoadHistoryCache / computationalLoadHistory.size();
     }
 
     @ZenMethod
@@ -111,6 +133,7 @@ public class DataProcessor extends NetNode {
 
         if (!owner.isWorking()) {
             computationalLoad = 0;
+            computationalLoadHistory.clear();
         }
 
         if (owner.getTicksExisted() % 20 == 0) {
@@ -218,18 +241,11 @@ public class DataProcessor extends NetNode {
         }
 
         if (doCalculate) {
-            computationalLoad = generated;
+            lastGenerated = generated;
             recentCalculation.offer(totalEnergyConsumption);
         }
 
         return generated;
-    }
-
-    @ZenMethod
-    public static DataProcessor from(final IMachineController machine) {
-        TileMultiblockMachineController ctrl = machine.getController();
-        return CACHED_DATA_PROCESSOR.computeIfAbsent(ctrl, v ->
-                new DataProcessor(ctrl, ctrl.getCustomDataTag()));
     }
 
     @Override
@@ -300,9 +316,5 @@ public class DataProcessor extends NetNode {
     @ZenGetter("overheat")
     public boolean isOverheat() {
         return overheat;
-    }
-
-    public static void clearCache() {
-        CACHED_DATA_PROCESSOR.clear();
     }
 }
