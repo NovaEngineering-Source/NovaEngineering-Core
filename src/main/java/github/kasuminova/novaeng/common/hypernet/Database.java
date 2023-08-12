@@ -10,6 +10,7 @@ import hellfirepvp.modularmachinery.common.machine.IOType;
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
 import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -19,6 +20,7 @@ import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import java.util.*;
+import java.util.stream.IntStream;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.Database")
@@ -26,6 +28,7 @@ public class Database extends NetNode {
     private static final Map<TileMultiblockMachineController, Database> CACHED_DATABASE = new WeakHashMap<>();
 
     private final Set<String> storedResearchCognition = new HashSet<>();
+    private final Object2DoubleOpenHashMap<String> researchingCognition = new Object2DoubleOpenHashMap<>();
     private final DatabaseType type;
 
     public Database(final TileMultiblockMachineController owner, final NBTTagCompound customData) {
@@ -60,16 +63,21 @@ public class Database extends NetNode {
         super.readNBT(customData);
 
         storedResearchCognition.clear();
-        if (!customData.hasKey("storedResearchCognition")) {
-            return;
+        if (customData.hasKey("storedResearchCognition")) {
+            NBTTagList tagList = customData.getTagList("storedResearchCognition", Constants.NBT.TAG_STRING);
+            IntStream.range(0, tagList.tagCount())
+                    .mapToObj(tagList::getStringTagAt)
+                    .filter(researchName -> RegistryHyperNet.getResearchCognitionData(researchName) != null)
+                    .forEach(storedResearchCognition::add);
         }
 
-        NBTTagList tagList = customData.getTagList("storedResearchCognition", Constants.NBT.TAG_STRING);
-        for (int i = 0; i < tagList.tagCount(); i++) {
-            String researchName = tagList.getStringTagAt(i);
-            if (RegistryHyperNet.getResearchCognitionData(researchName) != null) {
-                storedResearchCognition.add(researchName);
-            }
+        researchingCognition.clear();
+        if (customData.hasKey("researchingCognition")) {
+            NBTTagList researching = customData.getTagList("researchingCognition", Constants.NBT.TAG_COMPOUND);
+            IntStream.range(0, researching.tagCount())
+                    .mapToObj(researching::getCompoundTagAt)
+                    .filter(compound -> RegistryHyperNet.getResearchCognitionData(compound.getString("researchName")) != null)
+                    .forEach(compound -> researchingCognition.put(compound.getString("researchName"), compound.getDouble("progress")));
         }
     }
 
@@ -78,13 +86,22 @@ public class Database extends NetNode {
         super.writeNBT();
         NBTTagCompound tag = owner.getCustomDataTag();
 
-        NBTTagList tagList = new NBTTagList();
+        NBTTagList stored = new NBTTagList();
         for (final String researchName : storedResearchCognition) {
             NBTTagString tagStr = new NBTTagString(researchName);
-            tagList.appendTag(tagStr);
+            stored.appendTag(tagStr);
         }
 
-        tag.setTag("storedResearchCognition", tagList);
+        NBTTagList researching = new NBTTagList();
+        researchingCognition.forEach((name, progress) -> {
+            NBTTagCompound compound = new NBTTagCompound();
+            compound.setString("researchName", name);
+            compound.setDouble("progress", progress);
+            researching.appendTag(compound);
+        });
+
+        tag.setTag("storedResearchCognition", stored);
+        tag.setTag("researchingCognition", researching);
     }
 
     @ZenMethod
@@ -101,6 +118,15 @@ public class Database extends NetNode {
     @ZenGetter("storedResearchCognition")
     public String[] getStoredResearchCognitionArr() {
         return storedResearchCognition.toArray(new String[0]);
+    }
+
+    @ZenMethod
+    public double getResearchingCognitionProgress(String researchName) {
+        return researchingCognition.getOrDefault(researchName, 0D);
+    }
+
+    public Object2DoubleOpenHashMap<String> getAllResearchingCognition() {
+        return researchingCognition;
     }
 
     public Set<String> getStoredResearchCognition() {

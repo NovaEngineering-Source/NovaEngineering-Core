@@ -4,7 +4,9 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import github.kasuminova.mmce.common.upgrade.UpgradeType;
-import github.kasuminova.novaeng.common.hypernet.*;
+import github.kasuminova.novaeng.common.hypernet.ComputationCenterType;
+import github.kasuminova.novaeng.common.hypernet.DataProcessorType;
+import github.kasuminova.novaeng.common.hypernet.DatabaseType;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchStationType;
 import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleCPUType;
@@ -12,6 +14,7 @@ import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleGPU
 import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleRAMType;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import stanhebben.zenscript.annotations.NotNull;
@@ -20,15 +23,12 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.RegistryHyperNet")
 public class RegistryHyperNet {
-    private static Item hyperNetConnectCard = null;
+    private static Item hyperNetConnectCard = Items.AIR;
 
     private static final Set<ResourceLocation> SUPPORTED_MACHINERY = new HashSet<>();
     private static final Set<ResourceLocation> COMPUTATION_CENTERS = new HashSet<>();
@@ -128,6 +128,10 @@ public class RegistryHyperNet {
     @ZenMethod
     public static ResearchCognitionData getResearchCognitionData(@NotNull final String researchName) {
         return RESEARCH_COGNITION.get(researchName);
+    }
+
+    public static Collection<ResearchCognitionData> getAllResearchCognitionData() {
+        return RESEARCH_COGNITION.values();
     }
 
     @ZenMethod

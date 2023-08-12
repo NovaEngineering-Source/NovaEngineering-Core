@@ -158,8 +158,9 @@ public class ComputationCenter {
         nodes.computeIfAbsent(node.getClass(), v -> new ConcurrentHashMap<>()).remove(machinery.getPos());
     }
 
-    public Collection<NetNode> getNode(Class<?> type) {
-        return nodes.computeIfAbsent(type, v -> new ConcurrentHashMap<>()).values();
+    @SuppressWarnings("unchecked")
+    public <N extends NetNode> Collection<N> getNode(Class<N> type) {
+        return (Collection<N>) nodes.computeIfAbsent(type, v -> new ConcurrentHashMap<>()).values();
     }
 
     /**

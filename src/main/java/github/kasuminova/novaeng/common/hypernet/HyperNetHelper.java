@@ -51,10 +51,17 @@ public class HyperNetHelper {
     @Nullable
     @ZenMethod
     public static IBlockPos readConnectCardInfo(IMachineController ctrl, IItemStack stackCT) {
-        ItemStack stack = CraftTweakerMC.getItemStack(stackCT);
+        BlockPos blockPos = readConnectCardInfo(ctrl, CraftTweakerMC.getItemStack(stackCT));
+        return blockPos == null ? null : CraftTweakerMC.getIBlockPos(blockPos);
+    }
+
+    public static BlockPos readConnectCardInfo(IMachineController ctrl, ItemStack stack) {
+        if (stack.isEmpty()) {
+            return null;
+        }
 
         NBTTagCompound tag = stack.getTagCompound();
-        if (tag == null || !tag.hasKey("pos")) {
+        if (tag == null ||!tag.hasKey("pos")) {
             return null;
         }
 
@@ -74,7 +81,7 @@ public class HyperNetHelper {
             return null;
         }
 
-        return CraftTweakerMC.getIBlockPos(pos);
+        return pos;
     }
 
 }

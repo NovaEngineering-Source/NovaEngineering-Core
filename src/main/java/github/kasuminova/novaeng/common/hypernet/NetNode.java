@@ -102,7 +102,10 @@ public abstract class NetNode {
 
     @ZenMethod
     public void writeNBT() {
-        NBTTagCompound tag = owner.getCustomDataTag();
+        writeNBT(owner.getCustomDataTag());
+    }
+
+    public void writeNBT(NBTTagCompound tag) {
         if (centerPos != null) {
             tag.setLong("centerPos", centerPos.toLong());
         }

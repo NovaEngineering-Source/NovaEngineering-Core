@@ -5,7 +5,7 @@ item.hypernet_connect_card.tooltip.4=§c警告：使用时请保持 HyperNet 计
 item.hypernet_connect_card.tooltip.no_pos.tip.0=§b存储卡中保存的坐标：§e空
 item.hypernet_connect_card.tooltip.no_pos.tip.1=§2右击任意等级的计算网络中心控制器来写入数据。
 item.hypernet_connect_card.tooltip.pos.tip.0=§b存储卡中保存的坐标：§a（X: %s, Y: %s, Z: %s）
-item.hypernet_connect_card.tooltip.pos.tip.1=§2右击任意等级的计算网络中心控制器来写入数据。
+item.hypernet_connect_card.tooltip.pos.tip.1=§2右击任意等级的计算网络中心控制器来覆写数据。
 
 upgrade.data_processor.module.cpu.tip.0=§9CPU 模块为数据处理计算机提供算力。
 upgrade.data_processor.module.cpu.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c50%%。
@@ -26,3 +26,24 @@ upgrade.data_processor.module.ram.limit_provision=§9上限提供: §e%s§9 (效
 upgrade.data_processor.module.energy.tip=§9模块耗电量：§c%s
 upgrade.data_processor.module.durability.tip=§9耐久：§e%s / %s§a（%s）
 upgrade.data_processor.module.durability.unknown.tip=§9最大耐久：§e%s ～ %s
+
+tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
+
+gui.terminal_controller.status=§b状态：
+gui.terminal_controller.status.online=§a终端在线
+gui.terminal_controller.status.offline=§c终端离线
+gui.terminal_controller.status.network.computation_point_consumption=§9总算力消耗 / 产出：
+gui.terminal_controller.status.network.computation_point_consumption.info=§b%s / %s
+gui.terminal_controller.status.network.total_connected=§9在线设备数量：§b
+
+gui.terminal_controller.connect_card.empty=请插入密钥卡
+gui.terminal_controller.connect_card.validate=§a密钥卡已识别
+gui.terminal_controller.connect_card.invalidate=§c无效的密钥卡
+
+gui.terminal_controller.screen.none=点击左侧的研究认知卡以预览。
+
+gui.terminal_controller.screen.info.dependencies=前置研究：
+gui.terminal_controller.screen.info.dependencies.none=§2无
+gui.terminal_controller.screen.info.tech_level=科技等级：
+gui.terminal_controller.screen.info.required_points=需要研究点：§9
+gui.terminal_controller.screen.info.min_computation_point_per_tick=最低算力要求：§b
