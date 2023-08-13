@@ -16,6 +16,7 @@ public class HyperNetTerminal extends NetNode {
         if (terminal.getTicksExisted() % 10 == 0) {
             ItemStack stack = terminal.getCardInventory().getStackInSlot(0);
             centerPos = HyperNetHelper.readConnectCardInfo(terminal, stack);
+            writeNBT();
         }
 
         super.onMachineTick();

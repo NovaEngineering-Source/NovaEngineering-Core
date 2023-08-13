@@ -5,6 +5,7 @@ import github.kasuminova.novaeng.client.gui.widget.GuiScrollbarThin;
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenterCache;
+import github.kasuminova.novaeng.common.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
@@ -150,8 +151,6 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         updateAndDrawScrollbar();
 
-        handleDWheel(mouseX, mouseY);
-
         updateRenderingData();
         renderDataList(mouseX, mouseY);
 
@@ -184,7 +183,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         GlStateManager.scale(FONT_SCALE, FONT_SCALE, FONT_SCALE);
 
         float descDrawOffsetX = 115 / FONT_SCALE;
-        float descDrawOffsetY = 23 / FONT_SCALE;
+        float descDrawOffsetY = 24 / FONT_SCALE;
 
         List<String> lines;
         if (inScreen.isLocked()) {
@@ -212,7 +211,6 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         }
 
         float infoDrawOffsetY = 108 / FONT_SCALE;
-        float infoDrawOffsetXRight = (float) 217 / 1.5F / FONT_SCALE;
 
         String dependencies;
         if (data.getDependencies().isEmpty()) {
@@ -234,12 +232,12 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         fontRenderer.drawStringWithShadow(
                 I18n.format("gui.terminal_controller.screen.info.required_points") +
                         MiscUtils.formatNumber((long) data.getRequiredPoints()),
-                descDrawOffsetX + 65, infoDrawOffsetY + 12, 0xFFFFFF
+                descDrawOffsetX + 90, infoDrawOffsetY + 12, 0xFFFFFF
         );
         fontRenderer.drawStringWithShadow(
                 I18n.format("gui.terminal_controller.screen.info.min_computation_point_per_tick") +
                         NovaEngUtils.formatFLOPS(data.getMinComputationPointPerTick()),
-                descDrawOffsetX + 130, infoDrawOffsetY + 12, 0xFFFFFF
+                descDrawOffsetX + 180, infoDrawOffsetY + 12, 0xFFFFFF
         );
 
         screenScrollbar.setRange(0, Math.max(0, lines.size() - SCREEN_TEXT_MAX_LINES), 1);
@@ -314,10 +312,10 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         IOInventory cardInventory = terminal.getCardInventory();
         ItemStack stack = cardInventory.getStackInSlot(0);
 
-        if (stack.isEmpty()) {
+        if (stack == ItemStack.EMPTY) {
             fontRenderer.drawStringWithShadow(I18n.format("gui.terminal_controller.connect_card.empty"),
                     statusRenderX, statusRenderY, 0xFFFFFF);
-        } else if (RegistryHyperNet.getHyperNetConnectCard() == stack.getItem() && stack.hasTagCompound() && stack.getTagCompound().hasKey("pos")) {
+        } else if (RegistryHyperNet.getHyperNetConnectCard() == stack.getItem() && HyperNetHelper.readConnectCardInfo(terminal, stack) != null) {
             fontRenderer.drawStringWithShadow(I18n.format("gui.terminal_controller.connect_card.validate"),
                     statusRenderX, statusRenderY, 0xFFFFFF);
         } else {
@@ -354,16 +352,16 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
     }
 
     protected void renderDataList(int mouseX, int mouseY) {
-        GlStateManager.pushMatrix();
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-
         int offsetY = 30;
         for (final ResearchDataContext dataContext : renderingData) {
-            drawResearchData(dataContext, offsetY, mouseX, mouseY);
-            offsetY += TERMINAL_ELEMENT_HEIGHT + 1;
-        }
+            GlStateManager.pushMatrix();
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-        GlStateManager.popMatrix();
+            drawResearchData(dataContext, offsetY, mouseX, mouseY);
+            offsetY += TERMINAL_ELEMENT_HEIGHT;
+
+            GlStateManager.popMatrix();
+        }
     }
 
     protected void drawResearchData(final ResearchDataContext dataContext, final int offsetY, int mouseX, int mouseY) {
@@ -376,7 +374,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             GlStateManager.color(1.0F, 0.6F, 0.6F, 1.0F);
         }
         if (isMouseOver(8, offsetY,
-                8 + TERMINAL_ELEMENT_WIDTH, offsetY + TERMINAL_ELEMENT_HEIGHT,
+                8 + TERMINAL_ELEMENT_WIDTH - 1, offsetY + TERMINAL_ELEMENT_HEIGHT - 1,
                 mouseX - guiLeft, mouseY - guiTop))
         {
             GlStateManager.color(0.7F, 0.9F, 1.0F, 1.0F);
@@ -471,6 +469,8 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
                 inScreen = data;
                 break;
             }
+
+            offsetY += TERMINAL_ELEMENT_HEIGHT;
         }
     }
 
@@ -494,9 +494,15 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         searchTextField.textboxKeyTyped(c, i);
     }
 
-    public void handleDWheel(int mouseX, int mouseY) {
-        final int i = Mouse.getDWheel();
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+
+        final int i = Mouse.getEventDWheel();
         if (i != 0) {
+            int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
+            int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
+
             if (isMouseOver(7, 29, 106, 206, mouseX - guiLeft, mouseY - guiTop)) {
                 dataScrollbar.wheel(i);
             }

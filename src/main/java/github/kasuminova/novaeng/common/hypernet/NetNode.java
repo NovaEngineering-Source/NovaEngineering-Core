@@ -63,6 +63,8 @@ public abstract class NetNode {
         }
 
         ComputationCenter.from(ctrl).onConnect(owner, this);
+
+        writeNBT();
     }
 
     public float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {

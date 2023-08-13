@@ -20,7 +20,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.items.CapabilityItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,7 +88,7 @@ public class TileHyperNetTerminal extends TileMultiblockMachineController {
     protected void checkRotation() {
         IBlockState state = getWorld().getBlockState(getPos());
         if (state.getBlock() instanceof BlockHyperNetTerminal) {
-            state.getValue(BlockController.FACING);
+            controllerRotation = state.getValue(BlockController.FACING);
         } else {
             // wtf, where is the controller?
             NovaEngineeringCore.log.warn("Invalid controller block at " + getPos() + " !");
@@ -108,12 +111,22 @@ public class TileHyperNetTerminal extends TileMultiblockMachineController {
     }
 
     @Override
+    protected void readMachineNBT(NBTTagCompound compound) {
+        if (compound.hasKey("parentMachine")) {
+            ResourceLocation rl = new ResourceLocation(compound.getString("parentMachine"));
+            parentMachine = MachineRegistry.getRegistry().getMachine(rl);
+        }
+
+        super.readMachineNBT(compound);
+    }
+
+    @Override
     public void writeCustomNBT(final NBTTagCompound compound) {
         super.writeCustomNBT(compound);
 
         nodeProxy.writeNBT(compound);
 
-        compound.setTag("cardInventory", inventory.writeNBT());
+        compound.setTag("cardInventory", cardInventory.writeNBT());
         compound.setTag("controllerStatus", controllerStatus.serialize());
     }
 
@@ -133,6 +146,16 @@ public class TileHyperNetTerminal extends TileMultiblockMachineController {
     @Override
     public void setControllerStatus(final CraftingStatus status) {
         this.controllerStatus = status;
+    }
+
+    @Nullable
+    @Override
+    @SuppressWarnings("unchecked")
+    public <T> T getCapability(@Nonnull Capability<T> capability, @Nullable EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return (T) cardInventory;
+        }
+        return super.getCapability(capability, facing);
     }
 
     // NO-OP
