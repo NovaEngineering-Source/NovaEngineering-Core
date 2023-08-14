@@ -7,9 +7,11 @@ import github.kasuminova.mmce.common.helper.IMachineController;
 import github.kasuminova.novaeng.common.hypernet.Database;
 import github.kasuminova.novaeng.common.hypernet.NetNode;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
+import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.crafting.ActiveMachineRecipe;
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -36,11 +38,6 @@ public class ResearchStation extends NetNode {
         );
 
         readNBT(customData);
-    }
-
-    public static void completeRecipe(FactoryRecipeThread thread) {
-        ActiveMachineRecipe recipe = thread.getActiveRecipe();
-        recipe.setTick(recipe.getTotalTick());
     }
 
     @ZenMethod
@@ -87,7 +84,7 @@ public class ResearchStation extends NetNode {
         if (nodes.stream()
                 .map(Database.class::cast)
                 .noneMatch(database ->
-                        database.getStoredResearchCognition().size() < database.getType().getMaxResearchCognitionStoreSize())) {
+                        database.getType().getMaxResearchCognitionStoreSize() > database.getStoredResearchCognition().size())) {
             event.setFailed("网络中所有的数据库存储已满！");
         }
     }
@@ -96,6 +93,10 @@ public class ResearchStation extends NetNode {
     public void onWorkingTick(final FactoryRecipeTickEvent event) {
         if (centerPos == null) {
             event.setFailed(true, "未连接至计算网络！");
+            return;
+        }
+        if (currentResearching == null) {
+            event.setFailed(true, "终端尚未发配任务！");
             return;
         }
         if (center == null) {
@@ -117,9 +118,33 @@ public class ResearchStation extends NetNode {
                     "算力不足！（预期算力：" + computationPointConsumption + " TFloPS，当前算力：" + consumed + " TFloPS）");
         } else {
             currentResearchingProgress += consumed;
-            writeResearchProgressToDatabase();
+            ModularMachinery.EXECUTE_MANAGER.addSyncTask(this::writeResearchProgressToDatabase);
         }
         writeNBT();
+    }
+
+    public void completeRecipe(FactoryRecipeThread thread) {
+        ActiveMachineRecipe recipe = thread.getActiveRecipe();
+        recipe.setTick(recipe.getTotalTick() + 1);
+
+        Collection<Database> nodes = center.getNode(Database.class);
+        if (nodes.isEmpty()) {
+            return;
+        }
+
+        if (currentResearching == null) {
+            return;
+        }
+
+        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> {
+            nodes.stream()
+                    .filter(node -> node.getType().getMaxResearchCognitionStoreSize() > node.getStoredResearchCognition().size())
+                    .filter(node -> node.getAllResearchingCognition().containsKey(currentResearching))
+                    .findFirst()
+                    .ifPresent(node -> node.storeResearchCognitionData(currentResearching));
+            nodes.forEach(node -> node.getAllResearchingCognition().removeDouble(currentResearching));
+            resetResearchTask();
+        });
     }
 
     public void writeResearchProgressToDatabase() {
@@ -132,33 +157,16 @@ public class ResearchStation extends NetNode {
             return;
         }
 
-        nodes.stream()
-                .filter(node -> node.getStoredResearchCognition().size() >= node.getType().getMaxResearchCognitionStoreSize())
-                .map(Database::getAllResearchingCognition)
-                .filter(researching -> researching.containsKey(currentResearching.getResearchName()))
-                .findFirst()
-                .ifPresent(researching -> researching.put(currentResearching.getResearchName(), currentResearchingProgress));
-    }
-
-    @ZenMethod
-    public void onRecipeFinished() {
-        Collection<Database> nodes = center.getNode(Database.class);
-        if (nodes.isEmpty()) {
-            return;
+        for (Database database : nodes) {
+            Object2DoubleOpenHashMap<ResearchCognitionData> map = database.getAllResearchingCognition();
+            if (database.getType().getMaxResearchCognitionStoreSize() < database.getStoredResearchCognition().size()) {
+                continue;
+            }
+            if (map.computeIfPresent(currentResearching, (k, v) -> currentResearchingProgress) != null) {
+                database.writeNBT();
+                break;
+            }
         }
-
-        if (currentResearching == null) {
-            return;
-        }
-
-        nodes.forEach(node -> node.getAllResearchingCognition().removeDouble(currentResearching.getResearchName()));
-        nodes.stream()
-                .map(Database.class::cast)
-                .filter(database -> database.getStoredResearchCognition().size() < database.getType().getMaxResearchCognitionStoreSize())
-                .findFirst()
-                .ifPresent(database -> database.storeResearchCognitionData(currentResearching));
-
-        resetResearchTask();
     }
 
     public void resetResearchTask() {
@@ -180,25 +188,48 @@ public class ResearchStation extends NetNode {
     public void provideTask(ResearchCognitionData data) {
         currentResearching = data;
         computationPointConsumption = data.getMinComputationPointPerTick();
-        currentResearchingProgress = center.getNode(Database.class)
+        double progress = center.getNode(Database.class)
                 .stream()
-                .map(database -> database.getAllResearchingCognition().getOrDefault(data.getResearchName(), -1D))
-                .filter(progress -> progress != -1D)
+                .filter(database -> database.getType().getMaxResearchCognitionStoreSize() > database.getStoredResearchCognition().size())
+                .map(database -> database.getAllResearchingCognition().getOrDefault(data, -1D))
+                .filter(d -> d != -1D)
                 .findFirst()
-                .orElse(0D);
+                .orElse(-1D);
+
+        if (progress == -1) {
+            ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> center.getNode(Database.class)
+                    .stream()
+                    .filter(database -> database.getType().getMaxResearchCognitionStoreSize() > database.getStoredResearchCognition().size())
+                    .findFirst()
+                    .ifPresent(database -> {
+                        database.getAllResearchingCognition().put(data, 0D);
+                        database.writeNBT();
+                    }));
+            progress = 0D;
+        }
+
+        currentResearchingProgress = progress;
+        writeNBT();
     }
 
     @Override
     public void readNBT(final NBTTagCompound customData) {
         super.readNBT(customData);
         this.computationPointConsumption = customData.getFloat("computationPointConsumption");
+        this.currentResearching = RegistryHyperNet.getResearchCognitionData(customData.getString("researching"));
+        this.currentResearchingProgress = customData.getDouble("researchProgress");
     }
 
     @Override
     public void writeNBT() {
         super.writeNBT();
         NBTTagCompound tag = owner.getCustomDataTag();
+
         tag.setFloat("computationPointConsumption", computationPointConsumption);
+        if (currentResearching != null) {
+            tag.setString("researching", currentResearching.getResearchName());
+            tag.setDouble("researchProgress", currentResearchingProgress);
+        }
     }
 
     @Override
@@ -216,4 +247,13 @@ public class ResearchStation extends NetNode {
         return type;
     }
 
+    @ZenGetter("currentResearching")
+    public ResearchCognitionData getCurrentResearching() {
+        return currentResearching;
+    }
+
+    @ZenGetter("currentResearchingProgress")
+    public double getCurrentResearchingProgress() {
+        return currentResearchingProgress;
+    }
 }

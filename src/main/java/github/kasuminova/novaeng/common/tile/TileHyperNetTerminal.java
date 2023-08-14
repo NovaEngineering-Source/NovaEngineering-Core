@@ -100,7 +100,7 @@ public class TileHyperNetTerminal extends TileMultiblockMachineController {
     public void readCustomNBT(final NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
-        nodeProxy.readNBT(compound);
+        nodeProxy.readNBT();
 
         if (compound.hasKey("cardInventory")) {
             cardInventory = IOInventory.deserialize(this, compound.getCompoundTag("cardInventory"));
@@ -122,9 +122,9 @@ public class TileHyperNetTerminal extends TileMultiblockMachineController {
 
     @Override
     public void writeCustomNBT(final NBTTagCompound compound) {
-        super.writeCustomNBT(compound);
+        nodeProxy.writeNBT();
 
-        nodeProxy.writeNBT(compound);
+        super.writeCustomNBT(compound);
 
         compound.setTag("cardInventory", cardInventory.writeNBT());
         compound.setTag("controllerStatus", controllerStatus.serialize());

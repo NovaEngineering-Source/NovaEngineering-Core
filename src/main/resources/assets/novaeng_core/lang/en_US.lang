@@ -43,7 +43,7 @@ gui.terminal_controller.connect_card.invalidate=§c无效的密钥卡
 
 gui.terminal_controller.data.unlocked=已解锁
 gui.terminal_controller.data.locked=未解锁
-gui.terminal_controller.data.progress=（研究进度：%s）
+gui.terminal_controller.data.progress=研究进度：%s
 
 gui.terminal_controller.screen.none=点击左侧的研究认知卡以预览。
 
@@ -52,3 +52,11 @@ gui.terminal_controller.screen.info.dependencies.none=§2无
 gui.terminal_controller.screen.info.tech_level=科技等级：
 gui.terminal_controller.screen.info.required_points=需要研究点：§9
 gui.terminal_controller.screen.info.min_computation_point_per_tick=最低算力要求：§b
+
+gui.terminal_controller.screen.info.start=§a点击向研究站发送研究任务。
+gui.terminal_controller.screen.info.start.time=§9预计耗时：%s 小时 %s 分钟 %s 秒（%s Ticks）。
+gui.terminal_controller.screen.info.start.warn.computation=§e警告：当前算力可能不足以完成研究。
+gui.terminal_controller.screen.info.start.error=§c无法开始研究。
+gui.terminal_controller.screen.info.start.error.tech_level=§c未找到研究站或研究站等级过低。
+gui.terminal_controller.screen.info.start.error.computation=§c算力不足。
+gui.terminal_controller.screen.info.start.error.database_space=§c未找到网络数据库或网络数据库空间已满。

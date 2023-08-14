@@ -7,10 +7,10 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenRegister
 @ZenClass("novaeng.hypernet.ComputationCenterCache")
 public class ComputationCenterCache {
-    private static ComputationCenterType type = null;
-    private static int totalConnected = 0;
-    private static float computationPointGeneration = 0;
-    private static float computationPointConsumption = 0;
+    private static volatile ComputationCenterType type = null;
+    private static volatile int totalConnected = 0;
+    private static volatile float computationPointGeneration = 0;
+    private static volatile float computationPointConsumption = 0;
 
     @ZenMethod
     public static ComputationCenterType getType() {

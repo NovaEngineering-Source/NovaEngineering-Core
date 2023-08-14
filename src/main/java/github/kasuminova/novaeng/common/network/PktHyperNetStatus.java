@@ -40,6 +40,7 @@ public class PktHyperNetStatus implements IMessage, IMessageHandler<PktHyperNetS
 
     @Override
     public IMessage onMessage(final PktHyperNetStatus message, final MessageContext ctx) {
+        NBTTagCompound statusTag = message.statusTag;
         if (statusTag == null) {
             return null;
         }
@@ -47,8 +48,8 @@ public class PktHyperNetStatus implements IMessage, IMessageHandler<PktHyperNetS
         if (!statusTag.hasKey("centerType")
                 || !statusTag.hasKey("totalConnected")
                 || !statusTag.hasKey("computationPointGeneration")
-                || !statusTag.hasKey("computationPointConsumption")
-        ) {
+                || !statusTag.hasKey("computationPointConsumption"))
+        {
             return null;
         }
 

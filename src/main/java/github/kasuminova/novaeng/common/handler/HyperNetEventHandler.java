@@ -8,7 +8,6 @@ import github.kasuminova.novaeng.common.network.PktHyperNetStatus;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
-import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.container.ContainerBase;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
@@ -109,26 +108,29 @@ public class HyperNetEventHandler {
             return;
         }
 
-        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> {
-            if (!(event.player instanceof EntityPlayerMP)) {
-                return;
-            }
+        if (!(event.player instanceof EntityPlayerMP)) {
+            return;
+        }
 
-            EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            World world = playerMP.getEntityWorld();
+        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+        World world = playerMP.getEntityWorld();
 
-            if (world.getWorldTime() % 15 != 0) {
-                return;
-            }
+        if (world.getWorldTime() % 15 != 0) {
+            return;
+        }
 
-            ComputationCenter center = HyperNetHelper.isComputationCenter(ctrl)
-                    ? ComputationCenter.from(ctrl)
-                    : getCenter(ctrl);
+        if (ctrl instanceof TileHyperNetTerminal) {
+            TileHyperNetTerminal terminal = (TileHyperNetTerminal) ctrl;
+            NovaEngineeringCore.NET_CHANNEL.sendTo(new PktTerminalGuiData(terminal), (EntityPlayerMP) player);
+        }
 
-            if (center != null) {
-                NovaEngineeringCore.NET_CHANNEL.sendTo(new PktHyperNetStatus(center), playerMP);
-            }
-        });
+        ComputationCenter center = HyperNetHelper.isComputationCenter(ctrl)
+                ? ComputationCenter.from(ctrl)
+                : getCenter(ctrl);
+
+        if (center != null) {
+            NovaEngineeringCore.NET_CHANNEL.sendTo(new PktHyperNetStatus(center), playerMP);
+        }
     }
 
     public static void addTickStartAction(final Action action) {

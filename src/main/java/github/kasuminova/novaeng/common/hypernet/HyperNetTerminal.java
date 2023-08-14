@@ -23,11 +23,6 @@ public class HyperNetTerminal extends NetNode {
     }
 
     @Override
-    public void writeNBT() {
-        terminal.markForUpdateSync();
-    }
-
-    @Override
     public int getNodeMaxPresences() {
         return 1;
     }

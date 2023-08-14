@@ -27,8 +27,8 @@ import java.util.stream.IntStream;
 public class Database extends NetNode {
     private static final Map<TileMultiblockMachineController, Database> CACHED_DATABASE = new WeakHashMap<>();
 
-    private final Set<String> storedResearchCognition = new HashSet<>();
-    private final Object2DoubleOpenHashMap<String> researchingCognition = new Object2DoubleOpenHashMap<>();
+    private final Set<ResearchCognitionData> storedResearchCognition = new HashSet<>();
+    private final Object2DoubleOpenHashMap<ResearchCognitionData> researchingCognition = new Object2DoubleOpenHashMap<>();
     private final DatabaseType type;
 
     public Database(final TileMultiblockMachineController owner, final NBTTagCompound customData) {
@@ -54,8 +54,7 @@ public class Database extends NetNode {
     @ZenMethod
     public static Database from(final IMachineController machine) {
         TileMultiblockMachineController ctrl = machine.getController();
-        return CACHED_DATABASE.computeIfAbsent(ctrl, v ->
-                new Database(ctrl, ctrl.getCustomDataTag()));
+        return CACHED_DATABASE.computeIfAbsent(ctrl, v -> new Database(ctrl, ctrl.getCustomDataTag()));
     }
 
     @Override
@@ -65,19 +64,24 @@ public class Database extends NetNode {
         storedResearchCognition.clear();
         if (customData.hasKey("storedResearchCognition")) {
             NBTTagList tagList = customData.getTagList("storedResearchCognition", Constants.NBT.TAG_STRING);
-            IntStream.range(0, tagList.tagCount())
+            int bound = tagList.tagCount();
+            IntStream.range(0, bound)
                     .mapToObj(tagList::getStringTagAt)
-                    .filter(researchName -> RegistryHyperNet.getResearchCognitionData(researchName) != null)
+                    .map(RegistryHyperNet::getResearchCognitionData)
+                    .filter(Objects::nonNull)
                     .forEach(storedResearchCognition::add);
         }
 
         researchingCognition.clear();
         if (customData.hasKey("researchingCognition")) {
             NBTTagList researching = customData.getTagList("researchingCognition", Constants.NBT.TAG_COMPOUND);
-            IntStream.range(0, researching.tagCount())
-                    .mapToObj(researching::getCompoundTagAt)
-                    .filter(compound -> RegistryHyperNet.getResearchCognitionData(compound.getString("researchName")) != null)
-                    .forEach(compound -> researchingCognition.put(compound.getString("researchName"), compound.getDouble("progress")));
+            int bound = researching.tagCount();
+            IntStream.range(0, bound).mapToObj(researching::getCompoundTagAt).forEach(compound -> {
+                ResearchCognitionData data = RegistryHyperNet.getResearchCognitionData(compound.getString("researchName"));
+                if (data != null) {
+                    researchingCognition.put(data, compound.getDouble("progress"));
+                }
+            });
         }
     }
 
@@ -87,15 +91,15 @@ public class Database extends NetNode {
         NBTTagCompound tag = owner.getCustomDataTag();
 
         NBTTagList stored = new NBTTagList();
-        for (final String researchName : storedResearchCognition) {
-            NBTTagString tagStr = new NBTTagString(researchName);
+        for (final ResearchCognitionData data : storedResearchCognition) {
+            NBTTagString tagStr = new NBTTagString(data.getResearchName());
             stored.appendTag(tagStr);
         }
 
         NBTTagList researching = new NBTTagList();
-        researchingCognition.forEach((name, progress) -> {
+        researchingCognition.forEach((data, progress) -> {
             NBTTagCompound compound = new NBTTagCompound();
-            compound.setString("researchName", name);
+            compound.setString("researchName", data.getResearchName());
             compound.setDouble("progress", progress);
             researching.appendTag(compound);
         });
@@ -106,30 +110,31 @@ public class Database extends NetNode {
 
     @ZenMethod
     public boolean hasResearchCognition(String researchName) {
-        return owner.isWorking() && storedResearchCognition.contains(researchName);
+        ResearchCognitionData data = RegistryHyperNet.getResearchCognitionData(researchName);
+        return owner.isWorking() && data != null && storedResearchCognition.contains(data);
     }
 
     @ZenMethod
     public void storeResearchCognitionData(ResearchCognitionData data) {
-        storedResearchCognition.add(data.getResearchName());
+        storedResearchCognition.add(data);
         writeNBT();
     }
 
     @ZenGetter("storedResearchCognition")
-    public String[] getStoredResearchCognitionArr() {
-        return storedResearchCognition.toArray(new String[0]);
+    public ResearchCognitionData[] getStoredResearchCognitionArr() {
+        return storedResearchCognition.toArray(new ResearchCognitionData[0]);
     }
 
     @ZenMethod
     public double getResearchingCognitionProgress(String researchName) {
-        return researchingCognition.getOrDefault(researchName, 0D);
+        return researchingCognition.getOrDefault(RegistryHyperNet.getResearchCognitionData(researchName), 0D);
     }
 
-    public Object2DoubleOpenHashMap<String> getAllResearchingCognition() {
+    public Object2DoubleOpenHashMap<ResearchCognitionData> getAllResearchingCognition() {
         return researchingCognition;
     }
 
-    public Set<String> getStoredResearchCognition() {
+    public Set<ResearchCognitionData> getStoredResearchCognition() {
         return storedResearchCognition;
     }
 
@@ -138,7 +143,57 @@ public class Database extends NetNode {
         return type;
     }
 
+    public Status createStatus() {
+        return new Status(type, storedResearchCognition.size(), researchingCognition.size());
+    }
+
     public static void clearCache() {
         CACHED_DATABASE.clear();
+    }
+
+    public static class Status {
+        private final DatabaseType type;
+        private final int storedCognition;
+        private final int researchingCognition;
+
+        public Status(final DatabaseType type, final int storedCognition, final int researchingCognition) {
+            this.type = type;
+            this.storedCognition = storedCognition;
+            this.researchingCognition = researchingCognition;
+        }
+
+        public static Status readFromNBT(final NBTTagCompound tag) {
+            if (!tag.hasKey("t") || !tag.hasKey("s") || !tag.hasKey("r")) {
+                return null;
+            }
+
+            DatabaseType type = RegistryHyperNet.getDatabaseType(tag.getString("t"));
+            if (type == null) {
+                return null;
+            }
+
+            return new Status(type, tag.getInteger("s"), tag.getInteger("r"));
+        }
+
+        public NBTTagCompound writeToNBT() {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setString("t", type.getTypeName());
+            tag.setInteger("s", storedCognition);
+            tag.setInteger("r", researchingCognition);
+
+            return tag;
+        }
+
+        public DatabaseType getType() {
+            return type;
+        }
+
+        public int getStoredCognition() {
+            return storedCognition;
+        }
+
+        public int getResearchingCognition() {
+            return researchingCognition;
+        }
     }
 }
