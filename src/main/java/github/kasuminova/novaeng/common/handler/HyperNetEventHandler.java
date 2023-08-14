@@ -5,27 +5,22 @@ import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
 import github.kasuminova.novaeng.common.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.network.PktHyperNetStatus;
+import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
-import hellfirepvp.modularmachinery.ModularMachinery;
-import hellfirepvp.modularmachinery.common.block.BlockController;
-import hellfirepvp.modularmachinery.common.block.BlockFactoryController;
+import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import hellfirepvp.modularmachinery.common.container.ContainerBase;
-import hellfirepvp.modularmachinery.common.lib.ItemsMM;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
-import ink.ikx.mmce.core.AssemblyConfig;
 import io.netty.util.internal.shaded.org.jctools.queues.atomic.MpscLinkedAtomicQueue;
-import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,24 +45,32 @@ public class HyperNetEventHandler {
         }
     }
 
-    @SubscribeEvent
+    @SubscribeEvent(priority = EventPriority.LOW)
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         World world = event.getWorld();
         if (world.isRemote) {
             return;
         }
 
-        if (event.getEntityPlayer().isSneaking()) {
-            return;
-        }
+        EntityPlayer player = event.getEntityPlayer();
 
-        ItemStack stack = event.getItemStack();
-        if (stack.getItem() != RegistryHyperNet.getHyperNetConnectCard()) {
+        if (player.isSneaking()) {
             return;
         }
 
         TileEntity te = world.getTileEntity(event.getPos());
         if (!(te instanceof TileMultiblockMachineController)) {
+            return;
+        }
+
+        if (te instanceof TileHyperNetTerminal && player instanceof EntityPlayerMP) {
+            TileHyperNetTerminal terminal = (TileHyperNetTerminal) te;
+            NovaEngineeringCore.NET_CHANNEL.sendTo(new PktTerminalGuiData(terminal), (EntityPlayerMP) player);
+            return;
+        }
+
+        ItemStack stack = event.getItemStack();
+        if (stack.getItem() != RegistryHyperNet.getHyperNetConnectCard()) {
             return;
         }
 
@@ -105,26 +108,29 @@ public class HyperNetEventHandler {
             return;
         }
 
-        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> {
-            if (!(event.player instanceof EntityPlayerMP)) {
-                return;
-            }
+        if (!(event.player instanceof EntityPlayerMP)) {
+            return;
+        }
 
-            EntityPlayerMP playerMP = (EntityPlayerMP) player;
-            World world = playerMP.getEntityWorld();
+        EntityPlayerMP playerMP = (EntityPlayerMP) player;
+        World world = playerMP.getEntityWorld();
 
-            if (world.getWorldTime() % 15 != 0) {
-                return;
-            }
+        if (world.getWorldTime() % 15 != 0) {
+            return;
+        }
 
-            ComputationCenter center = HyperNetHelper.isComputationCenter(ctrl)
-                    ? ComputationCenter.from(ctrl)
-                    : getCenter(ctrl);
+        if (ctrl instanceof TileHyperNetTerminal) {
+            TileHyperNetTerminal terminal = (TileHyperNetTerminal) ctrl;
+            NovaEngineeringCore.NET_CHANNEL.sendTo(new PktTerminalGuiData(terminal), (EntityPlayerMP) player);
+        }
 
-            if (center != null) {
-                NovaEngineeringCore.NET_CHANNEL.sendTo(new PktHyperNetStatus(center), playerMP);
-            }
-        });
+        ComputationCenter center = HyperNetHelper.isComputationCenter(ctrl)
+                ? ComputationCenter.from(ctrl)
+                : getCenter(ctrl);
+
+        if (center != null) {
+            NovaEngineeringCore.NET_CHANNEL.sendTo(new PktHyperNetStatus(center), playerMP);
+        }
     }
 
     public static void addTickStartAction(final Action action) {

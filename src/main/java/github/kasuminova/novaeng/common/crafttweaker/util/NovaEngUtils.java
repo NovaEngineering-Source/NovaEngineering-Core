@@ -1,9 +1,6 @@
 package github.kasuminova.novaeng.common.crafttweaker.util;
 
 import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.minecraft.CraftTweakerMC;
-import crafttweaker.api.world.IBlockPos;
-import net.minecraft.util.math.BlockPos;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -27,8 +24,8 @@ public class NovaEngUtils {
     }
 
     @ZenMethod
-    public static String formatPercent(float num1, float num2) {
-        return NovaEngUtils.formatFloat((num1 / num2) * 100F, 2) + "%";
+    public static String formatPercent(double num1, double num2) {
+        return NovaEngUtils.formatDouble((num1 / num2) * 100D, 2) + "%";
     }
 
     @ZenMethod

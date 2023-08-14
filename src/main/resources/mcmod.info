@@ -4,10 +4,10 @@
     {
       "modid": "novaeng_core",
       "name": "Nova Engineering - Core",
-      "description": "新星工程：世界核心模组。",
+      "description": "新星工程计划核心模组。",
       "version": "${version}",
       "mcversion": "${mcversion}",
-      "url": "",
+      "url": "https://github.com/NovaEngineering-Source/NovaEngineering-Core",
       "updateUrl": "",
       "authorList": [
         "Kasumi_Nova"

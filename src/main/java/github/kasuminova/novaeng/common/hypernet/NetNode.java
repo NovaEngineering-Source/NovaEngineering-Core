@@ -63,6 +63,8 @@ public abstract class NetNode {
         }
 
         ComputationCenter.from(ctrl).onConnect(owner, this);
+
+        writeNBT();
     }
 
     public float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {
@@ -102,7 +104,10 @@ public abstract class NetNode {
 
     @ZenMethod
     public void writeNBT() {
-        NBTTagCompound tag = owner.getCustomDataTag();
+        writeNBT(owner.getCustomDataTag());
+    }
+
+    public void writeNBT(NBTTagCompound tag) {
         if (centerPos != null) {
             tag.setLong("centerPos", centerPos.toLong());
         }

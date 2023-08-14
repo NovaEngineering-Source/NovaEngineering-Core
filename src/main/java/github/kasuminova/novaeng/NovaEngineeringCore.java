@@ -2,6 +2,8 @@ package github.kasuminova.novaeng;
 
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.network.PktHyperNetStatus;
+import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
+import github.kasuminova.novaeng.common.network.PktTerminalTaskProvide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -20,8 +22,8 @@ import org.apache.logging.log4j.Logger;
 @SuppressWarnings("MethodMayBeStatic")
 public class NovaEngineeringCore {
     public static final String MOD_ID = "novaeng_core";
-    public static final String MOD_NAME = "Nova Engineering - Core";
-    public static final String VERSION = "1.1.0";
+    public static final String MOD_NAME = "Nova Engineering: Core";
+    public static final String VERSION = "1.3.0";
     public static final String CLIENT_PROXY = "github.kasuminova.novaeng.client.ClientProxy";
     public static final String COMMON_PROXY = "github.kasuminova.novaeng.common.CommonProxy";
     public static final SimpleNetworkWrapper NET_CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
@@ -37,7 +39,10 @@ public class NovaEngineeringCore {
         event.getModMetadata().version = VERSION;
         log = event.getModLog();
 
-        NET_CHANNEL.registerMessage(PktHyperNetStatus.class, PktHyperNetStatus.class, 0, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktHyperNetStatus.class,  PktHyperNetStatus.class,  0, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktTerminalGuiData.class, PktTerminalGuiData.class, 1, Side.CLIENT);
+
+        NET_CHANNEL.registerMessage(PktTerminalTaskProvide.class, PktTerminalTaskProvide.class, 100, Side.SERVER);
 
         proxy.preInit();
     }

@@ -24,22 +24,6 @@ public class PktHyperNetStatus implements IMessage, IMessageHandler<PktHyperNetS
     @Override
     public void fromBytes(final ByteBuf buf) {
         this.statusTag = ByteBufUtils.readTag(buf);
-        if (statusTag == null) {
-            return;
-        }
-
-        if (!statusTag.hasKey("centerType")
-                || !statusTag.hasKey("totalConnected")
-                || !statusTag.hasKey("computationPointGeneration")
-                || !statusTag.hasKey("computationPointConsumption")
-        ) {
-            return;
-        }
-
-        ComputationCenterCache.setType(RegistryHyperNet.getComputationCenterType(statusTag.getString("centerType")));
-        ComputationCenterCache.setTotalConnected(statusTag.getInteger("totalConnected"));
-        ComputationCenterCache.setComputationPointGeneration(statusTag.getInteger("computationPointGeneration"));
-        ComputationCenterCache.setComputationPointConsumption(statusTag.getInteger("computationPointConsumption"));
     }
 
     @Override
@@ -56,6 +40,23 @@ public class PktHyperNetStatus implements IMessage, IMessageHandler<PktHyperNetS
 
     @Override
     public IMessage onMessage(final PktHyperNetStatus message, final MessageContext ctx) {
+        NBTTagCompound statusTag = message.statusTag;
+        if (statusTag == null) {
+            return null;
+        }
+
+        if (!statusTag.hasKey("centerType")
+                || !statusTag.hasKey("totalConnected")
+                || !statusTag.hasKey("computationPointGeneration")
+                || !statusTag.hasKey("computationPointConsumption"))
+        {
+            return null;
+        }
+
+        ComputationCenterCache.setType(RegistryHyperNet.getComputationCenterType(statusTag.getString("centerType")));
+        ComputationCenterCache.setTotalConnected(statusTag.getInteger("totalConnected"));
+        ComputationCenterCache.setComputationPointGeneration(statusTag.getInteger("computationPointGeneration"));
+        ComputationCenterCache.setComputationPointConsumption(statusTag.getInteger("computationPointConsumption"));
         return null;
     }
 
