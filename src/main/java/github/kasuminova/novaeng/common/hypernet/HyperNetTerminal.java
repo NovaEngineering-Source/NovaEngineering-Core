@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.common.hypernet;
 
+import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import net.minecraft.item.ItemStack;
 

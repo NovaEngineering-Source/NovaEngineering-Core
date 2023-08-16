@@ -3,8 +3,12 @@ package github.kasuminova.novaeng.client.gui;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.widget.GuiScrollbarThin;
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
+import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import github.kasuminova.novaeng.common.hypernet.*;
+import github.kasuminova.novaeng.common.hypernet.ComputationCenterCache;
+import github.kasuminova.novaeng.common.hypernet.Database;
+import github.kasuminova.novaeng.common.hypernet.DatabaseType;
+import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchStationType;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
@@ -192,9 +196,9 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.popMatrix();
 
-        startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
+//        startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
         if (current != null) {
-//            startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
+            startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
             drawButtonOverlayAndHoveringText(mouseX, mouseY);
         }
     }
@@ -229,7 +233,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
                 hoveredTip.add(I18n.format("gui.terminal_controller.data.unlocked"));
             } else {
                 hoveredTip.add(I18n.format("gui.terminal_controller.screen.info.start"));
-                long tickRequired = (long) (data.getRequiredPoints() / data.getMinComputationPointPerTick());
+                long tickRequired = (long) (data.getRequiredPoints() - current.getProgress() / data.getMinComputationPointPerTick());
 //                long tickRequired = (long) (data.getRequiredPoints() / Math.max(0.1F, (generation - consumption)));
                 hoveredTip.add(TimeUtils.formatResearchRequiredTime(tickRequired * 50));
                 hoveredTip.addAll(warnTip);
@@ -642,7 +646,8 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         public ResearchDataContext(final ResearchCognitionData data,
                                    final boolean locked,
-                                   final Double progress) {
+                                   final Double progress)
+        {
             this.data = data;
             this.locked = locked;
             this.progress = progress;

@@ -29,6 +29,17 @@ upgrade.data_processor.module.durability.unknown.tip=§9最大耐久：§e%s ～
 
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 
+novaeng.hypernet.computation_point_required.tip=§9需要算力：§b%s
+novaeng.hypernet.research_required.tip=§6需要研究：§r%s
+
+gui.hypernet.controller.title=§9///////// HyperNet 代理网络 /////////
+gui.hypernet.controller.computation_point_consumption=§9算力消耗：§b
+gui.hypernet.controller.computation_point_consumption.total=§9总算力消耗 / 产出：§b%s / %s
+gui.hypernet.controller.connected=§9网络状态：§a已连接
+gui.hypernet.controller.disconnected=§9网络状态：§c断开连接
+gui.hypernet.controller.version=§7HyperNet Monitor v1.0
+gui.hypernet.controller.footer=§9/////////////////////////////////
+
 gui.terminal_controller.status=§b状态：
 gui.terminal_controller.status.missing_structure=§c结构不完整
 gui.terminal_controller.status.online=§a终端在线

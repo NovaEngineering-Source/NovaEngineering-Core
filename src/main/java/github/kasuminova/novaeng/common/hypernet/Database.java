@@ -111,7 +111,12 @@ public class Database extends NetNode {
     @ZenMethod
     public boolean hasResearchCognition(String researchName) {
         ResearchCognitionData data = RegistryHyperNet.getResearchCognitionData(researchName);
-        return owner.isWorking() && data != null && storedResearchCognition.contains(data);
+        return data != null && hasResearchCognition(data);
+    }
+
+    @ZenMethod
+    public boolean hasResearchCognition(ResearchCognitionData research) {
+        return owner.isWorking() && research != null && storedResearchCognition.contains(research);
     }
 
     @ZenMethod

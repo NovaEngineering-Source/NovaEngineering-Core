@@ -3,6 +3,7 @@ package github.kasuminova.novaeng.common.hypernet;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
 import github.kasuminova.mmce.common.helper.IMachineController;
+import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.util.RandomUtils;
@@ -33,9 +34,6 @@ public class ComputationCenter {
 
     // 计算点计数器，计算当前 Tick 总共消耗了多少算力。
     private volatile float computationPointCounter = 0;
-
-    // 存储上一个 Tick 消耗的总算力，用于能源消耗计算。
-    private float lastComputationPointConsumed = 0;
 
     public ComputationCenter(final TileMultiblockMachineController owner, final NBTTagCompound customData) {
         this.owner = owner;
@@ -197,7 +195,6 @@ public class ComputationCenter {
     }
 
     public void resetComputationPointCounter() {
-        lastComputationPointConsumed = computationPointCounter;
         computationPointCounter = type.getMaxComputationPointCarrying();
     }
 
