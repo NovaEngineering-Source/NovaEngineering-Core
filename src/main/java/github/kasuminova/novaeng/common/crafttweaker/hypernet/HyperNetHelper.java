@@ -37,6 +37,10 @@ import java.util.List;
 @ZenClass("novaeng.hypernet.HyperNetHelper")
 public class HyperNetHelper {
 
+    /**
+     * 自动代理一个模块化机械，使其能够接入 HyperNet 计算网络，并在控制器添加网络相关信息。
+     * @param machineName 机械名称
+     */
     @ZenMethod
     public static void proxyMachineForHyperNet(String machineName) {
         DynamicMachine machine = MachineRegistry.getRegistry().getMachine(new ResourceLocation(ModularMachinery.MODID, machineName));

@@ -19,6 +19,10 @@ import java.util.stream.Collectors;
 @ZenExpansion("mods.modularmachinery.RecipePrimer")
 public class RecipePrimerHyperNet {
 
+    /**
+     * 为一个配方添加算力要求。
+     * 用法：{@code requireComputationPoint(1.0F);}
+     */
     @ZenMethod
     public static RecipePrimer requireComputationPoint(final RecipePrimer primer,
                                                        final float required) {
@@ -32,6 +36,10 @@ public class RecipePrimerHyperNet {
         );
     }
 
+    /**
+     * 为一个配方添加研究认知要求。
+     * 用法：{@code requireResearch("research_name_a", "research_name_b")}
+     */
     @ZenMethod
     public static RecipePrimer requireResearch(final RecipePrimer primer,
                                                final String... researchNames) {
