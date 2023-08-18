@@ -1,100 +1,64 @@
 package github.kasuminova.novaeng.common.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.TreeMap;
 
 public class StringSortUtils {
 
     /**
      * <p>根据给定的字符串的匹配率，排序给定的数组。</p>
-     * <p>网上抄的（）</p>
+     * <p>在开头被匹配的字符越多，匹配率越高，越往后越低。</p>
+     * <p>算法相对暴力...</p>
      *
      * @param source 要排序的数组
-     * @param filter 字符串
+     * @param filter      字符串
      * @return 排序后的列表
      */
-    public static List<String> sortWithMatchRate(String[] source, String filter) {
-        char[] charArr = filter.toLowerCase().toCharArray();
+    public static List<String> sortWithMatchRate(final Collection<String> source, final String filter) {
+        TreeMap<Integer, List<String>> sorted = new TreeMap<>();
 
-        String[] result = new String[source.length];
-        int[] B = new int[source.length];
-        int[] b = new int[source.length];
+        char[] filterCharArr = filter.replace(" ", "").toLowerCase().toCharArray();
 
-        int num = 0;
-        for (String s : source) {
-            char[] charSource = s.toLowerCase().toCharArray();
+        for (final String s : source) {
+            String str = s.replace(" ", "").toLowerCase();
 
-            for (int x = 0; x < 9; x++) {
-                b[x] = 1;
-            }
+            char[] targetCharArr = str.toCharArray();
 
-            int m = 0;
-            int t = 0;
-            for (int j = 0; j < charSource.length; j++) {
-                if (j >= charArr.length) {
-                    j = charArr.length - 1;
-                }
-                if (m >= charSource.length) {
-                    break;
-                }
-                for (; m < charSource.length; m++) {
-                    if (charSource[m] == charArr[j]) {
-                        t = t + 1;
-
-                        b[m] = 1;
-                        m = m + 1;
-                        break;
-                    }
-                    if (charSource[m] != charArr[j]) {
-
-                        b[m] = 0;
-
-                    }
-                }
-            }
-            if (t == charArr.length) {
-                result[num] = s;
-                B[num] = num(b);
-                num++;
+            int matchRate = getMatchRate(filterCharArr, targetCharArr);
+            if (matchRate > 0) {
+                sorted.computeIfAbsent(matchRate, v -> new ArrayList<>()).add(s);
             }
         }
 
-        String t;
-        int tt;
-        for (int i = 0; i < result.length; i++) {
-            for (int j = i + 1; j < result.length; j++) {
-                if (B[j] > B[i]) {
-                    t = result[j];
-                    result[j] = result[i];
-                    result[i] = t;
-
-                    tt = B[j];
-                    B[j] = B[i];
-                    B[i] = tt;
-                }
-            }
-        }
-
-        return filterEmptyElements(result);
+        List<String> result = new ArrayList<>();
+        sorted.descendingMap().values().forEach(result::addAll);
+        return result;
     }
 
-    private static List<String> filterEmptyElements(String[] source) {
-        List<String> list = new ArrayList<>();
-        for (String s : source) {
-            if (s != null && !s.isEmpty()) {
-                list.add(s);
+    private static int getMatchRate(final char[] filterCharArr, final char[] targetCharArr) {
+        int matchRate = 0;
+        int matchedCharCount = 0;
+        int targetIndex = 0;
+
+        filter:
+        for (final char c : filterCharArr) {
+            for (int i = targetIndex; i < targetCharArr.length; i++) {
+                char tc = targetCharArr[i];
+                if (c == tc) {
+                    matchRate += targetCharArr.length - targetIndex + 1;
+
+                    targetIndex++;
+                    matchedCharCount++;
+                    continue filter;
+                }
             }
         }
-        return list;
-    }
 
-    private static int num(int[] b) {
-        int byteb;
-        int num = 0;
-        for (int y = 0; y < 9; y++) {
-            byteb = (int) (b[y] * Math.pow(10, 8 - y));
-            num += byteb;
+        if (targetCharArr.length >= filterCharArr.length && matchedCharCount == filterCharArr.length) {
+            return Integer.MAX_VALUE;
         }
-        return num;
+        return matchRate;
     }
 }

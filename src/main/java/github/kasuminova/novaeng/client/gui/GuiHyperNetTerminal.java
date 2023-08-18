@@ -446,7 +446,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         String searchFilter = searchTextField.getText();
         if (!searchFilter.isEmpty()) {
-            List<String> filtered = StringSortUtils.sortWithMatchRate(tmp.keySet().toArray(new String[0]), searchFilter);
+            List<String> filtered = StringSortUtils.sortWithMatchRate(tmp.keySet(), searchFilter);
             for (final String s : filtered) {
                 renderingData.add(tmp.get(s));
             }
@@ -564,6 +564,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
                     x, y))
             {
                 searchTextField.setText("");
+                updateRenderingData();
             }
         }
 
@@ -632,7 +633,9 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             super.keyTyped(c, i);
         }
 
-        searchTextField.textboxKeyTyped(c, i);
+        if (searchTextField.textboxKeyTyped(c, i)) {
+            updateRenderingData();
+        }
     }
 
     @Override
