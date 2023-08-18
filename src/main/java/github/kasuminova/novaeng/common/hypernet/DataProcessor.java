@@ -28,7 +28,8 @@ import java.util.*;
 public class DataProcessor extends NetNode {
     private static final Map<TileMultiblockMachineController, DataProcessor> CACHED_DATA_PROCESSOR = new WeakHashMap<>();
 
-    private final SpscLinkedQueue<Long> recentCalculation = new SpscLinkedQueue<>();
+    private final SpscLinkedQueue<Long> recentEnergyUsage = new SpscLinkedQueue<>();
+    private final SpscLinkedQueue<Float> recentCalculation = new SpscLinkedQueue<>();
 
     private final DataProcessorType type;
     private final LinkedList<Float> computationalLoadHistory = new LinkedList<>();
@@ -37,7 +38,6 @@ public class DataProcessor extends NetNode {
     private int storedHU = 0;
     private boolean overheat = false;
     private float computationalLoadHistoryCache = 0;
-    private float lastGenerated = 0;
     private float computationalLoad = 0;
     private float maxGeneration = 0;
 
@@ -104,7 +104,7 @@ public class DataProcessor extends NetNode {
 
         long energyConsumption = 0;
         Long consumption;
-        while ((consumption = recentCalculation.poll()) != null) {
+        while ((consumption = recentEnergyUsage.poll()) != null) {
             energyConsumption += consumption;
         }
 
@@ -118,8 +118,14 @@ public class DataProcessor extends NetNode {
             ));
         }
 
-        computationalLoadHistory.addFirst(lastGenerated);
-        computationalLoadHistoryCache += lastGenerated;
+        float totalCalculation = 0;
+        Float calculation;
+        while((calculation = recentCalculation.poll()) != null) {
+            totalCalculation += calculation;
+        }
+
+        computationalLoadHistory.addFirst(totalCalculation);
+        computationalLoadHistoryCache += totalCalculation;
         if (computationalLoadHistory.size() > 100) {
             computationalLoadHistoryCache -= computationalLoadHistory.pollLast();
         }
@@ -226,26 +232,28 @@ public class DataProcessor extends NetNode {
 
         float generationLimit = 0F;
         for (ProcessorModuleRAM ram : moduleRAMs) {
-            generationLimit += ram.calculate(doCalculate, maxGen - generationLimit);
+            float generated = ram.calculate(doCalculate, maxGen - generationLimit);
+            generationLimit += generated;
             if (doCalculate) {
-                totalEnergyConsumption += (long) (ram.getEfficiency() * ram.getEnergyConsumption());
+                totalEnergyConsumption += (long) ((double) (generated / ram.getComputationPointGenerationLimit()) * ram.getEnergyConsumption());
             }
         }
 
-        float generated = 0F;
+        float totalGenerated = 0F;
         for (final ProcessorModuleCPU cpu : moduleCPUs) {
-            generated += cpu.calculate(doCalculate, generationLimit - generated);
+            float generated = cpu.calculate(doCalculate, generationLimit - totalGenerated);
+            totalGenerated += generated;
             if (doCalculate) {
-                totalEnergyConsumption += (long) (cpu.getEfficiency() * cpu.getEnergyConsumption());
+                totalEnergyConsumption += (long) ((double) (generated / cpu.getComputationPointGeneration()) * cpu.getEnergyConsumption());
             }
         }
 
         if (doCalculate) {
-            lastGenerated = generated;
-            recentCalculation.offer(totalEnergyConsumption);
+            recentCalculation.offer(totalGenerated);
+            recentEnergyUsage.offer(totalEnergyConsumption);
         }
 
-        return generated;
+        return totalGenerated;
     }
 
     @Override

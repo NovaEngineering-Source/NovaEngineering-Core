@@ -15,6 +15,7 @@ import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
 import github.kasuminova.novaeng.common.network.PktTerminalTaskProvide;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
+import github.kasuminova.novaeng.common.util.StringSortUtils;
 import github.kasuminova.novaeng.common.util.TimeUtils;
 import hellfirepvp.modularmachinery.client.ClientScheduler;
 import hellfirepvp.modularmachinery.client.gui.GuiContainerBase;
@@ -37,10 +38,7 @@ import net.minecraftforge.client.model.animation.Animation;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTerminal> {
@@ -172,7 +170,6 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
             updateAndDrawScrollbar();
 
-            updateRenderingData();
             renderDataList(x, y);
 
             drawScreen(mouseX, mouseY);
@@ -233,7 +230,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
                 hoveredTip.add(I18n.format("gui.terminal_controller.data.unlocked"));
             } else {
                 hoveredTip.add(I18n.format("gui.terminal_controller.screen.info.start"));
-                long tickRequired = (long) (data.getRequiredPoints() - current.getProgress() / data.getMinComputationPointPerTick());
+                long tickRequired = (long) ((data.getRequiredPoints() - current.getProgress()) / data.getMinComputationPointPerTick());
 //                long tickRequired = (long) (data.getRequiredPoints() / Math.max(0.1F, (generation - consumption)));
                 hoveredTip.add(TimeUtils.formatResearchRequiredTime(tickRequired * 50));
                 hoveredTip.addAll(warnTip);
@@ -407,34 +404,64 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
     protected void updateSearchTextField() {
         searchTextField.drawTextBox();
+
+        if (searchTextField.isFocused() || !searchTextField.getText().isEmpty()) {
+            return;
+        }
+
+        int textRenderX = searchTextField.x;
+        int textRenderY = searchTextField.y;
+        fontRenderer.drawStringWithShadow(
+                I18n.format("gui.terminal_controller.search"),
+                textRenderX, textRenderY, 0xFFFFFF
+        );
     }
 
     protected void updateRenderingData() {
         renderingData.clear();
 
-        final int currentScroll = dataScrollbar.getCurrentScroll();
+        Map<String, ResearchDataContext> tmp = new LinkedHashMap<>();
 
-        researchingData.entrySet().stream().skip(currentScroll).limit(MAX_PAGE_ELEMENTS).forEach(entry ->
-                renderingData.add(new ResearchDataContext(entry.getKey(), true, entry.getValue())));
+        researchingData.forEach((data, progress) -> {
+            ResearchDataContext context = new ResearchDataContext(data, true, progress);
+            tmp.put(data.getTranslatedName(), context);
+            if (context.equals(current)) {
+                current = context;
+            }
+        });
+        unlockedData.forEach(data -> {
+            ResearchDataContext context = new ResearchDataContext(data, false, -1D);
+            tmp.put(data.getTranslatedName(), context);
+            if (context.equals(current)) {
+                current = context;
+            }
+        });
+        lockedData.forEach(data -> {
+            ResearchDataContext context = new ResearchDataContext(data, true, -1D);
+            tmp.put(data.getTranslatedName(), context);
+            if (context.equals(current)) {
+                current = context;
+            }
+        });
 
-        if (renderingData.size() >= MAX_PAGE_ELEMENTS) {
-            return;
+        String searchFilter = searchTextField.getText();
+        if (!searchFilter.isEmpty()) {
+            List<String> filtered = StringSortUtils.sortWithMatchRate(tmp.keySet().toArray(new String[0]), searchFilter);
+            for (final String s : filtered) {
+                renderingData.add(tmp.get(s));
+            }
+        } else {
+            renderingData.addAll(tmp.values());
         }
-
-        unlockedData.stream().limit(MAX_PAGE_ELEMENTS - renderingData.size()).forEach(data ->
-                renderingData.add(new ResearchDataContext(data, false, -1D)));
-
-        if (renderingData.size() >= MAX_PAGE_ELEMENTS) {
-            return;
-        }
-
-        lockedData.stream().limit(MAX_PAGE_ELEMENTS - renderingData.size()).forEach(data ->
-                renderingData.add(new ResearchDataContext(data, true, -1D)));
     }
 
     protected void renderDataList(int mouseX, int mouseY) {
         int offsetY = 30;
-        for (final ResearchDataContext dataContext : renderingData) {
+
+        final int currentScroll = dataScrollbar.getCurrentScroll();
+        int currentIndex = 0;
+        while (currentIndex + currentScroll < renderingData.size() && currentIndex < MAX_PAGE_ELEMENTS) {
+            final ResearchDataContext dataContext = renderingData.get(currentIndex + currentScroll);
             GlStateManager.pushMatrix();
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -442,6 +469,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             offsetY += TERMINAL_ELEMENT_HEIGHT;
 
             GlStateManager.popMatrix();
+            currentIndex++;
         }
     }
 
@@ -484,7 +512,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             if (researchProgress >= 0) {
                 if (researchProgress == 0) {
                     fontRenderer.drawString(
-                            I18n.format("gui.terminal_controller.data.progress", 0),
+                            I18n.format("gui.terminal_controller.data.progress", "0.00%"),
                             (int) textRenderOffsetX, (int) textRenderOffsetY + 12, 0x404040);
                 } else {
                     fontRenderer.drawString(
@@ -511,9 +539,10 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         searchTextField.updateCursorCounter();
 
         if (ClientScheduler.getClientTick() % 20 == 0) {
-            updateUnlockedData(unlockedData);
             updateResearchingData(researchingData);
+            updateUnlockedData(unlockedData);
             updateLockedData(lockedData);
+            updateRenderingData();
         }
     }
 
@@ -521,14 +550,24 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
     protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        if (mouseButton != 0) {
-            return;
-        }
-
         int x = mouseX - guiLeft;
         int y = mouseY - guiTop;
 
-        if (searchTextField.mouseClicked(x, y, mouseButton)) {
+        if (mouseButton == 0) {
+            if (searchTextField.mouseClicked(x, y, mouseButton)) {
+                return;
+            }
+        } else if (mouseButton == 1) {
+            if (isMouseOver(searchTextField.x, searchTextField.y,
+                    searchTextField.x + searchTextField.width,
+                    searchTextField.y + searchTextField.height,
+                    x, y))
+            {
+                searchTextField.setText("");
+            }
+        }
+
+        if (mouseButton != 0) {
             return;
         }
 
@@ -627,7 +666,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         dataScrollbar.setLeft(DATA_SCROLL_BAR_LEFT)
                 .setTop(DATA_SCROLL_BAR_TOP)
                 .setHeight(DATA_SCROLL_BAR_HEIGHT)
-                .setRange(0, Math.max(0, unlockedData.size() + lockedData.size() - MAX_PAGE_ELEMENTS), 1);
+                .setRange(0, Math.max(0, researchingData.size() + unlockedData.size() + lockedData.size() - MAX_PAGE_ELEMENTS), 1);
         screenScrollbar.setLeft(SCREEN_SCROLL_BAR_LEFT)
                 .setTop(SCREEN_SCROLL_BAR_TOP)
                 .setHeight(SCREEN_SCROLL_BAR_HEIGHT);

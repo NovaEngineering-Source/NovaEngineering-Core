@@ -23,14 +23,14 @@ upgrade.data_processor.module.ram.tip.2=§9每秒有 §a1%% §9的概率降低 �
 
 upgrade.data_processor.module.ram.limit_provision=§9上限提供: §e%s§9 (效率: %s)
 
-upgrade.data_processor.module.energy.tip=§9模块耗电量：§c%s
+upgrade.data_processor.module.energy.tip=§9峰值耗电量 (TDP)：§c%s
 upgrade.data_processor.module.durability.tip=§9耐久：§e%s / %s§a（%s）
 upgrade.data_processor.module.durability.unknown.tip=§9最大耐久：§e%s ～ %s
 
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 
 novaeng.hypernet.computation_point_required.tip=§9需要算力：§b%s
-novaeng.hypernet.research_required.tip=§6需要研究：§r%s
+novaeng.hypernet.research_required.tip=§6需要研究认知：§r%s
 
 gui.hypernet.controller.title=§9///////// HyperNet 代理网络 /////////
 gui.hypernet.controller.computation_point_consumption=§9算力消耗：§b
@@ -40,6 +40,7 @@ gui.hypernet.controller.disconnected=§9网络状态：§c断开连接
 gui.hypernet.controller.version=§7HyperNet Monitor v1.0
 gui.hypernet.controller.footer=§9/////////////////////////////////
 
+gui.terminal_controller.search=§7§o搜索研究...
 gui.terminal_controller.status=§b状态：
 gui.terminal_controller.status.missing_structure=§c结构不完整
 gui.terminal_controller.status.online=§a终端在线
