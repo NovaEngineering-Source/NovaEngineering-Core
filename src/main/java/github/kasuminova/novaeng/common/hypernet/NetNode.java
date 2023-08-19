@@ -4,6 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IBlockPos;
+import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -62,7 +63,12 @@ public abstract class NetNode {
             return;
         }
 
-        ComputationCenter.from(ctrl).onConnect(owner, this);
+        switch (ComputationCenter.from(ctrl).onConnect(owner, this)) {
+            case NODE_TYPE_REACHED_MAX_PRESENCES:
+            case CENTER_REACHED_CONNECTION_LIMIT:
+                center = null;
+                break;
+        }
 
         writeNBT();
     }

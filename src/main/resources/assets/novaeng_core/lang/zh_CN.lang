@@ -23,12 +23,25 @@ upgrade.data_processor.module.ram.tip.2=§9每秒有 §a1%% §9的概率降低 �
 
 upgrade.data_processor.module.ram.limit_provision=§9上限提供: §e%s§9 (效率: %s)
 
-upgrade.data_processor.module.energy.tip=§9模块耗电量：§c%s
+upgrade.data_processor.module.energy.tip=§9峰值耗电量 (TDP)：§c%s
 upgrade.data_processor.module.durability.tip=§9耐久：§e%s / %s§a（%s）
 upgrade.data_processor.module.durability.unknown.tip=§9最大耐久：§e%s ～ %s
 
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 
+novaeng.hypernet.computation_point_required.tip=§9需要算力：§b%s
+novaeng.hypernet.research_required.tip=§6需要研究认知：§r%s
+
+gui.hypernet.controller.title=§9///////// HyperNet 代理网络 /////////
+gui.hypernet.controller.computation_point_consumption=§9算力消耗：§b
+gui.hypernet.controller.computation_point_consumption.total=§9总算力消耗 / 产出：§b%s / %s
+gui.hypernet.controller.connected=§9网络状态：§a已连接
+gui.hypernet.controller.disconnected=§9网络状态：§c断开连接
+gui.hypernet.controller.version=§7HyperNet Monitor v1.0
+gui.hypernet.controller.footer=§9/////////////////////////////////
+
+gui.terminal_controller.title.nxc=nxc 的虚空终端
+gui.terminal_controller.search=§7§o搜索研究...
 gui.terminal_controller.status=§b状态：
 gui.terminal_controller.status.missing_structure=§c结构不完整
 gui.terminal_controller.status.online=§a终端在线
@@ -41,8 +54,9 @@ gui.terminal_controller.connect_card.empty=请插入密钥卡
 gui.terminal_controller.connect_card.validate=§a密钥卡已识别
 gui.terminal_controller.connect_card.invalidate=§c无效的密钥卡
 
-gui.terminal_controller.data.unlocked=已解锁
-gui.terminal_controller.data.locked=未解锁
+gui.terminal_controller.data.unlocked=研究已解锁
+gui.terminal_controller.data.locked=研究可用
+gui.terminal_controller.data.unavailable=研究不可用
 gui.terminal_controller.data.progress=研究进度：%s
 
 gui.terminal_controller.screen.none=点击左侧的研究认知卡以预览。
@@ -60,3 +74,4 @@ gui.terminal_controller.screen.info.start.error=§c无法开始研究。
 gui.terminal_controller.screen.info.start.error.tech_level=§c未找到研究站或研究站等级过低。
 gui.terminal_controller.screen.info.start.error.computation=§c算力不足。
 gui.terminal_controller.screen.info.start.error.database_space=§c未找到网络数据库或网络数据库空间已满。
+gui.terminal_controller.screen.info.start.error.dependencies=§c缺失前置研究：%s

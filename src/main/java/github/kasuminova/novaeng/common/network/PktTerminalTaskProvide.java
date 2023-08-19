@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.common.network;
 
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
+import github.kasuminova.novaeng.common.hypernet.Database;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchStation;
@@ -67,6 +68,17 @@ public class PktTerminalTaskProvide implements IMessage, IMessageHandler<PktTerm
         ComputationCenter center = nodeProxy.getCenter();
         if (center == null) {
             return null;
+        }
+
+        Collection<Database> databases = center.getNode(Database.class);
+        for (final ResearchCognitionData dependency : researchTask.getDependencies()) {
+            for (final Database database : databases) {
+                if (database.hasResearchCognition(dependency)) {
+                    break;
+                } else {
+                    return null;
+                }
+            }
         }
 
         Collection<ResearchStation> stations = center.getNode(ResearchStation.class);

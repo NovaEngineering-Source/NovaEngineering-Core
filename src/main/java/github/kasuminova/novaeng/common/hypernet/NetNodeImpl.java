@@ -1,13 +1,17 @@
 package github.kasuminova.novaeng.common.hypernet;
 
 import crafttweaker.annotations.ZenRegister;
+import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
 import github.kasuminova.mmce.common.helper.IMachineController;
+import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenSetter;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.WeakHashMap;
 
@@ -22,6 +26,43 @@ public class NetNodeImpl extends NetNode {
     public NetNodeImpl(final TileMultiblockMachineController owner, NBTTagCompound customData) {
         super(owner);
         readNBT(customData);
+    }
+
+    @ZenMethod
+    public void checkComputationPoint(final RecipeCheckEvent event,
+                                      final float pointRequired,
+                                      final ResearchCognitionData... researchRequired)
+    {
+        if (centerPos == null || center == null) {
+            event.setFailed("未连接至计算网络！");
+            return;
+        }
+
+        if (center.getComputationPointGeneration() < pointRequired) {
+            event.setFailed("算力不足！（预期算力：" + pointRequired + " TFloPS，当前算力：" + center.getComputationPointGeneration() + " TFloPS）");
+        }
+    }
+
+    @ZenMethod
+    public void checkResearch(final RecipeCheckEvent event,
+                              final ResearchCognitionData... researchRequired)
+    {
+        if (centerPos == null || center == null) {
+            event.setFailed("未连接至计算网络！");
+            return;
+        }
+
+        Collection<Database> nodes = center.getNode(Database.class);
+        if (nodes.isEmpty()) {
+            event.setFailed("计算网络中未找到数据库！");
+            return;
+        }
+
+        Arrays.stream(researchRequired)
+                .filter(research -> nodes.stream()
+                        .noneMatch(database -> database.hasResearchCognition(research)))
+                .findFirst()
+                .ifPresent(research -> event.setFailed("缺失研究：" + research.getResearchName() + "！"));
     }
 
     @Override

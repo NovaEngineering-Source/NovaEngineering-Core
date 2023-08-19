@@ -3,14 +3,19 @@ package github.kasuminova.novaeng.client.gui;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.widget.GuiScrollbarThin;
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
+import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import github.kasuminova.novaeng.common.hypernet.*;
+import github.kasuminova.novaeng.common.hypernet.ComputationCenterCache;
+import github.kasuminova.novaeng.common.hypernet.Database;
+import github.kasuminova.novaeng.common.hypernet.DatabaseType;
+import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchStationType;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
 import github.kasuminova.novaeng.common.network.PktTerminalTaskProvide;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
+import github.kasuminova.novaeng.common.util.StringSortUtils;
 import github.kasuminova.novaeng.common.util.TimeUtils;
 import hellfirepvp.modularmachinery.client.ClientScheduler;
 import hellfirepvp.modularmachinery.client.gui.GuiContainerBase;
@@ -19,11 +24,13 @@ import hellfirepvp.modularmachinery.common.util.IOInventory;
 import hellfirepvp.modularmachinery.common.util.MiscUtils;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiButtonImage;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,10 +40,7 @@ import net.minecraftforge.client.model.animation.Animation;
 import org.lwjgl.input.Mouse;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTerminal> {
@@ -64,6 +68,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
     protected final TileHyperNetTerminal terminal;
     protected final Set<ResearchCognitionData> unlockedData = new HashSet<>();
     protected final List<ResearchCognitionData> lockedData = new ArrayList<>();
+    protected final List<ResearchCognitionData> unavailableData = new ArrayList<>();
     protected final Object2DoubleOpenHashMap<ResearchCognitionData> researchingData = new Object2DoubleOpenHashMap<>();
     protected final List<ResearchDataContext> renderingData = new ArrayList<>();
     protected GuiTextField searchTextField = null;
@@ -111,16 +116,26 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
                                             final int y,
                                             final ItemStack stack)
     {
+        RenderHelper.enableGUIStandardItemLighting();
         ri.renderItemAndEffectIntoGUI(stack, x, y);
         ri.renderItemOverlays(mc.fontRenderer, stack, x, y);
+        RenderHelper.disableStandardItemLighting();
     }
 
-    private void updateLockedData(List<ResearchCognitionData> lockedData) {
+    private void updateFilteredData() {
         lockedData.clear();
-        RegistryHyperNet.getAllResearchCognitionData()
-                .stream()
-                .filter(data -> !unlockedData.contains(data) && !researchingData.containsKey(data))
-                .forEach(lockedData::add);
+        unavailableData.clear();
+        RegistryHyperNet.getAllResearchCognitionData().stream()
+                .filter(data -> !researchingData.containsKey(data))
+                .filter(data -> !unlockedData.contains(data))
+                .forEach(data -> {
+                    List<ResearchCognitionData> dependencies = data.getDependencies();
+                    if (dependencies.isEmpty() || unlockedData.containsAll(dependencies)) {
+                        lockedData.add(data);
+                    } else {
+                        unavailableData.add(data);
+                    }
+                });
     }
 
     @Override
@@ -144,7 +159,8 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         updateUnlockedData(unlockedData);
         updateResearchingData(researchingData);
-        updateLockedData(lockedData);
+        updateFilteredData();
+        updateRenderingData();
     }
 
     @Override
@@ -168,7 +184,6 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
             updateAndDrawScrollbar();
 
-            updateRenderingData();
             renderDataList(x, y);
 
             drawScreen(mouseX, mouseY);
@@ -192,9 +207,9 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.popMatrix();
 
-        startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
+//        startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
         if (current != null) {
-//            startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
+            startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
             drawButtonOverlayAndHoveringText(mouseX, mouseY);
         }
     }
@@ -217,6 +232,14 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         } else if ((generation - consumption) < data.getMinComputationPointPerTick()) {
             warnTip.add(I18n.format("gui.terminal_controller.screen.info.start.warn.computation"));
         }
+        List<ResearchCognitionData> missingDependencies = getMissingResearches(data);
+        if (!missingDependencies.isEmpty()) {
+            errorTip.add(I18n.format("gui.terminal_controller.screen.info.start.error.dependencies",
+                    missingDependencies.stream()
+                            .map(ResearchCognitionData::getTranslatedName)
+                            .collect(Collectors.joining(", "))
+            ));
+        }
 
         List<Database.Status> databases = PktTerminalGuiData.getDatabases();
         if (!hasDatabaseSpace(databases)) {
@@ -229,7 +252,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
                 hoveredTip.add(I18n.format("gui.terminal_controller.data.unlocked"));
             } else {
                 hoveredTip.add(I18n.format("gui.terminal_controller.screen.info.start"));
-                long tickRequired = (long) (data.getRequiredPoints() / data.getMinComputationPointPerTick());
+                long tickRequired = (long) ((data.getRequiredPoints() - current.getProgress()) / data.getMinComputationPointPerTick());
 //                long tickRequired = (long) (data.getRequiredPoints() / Math.max(0.1F, (generation - consumption)));
                 hoveredTip.add(TimeUtils.formatResearchRequiredTime(tickRequired * 50));
                 hoveredTip.addAll(warnTip);
@@ -243,6 +266,12 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         if (isMouseOver(316, 107, 316 + 16, 107 + 16, mouseX - guiLeft, mouseY - guiTop)) {
             drawHoveringText(hoveredTip, mouseX - guiLeft, mouseY - guiTop);
         }
+    }
+
+    protected List<ResearchCognitionData> getMissingResearches(ResearchCognitionData data) {
+        return data.getDependencies().stream()
+                .filter(dependency -> !unlockedData.contains(dependency))
+                .collect(Collectors.toList());
     }
 
     protected void drawButtonOverlay(int textureX, int textureY) {
@@ -308,7 +337,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         );
         fontRenderer.drawStringWithShadow(
                 I18n.format("gui.terminal_controller.screen.info.required_points") +
-                        MiscUtils.formatNumber((long) data.getRequiredPoints()),
+                        MiscUtils.formatDecimal((long) data.getRequiredPoints()),
                 descDrawOffsetX + 90, infoDrawOffsetY + 12, 0xFFFFFF
         );
         fontRenderer.drawStringWithShadow(
@@ -326,8 +355,13 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         GlStateManager.pushMatrix();
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
         FontRenderer fr = this.fontRenderer;
-        fr.drawString(I18n.format("tile.novaeng_core.hypernet_terminal_controller.name"), 8, 5, 0x404040);
+        if (player != null && player.getName().equals("nxc_in_china")) {
+            fr.drawString(I18n.format("gui.terminal_controller.title.nxc"), 8, 5, 0x404040);
+        } else {
+            fr.drawString(I18n.format("tile.novaeng_core.hypernet_terminal_controller.name"), 8, 5, 0x404040);
+        }
 
         GlStateManager.popMatrix();
     }
@@ -403,34 +437,77 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
     protected void updateSearchTextField() {
         searchTextField.drawTextBox();
+
+        if (searchTextField.isFocused() || !searchTextField.getText().isEmpty()) {
+            return;
+        }
+
+        int textRenderX = searchTextField.x;
+        int textRenderY = searchTextField.y;
+        fontRenderer.drawStringWithShadow(
+                I18n.format("gui.terminal_controller.search"),
+                textRenderX, textRenderY, 0xFFFFFF
+        );
     }
 
     protected void updateRenderingData() {
         renderingData.clear();
 
-        final int currentScroll = dataScrollbar.getCurrentScroll();
+        Map<String, ResearchDataContext> tmp = new LinkedHashMap<>();
 
-        researchingData.entrySet().stream().skip(currentScroll).limit(MAX_PAGE_ELEMENTS).forEach(entry ->
-                renderingData.add(new ResearchDataContext(entry.getKey(), true, entry.getValue())));
+        researchingData.forEach((data, progress) -> {
+            ResearchDataContext context = new ResearchDataContext(data, true, true, progress);
+            tmp.put(data.getTranslatedName(), context);
+            if (context.equals(current)) {
+                current = context;
+            }
+        });
+        unlockedData.forEach(data -> {
+            ResearchDataContext context = new ResearchDataContext(data, false, true, -1D);
+            tmp.put(data.getTranslatedName(), context);
+            if (context.equals(current)) {
+                current = context;
+            }
+        });
+        lockedData.forEach(data -> {
+            ResearchDataContext context = new ResearchDataContext(data, true, true, -1D);
+            tmp.put(data.getTranslatedName(), context);
+            if (context.equals(current)) {
+                current = context;
+            }
+        });
+        unavailableData.forEach(data -> {
+            ResearchDataContext context = new ResearchDataContext(data, true, false, -1D);
+            tmp.put(data.getTranslatedName(), context);
+            if (context.equals(current)) {
+                current = context;
+            }
+        });
 
-        if (renderingData.size() >= MAX_PAGE_ELEMENTS) {
-            return;
+        String searchFilter = searchTextField.getText();
+        if (!searchFilter.isEmpty()) {
+            List<String> filtered = StringSortUtils.sortWithMatchRate(tmp.keySet(), searchFilter);
+            if (filtered.isEmpty()) {
+                searchTextField.setTextColor(0xFF0000);
+            } else {
+                searchTextField.setTextColor(0xFFFFFF);
+                for (final String s : filtered) {
+                    renderingData.add(tmp.get(s));
+                }
+            }
+        } else {
+            searchTextField.setTextColor(0xFFFFFF);
+            renderingData.addAll(tmp.values());
         }
-
-        unlockedData.stream().limit(MAX_PAGE_ELEMENTS - renderingData.size()).forEach(data ->
-                renderingData.add(new ResearchDataContext(data, false, -1D)));
-
-        if (renderingData.size() >= MAX_PAGE_ELEMENTS) {
-            return;
-        }
-
-        lockedData.stream().limit(MAX_PAGE_ELEMENTS - renderingData.size()).forEach(data ->
-                renderingData.add(new ResearchDataContext(data, true, -1D)));
     }
 
     protected void renderDataList(int mouseX, int mouseY) {
         int offsetY = 30;
-        for (final ResearchDataContext dataContext : renderingData) {
+
+        final int currentScroll = dataScrollbar.getCurrentScroll();
+        int currentIndex = 0;
+        while (currentIndex + currentScroll < renderingData.size() && currentIndex < MAX_PAGE_ELEMENTS) {
+            final ResearchDataContext dataContext = renderingData.get(currentIndex + currentScroll);
             GlStateManager.pushMatrix();
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -438,16 +515,15 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             offsetY += TERMINAL_ELEMENT_HEIGHT;
 
             GlStateManager.popMatrix();
+            currentIndex++;
         }
     }
 
     protected void drawResearchData(final ResearchDataContext dataContext, final int offsetY, int mouseX, int mouseY) {
-        ResearchCognitionData data = dataContext.getData();
-
-        ItemStack previewStack = data.getPreviewStack();
-        renderItemStackToGUI(mc, mc.getRenderItem(), 11, offsetY + 3, previewStack);
-
         if (dataContext.isLocked()) {
+            GlStateManager.color(1.0F, 0.9F, 0.6F, 1.0F);
+        }
+        if (!dataContext.isAvailable()) {
             GlStateManager.color(1.0F, 0.6F, 0.6F, 1.0F);
         }
         if (isMouseOver(8, offsetY,
@@ -462,16 +538,19 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         this.mc.getTextureManager().bindTexture(TEXTURES_TERMINAL_ELEMENTS);
         drawTexturedModalRect(8, offsetY, 0, 0, TERMINAL_ELEMENT_WIDTH, TERMINAL_ELEMENT_HEIGHT);
 
+        ResearchCognitionData data = dataContext.getData();
         double researchProgress = dataContext.getProgress();
         if (researchProgress > 0) {
             GlStateManager.color(0.6F, 1.0F, 0.6F, 1.0F);
             double progress = researchProgress / data.getRequiredPoints();
             drawTexturedModalRect(8, offsetY, 0, 0, (int) (TERMINAL_ELEMENT_WIDTH * progress), TERMINAL_ELEMENT_HEIGHT);
         }
-
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.scale(FONT_SCALE, FONT_SCALE, FONT_SCALE);
 
+        ItemStack previewStack = data.getPreviewStack();
+        renderItemStackToGUI(mc, mc.getRenderItem(), 11, offsetY + 3, previewStack);
+
+        GlStateManager.scale(FONT_SCALE, FONT_SCALE, FONT_SCALE);
         float textRenderOffsetX = 29 / FONT_SCALE;
         float textRenderOffsetY = (34 + (offsetY - 30)) / FONT_SCALE;
         fontRenderer.drawString(data.getTranslatedName(), (int) textRenderOffsetX, (int) textRenderOffsetY, 0x404040);
@@ -480,7 +559,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             if (researchProgress >= 0) {
                 if (researchProgress == 0) {
                     fontRenderer.drawString(
-                            I18n.format("gui.terminal_controller.data.progress", 0),
+                            I18n.format("gui.terminal_controller.data.progress", "0.00%"),
                             (int) textRenderOffsetX, (int) textRenderOffsetY + 12, 0x404040);
                 } else {
                     fontRenderer.drawString(
@@ -489,8 +568,13 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
                             (int) textRenderOffsetX, (int) textRenderOffsetY + 12, 0x404040);
                 }
             } else {
-                fontRenderer.drawString(I18n.format("gui.terminal_controller.data.locked"),
-                        (int) textRenderOffsetX, (int) textRenderOffsetY + 12, 0x404040);
+                if (dataContext.isAvailable()) {
+                    fontRenderer.drawString(I18n.format("gui.terminal_controller.data.locked"),
+                            (int) textRenderOffsetX, (int) textRenderOffsetY + 12, 0x404040);
+                } else {
+                    fontRenderer.drawString(I18n.format("gui.terminal_controller.data.unavailable"),
+                            (int) textRenderOffsetX, (int) textRenderOffsetY + 12, 0x404040);
+                }
             }
         } else {
             fontRenderer.drawString(I18n.format("gui.terminal_controller.data.unlocked"),
@@ -507,9 +591,10 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         searchTextField.updateCursorCounter();
 
         if (ClientScheduler.getClientTick() % 20 == 0) {
-            updateUnlockedData(unlockedData);
             updateResearchingData(researchingData);
-            updateLockedData(lockedData);
+            updateUnlockedData(unlockedData);
+            updateFilteredData();
+            updateRenderingData();
         }
     }
 
@@ -517,14 +602,25 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
     protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
-        if (mouseButton != 0) {
-            return;
-        }
-
         int x = mouseX - guiLeft;
         int y = mouseY - guiTop;
 
-        if (searchTextField.mouseClicked(x, y, mouseButton)) {
+        if (mouseButton == 0) {
+            if (searchTextField.mouseClicked(x, y, mouseButton)) {
+                return;
+            }
+        } else if (mouseButton == 1) {
+            if (isMouseOver(searchTextField.x, searchTextField.y,
+                    searchTextField.x + searchTextField.width,
+                    searchTextField.y + searchTextField.height,
+                    x, y))
+            {
+                searchTextField.setText("");
+                updateRenderingData();
+            }
+        }
+
+        if (mouseButton != 0) {
             return;
         }
 
@@ -563,8 +659,10 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         }
         if (generation < data.getMinComputationPointPerTick()) {
             return false;
-
         } else if ((generation - consumption) < data.getMinComputationPointPerTick()) {
+            return false;
+        }
+        if (!unlockedData.containsAll(data.getDependencies())) {
             return false;
         }
 
@@ -589,7 +687,9 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             super.keyTyped(c, i);
         }
 
-        searchTextField.textboxKeyTyped(c, i);
+        if (searchTextField.textboxKeyTyped(c, i)) {
+            updateRenderingData();
+        }
     }
 
     @Override
@@ -623,7 +723,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         dataScrollbar.setLeft(DATA_SCROLL_BAR_LEFT)
                 .setTop(DATA_SCROLL_BAR_TOP)
                 .setHeight(DATA_SCROLL_BAR_HEIGHT)
-                .setRange(0, Math.max(0, unlockedData.size() + lockedData.size() - MAX_PAGE_ELEMENTS), 1);
+                .setRange(0, Math.max(0, researchingData.size() + unlockedData.size() + lockedData.size() - MAX_PAGE_ELEMENTS), 1);
         screenScrollbar.setLeft(SCREEN_SCROLL_BAR_LEFT)
                 .setTop(SCREEN_SCROLL_BAR_TOP)
                 .setHeight(SCREEN_SCROLL_BAR_HEIGHT);
@@ -638,13 +738,17 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
     public static class ResearchDataContext {
         private final ResearchCognitionData data;
         private final boolean locked;
+        private final boolean available;
         private final double progress;
 
         public ResearchDataContext(final ResearchCognitionData data,
                                    final boolean locked,
-                                   final Double progress) {
+                                   final boolean available,
+                                   final Double progress)
+        {
             this.data = data;
             this.locked = locked;
+            this.available = available;
             this.progress = progress;
         }
 
@@ -654,6 +758,10 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         public boolean isLocked() {
             return locked;
+        }
+
+        public boolean isAvailable() {
+            return available;
         }
 
         public double getProgress() {

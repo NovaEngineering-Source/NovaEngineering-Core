@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'github.kasuminova'
-version = '1.3'
+version = '1.3.2'
 
 repositories {
     flatDir {

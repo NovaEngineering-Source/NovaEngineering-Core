@@ -2,8 +2,8 @@ package github.kasuminova.novaeng.common.handler;
 
 import github.kasuminova.mmce.common.concurrent.Action;
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
-import github.kasuminova.novaeng.common.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.network.PktHyperNetStatus;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;

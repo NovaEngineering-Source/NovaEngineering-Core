@@ -3,7 +3,9 @@ package github.kasuminova.novaeng.common.hypernet;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
 import github.kasuminova.mmce.common.helper.IMachineController;
+import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
+import github.kasuminova.novaeng.common.hypernet.misc.ConnectResult;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.util.RandomUtils;
 import hellfirepvp.modularmachinery.ModularMachinery;
@@ -33,9 +35,6 @@ public class ComputationCenter {
 
     // 计算点计数器，计算当前 Tick 总共消耗了多少算力。
     private volatile float computationPointCounter = 0;
-
-    // 存储上一个 Tick 消耗的总算力，用于能源消耗计算。
-    private float lastComputationPointConsumed = 0;
 
     public ComputationCenter(final TileMultiblockMachineController owner, final NBTTagCompound customData) {
         this.owner = owner;
@@ -130,9 +129,9 @@ public class ComputationCenter {
         });
     }
 
-    public boolean onConnect(final TileMultiblockMachineController machinery, final NetNode node) {
+    public ConnectResult onConnect(final TileMultiblockMachineController machinery, final NetNode node) {
         if (!owner.isWorking()) {
-            return false;
+            return ConnectResult.CENTER_NOT_WORKING;
         }
 
         Map<BlockPos, NetNode> connected = nodes.computeIfAbsent(node.getClass(), v -> new ConcurrentHashMap<>());
@@ -140,18 +139,20 @@ public class ComputationCenter {
 
         if (connected.computeIfPresent(pos, (k, v) -> node) != null) {
             node.onConnected(this);
-            return true;
+            return ConnectResult.SUCCESS;
         }
 
-        if (getConnectedMachineryCount() >= type.getMaxConnections()
-                || !HyperNetHelper.supportsHyperNet(machinery)
-                || connected.size() >= node.getNodeMaxPresences()) {
-            return false;
+        if (getConnectedMachineryCount() >= type.getMaxConnections()) {
+            return ConnectResult.CENTER_REACHED_CONNECTION_LIMIT;
+        } else if (!HyperNetHelper.supportsHyperNet(machinery)) {
+            return ConnectResult.UNSUPPORTED_NODE;
+        } else if (connected.size() >= node.getNodeMaxPresences()) {
+            return ConnectResult.NODE_TYPE_REACHED_MAX_PRESENCES;
         }
 
         connected.put(pos, node);
         node.onConnected(this);
-        return true;
+        return ConnectResult.SUCCESS;
     }
 
     public void onDisconnect(final TileMultiblockMachineController machinery, final NetNode node) {
@@ -197,7 +198,6 @@ public class ComputationCenter {
     }
 
     public void resetComputationPointCounter() {
-        lastComputationPointConsumed = computationPointCounter;
         computationPointCounter = type.getMaxComputationPointCarrying();
     }
 
