@@ -14,9 +14,11 @@ import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleGPU
 import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleRAMType;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
+import net.minecraft.command.ICommandSender;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.text.TextComponentString;
 import stanhebben.zenscript.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -183,5 +185,34 @@ public class RegistryHyperNet {
 
         DATA_PROCESSOR_MODULE_CPU_TYPE.clear();
         DATA_PROCESSOR_MODULE_RAM_TYPE.clear();
+    }
+
+    public static void clearRegistry(ICommandSender sender) {
+        sender.sendMessage(new TextComponentString(String.format(
+                "[NovaEngineering-Core] Cleared %s supported machinery registry.", SUPPORTED_MACHINERY.size()))
+        );
+        sender.sendMessage(new TextComponentString(String.format(
+                "[NovaEngineering-Core] Cleared %s computation center type registry.", COMPUTATION_CENTER_TYPE.size()))
+        );
+        sender.sendMessage(new TextComponentString(String.format(
+                "[NovaEngineering-Core] Cleared %s data processor type registry.", DATA_PROCESSOR_TYPE.size()))
+        );
+        sender.sendMessage(new TextComponentString(String.format(
+                "[NovaEngineering-Core] Cleared %s research station type registry.", RESEARCH_STATION_TYPE.size()))
+        );
+        sender.sendMessage(new TextComponentString(String.format(
+                "[NovaEngineering-Core] Cleared %s database type registry.", DATABASE_TYPE.size()))
+        );
+        sender.sendMessage(new TextComponentString(String.format(
+                "[NovaEngineering-Core] Cleared %s research cognition registry.", RESEARCH_COGNITION.size()))
+        );
+        sender.sendMessage(new TextComponentString(String.format(
+                "[NovaEngineering-Core] Cleared %s data processor cpu type registry.", DATA_PROCESSOR_MODULE_CPU_TYPE.size()))
+        );
+        sender.sendMessage(new TextComponentString(String.format(
+                "[NovaEngineering-Core] Cleared %s data processor gpu type registry.", DATA_PROCESSOR_MODULE_RAM_TYPE.size()))
+        );
+
+        clearRegistry();
     }
 }

@@ -71,14 +71,14 @@ public class PktTerminalTaskProvide implements IMessage, IMessageHandler<PktTerm
         }
 
         Collection<Database> databases = center.getNode(Database.class);
+        dependency:
         for (final ResearchCognitionData dependency : researchTask.getDependencies()) {
             for (final Database database : databases) {
                 if (database.hasResearchCognition(dependency)) {
-                    break;
-                } else {
-                    return null;
+                    continue dependency;
                 }
             }
+            return null;
         }
 
         Collection<ResearchStation> stations = center.getNode(ResearchStation.class);

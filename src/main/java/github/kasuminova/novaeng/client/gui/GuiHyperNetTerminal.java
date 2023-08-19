@@ -106,7 +106,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             DatabaseType type = status.getType();
             int stored = status.getStoredCognition();
             int researching = status.getResearchingCognition();
-            return stored + researching < type.getMaxResearchCognitionStoreSize();
+            return type.getMaxResearchCognitionStoreSize() > stored + researching;
         });
     }
 
@@ -636,16 +636,24 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         screenScrollbar.click(x, y);
 
         int offsetY = 30;
-        for (final ResearchDataContext data : renderingData) {
+
+        int index = dataScrollbar.getCurrentScroll();
+        int currentIndex = 0;
+        while (index < renderingData.size() && currentIndex < MAX_PAGE_ELEMENTS) {
+            final ResearchDataContext data = renderingData.get(index);
+
             if (isMouseOver(
                     8, 30,
                     8 + TERMINAL_ELEMENT_WIDTH, offsetY + TERMINAL_ELEMENT_HEIGHT,
-                    x, y)) {
+                    x, y))
+            {
                 current = data;
                 break;
             }
 
             offsetY += TERMINAL_ELEMENT_HEIGHT;
+            currentIndex++;
+            index++;
         }
     }
 
@@ -723,7 +731,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         dataScrollbar.setLeft(DATA_SCROLL_BAR_LEFT)
                 .setTop(DATA_SCROLL_BAR_TOP)
                 .setHeight(DATA_SCROLL_BAR_HEIGHT)
-                .setRange(0, Math.max(0, researchingData.size() + unlockedData.size() + lockedData.size() - MAX_PAGE_ELEMENTS), 1);
+                .setRange(0, Math.max(0, renderingData.size() - MAX_PAGE_ELEMENTS), 1);
         screenScrollbar.setLeft(SCREEN_SCROLL_BAR_LEFT)
                 .setTop(SCREEN_SCROLL_BAR_TOP)
                 .setHeight(SCREEN_SCROLL_BAR_HEIGHT);

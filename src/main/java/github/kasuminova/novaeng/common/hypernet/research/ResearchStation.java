@@ -83,8 +83,9 @@ public class ResearchStation extends NetNode {
 
         if (nodes.stream()
                 .map(Database.class::cast)
-                .noneMatch(database ->
-                        database.getType().getMaxResearchCognitionStoreSize() > database.getStoredResearchCognition().size())) {
+                .noneMatch(database -> database.getType().getMaxResearchCognitionStoreSize() >
+                        database.getStoredResearchCognition().size() + database.getAllResearchingCognition().size()))
+        {
             event.setFailed("网络中所有的数据库存储已满！");
         }
     }
@@ -199,7 +200,8 @@ public class ResearchStation extends NetNode {
         if (progress == -1) {
             ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> center.getNode(Database.class)
                     .stream()
-                    .filter(database -> database.getType().getMaxResearchCognitionStoreSize() > database.getStoredResearchCognition().size())
+                    .filter(database -> database.getType().getMaxResearchCognitionStoreSize() >
+                            database.getStoredResearchCognition().size() + database.getAllResearchingCognition().size())
                     .findFirst()
                     .ifPresent(database -> {
                         database.getAllResearchingCognition().put(data, 0D);
