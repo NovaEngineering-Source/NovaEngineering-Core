@@ -63,7 +63,12 @@ public abstract class NetNode {
             return;
         }
 
-        ComputationCenter.from(ctrl).onConnect(owner, this);
+        switch (ComputationCenter.from(ctrl).onConnect(owner, this)) {
+            case NODE_TYPE_REACHED_MAX_PRESENCES:
+            case CENTER_REACHED_CONNECTION_LIMIT:
+                center = null;
+                break;
+        }
 
         writeNBT();
     }

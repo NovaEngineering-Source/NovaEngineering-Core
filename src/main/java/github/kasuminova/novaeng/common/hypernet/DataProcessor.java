@@ -195,9 +195,10 @@ public class DataProcessor extends NetNode {
 
     public float getEfficiency() {
         float overHeatPercent = getOverHeatPercent();
-        return overHeatPercent >= 0.9F ? 1.0F - (overHeatPercent - 0.5F) * 2F : 1F;
+        return overHeatPercent >= 0.95F ? 1.0F - (overHeatPercent - 0.5F) * 2F : 1F;
     }
 
+    @ZenGetter("overHeatPercent")
     public float getOverHeatPercent() {
         return overheat ? 1F : (float) storedHU / type.getOverheatThreshold();
     }

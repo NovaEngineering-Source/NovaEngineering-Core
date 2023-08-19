@@ -1,9 +1,9 @@
 package github.kasuminova.novaeng.common.util;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.TreeMap;
+import java.util.PriorityQueue;
+import java.util.stream.Collectors;
 
 public class StringSortUtils {
 
@@ -17,7 +17,7 @@ public class StringSortUtils {
      * @return 排序后的列表
      */
     public static List<String> sortWithMatchRate(final Collection<String> source, final String filter) {
-        TreeMap<Integer, List<String>> sorted = new TreeMap<>();
+        PriorityQueue<MatchResult> sorted = new PriorityQueue<>();
 
         char[] filterCharArr = filter.replace(" ", "").toLowerCase().toCharArray();
 
@@ -28,13 +28,11 @@ public class StringSortUtils {
 
             int matchRate = getMatchRate(filterCharArr, targetCharArr);
             if (matchRate > 0) {
-                sorted.computeIfAbsent(matchRate, v -> new ArrayList<>()).add(s);
+                sorted.add(new MatchResult(s, matchRate));
             }
         }
 
-        List<String> result = new ArrayList<>();
-        sorted.descendingMap().values().forEach(result::addAll);
-        return result;
+        return sorted.stream().map(e -> e.str).collect(Collectors.toList());
     }
 
     private static int getMatchRate(final char[] filterCharArr, final char[] targetCharArr) {
@@ -60,5 +58,20 @@ public class StringSortUtils {
             return Integer.MAX_VALUE;
         }
         return matchRate;
+    }
+
+    public static class MatchResult implements Comparable<MatchResult> {
+        private final String str;
+        private final int matchRate;
+
+        public MatchResult(final String str, final int matchRate) {
+            this.str = str;
+            this.matchRate = matchRate;
+        }
+
+        @Override
+        public int compareTo(final MatchResult o) {
+            return Integer.compare(o.matchRate, matchRate);
+        }
     }
 }
