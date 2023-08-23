@@ -2,13 +2,13 @@ package github.kasuminova.novaeng.common.hypernet;
 
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.FactoryRecipeTickEvent;
-import github.kasuminova.mmce.common.helper.IMachineController;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.common.lib.RequirementTypesMM;
 import hellfirepvp.modularmachinery.common.machine.IOType;
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
 import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
+import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,25 +19,26 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import java.util.*;
+import javax.annotation.Nullable;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.Database")
 public class Database extends NetNode {
-    private static final Map<TileMultiblockMachineController, Database> CACHED_DATABASE = new WeakHashMap<>();
-
     private final Set<ResearchCognitionData> storedResearchCognition = new HashSet<>();
     private final Object2DoubleOpenHashMap<ResearchCognitionData> researchingCognition = new Object2DoubleOpenHashMap<>();
     private final DatabaseType type;
 
-    public Database(final TileMultiblockMachineController owner, final NBTTagCompound customData) {
+    public Database(final TileMultiblockMachineController owner) {
         super(owner);
         this.type = RegistryHyperNet.getDatabaseType(
                 Objects.requireNonNull(owner.getFoundMachine()).getRegistryName().getPath()
         );
 
-        readNBT(customData);
+        researchingCognition.defaultReturnValue(-1D);
     }
 
     @ZenMethod
@@ -51,10 +52,16 @@ public class Database extends NetNode {
                 false));
     }
 
-    @ZenMethod
-    public static Database from(final IMachineController machine) {
-        TileMultiblockMachineController ctrl = machine.getController();
-        return CACHED_DATABASE.computeIfAbsent(ctrl, v -> new Database(ctrl, ctrl.getCustomDataTag()));
+    @Override
+    public boolean isWorking() {
+        if (!(owner instanceof TileFactoryController)) {
+            return false;
+        }
+
+        TileFactoryController factory = (TileFactoryController) owner;
+        FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(DatabaseType.DATABASE_WORKING_THREAD_NAME);
+
+        return thread != null && thread.isWorking();
     }
 
     @Override
@@ -116,13 +123,53 @@ public class Database extends NetNode {
 
     @ZenMethod
     public boolean hasResearchCognition(ResearchCognitionData research) {
-        return owner.isWorking() && research != null && storedResearchCognition.contains(research);
+        return isWorking() && research != null && storedResearchCognition.contains(research);
     }
 
     @ZenMethod
-    public void storeResearchCognitionData(ResearchCognitionData data) {
+    public double getResearchingData(ResearchCognitionData data) {
+        return isWorking() ? researchingCognition.getDouble(data) : -1;
+    }
+
+    @ZenMethod
+    public boolean writeResearchingData(ResearchCognitionData data, double progress) {
+        if (!hasDatabaseSpace(data)) {
+            return false;
+        }
+
+        researchingCognition.put(data, progress);
+        writeNBT();
+        return true;
+    }
+
+    @ZenMethod
+    public boolean hasDatabaseSpace() {
+        int maxStoreSize = type.getMaxResearchDataStoreSize();
+        int stored = storedResearchCognition.size();
+        return maxStoreSize > stored;
+    }
+
+    @ZenMethod
+    public boolean hasDatabaseSpace(@Nullable ResearchCognitionData toStore) {
+        int maxStoreSize = type.getMaxResearchDataStoreSize();
+        int stored = storedResearchCognition.size();
+        int researching = researchingCognition.size();
+
+        if (researchingCognition.containsKey(toStore)) {
+            researching--;
+        }
+
+        return maxStoreSize > stored + researching;
+    }
+
+    @ZenMethod
+    public boolean storeResearchCognitionData(ResearchCognitionData data) {
+        if (!hasDatabaseSpace(data)) {
+            return false;
+        }
         storedResearchCognition.add(data);
         writeNBT();
+        return true;
     }
 
     @ZenGetter("storedResearchCognition")
@@ -152,10 +199,7 @@ public class Database extends NetNode {
         return new Status(type, storedResearchCognition.size(), researchingCognition.size());
     }
 
-    public static void clearCache() {
-        CACHED_DATABASE.clear();
-    }
-
+    @SuppressWarnings("unused")
     public static class Status {
         private final DatabaseType type;
         private final int storedCognition;
@@ -187,6 +231,10 @@ public class Database extends NetNode {
             tag.setInteger("r", researchingCognition);
 
             return tag;
+        }
+
+        public boolean hasDatabaseSpace() {
+            return type.getMaxResearchDataStoreSize() > storedCognition + researchingCognition;
         }
 
         public DatabaseType getType() {

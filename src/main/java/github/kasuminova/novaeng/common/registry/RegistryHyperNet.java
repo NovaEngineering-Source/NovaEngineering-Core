@@ -1,13 +1,13 @@
 package github.kasuminova.novaeng.common.registry;
 
+import com.google.common.base.Preconditions;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import github.kasuminova.mmce.common.upgrade.UpgradeType;
-import github.kasuminova.novaeng.common.hypernet.ComputationCenterType;
-import github.kasuminova.novaeng.common.hypernet.DataProcessorType;
-import github.kasuminova.novaeng.common.hypernet.DatabaseType;
+import github.kasuminova.novaeng.common.hypernet.*;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
+import github.kasuminova.novaeng.common.hypernet.research.ResearchStation;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchStationType;
 import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleCPUType;
 import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleGPUType;
@@ -19,7 +19,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextComponentString;
-import stanhebben.zenscript.annotations.NotNull;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -34,6 +33,8 @@ public class RegistryHyperNet {
 
     private static final Set<ResourceLocation> SUPPORTED_MACHINERY = new HashSet<>();
     private static final Set<ResourceLocation> COMPUTATION_CENTERS = new HashSet<>();
+
+    private static final Map<ResourceLocation, Class<? extends NetNode>> REGISTERED_NODE_TYPE = new HashMap<>();
 
     private static final Map<String, ComputationCenterType> COMPUTATION_CENTER_TYPE = new HashMap<>();
     private static final Map<String, DataProcessorType>     DATA_PROCESSOR_TYPE     = new HashMap<>();
@@ -60,8 +61,9 @@ public class RegistryHyperNet {
     }
 
     @ZenMethod
-    public static void addHyperNetSupportedMachinery(@Nonnull final String registryName) {
-        SUPPORTED_MACHINERY.add(new ResourceLocation(ModularMachinery.MODID, registryName));
+    public static void addHyperNetSupportedMachinery(@Nonnull final String name) {
+        ResourceLocation registryName = new ResourceLocation(ModularMachinery.MODID, name);
+        SUPPORTED_MACHINERY.add(registryName);
     }
 
     @ZenMethod
@@ -83,43 +85,81 @@ public class RegistryHyperNet {
     }
 
     @ZenMethod
-    public static void addComputationCenterType(@NotNull final ComputationCenterType type) {
+    public static void addComputationCenterType(@Nonnull final ComputationCenterType type) {
         COMPUTATION_CENTER_TYPE.put(type.getTypeName(), type);
+        addHyperNetSupportedMachinery(new ResourceLocation(ModularMachinery.MODID, type.getTypeName()));
     }
 
     @ZenMethod
-    public static ComputationCenterType getComputationCenterType(@NotNull final String typeName) {
+    public static void addDataProcessorType(@Nonnull final DataProcessorType type) {
+        DATA_PROCESSOR_TYPE.put(type.getTypeName(), type);
+        registerHyperNetNode(new ResourceLocation(ModularMachinery.MODID, type.getTypeName()), DataProcessor.class);
+    }
+
+    @ZenMethod
+    public static void addResearchStationType(@Nonnull final ResearchStationType type) {
+        RESEARCH_STATION_TYPE.put(type.getTypeName(), type);
+        registerHyperNetNode(new ResourceLocation(ModularMachinery.MODID, type.getTypeName()), ResearchStation.class);
+    }
+
+    @ZenMethod
+    public static void addDatabaseType(@Nonnull final DatabaseType type) {
+        DATABASE_TYPE.put(type.getTypeName(), type);
+        registerHyperNetNode(new ResourceLocation(ModularMachinery.MODID, type.getTypeName()), Database.class);
+    }
+
+    @ZenMethod
+    public static ComputationCenterType getComputationCenterType(@Nonnull final String typeName) {
         return COMPUTATION_CENTER_TYPE.get(typeName);
     }
 
-    @ZenMethod
-    public static void addDataProcessorType(@NotNull final DataProcessorType type) {
-        DATA_PROCESSOR_TYPE.put(type.getTypeName(), type);
+    public static Collection<ComputationCenterType> getAllComputationsCenterTypes() {
+        return Collections.unmodifiableCollection(COMPUTATION_CENTER_TYPE.values());
     }
 
     @ZenMethod
-    public static DataProcessorType getDataProcessorType(@NotNull final String typeName) {
+    public static DataProcessorType getDataProcessorType(@Nonnull final String typeName) {
         return DATA_PROCESSOR_TYPE.get(typeName);
     }
 
-    @ZenMethod
-    public static void addResearchStationType(@NotNull final ResearchStationType type) {
-        RESEARCH_STATION_TYPE.put(type.getTypeName(), type);
+    public static Collection<DataProcessorType> getAllDataProcessorTypes() {
+        return Collections.unmodifiableCollection(DATA_PROCESSOR_TYPE.values());
     }
 
     @ZenMethod
-    public static ResearchStationType getResearchStationType(@NotNull final String typeName) {
+    public static ResearchStationType getResearchStationType(@Nonnull final String typeName) {
         return RESEARCH_STATION_TYPE.get(typeName);
     }
 
-    @ZenMethod
-    public static void addDatabaseType(@NotNull final DatabaseType type) {
-        DATABASE_TYPE.put(type.getTypeName(), type);
+    public static Collection<ResearchStationType> getAllResearchStationTypes() {
+        return Collections.unmodifiableCollection(RESEARCH_STATION_TYPE.values());
     }
 
     @ZenMethod
-    public static DatabaseType getDatabaseType(@NotNull final String typeName) {
+    public static DatabaseType getDatabaseType(@Nonnull final String typeName) {
         return DATABASE_TYPE.get(typeName);
+    }
+
+    public static Collection<DatabaseType> getAllDatabaseTypes() {
+        return Collections.unmodifiableCollection(DATABASE_TYPE.values());
+    }
+    
+    public static <T extends NetNode> void registerHyperNetNode(@Nonnull final ResourceLocation registryName,
+                                                                @Nonnull final Class<T> nodeClass)
+    {
+        Preconditions.checkNotNull(registryName);
+        Preconditions.checkNotNull(nodeClass);
+
+        REGISTERED_NODE_TYPE.put(registryName, nodeClass);
+        addHyperNetSupportedMachinery(registryName);
+    }
+
+    public static Class<? extends NetNode> getNodeType(@Nonnull final DynamicMachine machine) {
+        return getNodeType(machine.getRegistryName());
+    }
+
+    public static Class<? extends NetNode> getNodeType(@Nonnull final ResourceLocation registryName) {
+        return REGISTERED_NODE_TYPE.get(registryName);
     }
 
     @ZenMethod
@@ -128,7 +168,7 @@ public class RegistryHyperNet {
     }
 
     @ZenMethod
-    public static ResearchCognitionData getResearchCognitionData(@NotNull final String researchName) {
+    public static ResearchCognitionData getResearchCognitionData(@Nonnull final String researchName) {
         return RESEARCH_COGNITION.get(researchName);
     }
 
@@ -178,9 +218,12 @@ public class RegistryHyperNet {
         SUPPORTED_MACHINERY.clear();
         COMPUTATION_CENTER_TYPE.clear();
 
+        REGISTERED_NODE_TYPE.clear();
+        
         DATA_PROCESSOR_TYPE.clear();
-        RESEARCH_STATION_TYPE.clear();
         DATABASE_TYPE.clear();
+        
+        RESEARCH_STATION_TYPE.clear();
         RESEARCH_COGNITION.clear();
 
         DATA_PROCESSOR_MODULE_CPU_TYPE.clear();
@@ -204,13 +247,16 @@ public class RegistryHyperNet {
                 "[NovaEngineering-Core] Cleared %s database type registry.", DATABASE_TYPE.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
+                "[NovaEngineering-Core] Cleared %s registered node type.", REGISTERED_NODE_TYPE.size()))
+        );
+        sender.sendMessage(new TextComponentString(String.format(
                 "[NovaEngineering-Core] Cleared %s research cognition registry.", RESEARCH_COGNITION.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
                 "[NovaEngineering-Core] Cleared %s data processor cpu type registry.", DATA_PROCESSOR_MODULE_CPU_TYPE.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s data processor gpu type registry.", DATA_PROCESSOR_MODULE_RAM_TYPE.size()))
+                "[NovaEngineering-Core] Cleared %s data processor ram type registry.", DATA_PROCESSOR_MODULE_RAM_TYPE.size()))
         );
 
         clearRegistry();

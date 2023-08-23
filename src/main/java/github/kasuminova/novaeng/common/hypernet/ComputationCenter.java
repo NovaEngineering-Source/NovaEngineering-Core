@@ -9,6 +9,8 @@ import github.kasuminova.novaeng.common.hypernet.misc.ConnectResult;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.util.RandomUtils;
 import hellfirepvp.modularmachinery.ModularMachinery;
+import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
+import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -63,10 +65,23 @@ public class ComputationCenter {
     }
 
     @ZenMethod
+    public void onDurabilityFixRecipeCheck(RecipeCheckEvent event, int durability) {
+        if (circuitDurability + durability > type.getCircuitDurability()) {
+            event.setFailed("novaeng.hypernet.craftcheck.durability.failed");
+        }
+    }
+
+    @ZenMethod
     public void onWorkingTick() {
         checkNodeConnection();
         consumeCircuitDurability();
         HyperNetEventHandler.addTickStartAction(this::resetComputationPointCounter);
+    }
+
+    @ZenMethod
+    public void fixCircuit(int durability) {
+        circuitDurability = Math.min(circuitDurability + durability, type.getCircuitDurability());
+        writeNBT();
     }
 
     @ZenMethod
@@ -130,7 +145,7 @@ public class ComputationCenter {
     }
 
     public ConnectResult onConnect(final TileMultiblockMachineController machinery, final NetNode node) {
-        if (!owner.isWorking()) {
+        if (!isWorking()) {
             return ConnectResult.CENTER_NOT_WORKING;
         }
 
@@ -168,7 +183,7 @@ public class ComputationCenter {
      * 消耗计算点，返回已消耗的数量。
      */
     public synchronized float consumeComputationPoint(final float amount) {
-        if (!owner.isWorking() || type.getMaxComputationPointCarrying() < amount || computationPointCounter < amount) {
+        if (!isWorking() || type.getMaxComputationPointCarrying() < amount || computationPointCounter < amount) {
             return 0;
         }
 
@@ -195,6 +210,17 @@ public class ComputationCenter {
         }
 
         return totalGenerated;
+    }
+
+    public boolean isWorking() {
+        if (!(owner instanceof TileFactoryController)) {
+            return false;
+        }
+
+        TileFactoryController factory = (TileFactoryController) owner;
+        FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(ComputationCenterType.CENTER_WORKING_THREAD_NAME);
+
+        return thread != null && thread.isWorking();
     }
 
     public void resetComputationPointCounter() {

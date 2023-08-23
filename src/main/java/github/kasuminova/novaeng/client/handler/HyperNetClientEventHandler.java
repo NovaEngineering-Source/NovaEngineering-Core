@@ -29,7 +29,6 @@ public class HyperNetClientEventHandler {
         }
         NBTTagCompound tag = stack.getTagCompound();
 
-
         List<String> tips = event.getToolTip();
         tips.add(I18n.format("item.hypernet_connect_card.tooltip.1"));
         tips.add(I18n.format("item.hypernet_connect_card.tooltip.2"));

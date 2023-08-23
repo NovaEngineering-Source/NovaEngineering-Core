@@ -92,17 +92,21 @@ public class GuiScrollbarThin {
         return this.currentScroll;
     }
 
-    public void click(final int x, final int y) {
+    public boolean click(final int x, final int y) {
         if (this.getRange() == 0) {
-            return;
+            return false;
         }
 
-        if (isMouseOver(x, y)) {
-            this.currentScroll = (y - this.displayY);
-            this.currentScroll = this.minScroll + ((this.currentScroll * 2 * this.getRange() / this.height));
-            this.currentScroll = (this.currentScroll + 1) >> 1;
-            this.applyRange();
+        if (!isMouseOver(x, y)) {
+            return false;
         }
+
+        this.currentScroll = (y - this.displayY);
+        this.currentScroll = this.minScroll + ((this.currentScroll * 2 * this.getRange() / this.height));
+        this.currentScroll = (this.currentScroll + 1) >> 1;
+        this.applyRange();
+
+        return true;
     }
 
     public boolean isMouseOver(final int x, final int y) {

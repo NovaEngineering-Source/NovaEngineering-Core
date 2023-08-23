@@ -1,11 +1,18 @@
 item.hypernet_connect_card.tooltip.1=§9这张存储卡可以储存一个 HyperNet 网络的频段和坐标信息，存储的密钥经过重重加密。
-item.hypernet_connect_card.tooltip.2=§9将其输入到支持 HyperNet 计算网络的机械的物品输入仓中，即可自动解析存储卡并连接至 HyperNet 计算网络。
+item.hypernet_connect_card.tooltip.2=§9右击支持 HyperNet 的机械控制器，即可自动解析存储卡并连接至 HyperNet 计算网络。
 item.hypernet_connect_card.tooltip.3=§a存储卡可以重复使用。
 item.hypernet_connect_card.tooltip.4=§c警告：使用时请保持 HyperNet 计算网络中心在线。HyperNet 通讯距离无限，但是无法跨越维度。
 item.hypernet_connect_card.tooltip.no_pos.tip.0=§b存储卡中保存的坐标：§e空
 item.hypernet_connect_card.tooltip.no_pos.tip.1=§2右击任意等级的计算网络中心控制器来写入数据。
 item.hypernet_connect_card.tooltip.pos.tip.0=§b存储卡中保存的坐标：§a（X: %s, Y: %s, Z: %s）
 item.hypernet_connect_card.tooltip.pos.tip.1=§2右击任意等级的计算网络中心控制器来覆写数据。
+
+novaeng.hypernet.connect.result.success=§a连接成功§b（状态：%s 已连接 / %s 最大连接数）。
+novaeng.hypernet.connect.result.unknown_center=§c连接失败（原因：未知的计算网络中心，区块可能被卸载或控制器不存在）。
+novaeng.hypernet.connect.result.center_not_working=§c连接失败（原因：计算网络中心处于离线状态）。
+novaeng.hypernet.connect.result.center_reached_connection_limit=§c连接失败（原因：已达到计算网络中心的最大连接数：%s）。
+novaeng.hypernet.connect.result.unsupported_node=§c连接失败（原因：未知的网络节点）。
+novaeng.hypernet.connect.result.node_type_reached_max_presences=§c连接失败（原因：已达到当前网络节点类型的连接上限：%s））。
 
 upgrade.data_processor.module.cpu.tip.0=§9CPU 模块为数据处理计算机提供算力。
 upgrade.data_processor.module.cpu.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c50%%。
@@ -40,6 +47,27 @@ gui.hypernet.controller.disconnected=§9网络状态：§c断开连接
 gui.hypernet.controller.version=§7HyperNet Monitor v1.0
 gui.hypernet.controller.footer=§9/////////////////////////////////
 
+novaeng.hypernet.maintenance_controller=维护控制器
+novaeng.hypernet.data_forwarding_processor=数据转发处理器
+
+novaeng.hypernet.craftcheck.durability.failed=电路板状态良好。
+
+novaeng.hypernet.computation_center.working.tooltip.0=闲置状态下，始终会消耗机械基础耗电量。
+novaeng.hypernet.computation_center.working.tooltip.1=每连接 §a1 §r个机械，最终耗电量 §c+5%%§r。
+
+novaeng.hypernet.data_processor.compute_scheduler=计算调度器
+novaeng.hypernet.data_processor.working.tooltip.0=闲置状态下，始终会消耗机械基础耗电量。
+novaeng.hypernet.data_processor.working.tooltip.1=最终耗电量取决于处理器模块当前的负载。
+
+novaeng.hypernet.database.working.tooltip.0=闲置状态下，始终会消耗机械基础电量。
+novaeng.hypernet.database.working.tooltip.1=每存储 §a1 §r个研究认知，最终耗电量 §c+10%%§r。
+
+novaeng.hypernet.research_station.hypercol=HyperCol AI
+novaeng.hypernet.research_station.working.tooltip.0=仅在工作状态下消耗能量。
+novaeng.hypernet.research_station.working.tooltip.1=工作状态下根据当前研究，消耗指定数量的算力。
+
+novaeng.hypernet.repair.tooltip=完成时，修复 §a%s §r点耐久值。
+
 gui.terminal_controller.title.nxc=nxc 的虚空终端
 gui.terminal_controller.search=§7§o搜索研究...
 gui.terminal_controller.status=§b状态：
@@ -67,7 +95,8 @@ gui.terminal_controller.screen.info.tech_level=科技等级：
 gui.terminal_controller.screen.info.required_points=需要研究点：§9
 gui.terminal_controller.screen.info.min_computation_point_per_tick=最低算力要求：§b
 
-gui.terminal_controller.screen.info.start=§a点击向研究站发送研究任务。
+gui.terminal_controller.screen.info.start=§a左击向研究站发送当前研究任务。
+gui.terminal_controller.screen.info.reset=§e右击取消研究站当前正在进行的任务。
 gui.terminal_controller.screen.info.start.time=§9预计耗时：%s 小时 %s 分钟 %s 秒（%s Ticks）。
 gui.terminal_controller.screen.info.start.warn.computation=§e警告：当前算力可能不足以完成研究。
 gui.terminal_controller.screen.info.start.error=§c无法开始研究。

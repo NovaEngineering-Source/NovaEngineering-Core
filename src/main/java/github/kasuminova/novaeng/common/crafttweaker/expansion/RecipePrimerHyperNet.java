@@ -2,12 +2,14 @@ package github.kasuminova.novaeng.common.crafttweaker.expansion;
 
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
+import github.kasuminova.novaeng.common.hypernet.NetNodeCache;
 import github.kasuminova.novaeng.common.hypernet.NetNodeImpl;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.common.integration.crafttweaker.RecipePrimer;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.client.resources.I18n;
+import net.minecraftforge.fml.relauncher.Side;
 import stanhebben.zenscript.annotations.ZenExpansion;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -25,15 +27,22 @@ public class RecipePrimerHyperNet {
      */
     @ZenMethod
     public static RecipePrimer requireComputationPoint(final RecipePrimer primer,
-                                                       final float required) {
+                                                       final float required)
+    {
+        if (Side.CLIENT.isClient()) {
+            primer.addRecipeTooltip(
+                    I18n.format("novaeng.hypernet.computation_point_required.tip",
+                            NovaEngUtils.formatFLOPS(required))
+            );
+        }
+
         return primer.addCheckHandler(event -> {
             TileMultiblockMachineController ctrl = event.getController();
-            NetNodeImpl node = NetNodeImpl.from(ctrl);
-            node.checkComputationPoint(event, required);
-        }).addRecipeTooltip(
-                I18n.format("novaeng.hypernet.computation_point_required.tip",
-                        NovaEngUtils.formatFLOPS(required))
-        );
+            NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
+            if (node != null) {
+                node.checkComputationPoint(event, required);
+            }
+        });
     }
 
     /**
@@ -42,7 +51,8 @@ public class RecipePrimerHyperNet {
      */
     @ZenMethod
     public static RecipePrimer requireResearch(final RecipePrimer primer,
-                                               final String... researchNames) {
+                                               final String... researchNames)
+    {
         return requireResearch(primer, Arrays.stream(researchNames)
                 .map(RegistryHyperNet::getResearchCognitionData)
                 .filter(Objects::nonNull)
@@ -51,15 +61,20 @@ public class RecipePrimerHyperNet {
 
     @ZenMethod
     public static RecipePrimer requireResearch(final RecipePrimer primer,
-                                               final ResearchCognitionData... researchRequired) {
-        String researchTip = Arrays.stream(researchRequired)
-                .map(ResearchCognitionData::getTranslatedName)
-                .collect(Collectors.joining(", "));
+                                               final ResearchCognitionData... researchRequired)
+    {
+        if (Side.CLIENT.isClient()) {
+            String researchTip = Arrays.stream(researchRequired)
+                    .map(ResearchCognitionData::getTranslatedName)
+                    .collect(Collectors.joining(", "));
+            primer.addRecipeTooltip(I18n.format("novaeng.hypernet.research_required.tip", researchTip));
+        }
 
         return primer.addCheckHandler(event -> {
-            TileMultiblockMachineController ctrl = event.getController();
-            NetNodeImpl node = NetNodeImpl.from(ctrl);
-            node.checkResearch(event, researchRequired);
-        }).addRecipeTooltip(I18n.format("novaeng.hypernet.research_required.tip", researchTip));
+            NetNodeImpl cache = NetNodeCache.getCache(event.getController(), NetNodeImpl.class);
+            if (cache != null) {
+                cache.checkResearch(event, researchRequired);
+            }
+        });
     }
 }

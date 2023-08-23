@@ -21,14 +21,14 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import java.util.Collection;
 import java.util.Optional;
 
-public class PktTerminalTaskProvide implements IMessage, IMessageHandler<PktTerminalTaskProvide, IMessage> {
+public class PktResearchTaskProvide implements IMessage, IMessageHandler<PktResearchTaskProvide, IMessage> {
     private ResearchCognitionData researchTask = null;
 
-    public PktTerminalTaskProvide() {
+    public PktResearchTaskProvide() {
 
     }
 
-    public PktTerminalTaskProvide(final ResearchCognitionData researchTask) {
+    public PktResearchTaskProvide(final ResearchCognitionData researchTask) {
         this.researchTask = researchTask;
     }
 
@@ -49,7 +49,7 @@ public class PktTerminalTaskProvide implements IMessage, IMessageHandler<PktTerm
     }
 
     @Override
-    public IMessage onMessage(final PktTerminalTaskProvide message, final MessageContext ctx) {
+    public IMessage onMessage(final PktResearchTaskProvide message, final MessageContext ctx) {
         ResearchCognitionData researchTask = message.researchTask;
 
         if (researchTask == null) {

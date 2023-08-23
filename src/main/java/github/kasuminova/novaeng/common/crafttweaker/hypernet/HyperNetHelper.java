@@ -4,13 +4,12 @@ import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IBlockPos;
-import github.kasuminova.mmce.common.event.Phase;
 import github.kasuminova.mmce.common.event.client.ControllerGUIRenderEvent;
-import github.kasuminova.mmce.common.event.machine.MachineTickEvent;
 import github.kasuminova.mmce.common.helper.IMachineController;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenterCache;
+import github.kasuminova.novaeng.common.hypernet.NetNodeCache;
 import github.kasuminova.novaeng.common.hypernet.NetNodeImpl;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.ModularMachinery;
@@ -39,6 +38,8 @@ public class HyperNetHelper {
 
     /**
      * 自动代理一个模块化机械，使其能够接入 HyperNet 计算网络，并在控制器添加网络相关信息。
+     * 默认使用 {@link NetNodeImpl} 实现。
+     *
      * @param machineName 机械名称
      */
     @ZenMethod
@@ -50,13 +51,7 @@ public class HyperNetHelper {
     }
 
     public static void proxyMachineForHyperNet(DynamicMachine machine) {
-        machine.addMachineEventHandler(MachineTickEvent.class, event -> {
-            if (event.phase == Phase.START) {
-                TileMultiblockMachineController ctrl = event.getController();
-                // Create Instance.
-                NetNodeImpl.from(ctrl).onMachineTick();
-            }
-        });
+        RegistryHyperNet.registerHyperNetNode(machine.getRegistryName(), NetNodeImpl.class);
 
         if (FMLCommonHandler.instance().getSide() != Side.CLIENT) {
             return;
@@ -64,7 +59,10 @@ public class HyperNetHelper {
 
         machine.addMachineEventHandler(ControllerGUIRenderEvent.class, event -> {
             TileMultiblockMachineController ctrl = event.getController();
-            NetNodeImpl node = NetNodeImpl.from(ctrl);
+            NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
+            if (node == null) {
+                return;
+            }
 
             if (ctrl.getTicksExisted() % 20 == 0) {
                 node.readNBT();
@@ -80,7 +78,7 @@ public class HyperNetHelper {
                         NovaEngUtils.formatFLOPS(ComputationCenterCache.getComputationPointConsumption()),
                         NovaEngUtils.formatFLOPS(ComputationCenterCache.getComputationPointGeneration()))
                 );
-                if (ctrl.isWorking()) {
+                if (node.isWorking()) {
                     tips.add(I18n.format("gui.hypernet.controller.computation_point_consumption") +
                             NovaEngUtils.formatFLOPS(node.getComputationPointConsumption())
                     );
@@ -135,7 +133,7 @@ public class HyperNetHelper {
         }
 
         NBTTagCompound tag = stack.getTagCompound();
-        if (tag == null ||!tag.hasKey("pos")) {
+        if (tag == null || !tag.hasKey("pos")) {
             return null;
         }
 

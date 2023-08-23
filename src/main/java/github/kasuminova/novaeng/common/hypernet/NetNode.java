@@ -5,6 +5,7 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IBlockPos;
 import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
+import github.kasuminova.novaeng.common.hypernet.misc.ConnectResult;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -39,31 +40,44 @@ public abstract class NetNode {
 
     @ZenMethod
     public boolean connectTo(IBlockPos pos) {
-        this.centerPos = CraftTweakerMC.getBlockPos(pos);
-        connectToCenter();
+        return connectTo(CraftTweakerMC.getBlockPos(pos)).isSuccess();
+    }
+
+    public ConnectResult connectTo(BlockPos pos) {
+        this.centerPos = pos;
+        if (pos == null) {
+            writeNBT();
+            return ConnectResult.UNKNOWN_CENTER;
+        }
+
+        ConnectResult result = connectToCenter();
+        if (result.isSuccess()) {
+            return result;
+        }
         writeNBT();
-        return isConnected();
+        return result;
     }
 
     @ZenMethod
-    protected void connectToCenter() {
+    protected ConnectResult connectToCenter() {
         this.center = null;
 
         if (!owner.getWorld().isBlockLoaded(this.centerPos)) {
-            return;
+            return ConnectResult.UNKNOWN_CENTER;
         }
 
         TileEntity te = owner.getWorld().getTileEntity(this.centerPos);
         if (!(te instanceof TileMultiblockMachineController)) {
-            return;
+            return ConnectResult.UNKNOWN_CENTER;
         }
 
         TileMultiblockMachineController ctrl = (TileMultiblockMachineController) te;
         if (!HyperNetHelper.isComputationCenter(ctrl)) {
-            return;
+            return ConnectResult.UNKNOWN_CENTER;
         }
 
-        switch (ComputationCenter.from(ctrl).onConnect(owner, this)) {
+        ConnectResult result = ComputationCenter.from(ctrl).onConnect(owner, this);
+        switch (result) {
             case NODE_TYPE_REACHED_MAX_PRESENCES:
             case CENTER_REACHED_CONNECTION_LIMIT:
                 center = null;
@@ -71,6 +85,12 @@ public abstract class NetNode {
         }
 
         writeNBT();
+        return result;
+    }
+
+    @ZenGetter("working")
+    public boolean isWorking() {
+        return owner.isWorking();
     }
 
     public float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {
@@ -93,7 +113,7 @@ public abstract class NetNode {
     }
 
     @ZenMethod
-    public void readNBT() {
+    public final void readNBT() {
         readNBT(owner.getCustomDataTag());
     }
 

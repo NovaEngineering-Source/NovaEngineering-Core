@@ -3,54 +3,36 @@ package github.kasuminova.novaeng.common.hypernet.research;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.FactoryRecipeTickEvent;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
-import github.kasuminova.mmce.common.helper.IMachineController;
 import github.kasuminova.novaeng.common.hypernet.Database;
 import github.kasuminova.novaeng.common.hypernet.NetNode;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.crafting.ActiveMachineRecipe;
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
+import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
-import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import java.util.Collection;
-import java.util.Map;
 import java.util.Objects;
-import java.util.WeakHashMap;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.ResearchStation")
 public class ResearchStation extends NetNode {
-    private static final Map<TileMultiblockMachineController, ResearchStation> CACHED_RESEARCH_STATION = new WeakHashMap<>();
     private final ResearchStationType type;
     private ResearchCognitionData currentResearching = null;
     private double currentResearchingProgress = 0;
     private float computationPointConsumption = 0;
 
-    public ResearchStation(final TileMultiblockMachineController owner, final NBTTagCompound customData) {
+    public ResearchStation(final TileMultiblockMachineController owner) {
         super(owner);
         this.type = RegistryHyperNet.getResearchStationType(
                 Objects.requireNonNull(owner.getFoundMachine()).getRegistryName().getPath()
         );
-
-        readNBT(customData);
     }
-
-    @ZenMethod
-    public static ResearchStation from(final IMachineController machine) {
-        TileMultiblockMachineController ctrl = machine.getController();
-        return CACHED_RESEARCH_STATION.computeIfAbsent(ctrl, v ->
-                new ResearchStation(ctrl, ctrl.getCustomDataTag()));
-    }
-
-    public static void clearCache() {
-        CACHED_RESEARCH_STATION.clear();
-    }
-
     @ZenMethod
     public void onRecipeCheck(final RecipeCheckEvent event) {
         if (centerPos == null || center == null) {
@@ -71,7 +53,7 @@ public class ResearchStation extends NetNode {
 
         float pointPerTick = currentResearching.getMinComputationPointPerTick();
         if (center.getComputationPointGeneration() < pointPerTick) {
-            event.setFailed("算力不足！（预期算力：" + pointPerTick + " TFloPS，当前算力：" + center.getComputationPointGeneration() + " TFloPS）");
+            event.setFailed("算力不足！（预期算力：" + pointPerTick + "T FloPS，当前算力：" + center.getComputationPointGeneration() + "T FloPS）");
             return;
         }
 
@@ -83,8 +65,7 @@ public class ResearchStation extends NetNode {
 
         if (nodes.stream()
                 .map(Database.class::cast)
-                .noneMatch(database -> database.getType().getMaxResearchCognitionStoreSize() >
-                        database.getStoredResearchCognition().size() + database.getAllResearchingCognition().size()))
+                .noneMatch(database -> database.hasDatabaseSpace(currentResearching)))
         {
             event.setFailed("网络中所有的数据库存储已满！");
         }
@@ -116,7 +97,7 @@ public class ResearchStation extends NetNode {
         float consumed = center.consumeComputationPoint(computationPointConsumption);
         if (consumed < computationPointConsumption) {
             event.preventProgressing(
-                    "算力不足！（预期算力：" + computationPointConsumption + " TFloPS，当前算力：" + consumed + " TFloPS）");
+                    "算力不足！（预期算力：" + computationPointConsumption + "T FloPS，当前算力：" + consumed + "T FloPS）");
         } else {
             currentResearchingProgress += consumed;
             ModularMachinery.EXECUTE_MANAGER.addSyncTask(this::writeResearchProgressToDatabase);
@@ -128,22 +109,23 @@ public class ResearchStation extends NetNode {
         ActiveMachineRecipe recipe = thread.getActiveRecipe();
         recipe.setTick(recipe.getTotalTick() + 1);
 
-        Collection<Database> nodes = center.getNode(Database.class);
-        if (nodes.isEmpty()) {
+        Collection<Database> databases = center.getNode(Database.class);
+        if (databases.isEmpty()) {
             return;
         }
 
-        if (currentResearching == null) {
+        ResearchCognitionData data = currentResearching;
+        if (data == null) {
             return;
         }
 
         ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> {
-            nodes.stream()
-                    .filter(node -> node.getType().getMaxResearchCognitionStoreSize() > node.getStoredResearchCognition().size())
-                    .filter(node -> node.getAllResearchingCognition().containsKey(currentResearching))
-                    .findFirst()
-                    .ifPresent(node -> node.storeResearchCognitionData(currentResearching));
-            nodes.forEach(node -> node.getAllResearchingCognition().removeDouble(currentResearching));
+            for (final Database database : databases) {
+                if (database.storeResearchCognitionData(data)) {
+                    break;
+                }
+            }
+            databases.forEach(database -> database.getAllResearchingCognition().removeDouble(data));
             resetResearchTask();
         });
     }
@@ -153,18 +135,8 @@ public class ResearchStation extends NetNode {
             return;
         }
 
-        Collection<Database> nodes = center.getNode(Database.class);
-        if (nodes.isEmpty()) {
-            return;
-        }
-
-        for (Database database : nodes) {
-            Object2DoubleOpenHashMap<ResearchCognitionData> map = database.getAllResearchingCognition();
-            if (database.getType().getMaxResearchCognitionStoreSize() < database.getStoredResearchCognition().size()) {
-                continue;
-            }
-            if (map.computeIfPresent(currentResearching, (k, v) -> currentResearchingProgress) != null) {
-                database.writeNBT();
+        for (Database database : center.getNode(Database.class)) {
+            if (database.writeResearchingData(currentResearching, currentResearchingProgress)) {
                 break;
             }
         }
@@ -181,37 +153,50 @@ public class ResearchStation extends NetNode {
     public void onMachineTick() {
         super.onMachineTick();
 
-        if (!owner.isWorking()) {
+        if (!isWorking()) {
             computationPointConsumption = 0;
         }
     }
 
     public void provideTask(ResearchCognitionData data) {
         currentResearching = data;
+        if (data == null) {
+            currentResearchingProgress = 0;
+            writeNBT();
+            return;
+        }
+
         computationPointConsumption = data.getMinComputationPointPerTick();
         double progress = center.getNode(Database.class)
                 .stream()
-                .filter(database -> database.getType().getMaxResearchCognitionStoreSize() > database.getStoredResearchCognition().size())
-                .map(database -> database.getAllResearchingCognition().getOrDefault(data, -1D))
+                .map(database -> database.getResearchingData(data))
                 .filter(d -> d != -1D)
                 .findFirst()
                 .orElse(-1D);
 
         if (progress == -1) {
-            ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> center.getNode(Database.class)
-                    .stream()
-                    .filter(database -> database.getType().getMaxResearchCognitionStoreSize() >
-                            database.getStoredResearchCognition().size() + database.getAllResearchingCognition().size())
-                    .findFirst()
-                    .ifPresent(database -> {
-                        database.getAllResearchingCognition().put(data, 0D);
-                        database.writeNBT();
-                    }));
+            for (final Database database : center.getNode(Database.class)) {
+                if (database.writeResearchingData(data, 0D)) {
+                    break;
+                }
+            }
             progress = 0D;
         }
 
         currentResearchingProgress = progress;
         writeNBT();
+    }
+
+    @Override
+    public boolean isWorking() {
+        if (!(owner instanceof TileFactoryController)) {
+            return false;
+        }
+
+        TileFactoryController factory = (TileFactoryController) owner;
+        FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(ResearchStationType.RESEARCH_STATION_WORKING_THREAD_NAME);
+
+        return thread != null && thread.isWorking();
     }
 
     @Override

@@ -4,12 +4,17 @@ import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
+import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
+import github.kasuminova.novaeng.common.hypernet.base.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.integration.IntegrationCRT;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
+import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
+import hellfirepvp.modularmachinery.ModularMachinery;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -35,7 +40,13 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void init() {
+        RegistryHyperNet.registerHyperNetNode(
+                new ResourceLocation(ModularMachinery.MODID, "hypernet_terminal"),
+                HyperNetTerminal.class
+        );
+
         RecipeAdapterExtended.registerAdapter();
+        HyperNetRecipeManager.registerRecipes();
     }
 
     public void postInit() {

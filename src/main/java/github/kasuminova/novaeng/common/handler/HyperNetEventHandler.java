@@ -1,9 +1,14 @@
 package github.kasuminova.novaeng.common.handler;
 
 import github.kasuminova.mmce.common.concurrent.Action;
+import github.kasuminova.mmce.common.event.Phase;
+import github.kasuminova.mmce.common.event.machine.MachineTickEvent;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
+import github.kasuminova.novaeng.common.hypernet.NetNode;
+import github.kasuminova.novaeng.common.hypernet.NetNodeCache;
+import github.kasuminova.novaeng.common.hypernet.misc.ConnectResult;
 import github.kasuminova.novaeng.common.network.PktHyperNetStatus;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
@@ -18,6 +23,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -28,6 +34,87 @@ import net.minecraftforge.fml.relauncher.Side;
 @SuppressWarnings("MethodMayBeStatic")
 public class HyperNetEventHandler {
     private static final MpscLinkedAtomicQueue<Action> TICK_START_ACTIONS = new MpscLinkedAtomicQueue<>();
+
+    public static void addTickStartAction(final Action action) {
+        TICK_START_ACTIONS.offer(action);
+    }
+
+    private static ComputationCenter getCenter(final TileMultiblockMachineController ctrl) {
+        NBTTagCompound customData = ctrl.getCustomDataTag();
+        if (!customData.hasKey("centerPos")) {
+            return null;
+        }
+
+        BlockPos centerPos = BlockPos.fromLong(customData.getLong("centerPos"));
+        if (!ctrl.getWorld().isBlockLoaded(centerPos)) {
+            return null;
+        }
+
+        TileEntity te = ctrl.getWorld().getTileEntity(centerPos);
+        if (!(te instanceof TileMultiblockMachineController)) {
+            return null;
+        }
+
+        TileMultiblockMachineController center = (TileMultiblockMachineController) te;
+        if (!HyperNetHelper.supportsHyperNet(center) || !HyperNetHelper.isComputationCenter(center)) {
+            return null;
+        }
+
+        return ComputationCenter.from(center);
+    }
+
+    private static void sendResultMessage(final ConnectResult result, final EntityPlayer player, final ComputationCenter center, final NetNode cached) {
+        switch (result) {
+            case SUCCESS:
+                player.sendMessage(new TextComponentTranslation(
+                        "novaeng.hypernet.connect.result.success",
+                        center.getConnectedMachineryCount(), center.getType().getMaxConnections()
+                ));
+                break;
+            case UNKNOWN_CENTER:
+                player.sendMessage(new TextComponentTranslation(
+                        "novaeng.hypernet.connect.result.unknown_center"));
+                break;
+            case CENTER_NOT_WORKING:
+                player.sendMessage(new TextComponentTranslation(
+                        "novaeng.hypernet.connect.result.center_not_working"));
+                break;
+            case UNSUPPORTED_NODE:
+                player.sendMessage(new TextComponentTranslation(
+                        "novaeng.hypernet.connect.result.unsupported_node"));
+                break;
+            case CENTER_REACHED_CONNECTION_LIMIT:
+                player.sendMessage(new TextComponentTranslation(
+                        "novaeng.hypernet.connect.result.center_reached_connection_limit",
+                        center.getType().getMaxConnections()
+                ));
+                break;
+            case NODE_TYPE_REACHED_MAX_PRESENCES:
+                player.sendMessage(new TextComponentTranslation(
+                        "novaeng.hypernet.connect.result.node_type_reached_max_presences",
+                        cached.getNodeMaxPresences()
+                ));
+                break;
+        }
+    }
+
+    @SubscribeEvent
+    public void onMachineTick(final MachineTickEvent event) {
+        if (event.phase != Phase.START) {
+            return;
+        }
+
+        TileMultiblockMachineController ctrl = event.getController();
+        DynamicMachine foundMachine = ctrl.getFoundMachine();
+        if (!RegistryHyperNet.isHyperNetSupported(foundMachine)) {
+            return;
+        }
+
+        NetNode cached = NetNodeCache.getCache(ctrl, RegistryHyperNet.getNodeType(foundMachine));
+        if (cached != null) {
+            cached.onMachineTick();
+        }
+    }
 
     @SubscribeEvent
     public void onServerTickStart(final TickEvent.ServerTickEvent event) {
@@ -80,10 +167,30 @@ public class HyperNetEventHandler {
             return;
         }
 
+        event.setCanceled(true);
+
         if (RegistryHyperNet.isComputationCenter(foundMachine.getRegistryName())) {
             HyperNetHelper.writeConnectCardInfo(ComputationCenter.from(ctrl), stack);
-            event.setCanceled(true);
+            return;
         }
+
+        BlockPos centerPos = HyperNetHelper.readConnectCardInfo(ctrl, stack);
+        if (centerPos == null) {
+            player.sendMessage(new TextComponentTranslation(
+                    "novaeng.hypernet.connect.result.unknown_center"));
+            return;
+        }
+
+        NetNode cached = NetNodeCache.getCache(ctrl, RegistryHyperNet.getNodeType(foundMachine));
+        ComputationCenter center = getCenter(ctrl);
+        if (cached == null || center == null) {
+            player.sendMessage(new TextComponentTranslation(
+                    "novaeng.hypernet.connect.result.unknown_center"));
+            return;
+        }
+
+        ConnectResult result = cached.connectTo(centerPos);
+        sendResultMessage(result, player, center, cached);
     }
 
     @SubscribeEvent
@@ -131,34 +238,6 @@ public class HyperNetEventHandler {
         if (center != null) {
             NovaEngineeringCore.NET_CHANNEL.sendTo(new PktHyperNetStatus(center), playerMP);
         }
-    }
-
-    public static void addTickStartAction(final Action action) {
-        TICK_START_ACTIONS.offer(action);
-    }
-
-    private static ComputationCenter getCenter(final TileMultiblockMachineController ctrl) {
-        NBTTagCompound customData = ctrl.getCustomDataTag();
-        if (!customData.hasKey("centerPos")) {
-            return null;
-        }
-
-        BlockPos centerPos = BlockPos.fromLong(customData.getLong("centerPos"));
-        if (!ctrl.getWorld().isBlockLoaded(centerPos)) {
-            return null;
-        }
-
-        TileEntity te = ctrl.getWorld().getTileEntity(centerPos);
-        if (!(te instanceof TileMultiblockMachineController)) {
-            return null;
-        }
-
-        TileMultiblockMachineController center = (TileMultiblockMachineController) te;
-        if (!HyperNetHelper.supportsHyperNet(center) || !HyperNetHelper.isComputationCenter(center)) {
-            return null;
-        }
-
-        return ComputationCenter.from(center);
     }
 
 }

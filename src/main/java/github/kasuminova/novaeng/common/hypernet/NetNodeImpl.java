@@ -2,7 +2,6 @@ package github.kasuminova.novaeng.common.hypernet;
 
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
-import github.kasuminova.mmce.common.helper.IMachineController;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,20 +11,15 @@ import stanhebben.zenscript.annotations.ZenSetter;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Map;
-import java.util.WeakHashMap;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.NetNodeImpl")
 public class NetNodeImpl extends NetNode {
-    private static final Map<TileMultiblockMachineController, NetNodeImpl> CACHED_NODES = new WeakHashMap<>();
-
     private float computationPointProvision = 0;
     private float computationPointConsumption = 0;
 
-    public NetNodeImpl(final TileMultiblockMachineController owner, NBTTagCompound customData) {
+    public NetNodeImpl(final TileMultiblockMachineController owner) {
         super(owner);
-        readNBT(customData);
     }
 
     @ZenMethod
@@ -39,7 +33,7 @@ public class NetNodeImpl extends NetNode {
         }
 
         if (center.getComputationPointGeneration() < pointRequired) {
-            event.setFailed("算力不足！（预期算力：" + pointRequired + " TFloPS，当前算力：" + center.getComputationPointGeneration() + " TFloPS）");
+            event.setFailed("算力不足！（预期算力：" + pointRequired + "T FloPS，当前算力：" + center.getComputationPointGeneration() + "T FloPS）");
         }
     }
 
@@ -68,22 +62,16 @@ public class NetNodeImpl extends NetNode {
     @Override
     public void readNBT(final NBTTagCompound customData) {
         super.readNBT(customData);
-        this.computationPointProvision = customData.getInteger("computationPointProvision");
-        this.computationPointConsumption = customData.getInteger("computationPointConsumption");
+        this.computationPointProvision = customData.getInteger("p");
+        this.computationPointConsumption = customData.getInteger("c");
     }
 
     @Override
     public void writeNBT() {
         super.writeNBT();
         NBTTagCompound tag = owner.getCustomDataTag();
-        tag.setFloat("computationPointProvision", computationPointProvision);
-        tag.setFloat("computationPointConsumption", computationPointConsumption);
-    }
-
-    @ZenMethod
-    public static NetNodeImpl from(final IMachineController machine) {
-        TileMultiblockMachineController ctrl = machine.getController();
-        return CACHED_NODES.computeIfAbsent(ctrl, v -> new NetNodeImpl(ctrl, ctrl.getCustomDataTag()));
+        tag.setFloat("p", computationPointProvision);
+        tag.setFloat("c", computationPointConsumption);
     }
 
     @ZenSetter("computationPointProvision")

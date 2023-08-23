@@ -2,8 +2,9 @@ package github.kasuminova.novaeng;
 
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.network.PktHyperNetStatus;
+import github.kasuminova.novaeng.common.network.PktResearchTaskProvide;
+import github.kasuminova.novaeng.common.network.PktResearchTaskReset;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
-import github.kasuminova.novaeng.common.network.PktTerminalTaskProvide;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -42,7 +43,8 @@ public class NovaEngineeringCore {
         NET_CHANNEL.registerMessage(PktHyperNetStatus.class,  PktHyperNetStatus.class,  0, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktTerminalGuiData.class, PktTerminalGuiData.class, 1, Side.CLIENT);
 
-        NET_CHANNEL.registerMessage(PktTerminalTaskProvide.class, PktTerminalTaskProvide.class, 100, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, 100, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktResearchTaskReset.class, PktResearchTaskReset.class, 101, Side.SERVER);
 
         proxy.preInit();
     }

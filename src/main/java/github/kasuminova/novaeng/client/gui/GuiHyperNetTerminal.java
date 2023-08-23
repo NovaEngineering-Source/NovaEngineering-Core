@@ -7,12 +7,12 @@ import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenterCache;
 import github.kasuminova.novaeng.common.hypernet.Database;
-import github.kasuminova.novaeng.common.hypernet.DatabaseType;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchStationType;
+import github.kasuminova.novaeng.common.network.PktResearchTaskProvide;
+import github.kasuminova.novaeng.common.network.PktResearchTaskReset;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
-import github.kasuminova.novaeng.common.network.PktTerminalTaskProvide;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.util.StringSortUtils;
@@ -102,12 +102,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
     }
 
     public static boolean hasDatabaseSpace(final List<Database.Status> databases) {
-        return databases.stream().anyMatch(status -> {
-            DatabaseType type = status.getType();
-            int stored = status.getStoredCognition();
-            int researching = status.getResearchingCognition();
-            return type.getMaxResearchCognitionStoreSize() > stored + researching;
-        });
+        return databases.stream().anyMatch(Database.Status::hasDatabaseSpace);
     }
 
     public static void renderItemStackToGUI(final Minecraft mc,
@@ -256,11 +251,13 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 //                long tickRequired = (long) (data.getRequiredPoints() / Math.max(0.1F, (generation - consumption)));
                 hoveredTip.add(TimeUtils.formatResearchRequiredTime(tickRequired * 50));
                 hoveredTip.addAll(warnTip);
+                hoveredTip.add(I18n.format("gui.terminal_controller.screen.info.reset"));
             }
         } else {
             drawButtonOverlay(28, 22);
             hoveredTip.add(I18n.format("gui.terminal_controller.screen.info.start.error"));
             hoveredTip.addAll(errorTip);
+            hoveredTip.add(I18n.format("gui.terminal_controller.screen.info.reset"));
         }
 
         if (isMouseOver(316, 107, 316 + 16, 107 + 16, mouseX - guiLeft, mouseY - guiTop)) {
@@ -620,20 +617,26 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             }
         }
 
+        if (startResearch.mousePressed(mc, x, y)) {
+            if (mouseButton == 0 && current != null && current.isLocked() && canStartResearch(current.getData())) {
+                NovaEngineeringCore.NET_CHANNEL.sendToServer(new PktResearchTaskProvide(current.getData()));
+                startResearch.playPressSound(mc.getSoundHandler());
+                return;
+            }
+            if (mouseButton == 1) {
+                NovaEngineeringCore.NET_CHANNEL.sendToServer(new PktResearchTaskReset());
+                startResearch.playPressSound(mc.getSoundHandler());
+                return;
+            }
+        }
+
         if (mouseButton != 0) {
             return;
         }
 
-        if (startResearch.mousePressed(mc, x, y)) {
-            if (current != null && current.isLocked() && canStartResearch(current.getData())) {
-                NovaEngineeringCore.NET_CHANNEL.sendToServer(new PktTerminalTaskProvide(current.getData()));
-                startResearch.playPressSound(mc.getSoundHandler());
-            }
+        if (screenScrollbar.click(x, y) || dataScrollbar.click(x, y)) {
             return;
         }
-
-        dataScrollbar.click(x, y);
-        screenScrollbar.click(x, y);
 
         int offsetY = 30;
 
@@ -659,17 +662,21 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
     private boolean canStartResearch(ResearchCognitionData data) {
         ResearchStationType stationType = PktTerminalGuiData.getResearchStationType();
-        float consumption = ComputationCenterCache.getComputationPointConsumption();
-        float generation = ComputationCenterCache.getComputationPointGeneration();
 
         if (stationType == null || stationType.getMaxTechLevel() < data.getTechLevel()) {
             return false;
         }
+
+        float generation = ComputationCenterCache.getComputationPointGeneration();
         if (generation < data.getMinComputationPointPerTick()) {
             return false;
-        } else if ((generation - consumption) < data.getMinComputationPointPerTick()) {
+        }
+
+        float consumption = ComputationCenterCache.getComputationPointConsumption();
+        if ((generation - consumption) < data.getMinComputationPointPerTick()) {
             return false;
         }
+
         if (!unlockedData.containsAll(data.getDependencies())) {
             return false;
         }
