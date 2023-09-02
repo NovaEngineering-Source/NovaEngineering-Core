@@ -13,6 +13,7 @@ import github.kasuminova.novaeng.common.hypernet.NetNodeCache;
 import github.kasuminova.novaeng.common.hypernet.NetNodeImpl;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.ModularMachinery;
+import hellfirepvp.modularmachinery.common.integration.crafttweaker.event.MMEvents;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
@@ -24,7 +25,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.relauncher.Side;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -44,16 +44,19 @@ public class HyperNetHelper {
      */
     @ZenMethod
     public static void proxyMachineForHyperNet(String machineName) {
-        DynamicMachine machine = MachineRegistry.getRegistry().getMachine(new ResourceLocation(ModularMachinery.MODID, machineName));
-        if (machine != null) {
-            proxyMachineForHyperNet(machine);
-        }
+        MMEvents.WAIT_FOR_REGISTER_LIST.add(() -> {
+            DynamicMachine machine = MachineRegistry.getRegistry().getMachine(new ResourceLocation(ModularMachinery.MODID, machineName));
+            if (machine != null) {
+                proxyMachineForHyperNet(machine);
+            }
+        });
     }
 
     public static void proxyMachineForHyperNet(DynamicMachine machine) {
-        RegistryHyperNet.registerHyperNetNode(machine.getRegistryName(), NetNodeImpl.class);
+        ResourceLocation registryName = machine.getRegistryName();
+        RegistryHyperNet.registerHyperNetNode(registryName, NetNodeImpl.class);
 
-        if (FMLCommonHandler.instance().getSide() != Side.CLIENT) {
+        if (!FMLCommonHandler.instance().getSide().isClient()) {
             return;
         }
 
@@ -87,8 +90,8 @@ public class HyperNetHelper {
                 tips.add(I18n.format("gui.hypernet.controller.disconnected"));
             }
 
-            tips.add(I18n.format("gui.hypernet.controller.version"));
-            tips.add(I18n.format("gui.hypernet.controller.footer"));
+//            tips.add(I18n.format("gui.hypernet.controller.version"));
+//            tips.add(I18n.format("gui.hypernet.controller.footer"));
 
             event.setExtraInfo(tips.toArray(new String[0]));
         });

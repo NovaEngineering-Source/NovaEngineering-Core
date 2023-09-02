@@ -32,11 +32,15 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(new RegistryItems());
     }
 
+    public void construction() {
+
+    }
+
     public void preInit() {
         NetworkRegistry.INSTANCE.registerGuiHandler(NovaEngineeringCore.MOD_ID, this);
 
-        MinecraftForge.EVENT_BUS.register(new IntegrationCRT());
-        MinecraftForge.EVENT_BUS.register(new HyperNetEventHandler());
+        MinecraftForge.EVENT_BUS.register(IntegrationCRT.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(HyperNetEventHandler.INSTANCE);
     }
 
     public void init() {
@@ -50,6 +54,10 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void postInit() {
+
+    }
+
+    public void loadComplete() {
 
     }
 

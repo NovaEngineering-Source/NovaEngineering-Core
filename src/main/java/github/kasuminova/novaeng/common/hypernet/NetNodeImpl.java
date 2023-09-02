@@ -1,13 +1,14 @@
 package github.kasuminova.novaeng.common.hypernet;
 
 import crafttweaker.annotations.ZenRegister;
-import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
+import github.kasuminova.mmce.common.event.recipe.*;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
+import hellfirepvp.modularmachinery.common.machine.RecipeThread;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
+import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
 import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-import stanhebben.zenscript.annotations.ZenSetter;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -15,11 +16,28 @@ import java.util.Collection;
 @ZenRegister
 @ZenClass("novaeng.hypernet.NetNodeImpl")
 public class NetNodeImpl extends NetNode {
-    private float computationPointProvision = 0;
+    private final Object2FloatOpenHashMap<RecipeThread> recipeConsumers = new Object2FloatOpenHashMap<>();
     private float computationPointConsumption = 0;
 
     public NetNodeImpl(final TileMultiblockMachineController owner) {
         super(owner);
+    }
+
+    @Override
+    public void onMachineTick() {
+        super.onMachineTick();
+        if (isWorking()) {
+            if (owner.getTicksExisted() % 10 == 0) {
+                float total = 0;
+                for (final Float value : recipeConsumers.values()) {
+                    total += value;
+                }
+                computationPointConsumption = total;
+                recipeConsumers.clear();
+            }
+        } else {
+            computationPointConsumption = 0;
+        }
     }
 
     @ZenMethod
@@ -59,10 +77,49 @@ public class NetNodeImpl extends NetNode {
                 .ifPresent(research -> event.setFailed("缺失研究：" + research.getResearchName() + "！"));
     }
 
+    public void onRecipeStart(final RecipeStartEvent event, final float computation) {
+        recipeConsumers.put(event.getRecipeThread(), computation);
+    }
+
+    public void onRecipeStart(final FactoryRecipeStartEvent event, final float computation) {
+        recipeConsumers.put(event.getRecipeThread(), computation);
+    }
+
+    public void onRecipePreTick(final RecipeTickEvent event, final float computation) {
+        if (centerPos == null || center == null) {
+            event.setFailed(true, "未连接至计算网络！");
+            return;
+        }
+        recipeConsumers.put(event.getRecipeThread(), computation);
+
+        float consumed = center.consumeComputationPoint(computation);
+        if (consumed < computation) {
+            event.preventProgressing(
+                    "算力不足！（预期算力：" + computation + "T FloPS，当前算力：" + consumed + "T FloPS）");
+        }
+    }
+
+    public void onRecipePreTick(final FactoryRecipeTickEvent event, final float computation) {
+        if (centerPos == null || center == null) {
+            event.setFailed(true, "未连接至计算网络！");
+            return;
+        }
+        recipeConsumers.put(event.getRecipeThread(), computation);
+
+        float consumed = center.consumeComputationPoint(computation);
+        if (consumed < computation) {
+            event.preventProgressing(
+                    "算力不足！（预期算力：" + computation + "T FloPS，当前算力：" + consumed + "T FloPS）");
+        }
+    }
+
+    public void onRecipeFinished(final RecipeThread thread) {
+        recipeConsumers.removeFloat(thread);
+    }
+
     @Override
     public void readNBT(final NBTTagCompound customData) {
         super.readNBT(customData);
-        this.computationPointProvision = customData.getInteger("p");
         this.computationPointConsumption = customData.getInteger("c");
     }
 
@@ -70,23 +127,7 @@ public class NetNodeImpl extends NetNode {
     public void writeNBT() {
         super.writeNBT();
         NBTTagCompound tag = owner.getCustomDataTag();
-        tag.setFloat("p", computationPointProvision);
         tag.setFloat("c", computationPointConsumption);
-    }
-
-    @ZenSetter("computationPointProvision")
-    public void setComputationPointProvision(final int computationPointProvision) {
-        this.computationPointProvision = computationPointProvision;
-    }
-
-    @ZenSetter("computationPointConsumption")
-    public void setComputationPointConsumption(final int computationPointConsumption) {
-        this.computationPointConsumption = computationPointConsumption;
-    }
-
-    @Override
-    public float getComputationPointProvision(final float maxGeneration) {
-        return Math.min(computationPointProvision, maxGeneration);
     }
 
     @Override

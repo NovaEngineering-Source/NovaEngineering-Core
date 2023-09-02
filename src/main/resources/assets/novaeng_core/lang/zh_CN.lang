@@ -12,7 +12,7 @@ novaeng.hypernet.connect.result.unknown_center=§c连接失败（原因：未知
 novaeng.hypernet.connect.result.center_not_working=§c连接失败（原因：计算网络中心处于离线状态）。
 novaeng.hypernet.connect.result.center_reached_connection_limit=§c连接失败（原因：已达到计算网络中心的最大连接数：%s）。
 novaeng.hypernet.connect.result.unsupported_node=§c连接失败（原因：未知的网络节点）。
-novaeng.hypernet.connect.result.node_type_reached_max_presences=§c连接失败（原因：已达到当前网络节点类型的连接上限：%s））。
+novaeng.hypernet.connect.result.node_type_reached_max_presences=§c连接失败（原因：已达到当前网络节点类型的连接上限：%s）。
 
 upgrade.data_processor.module.cpu.tip.0=§9CPU 模块为数据处理计算机提供算力。
 upgrade.data_processor.module.cpu.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c50%%。
@@ -30,7 +30,7 @@ upgrade.data_processor.module.ram.tip.2=§9每秒有 §a1%% §9的概率降低 �
 
 upgrade.data_processor.module.ram.limit_provision=§9上限提供: §e%s§9 (效率: %s)
 
-upgrade.data_processor.module.energy.tip=§9峰值耗电量 (TDP)：§c%s
+upgrade.data_processor.module.energy.tip=§9最大功耗：§c%s
 upgrade.data_processor.module.durability.tip=§9耐久：§e%s / %s§a（%s）
 upgrade.data_processor.module.durability.unknown.tip=§9最大耐久：§e%s ～ %s
 
@@ -44,8 +44,8 @@ gui.hypernet.controller.computation_point_consumption=§9算力消耗：§b
 gui.hypernet.controller.computation_point_consumption.total=§9总算力消耗 / 产出：§b%s / %s
 gui.hypernet.controller.connected=§9网络状态：§a已连接
 gui.hypernet.controller.disconnected=§9网络状态：§c断开连接
-gui.hypernet.controller.version=§7HyperNet Monitor v1.0
-gui.hypernet.controller.footer=§9/////////////////////////////////
+gui.hypernet.controller.version=§7HyperNet Proxy Monitor v1.0
+gui.hypernet.controller.footer=§9/////////////////////////////////////////
 
 novaeng.hypernet.maintenance_controller=维护控制器
 novaeng.hypernet.data_forwarding_processor=数据转发处理器
@@ -68,14 +68,30 @@ novaeng.hypernet.research_station.working.tooltip.1=工作状态下根据当前�
 
 novaeng.hypernet.repair.tooltip=完成时，修复 §a%s §r点耐久值。
 
+novaeng.hypernet.tech_level.1=§a1§a.
+novaeng.hypernet.tech_level.2=§a2§a.
+novaeng.hypernet.tech_level.3=§a3§a.
+novaeng.hypernet.tech_level.4=§b4§b.
+novaeng.hypernet.tech_level.5=§b5§b.
+novaeng.hypernet.tech_level.6=§56§5.
+novaeng.hypernet.tech_level.7=§57§5.
+novaeng.hypernet.tech_level.8=§68§6.
+novaeng.hypernet.tech_level.9=§69§6.
+novaeng.hypernet.tech_level.10=§610§6.
+novaeng.hypernet.tech_level.11=§c11§c.
+novaeng.hypernet.tech_level.12=§c12§c.
+novaeng.hypernet.tech_level.13=§413§4.
+novaeng.hypernet.tech_level.14=§414§4.
+
 gui.terminal_controller.title.nxc=nxc 的虚空终端
 gui.terminal_controller.search=§7§o搜索研究...
 gui.terminal_controller.status=§b状态：
 gui.terminal_controller.status.missing_structure=§c结构不完整
 gui.terminal_controller.status.online=§a终端在线
 gui.terminal_controller.status.offline=§c终端离线
-gui.terminal_controller.status.network.computation_point_consumption=§9总算力消耗 / 产出：
-gui.terminal_controller.status.network.computation_point_consumption.info=§b%s / %s
+gui.terminal_controller.status.network.computation_point_consumption=§9总算力消耗：
+gui.terminal_controller.status.network.computation_point_generation=§9总算力产出：
+gui.terminal_controller.status.network.computation_point.info=§b%s
 gui.terminal_controller.status.network.total_connected=§9在线设备数量：§b
 
 gui.terminal_controller.connect_card.empty=请插入密钥卡

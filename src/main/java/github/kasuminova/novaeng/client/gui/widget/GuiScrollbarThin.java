@@ -3,7 +3,6 @@ package github.kasuminova.novaeng.client.gui.widget;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
 public class GuiScrollbarThin {
@@ -22,7 +21,7 @@ public class GuiScrollbarThin {
 
     public void draw(final GuiScreen g, Minecraft mc) {
         mc.getTextureManager().bindTexture(TEXTURES_TABS);
-        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
+//        GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 
         if (this.getRange() == 0) {
             g.drawTexturedModalRect(this.displayX, this.displayY, this.width, 22, this.width, this.height - 1);

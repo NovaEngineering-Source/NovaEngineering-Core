@@ -80,7 +80,7 @@ public abstract class NetNode {
         switch (result) {
             case NODE_TYPE_REACHED_MAX_PRESENCES:
             case CENTER_REACHED_CONNECTION_LIMIT:
-                center = null;
+                centerPos = null;
                 break;
         }
 

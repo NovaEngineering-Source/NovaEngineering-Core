@@ -3,7 +3,10 @@ package github.kasuminova.novaeng.common.block;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
+import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.block.BlockController;
+import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
+import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +29,12 @@ public class BlockHyperNetTerminal extends BlockController {
     private BlockHyperNetTerminal() {
         setRegistryName(new ResourceLocation(NovaEngineeringCore.MOD_ID, "hypernet_terminal_controller"));
         setTranslationKey(NovaEngineeringCore.MOD_ID + '.' + "hypernet_terminal_controller");
+    }
+
+    public DynamicMachine getParentMachine() {
+        return MachineRegistry.getRegistry().getMachine(
+                new ResourceLocation(ModularMachinery.MODID, "hypernet_terminal")
+        );
     }
 
     @Override

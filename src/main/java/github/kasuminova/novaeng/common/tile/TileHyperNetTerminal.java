@@ -6,14 +6,10 @@ import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.block.BlockController;
-import hellfirepvp.modularmachinery.common.crafting.ActiveMachineRecipe;
 import hellfirepvp.modularmachinery.common.crafting.helper.CraftingStatus;
 import hellfirepvp.modularmachinery.common.crafting.helper.ProcessingComponent;
 import hellfirepvp.modularmachinery.common.machine.IOType;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
-import hellfirepvp.modularmachinery.common.machine.RecipeThread;
-import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
-import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import hellfirepvp.modularmachinery.common.util.IEnergyHandlerAsync;
 import hellfirepvp.modularmachinery.common.util.IOInventory;
 import net.minecraft.block.state.IBlockState;
@@ -28,12 +24,11 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class TileHyperNetTerminal extends TileMultiblockMachineController {
+public class TileHyperNetTerminal extends TileCustomController {
     public static final int NETWORK_CONNECT_CARD_SLOT = 0;
     public static final int ENERGY_USAGE = 1_000;
 
     private final HyperNetTerminal nodeProxy = new HyperNetTerminal(this);
-    private CraftingStatus controllerStatus = CraftingStatus.IDLE;
 
     private IOInventory cardInventory;
 
@@ -111,16 +106,6 @@ public class TileHyperNetTerminal extends TileMultiblockMachineController {
     }
 
     @Override
-    protected void readMachineNBT(NBTTagCompound compound) {
-        if (compound.hasKey("parentMachine")) {
-            ResourceLocation rl = new ResourceLocation(compound.getString("parentMachine"));
-            parentMachine = MachineRegistry.getRegistry().getMachine(rl);
-        }
-
-        super.readMachineNBT(compound);
-    }
-
-    @Override
     public void writeCustomNBT(final NBTTagCompound compound) {
         nodeProxy.writeNBT();
 
@@ -138,16 +123,6 @@ public class TileHyperNetTerminal extends TileMultiblockMachineController {
         return nodeProxy;
     }
 
-    @Override
-    public CraftingStatus getControllerStatus() {
-        return controllerStatus;
-    }
-
-    @Override
-    public void setControllerStatus(final CraftingStatus status) {
-        this.controllerStatus = status;
-    }
-
     @Nullable
     @Override
     @SuppressWarnings("unchecked")
@@ -161,44 +136,8 @@ public class TileHyperNetTerminal extends TileMultiblockMachineController {
     // NO-OP
 
     @Override
-    public void flushContextModifier() {
-
-    }
-
-    @Nullable
-    @Override
-    public ActiveMachineRecipe getActiveRecipe() {
-        return null;
-    }
-
-    @Override
-    public ActiveMachineRecipe[] getActiveRecipeList() {
-        return new ActiveMachineRecipe[0];
-    }
-
-    @Override
-    public RecipeThread[] getRecipeThreadList() {
-        return new RecipeThread[0];
-    }
-
-    @Override
     public boolean isWorking() {
-        return true;
-    }
-
-    @Override
-    public void addModifier(final String key, final RecipeModifier modifier) {
-
-    }
-
-    @Override
-    public void removeModifier(final String key) {
-
-    }
-
-    @Override
-    public void overrideStatusInfo(final String newInfo) {
-
+        return isStructureFormed();
     }
 
 }

@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'github.kasuminova'
-version = '1.4'
+version = '1.5'
 
 repositories {
     flatDir {
@@ -105,8 +105,10 @@ dependencies {
     compileOnly fg.deobf("curse.maven:libvulpes-236541:3801015")
     compileOnly fg.deobf("curse.maven:advanced-rocketry-236542:4671856")
     compileOnly fg.deobf("curse.maven:immersive-engineering-231951:2974106")
+    compileOnly fg.deobf("curse.maven:valkyrielib-245480:2691542")
     compileOnly fg.deobf("curse.maven:environmental-tech-245453:2691536")
     compileOnly fg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197")
+    compileOnly fg.deobf("curse.maven:applied-energistics-2-223794:2747063")
 }
 
 jar {

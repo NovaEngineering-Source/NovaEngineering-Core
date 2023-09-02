@@ -2,7 +2,10 @@ package github.kasuminova.novaeng.client;
 
 
 import github.kasuminova.novaeng.client.gui.GuiHyperNetTerminal;
+import github.kasuminova.novaeng.client.handler.ClientEventHandler;
 import github.kasuminova.novaeng.client.handler.HyperNetClientEventHandler;
+import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
+import github.kasuminova.novaeng.client.util.TitleUtils;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
@@ -18,24 +21,51 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
+import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("MethodMayBeStatic")
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
+
+    static {
+        CompletableFuture.runAsync(HitokotoAPI::getRandomHitokoto);
+    }
+
+    @Override
+    public void construction() {
+        super.construction();
+
+        TitleUtils.setRandomTitle("*Construction*");
+    }
+
     @Override
     public void preInit() {
         super.preInit();
-        MinecraftForge.EVENT_BUS.register(new HyperNetClientEventHandler());
+        MinecraftForge.EVENT_BUS.register(HyperNetClientEventHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
+
+        TitleUtils.setRandomTitle("*PreInit*");
     }
 
     @Override
     public void init() {
         super.init();
+
+        TitleUtils.setRandomTitle("*Init*");
     }
 
     @Override
     public void postInit() {
         super.postInit();
+
+        TitleUtils.setRandomTitle("*PostInit*");
+    }
+
+    @Override
+    public void loadComplete() {
+        super.loadComplete();
+
+        TitleUtils.setRandomTitle();
     }
 
     @SubscribeEvent

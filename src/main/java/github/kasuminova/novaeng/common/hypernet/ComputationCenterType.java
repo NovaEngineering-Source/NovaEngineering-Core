@@ -8,7 +8,7 @@ import hellfirepvp.modularmachinery.common.integration.crafttweaker.RecipeBuilde
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Tuple;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -90,7 +90,7 @@ public class ComputationCenterType extends NetNodeTypeRepairable {
                             ComputationCenter.from(event.getController()).onDurabilityFixRecipeCheck(event, durability))
                     .addFactoryFinishHandler(event ->
                             ComputationCenter.from(event.getController()).fixCircuit(durability))
-                    .addRecipeTooltip(Side.CLIENT.isClient()
+                    .addRecipeTooltip(FMLCommonHandler.instance().getSide().isClient()
                             ? new String[]{I18n.format("novaeng.hypernet.repair.tooltip", durability)}
                             : new String[0])
                     .setThreadName(FIX_THREAD_NAME)

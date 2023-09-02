@@ -43,7 +43,7 @@ public class Database extends NetNode {
 
     @ZenMethod
     public void onWorkingTick(final FactoryRecipeTickEvent event) {
-        FactoryRecipeThread thread = event.getRecipeThread();
+        FactoryRecipeThread thread = event.getFactoryRecipeThread();
         float energyUsage = Math.max(1, 1 + storedResearchCognition.size() * 0.1F);
 
         thread.addModifier("energy", new RecipeModifier(

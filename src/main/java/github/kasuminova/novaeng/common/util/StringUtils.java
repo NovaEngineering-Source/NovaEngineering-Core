@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.PriorityQueue;
 import java.util.stream.Collectors;
 
-public class StringSortUtils {
+public class StringUtils {
 
     /**
      * <p>根据给定的字符串的匹配率，排序给定的数组。</p>

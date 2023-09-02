@@ -9,7 +9,8 @@ import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.common.integration.crafttweaker.RecipePrimer;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.client.resources.I18n;
-import net.minecraftforge.fml.relauncher.Side;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import stanhebben.zenscript.annotations.ZenExpansion;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -29,7 +30,7 @@ public class RecipePrimerHyperNet {
     public static RecipePrimer requireComputationPoint(final RecipePrimer primer,
                                                        final float required)
     {
-        if (Side.CLIENT.isClient()) {
+        if (FMLCommonHandler.instance().getSide().isClient()) {
             primer.addRecipeTooltip(
                     I18n.format("novaeng.hypernet.computation_point_required.tip",
                             NovaEngUtils.formatFLOPS(required))
@@ -41,6 +42,42 @@ public class RecipePrimerHyperNet {
             NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
             if (node != null) {
                 node.checkComputationPoint(event, required);
+            }
+        }).addStartHandler(event -> {
+            TileMultiblockMachineController ctrl = event.getController();
+            NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
+            if (node != null) {
+                node.onRecipeStart(event, required);
+            }
+        }).addFactoryStartHandler(event -> {
+            TileMultiblockMachineController ctrl = event.getController();
+            NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
+            if (node != null) {
+                node.onRecipeStart(event, required);
+            }
+        }).addPreTickHandler(event -> {
+            TileMultiblockMachineController ctrl = event.getController();
+            NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
+            if (node != null) {
+                node.onRecipePreTick(event, required);
+            }
+        }).addFactoryPreTickHandler(event -> {
+            TileMultiblockMachineController ctrl = event.getController();
+            NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
+            if (node != null) {
+                node.onRecipePreTick(event, required);
+            }
+        }).addFactoryFinishHandler(event -> {
+            TileMultiblockMachineController ctrl = event.getController();
+            NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
+            if (node != null) {
+                node.onRecipeFinished(event.getRecipeThread());
+            }
+        }).addFinishHandler(event -> {
+            TileMultiblockMachineController ctrl = event.getController();
+            NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
+            if (node != null) {
+                node.onRecipeFinished(event.getRecipeThread());
             }
         });
     }
@@ -63,10 +100,10 @@ public class RecipePrimerHyperNet {
     public static RecipePrimer requireResearch(final RecipePrimer primer,
                                                final ResearchCognitionData... researchRequired)
     {
-        if (Side.CLIENT.isClient()) {
+        if (FMLCommonHandler.instance().getSide().isClient()) {
             String researchTip = Arrays.stream(researchRequired)
                     .map(ResearchCognitionData::getTranslatedName)
-                    .collect(Collectors.joining(", "));
+                    .collect(Collectors.joining(TextFormatting.RESET + ", "));
             primer.addRecipeTooltip(I18n.format("novaeng.hypernet.research_required.tip", researchTip));
         }
 

@@ -5,15 +5,15 @@ import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.common.util.ItemUtils;
+import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
+import stanhebben.zenscript.annotations.ZenSetter;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @ZenRegister
@@ -28,9 +28,16 @@ public class ResearchCognitionData {
     private final double requiredPoints;
     private final float minComputationPointPerTick;
 
+    private boolean hideByDefault = false;
+
+    private final boolean cycleResearch;
+    private final int maxCycle;
+
     private final List<String> descriptions;
     private final List<String> unlockedDescriptions;
     private final List<ResearchCognitionData> dependencies;
+
+    private final Object2IntOpenHashMap<ResearchCognitionData> cycleDependencies = new Object2IntOpenHashMap<>();
 
     public ResearchCognitionData(final String researchName,
                                  final String translatedName,
@@ -43,14 +50,54 @@ public class ResearchCognitionData {
                                  final List<ResearchCognitionData> dependencies)
     {
         this.researchName = researchName;
-        this.translatedName = translatedName;
         this.previewStack = previewStack.getCount() != 1 ? ItemUtils.copyStackWithSize(previewStack, 1) : previewStack;
         this.techLevel = techLevel;
         this.requiredPoints = requiredPoints;
         this.minComputationPointPerTick = minComputationPointPerTick;
-        this.descriptions = descriptions;
-        this.unlockedDescriptions = unlockedDescriptions;
         this.dependencies = dependencies;
+        this.cycleResearch = false;
+        this.maxCycle = 0;
+
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            this.translatedName = translatedName;
+            this.descriptions = descriptions;
+            this.unlockedDescriptions = unlockedDescriptions;
+        } else {
+            this.translatedName = "";
+            this.descriptions = new ArrayList<>();
+            this.unlockedDescriptions = new ArrayList<>();
+        }
+    }
+
+    public ResearchCognitionData(final String researchName,
+                                 final String translatedName,
+                                 final ItemStack previewStack,
+                                 final float techLevel,
+                                 final double requiredPoints,
+                                 final float minComputationPointPerTick,
+                                 final List<String> descriptions,
+                                 final List<String> unlockedDescriptions,
+                                 final List<ResearchCognitionData> dependencies,
+                                 final int maxCycle)
+    {
+        this.researchName = researchName;
+        this.previewStack = previewStack.getCount() != 1 ? ItemUtils.copyStackWithSize(previewStack, 1) : previewStack;
+        this.techLevel = techLevel;
+        this.requiredPoints = requiredPoints;
+        this.minComputationPointPerTick = minComputationPointPerTick;
+        this.dependencies = dependencies;
+        this.cycleResearch = true;
+        this.maxCycle = maxCycle;
+
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            this.translatedName = translatedName;
+            this.descriptions = descriptions;
+            this.unlockedDescriptions = unlockedDescriptions;
+        } else {
+            this.translatedName = "";
+            this.descriptions = new ArrayList<>();
+            this.unlockedDescriptions = new ArrayList<>();
+        }
     }
 
     @ZenMethod
@@ -79,6 +126,51 @@ public class ResearchCognitionData {
                 Arrays.asList(descriptions),
                 Arrays.asList(unlockedDescriptions),
                 dependencies);
+    }
+
+    @ZenMethod
+    public static ResearchCognitionData createCycle(final String researchName,
+                                                    final String translatedName,
+                                                    final IItemStack previewStackCT,
+                                                    final float techLevel,
+                                                    final double requiredPoints,
+                                                    final float minComputationPointPerTick,
+                                                    final String[] descriptions,
+                                                    final String[] unlockedDescriptions,
+                                                    final String[] dependenciesArr,
+                                                    final int maxCycle)
+    {
+        List<ResearchCognitionData> dependencies = Arrays.stream(dependenciesArr)
+                .map(RegistryHyperNet::getResearchCognitionData)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+
+        return new ResearchCognitionData(
+                researchName,
+                translatedName,
+                CraftTweakerMC.getItemStack(previewStackCT),
+                techLevel,
+                requiredPoints,
+                minComputationPointPerTick,
+                Arrays.asList(descriptions),
+                Arrays.asList(unlockedDescriptions),
+                dependencies,
+                maxCycle);
+    }
+
+    @ZenMethod
+    public ResearchCognitionData addCycleDependence(String researchName, int minCycle) {
+        ResearchCognitionData data = RegistryHyperNet.getResearchCognitionData(researchName);
+        if (data != null) {
+            cycleDependencies.addTo(data, minCycle);
+        }
+        return this;
+    }
+
+    @ZenMethod
+    public ResearchCognitionData addCycleDependence(ResearchCognitionData data, int minCycle) {
+        cycleDependencies.addTo(data, minCycle);
+        return this;
     }
 
     @ZenGetter("researchName")
@@ -115,8 +207,29 @@ public class ResearchCognitionData {
         return minComputationPointPerTick;
     }
 
+    @ZenGetter("hideByDefault")
+    public boolean isHideByDefault() {
+        return hideByDefault;
+    }
+
+    @ZenMethod
+    @ZenSetter("hideByDefault")
+    public void setHideByDefault(final boolean hideByDefault) {
+        this.hideByDefault = hideByDefault;
+    }
+
     public List<String> getDescriptions() {
         return Collections.unmodifiableList(descriptions);
+    }
+
+    @ZenGetter("cycleResearch")
+    public boolean isCycleResearch() {
+        return cycleResearch;
+    }
+
+    @ZenGetter("maxCycle")
+    public int getMaxCycle() {
+        return maxCycle;
     }
 
     @ZenGetter("descriptions")
@@ -135,6 +248,10 @@ public class ResearchCognitionData {
 
     public List<ResearchCognitionData> getDependencies() {
         return Collections.unmodifiableList(dependencies);
+    }
+
+    public Object2IntOpenHashMap<ResearchCognitionData> getCycleDependencies() {
+        return cycleDependencies;
     }
 
     @Override

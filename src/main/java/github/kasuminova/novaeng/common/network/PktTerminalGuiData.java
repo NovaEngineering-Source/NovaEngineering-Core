@@ -61,6 +61,7 @@ public class PktTerminalGuiData implements IMessage, IMessageHandler<PktTerminal
     public void fromBytes(final ByteBuf buf) {
         UNLOCKED_DATA.clear();
         RESEARCHING_DATA.clear();
+        DATABASES.clear();
 
         NBTTagCompound tag = ByteBufUtils.readTag(buf);
         if (tag == null) {
@@ -121,9 +122,14 @@ public class PktTerminalGuiData implements IMessage, IMessageHandler<PktTerminal
         Object2DoubleOpenHashMap<String> researchingData = new Object2DoubleOpenHashMap<>();
         databases.forEach(database -> {
             databasesTag.appendTag(database.createStatus().writeToNBT());
-            database.getAllResearchingCognition().forEach((research, progress) ->
-                    // 过滤重复信息。
-                    researchingData.put(research.getResearchName(), progress.doubleValue()));
+            database.getAllResearchingCognition().forEach((research, progress) -> {
+                String researchName = research.getResearchName();
+                // 如有重复进度，取最大值。
+                Double value = researchingData.computeIfPresent(researchName, (_k, v) -> v > progress ? v : progress);
+                if (value == null) {
+                    researchingData.put(researchName, progress.doubleValue());
+                }
+            });
         });
         tag.setTag("databases", databasesTag);
 

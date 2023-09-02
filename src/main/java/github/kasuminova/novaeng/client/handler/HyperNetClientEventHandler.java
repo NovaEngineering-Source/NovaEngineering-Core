@@ -15,6 +15,11 @@ import java.util.List;
 
 @SuppressWarnings("MethodMayBeStatic")
 public class HyperNetClientEventHandler {
+    public static final HyperNetClientEventHandler INSTANCE = new HyperNetClientEventHandler();
+
+    private HyperNetClientEventHandler() {
+    }
+
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public void onItemTooltip(ItemTooltipEvent event) {

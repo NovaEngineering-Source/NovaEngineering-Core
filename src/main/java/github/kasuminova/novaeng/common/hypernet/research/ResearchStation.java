@@ -33,6 +33,7 @@ public class ResearchStation extends NetNode {
                 Objects.requireNonNull(owner.getFoundMachine()).getRegistryName().getPath()
         );
     }
+
     @ZenMethod
     public void onRecipeCheck(final RecipeCheckEvent event) {
         if (centerPos == null || center == null) {
@@ -90,7 +91,7 @@ public class ResearchStation extends NetNode {
         computationPointConsumption = (float) Math.min(currentResearching.getMinComputationPointPerTick(), left);
 
         if (left <= 0) {
-            completeRecipe(event.getRecipeThread());
+            completeRecipe(event.getFactoryRecipeThread());
             return;
         }
 
@@ -100,6 +101,7 @@ public class ResearchStation extends NetNode {
                     "算力不足！（预期算力：" + computationPointConsumption + "T FloPS，当前算力：" + consumed + "T FloPS）");
         } else {
             currentResearchingProgress += consumed;
+            event.getRecipeThread().setStatusInfo("研究中...");
             ModularMachinery.EXECUTE_MANAGER.addSyncTask(this::writeResearchProgressToDatabase);
         }
         writeNBT();

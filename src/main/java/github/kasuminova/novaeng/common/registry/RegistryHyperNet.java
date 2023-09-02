@@ -14,6 +14,7 @@ import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleGPU
 import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleRAMType;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -40,7 +41,7 @@ public class RegistryHyperNet {
     private static final Map<String, DataProcessorType>     DATA_PROCESSOR_TYPE     = new HashMap<>();
     private static final Map<String, ResearchStationType>   RESEARCH_STATION_TYPE   = new HashMap<>();
     private static final Map<String, DatabaseType>          DATABASE_TYPE           = new HashMap<>();
-    private static final Map<String, ResearchCognitionData> RESEARCH_COGNITION      = new HashMap<>();
+    private static final Map<String, ResearchCognitionData> RESEARCH_COGNITION      = new Object2ObjectLinkedOpenHashMap<>();
 
     private static final Map<UpgradeType, ProcessorModuleCPUType> DATA_PROCESSOR_MODULE_CPU_TYPE = new HashMap<>();
     private static final Map<UpgradeType, ProcessorModuleRAMType> DATA_PROCESSOR_MODULE_RAM_TYPE = new HashMap<>();
@@ -173,7 +174,7 @@ public class RegistryHyperNet {
     }
 
     public static Collection<ResearchCognitionData> getAllResearchCognitionData() {
-        return RESEARCH_COGNITION.values();
+        return Collections.unmodifiableCollection(RESEARCH_COGNITION.values());
     }
 
     @ZenMethod

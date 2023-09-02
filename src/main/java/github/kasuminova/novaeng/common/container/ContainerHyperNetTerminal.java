@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.common.container;
 
+import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import hellfirepvp.modularmachinery.common.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,7 +19,7 @@ public class ContainerHyperNetTerminal extends ContainerBase<TileHyperNetTermina
 
         this.slotCard = addSlotToContainer(new SlotCard(
                 owner.getCardInventory().asGUIAccess(),
-                TileHyperNetTerminal.NETWORK_CONNECT_CARD_SLOT, 159, 190));
+                TileHyperNetTerminal.NETWORK_CONNECT_CARD_SLOT, 159, 226));
     }
 
     @Override
@@ -74,11 +75,11 @@ public class ContainerHyperNetTerminal extends ContainerBase<TileHyperNetTermina
     protected void addPlayerSlots(EntityPlayer opening) {
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 9; j++) {
-                addSlotToContainer(new Slot(opening.inventory, j + i * 9 + 9, 182 + j * 18, 132 + i * 18));
+                addSlotToContainer(new Slot(opening.inventory, j + i * 9 + 9, 182 + j * 18, 168 + i * 18));
             }
         }
         for (int i = 0; i < 9; i++) {
-            addSlotToContainer(new Slot(opening.inventory, i, 182 + i * 18, 190));
+            addSlotToContainer(new Slot(opening.inventory, i, 182 + i * 18, 226));
         }
     }
 
@@ -90,9 +91,9 @@ public class ContainerHyperNetTerminal extends ContainerBase<TileHyperNetTermina
 
         @Override
         public boolean isItemValid(@Nonnull ItemStack stack) {
-//            if (!(stack.getItem() instanceof ItemBlueprint)) {
-//                return false;
-//            }
+            if (stack.getItem() != RegistryHyperNet.getHyperNetConnectCard()) {
+                return false;
+            }
             return super.isItemValid(stack);
         }
     }
