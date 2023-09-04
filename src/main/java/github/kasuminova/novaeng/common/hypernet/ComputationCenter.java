@@ -23,6 +23,7 @@ import stanhebben.zenscript.annotations.ZenSetter;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.ComputationCenter")
@@ -33,10 +34,11 @@ public class ComputationCenter {
     private final Map<Class<?>, Map<BlockPos, NetNode>> nodes = new ConcurrentHashMap<>();
 
     private final ComputationCenterType type;
-    private int circuitDurability = 0;
 
     // 计算点计数器，计算当前 Tick 总共消耗了多少算力。
-    private volatile float computationPointCounter = 0;
+    private final AtomicReference<Float> computationPointCounter = new AtomicReference<>(0F);
+
+    private int circuitDurability = 0;
 
     public ComputationCenter(final TileMultiblockMachineController owner, final NBTTagCompound customData) {
         this.owner = owner;
@@ -108,7 +110,7 @@ public class ComputationCenter {
     }
 
     private void checkNodeConnection() {
-        if (owner.getTicksExisted() % 20 != 0) {
+        if (owner.getTicksExisted() % 50 != 0) {
             return;
         }
 
@@ -182,30 +184,43 @@ public class ComputationCenter {
     /**
      * 消耗计算点，返回已消耗的数量。
      */
-    public synchronized float consumeComputationPoint(final float amount) {
-        if (!isWorking() || type.getMaxComputationPointCarrying() < amount || computationPointCounter < amount) {
+    public float consumeComputationPoint(final float required) {
+        if (!isWorking() || type.getMaxComputationPointCarrying() < required || computationPointCounter.get() < required) {
             return 0;
         }
 
-        float required = amount;
+        final float[] polledCounter = {0};
+        computationPointCounter.updateAndGet(counter -> {
+            if (counter < required) {
+                return counter;
+            }
+            return counter - (polledCounter[0] = required);
+        });
+        if (polledCounter[0] < required) {
+            computationPointCounter.updateAndGet(counter -> counter + polledCounter[0]);
+            return 0;
+        }
+
         float totalGenerated = 0F;
 
         calculate:
         for (Map<BlockPos, NetNode> nodes : nodes.values()) {
             for (NetNode node : nodes.values()) {
-                float generated = node.requireComputationPoint(required, true);
-                required -= generated;
+                float generated = node.requireComputationPoint(required - totalGenerated, true);
                 totalGenerated += generated;
-                if (required <= 0F) {
+                if (totalGenerated >= required) {
                     break calculate;
                 }
             }
         }
 
-        computationPointCounter -= totalGenerated;
-        if (amount > totalGenerated) {
-            if (totalGenerated + 0.05F > amount) {
-                return amount;
+        polledCounter[0] -= totalGenerated;
+        computationPointCounter.updateAndGet(counter -> counter + polledCounter[0]);
+
+        if (required > totalGenerated) {
+            // 修复精度有概率不准确的问题
+            if (totalGenerated + 0.1F > required) {
+                return required;
             }
         }
 
@@ -224,7 +239,7 @@ public class ComputationCenter {
     }
 
     public void resetComputationPointCounter() {
-        computationPointCounter = type.getMaxComputationPointCarrying();
+        computationPointCounter.set(type.getMaxComputationPointCarrying());
     }
 
     @ZenMethod
@@ -283,11 +298,13 @@ public class ComputationCenter {
 
     @ZenGetter("computationPointConsumption")
     public float getComputationPointConsumption() {
-        return (float) nodes.values()
-                .stream()
-                .flatMap(map -> map.values().stream())
-                .mapToDouble(NetNode::getComputationPointConsumption)
-                .sum();
+        float sum = 0F;
+        for (Map<BlockPos, NetNode> map : nodes.values()) {
+            for (NetNode node : map.values()) {
+                sum += node.getComputationPointConsumption();
+            }
+        }
+        return sum;
     }
 
     public TileMultiblockMachineController getOwner() {

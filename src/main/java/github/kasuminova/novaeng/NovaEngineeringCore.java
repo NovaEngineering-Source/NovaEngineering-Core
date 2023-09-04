@@ -15,16 +15,20 @@ import org.apache.logging.log4j.Logger;
 
 @Mod(modid = NovaEngineeringCore.MOD_ID, name = NovaEngineeringCore.MOD_NAME, version = NovaEngineeringCore.VERSION,
         dependencies = "required-after:forge@[14.23.5.2847,);" +
-                "required-after:modularmachinery@[1.11.1,);",
+                "required-after:modularmachinery@[1.11.1,);" +
+                "required-after:theoneprobe@[1.12-1.4.28,);",
         acceptedMinecraftVersions = "[1.12, 1.13)"
 )
 @SuppressWarnings("MethodMayBeStatic")
 public class NovaEngineeringCore {
     public static final String MOD_ID = "novaeng_core";
     public static final String MOD_NAME = "Nova Engineering: Core";
-    public static final String VERSION = "1.5";
+
+    public static final String VERSION = "1.5.1";
+
     public static final String CLIENT_PROXY = "github.kasuminova.novaeng.client.ClientProxy";
     public static final String COMMON_PROXY = "github.kasuminova.novaeng.common.CommonProxy";
+
     public static final SimpleNetworkWrapper NET_CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
 
     @Mod.Instance(MOD_ID)
@@ -43,7 +47,7 @@ public class NovaEngineeringCore {
         event.getModMetadata().version = VERSION;
         log = event.getModLog();
 
-        NET_CHANNEL.registerMessage(PktHyperNetStatus.class,  PktHyperNetStatus.class,  0, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktHyperNetStatus.class, PktHyperNetStatus.class, 0, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktTerminalGuiData.class, PktTerminalGuiData.class, 1, Side.CLIENT);
 
         NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, 100, Side.SERVER);

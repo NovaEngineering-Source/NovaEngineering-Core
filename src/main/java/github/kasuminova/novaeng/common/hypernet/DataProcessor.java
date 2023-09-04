@@ -3,6 +3,7 @@ package github.kasuminova.novaeng.common.hypernet;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.FactoryRecipeTickEvent;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
+import github.kasuminova.mmce.common.helper.IDynamicPatternInfo;
 import github.kasuminova.mmce.common.upgrade.MachineUpgrade;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleCPU;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleRAM;
@@ -14,8 +15,7 @@ import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
 import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
 import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
-import hellfirepvp.modularmachinery.common.util.MiscUtils;
-import io.netty.util.internal.shaded.org.jctools.queues.SpscLinkedQueue;
+import io.netty.util.internal.shaded.org.jctools.queues.atomic.MpscLinkedAtomicQueue;
 import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -30,11 +30,13 @@ import java.util.Objects;
 @ZenRegister
 @ZenClass("novaeng.hypernet.DataProcessor")
 public class DataProcessor extends NetNode {
-    private final SpscLinkedQueue<Long> recentEnergyUsage = new SpscLinkedQueue<>();
-    private final SpscLinkedQueue<Float> recentCalculation = new SpscLinkedQueue<>();
+    private final MpscLinkedAtomicQueue<Long> recentEnergyUsage = new MpscLinkedAtomicQueue<>();
+    private final MpscLinkedAtomicQueue<Float> recentCalculation = new MpscLinkedAtomicQueue<>();
 
     private final DataProcessorType type;
     private final LinkedList<Float> computationalLoadHistory = new LinkedList<>();
+
+    private int dynamicPatternSize = 0;
 
     private int circuitDurability = 0;
     private int storedHU = 0;
@@ -73,13 +75,12 @@ public class DataProcessor extends NetNode {
             return;
         }
 
-        List<MachineUpgrade> flattened = MiscUtils.flatten(upgrades.values());
-        if (ProcessorModuleRAM.filter(flattened).isEmpty()) {
+        if (ProcessorModuleRAM.filter(upgrades.values()).isEmpty()) {
             event.setFailed("至少需要安装一个内存模块！");
             return;
         }
 
-        if (ProcessorModuleCPU.filter(flattened).isEmpty()) {
+        if (ProcessorModuleCPU.filter(upgrades.values()).isEmpty()) {
             event.setFailed("至少需要安装一个 CPU 或 GPU 模块！");
         }
     }
@@ -106,29 +107,22 @@ public class DataProcessor extends NetNode {
             energyUsage += usage;
         }
 
-        if (energyUsage == 0) {
-            event.getRecipeThread().removeModifier("energy");
+        float heatPercent = getOverHeatPercent();
+        if (heatPercent <= 0.1F) {
+            energyUsage += (baseEnergyUsage / 10) * dynamicPatternSize > 0 ? dynamicPatternSize : 1;
+        } else if (heatPercent <= 0.5F) {
+            energyUsage += (baseEnergyUsage / 5) * dynamicPatternSize > 0 ? dynamicPatternSize : 1;
+        } else if (heatPercent <= 0.75F) {
+            energyUsage += (baseEnergyUsage / 2) * dynamicPatternSize > 0 ? dynamicPatternSize : 1;
         } else {
-            float mul = (float) ((double) (energyUsage + baseEnergyUsage) / baseEnergyUsage);
-            event.getRecipeThread().addModifier("energy", new RecipeModifier(
-                    RequirementTypesMM.REQUIREMENT_ENERGY,
-                    IOType.INPUT, mul, 1, false
-            ));
+            energyUsage += baseEnergyUsage * dynamicPatternSize > 0 ? dynamicPatternSize : 1;
         }
 
-        float totalCalculation = 0;
-        Float calculation;
-        while((calculation = recentCalculation.poll()) != null) {
-            totalCalculation += calculation;
-        }
-
-        computationalLoadHistory.addFirst(totalCalculation);
-        computationalLoadHistoryCache += totalCalculation;
-        if (computationalLoadHistory.size() > 100) {
-            computationalLoadHistoryCache -= computationalLoadHistory.pollLast();
-        }
-
-        computationalLoad = computationalLoadHistoryCache / computationalLoadHistory.size();
+        float mul = (float) ((double) (energyUsage + baseEnergyUsage) / baseEnergyUsage);
+        event.getRecipeThread().addModifier("energy", new RecipeModifier(
+                RequirementTypesMM.REQUIREMENT_ENERGY,
+                IOType.INPUT, mul, 1, false
+        ));
     }
 
     @ZenMethod
@@ -143,22 +137,63 @@ public class DataProcessor extends NetNode {
 
         if (!isWorking()) {
             computationalLoad = 0;
+            computationalLoadHistoryCache = 0;
             computationalLoadHistory.clear();
+        } else {
+            float totalCalculation = 0;
+            Float calculation;
+            while((calculation = recentCalculation.poll()) != null) {
+                totalCalculation += calculation;
+            }
+
+            computationalLoadHistory.addFirst(totalCalculation);
+            computationalLoadHistoryCache += totalCalculation;
+            if (computationalLoadHistory.size() > 100) {
+                computationalLoadHistoryCache -= computationalLoadHistory.pollLast();
+            }
+
+            computationalLoad = computationalLoadHistoryCache / computationalLoadHistory.size();
         }
 
         if (owner.getTicksExisted() % 20 == 0) {
             maxGeneration = getComputationPointProvision(0xFFFFFF);
+            IDynamicPatternInfo dynamicPattern = owner.getDynamicPattern(type.getDynamicPatternName());
+            if (dynamicPattern != null) {
+                dynamicPatternSize = dynamicPattern.getSize();
+            } else {
+                dynamicPatternSize = 0;
+            }
             writeNBT();
         }
 
         if (storedHU > 0) {
-            storedHU -= Math.min(type.getHeatDistribution(), storedHU);
+            int heatDist = calculateHeatDist();
+
+            storedHU -= Math.min(heatDist, storedHU);
             if (storedHU <= 0) {
                 overheat = false;
             }
             maxGeneration = getComputationPointProvision(0xFFFFFF);
             writeNBT();
         }
+    }
+
+    private int calculateHeatDist() {
+        float heatPercent = getOverHeatPercent();
+        int heatDist = type.getHeatDistribution();
+        if (dynamicPatternSize > 1) {
+            heatDist *= dynamicPatternSize;
+        }
+
+        if (heatPercent <= 0.25F) {
+            heatDist /= 10;
+        } else if (heatPercent <= 0.5F) {
+            heatDist /= 5;
+        } else if (heatPercent <= 0.75F) {
+            heatDist /= 2;
+        }
+
+        return heatDist;
     }
 
     @Override
@@ -172,7 +207,6 @@ public class DataProcessor extends NetNode {
         if (doCalculate) {
             consumeCircuitDurability();
             doHeatGeneration(generation);
-            writeNBT();
         }
 
         return generation;
@@ -189,7 +223,12 @@ public class DataProcessor extends NetNode {
         int min = type.getMinCircuitConsumeAmount();
         int max = type.getMaxCircuitConsumeAmount();
 
-        circuitDurability -= Math.min(min + RandomUtils.nextInt(max - min), circuitDurability);
+        int consume = min + RandomUtils.nextInt(max - min);
+        if (dynamicPatternSize > 1) {
+            consume *= dynamicPatternSize;
+        }
+
+        circuitDurability -= Math.min(consume, circuitDurability);
     }
 
     @Override
@@ -232,15 +271,17 @@ public class DataProcessor extends NetNode {
         }
 
         Map<String, List<MachineUpgrade>> upgrades = owner.getFoundUpgrades();
-        List<MachineUpgrade> flattened = MiscUtils.flatten(upgrades.values());
-
-        List<ProcessorModuleRAM> moduleRAMs = ProcessorModuleRAM.filter(flattened);
-        if (moduleRAMs.isEmpty()) {
+        if (upgrades.isEmpty()) {
             return 0;
         }
 
-        List<ProcessorModuleCPU> moduleCPUs = ProcessorModuleCPU.filter(flattened);
+        List<ProcessorModuleCPU> moduleCPUs = ProcessorModuleCPU.filter(upgrades.values());
         if (moduleCPUs.isEmpty()) {
+            return 0;
+        }
+
+        List<ProcessorModuleRAM> moduleRAMs = ProcessorModuleRAM.filter(upgrades.values());
+        if (moduleRAMs.isEmpty()) {
             return 0;
         }
 
@@ -336,6 +377,7 @@ public class DataProcessor extends NetNode {
     @ZenSetter("storedHU")
     public void setStoredHU(final int storedHU) {
         this.storedHU = storedHU;
+        writeNBT();
     }
 
     @ZenGetter("overheat")

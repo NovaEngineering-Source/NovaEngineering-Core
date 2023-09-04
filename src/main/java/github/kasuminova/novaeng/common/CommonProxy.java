@@ -7,6 +7,7 @@ import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.base.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.integration.IntegrationCRT;
+import github.kasuminova.novaeng.common.integration.theoneprobe.IntegrationTOP;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
@@ -49,6 +50,7 @@ public class CommonProxy implements IGuiHandler {
                 HyperNetTerminal.class
         );
 
+        IntegrationTOP.registerProvider();
         RecipeAdapterExtended.registerAdapter();
         HyperNetRecipeManager.registerRecipes();
     }

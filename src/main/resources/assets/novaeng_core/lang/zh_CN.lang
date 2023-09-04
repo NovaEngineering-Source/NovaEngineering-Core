@@ -34,9 +34,31 @@ upgrade.data_processor.module.energy.tip=§9最大功耗：§c%s
 upgrade.data_processor.module.durability.tip=§9耐久：§e%s / %s§a（%s）
 upgrade.data_processor.module.durability.unknown.tip=§9最大耐久：§e%s ～ %s
 
+top.hypernet.online=§9HyperNet 网络状态：§a已连接
+top.hypernet.offline=§9HyperNet 网络状态：§c断开连接
+
+top.hypernet.connected=§9网络当前在线设备数量：
+
+top.hypernet.computation_point_consumption=§9算力消耗：
+top.hypernet.computation_point_generation=§9算力产出：
+
+top.hypernet.research_station.current=§9当前研究：
+top.hypernet.research_station.progress=§9研究进度
+
+top.hypernet.database.stored.research=§9已存储研究认知数量：
+top.hypernet.database.stored.research.max=§9最大研究认知存储数量：
+
+top.hypernet.computation_point.total=§9网络总算力消耗 / 产出：
+
+top.hypernet.processor.generation=§9当前算力 / 最大算力：
+top.hypernet.processor.efficiency=§9工作效率：
+top.hypernet.processor.load=§9平均负载：
+top.hypernet.processor.circuit_durability=§9电路板耐久剩余：
+top.hypernet.processor.heat=§9内部热量：
+
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 
-novaeng.hypernet.computation_point_required.tip=§9需要算力：§b%s
+novaeng.hypernet.computation_point_required.tip=§9需要算力 (受并行影响)：§b%s
 novaeng.hypernet.research_required.tip=§6需要研究认知：§r%s
 
 gui.hypernet.controller.title=§9///////// HyperNet 代理网络 /////////

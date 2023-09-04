@@ -13,8 +13,8 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.upgrade.ProcessorModuleCPU")
@@ -26,12 +26,19 @@ public class ProcessorModuleCPU extends DataProcessorModule {
         super(type);
     }
 
-    public static List<ProcessorModuleCPU> filter(final List<MachineUpgrade> upgrades) {
-        return upgrades.stream()
-                .filter(ProcessorModuleCPU.class::isInstance)
-                .map(ProcessorModuleCPU.class::cast)
-                .filter(cpu -> cpu.durability > 0)
-                .collect(Collectors.toList());
+    public static List<ProcessorModuleCPU> filter(final Collection<List<MachineUpgrade>> upgradeLists) {
+        List<ProcessorModuleCPU> list = new ArrayList<>();
+        for (List<MachineUpgrade> upgradeList : upgradeLists) {
+            for (final MachineUpgrade upgrade : upgradeList) {
+                if (upgrade instanceof ProcessorModuleCPU) {
+                    ProcessorModuleCPU cpu = (ProcessorModuleCPU) upgrade;
+                    if (cpu.durability > 0) {
+                        list.add(cpu);
+                    }
+                }
+            }
+        }
+        return list;
     }
 
     public float calculate(final boolean doCalculate, float maxGeneration) {

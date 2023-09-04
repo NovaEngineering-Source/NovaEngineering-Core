@@ -37,7 +37,7 @@ public class ResearchStationType extends NetNodeType {
         String name = typeName;
         MachineModifier.addCoreThread(name, FactoryRecipeThread.createCoreThread(RESEARCH_STATION_WORKING_THREAD_NAME));
 
-        RecipeBuilder.newBuilder(name + "_working", name, 20, 100, false)
+        RecipeBuilder.newBuilder(name + "_working", name, 100, 100, false)
                 .addEnergyPerTickInput(energyUsage)
                 .addCheckHandler(event -> {
                     ResearchStation station = NetNodeCache.getCache(event.getController(), ResearchStation.class);

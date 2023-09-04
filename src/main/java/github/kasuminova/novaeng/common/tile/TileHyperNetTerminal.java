@@ -21,14 +21,15 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TileHyperNetTerminal extends TileCustomController {
     public static final int NETWORK_CONNECT_CARD_SLOT = 0;
-    public static final int ENERGY_USAGE = 1_000;
+    public static final int ENERGY_USAGE = 2_000;
 
     private final HyperNetTerminal nodeProxy = new HyperNetTerminal(this);
+    private final List<IEnergyHandlerAsync> energyHandlers = new ArrayList<>();
 
     private IOInventory cardInventory;
 
@@ -56,20 +57,14 @@ public class TileHyperNetTerminal extends TileCustomController {
     }
 
     public boolean consumeEnergy() {
-        List<IEnergyHandlerAsync> energyHandlers = foundComponents.stream()
-                .filter(foundComponent -> foundComponent.getComponent().getIOType() == IOType.INPUT)
-                .map(ProcessingComponent::getProvidedComponent)
-                .filter(IEnergyHandlerAsync.class::isInstance)
-                .map(IEnergyHandlerAsync.class::cast)
-                .collect(Collectors.toList());
-
         if (energyHandlers.isEmpty()) {
             controllerStatus = CraftingStatus.failure("component.missing.modularmachinery.energy.input");
             return false;
         }
 
+        int energyUsage = nodeProxy.isConnected() ? ENERGY_USAGE : ENERGY_USAGE / 10;
         for (final IEnergyHandlerAsync handler : energyHandlers) {
-            if (handler.extractEnergy(ENERGY_USAGE)) {
+            if (handler.extractEnergy(energyUsage)) {
                 controllerStatus = CraftingStatus.working();
                 return true;
             }
@@ -77,6 +72,22 @@ public class TileHyperNetTerminal extends TileCustomController {
 
         controllerStatus = CraftingStatus.failure("craftcheck.failure.energy.input");
         return false;
+    }
+
+    @Override
+    protected void updateComponents() {
+        super.updateComponents();
+
+        energyHandlers.clear();
+        for (ProcessingComponent<?> foundComponent : foundComponents) {
+            if (foundComponent.getComponent().getIOType() == IOType.INPUT) {
+                Object providedComponent = foundComponent.getProvidedComponent();
+                if (providedComponent instanceof IEnergyHandlerAsync) {
+                    IEnergyHandlerAsync iEnergyHandlerAsync = (IEnergyHandlerAsync) providedComponent;
+                    energyHandlers.add(iEnergyHandlerAsync);
+                }
+            }
+        }
     }
 
     @Override

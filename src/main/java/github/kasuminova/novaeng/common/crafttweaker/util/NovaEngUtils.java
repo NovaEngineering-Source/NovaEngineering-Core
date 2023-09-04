@@ -23,6 +23,24 @@ public class NovaEngUtils {
         return nf.format(value);
     }
 
+    public static String formatNumber(long value) {
+        if (value < 1_000L) {
+            return String.valueOf(value);
+        } else if (value < 1_000_000L) {
+            return formatFloat((float) value / 1_000L, 2) + "K";
+        } else if (value < 1_000_000_000L) {
+            return formatDouble((double) value / 1_000_000L, 2) + "M";
+        } else if (value < 1_000_000_000_000L) {
+            return formatDouble((double) value / 1_000_000_000L, 2) + "G";
+        } else if (value < 1_000_000_000_000_000L) {
+            return formatDouble((double) value / 1_000_000_000_000L, 2) + "T";
+        } else if (value < 1_000_000_000_000_000_000L) {
+            return formatDouble((double) value / 1_000_000_000_000_000L, 2) + "P";
+        } else {
+            return formatDouble((double) value / 1_000_000_000_000_000_000L, 2) + "E";
+        }
+    }
+
     @ZenMethod
     public static String formatPercent(double num1, double num2) {
         return NovaEngUtils.formatDouble((num1 / num2) * 100D, 2) + "%";

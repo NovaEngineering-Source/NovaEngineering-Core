@@ -27,6 +27,8 @@ public class DataProcessorType extends NetNodeTypeRepairable {
     private final int maxCircuitConsumeAmount;
     private final float circuitConsumeChance;
 
+    private String dynamicPatternName = "";
+
     public DataProcessorType(final String typeName,
                              final long energyUsage,
                              final int heatDistribution,
@@ -153,5 +155,16 @@ public class DataProcessorType extends NetNodeTypeRepairable {
     @ZenGetter("circuitConsumeChance")
     public float getCircuitConsumeChance() {
         return circuitConsumeChance;
+    }
+
+    @ZenGetter("dynamicPatternName")
+    public String getDynamicPatternName() {
+        return dynamicPatternName;
+    }
+
+    @ZenMethod
+    public DataProcessorType setDynamicPatternName(final String dynamicPatternName) {
+        this.dynamicPatternName = dynamicPatternName;
+        return this;
     }
 }

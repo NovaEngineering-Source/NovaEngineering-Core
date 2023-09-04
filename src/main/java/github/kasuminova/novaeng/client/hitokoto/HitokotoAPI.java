@@ -36,11 +36,18 @@ public class HitokotoAPI {
         } catch (IOException e) {
             return "";
         }
-        if (jsonStr == null) {
+
+        if (jsonStr == null || jsonStr.isEmpty()) {
             return "";
         }
 
-        HitokotoResult hitokoto = JsonUtils.fromJson(DESERIALIZER, jsonStr, HitokotoResult.class, true);
+        HitokotoResult hitokoto;
+        try {
+            hitokoto = JsonUtils.fromJson(DESERIALIZER, jsonStr, HitokotoResult.class, true);
+        } catch (Exception e) {
+            return "";
+        }
+
         if (hitokoto == null) {
             return "";
         }
@@ -54,10 +61,16 @@ public class HitokotoAPI {
 
     public static String assembleHitokoto(HitokotoResult result) {
         String hitokoto = result.getHitokoto();
-        String creator = result.getCreator();
+        String fromWho = result.getFromWho();
+        if (fromWho.isEmpty()) {
+            fromWho = result.getFrom();
+            if (fromWho.isEmpty()) {
+                fromWho = result.getCreator();
+            }
+        }
 
-        if (hitokoto != null && creator != null) {
-            return hitokoto + " —— " + creator;
+        if (hitokoto != null && fromWho != null) {
+            return hitokoto + " —— " + fromWho;
         }
 
         return "";

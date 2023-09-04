@@ -50,6 +50,10 @@ public abstract class NetNode {
             return ConnectResult.UNKNOWN_CENTER;
         }
 
+        if (center != null) {
+            center.onDisconnect(owner, this);
+        }
+
         ConnectResult result = connectToCenter();
         if (result.isSuccess()) {
             return result;

@@ -7,15 +7,14 @@ import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleRAMType;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.util.RandomUtils;
-import hellfirepvp.modularmachinery.ModularMachinery;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.upgrade.ProcessorModuleRAM")
@@ -26,12 +25,19 @@ public class ProcessorModuleRAM extends DataProcessorModule {
         super(type);
     }
 
-    public static List<ProcessorModuleRAM> filter(final List<MachineUpgrade> upgrades) {
-        return upgrades.stream()
-                .filter(ProcessorModuleRAM.class::isInstance)
-                .map(ProcessorModuleRAM.class::cast)
-                .filter(ram -> ram.durability > 0)
-                .collect(Collectors.toList());
+    public static List<ProcessorModuleRAM> filter(final Collection<List<MachineUpgrade>> upgradeLists) {
+        List<ProcessorModuleRAM> list = new ArrayList<>();
+        for (List<MachineUpgrade> upgradeList : upgradeLists) {
+            for (final MachineUpgrade upgrade : upgradeList) {
+                if (upgrade instanceof ProcessorModuleRAM) {
+                    ProcessorModuleRAM ram = (ProcessorModuleRAM) upgrade;
+                    if (ram.durability > 0) {
+                        list.add(ram);
+                    }
+                }
+            }
+        }
+        return list;
     }
 
     public float calculate(final boolean doCalculate, float maxGeneration) {

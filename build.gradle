@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'github.kasuminova'
-version = '1.5'
+version = '1.5.1'
 
 repositories {
     flatDir {
@@ -100,7 +100,9 @@ dependencies {
 
     // Mod Dependencies
     implementation fg.deobf('hellfirepvp:modularmachinery:r45:main')
+    implementation fg.deobf("curse.maven:the-one-probe-245211:2667280")
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+"
+
     compileOnly fg.deobf("curse.maven:zenutil-401178:4394263")
     compileOnly fg.deobf("curse.maven:libvulpes-236541:3801015")
     compileOnly fg.deobf("curse.maven:advanced-rocketry-236542:4671856")

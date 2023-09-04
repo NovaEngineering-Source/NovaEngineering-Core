@@ -57,13 +57,12 @@ public class ResearchCognitionData {
         this.dependencies = dependencies;
         this.cycleResearch = false;
         this.maxCycle = 0;
+        this.translatedName = translatedName;
 
         if (FMLCommonHandler.instance().getSide().isClient()) {
-            this.translatedName = translatedName;
             this.descriptions = descriptions;
             this.unlockedDescriptions = unlockedDescriptions;
         } else {
-            this.translatedName = "";
             this.descriptions = new ArrayList<>();
             this.unlockedDescriptions = new ArrayList<>();
         }

@@ -15,6 +15,8 @@ import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleRAM
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
+import it.unimi.dsi.fastutil.objects.ObjectOpenHashSet;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -25,26 +27,30 @@ import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.RegistryHyperNet")
 public class RegistryHyperNet {
     private static Item hyperNetConnectCard = Items.AIR;
 
-    private static final Set<ResourceLocation> SUPPORTED_MACHINERY = new HashSet<>();
-    private static final Set<ResourceLocation> COMPUTATION_CENTERS = new HashSet<>();
+    private static final Set<ResourceLocation> SUPPORTED_MACHINERY = new ObjectOpenHashSet<>();
+    private static final Set<ResourceLocation> COMPUTATION_CENTERS = new ObjectOpenHashSet<>();
 
-    private static final Map<ResourceLocation, Class<? extends NetNode>> REGISTERED_NODE_TYPE = new HashMap<>();
+    private static final Map<ResourceLocation, Class<? extends NetNode>> REGISTERED_NODE_TYPE = new Object2ObjectOpenHashMap<>();
 
-    private static final Map<String, ComputationCenterType> COMPUTATION_CENTER_TYPE = new HashMap<>();
-    private static final Map<String, DataProcessorType>     DATA_PROCESSOR_TYPE     = new HashMap<>();
-    private static final Map<String, ResearchStationType>   RESEARCH_STATION_TYPE   = new HashMap<>();
-    private static final Map<String, DatabaseType>          DATABASE_TYPE           = new HashMap<>();
-    private static final Map<String, ResearchCognitionData> RESEARCH_COGNITION      = new Object2ObjectLinkedOpenHashMap<>();
+    private static final Map<String, ComputationCenterType> COMPUTATION_CENTER_TYPE = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, DataProcessorType>     DATA_PROCESSOR_TYPE     = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, ResearchStationType>   RESEARCH_STATION_TYPE   = new Object2ObjectOpenHashMap<>();
+    private static final Map<String, DatabaseType>          DATABASE_TYPE           = new Object2ObjectOpenHashMap<>();
 
-    private static final Map<UpgradeType, ProcessorModuleCPUType> DATA_PROCESSOR_MODULE_CPU_TYPE = new HashMap<>();
-    private static final Map<UpgradeType, ProcessorModuleRAMType> DATA_PROCESSOR_MODULE_RAM_TYPE = new HashMap<>();
+    private static final Map<String, ResearchCognitionData> RESEARCH_COGNITION = new Object2ObjectLinkedOpenHashMap<>();
+
+    private static final Map<UpgradeType, ProcessorModuleCPUType> DATA_PROCESSOR_MODULE_CPU_TYPE = new Object2ObjectOpenHashMap<>();
+    private static final Map<UpgradeType, ProcessorModuleRAMType> DATA_PROCESSOR_MODULE_RAM_TYPE = new Object2ObjectOpenHashMap<>();
 
     public static boolean isHyperNetSupported(@Nullable final DynamicMachine machine) {
         if (machine == null) {

@@ -51,7 +51,7 @@ public class NetNodeImpl extends NetNode {
         }
 
         if (center.getComputationPointGeneration() < pointRequired) {
-            event.setFailed("算力不足！（预期算力：" + pointRequired + "T FloPS，当前算力：" + center.getComputationPointGeneration() + "T FloPS）");
+            event.setFailed("算力不足！预期：" + pointRequired + "T FloPS，当前：" + center.getComputationPointGeneration() + "T FloPS");
         }
     }
 
@@ -78,11 +78,11 @@ public class NetNodeImpl extends NetNode {
     }
 
     public void onRecipeStart(final RecipeStartEvent event, final float computation) {
-        recipeConsumers.put(event.getRecipeThread(), computation);
+        recipeConsumers.put(event.getRecipeThread(), computation * event.getActiveRecipe().getParallelism());
     }
 
     public void onRecipeStart(final FactoryRecipeStartEvent event, final float computation) {
-        recipeConsumers.put(event.getRecipeThread(), computation);
+        recipeConsumers.put(event.getRecipeThread(), computation * event.getActiveRecipe().getParallelism());
     }
 
     public void onRecipePreTick(final RecipeTickEvent event, final float computation) {
@@ -90,12 +90,13 @@ public class NetNodeImpl extends NetNode {
             event.setFailed(true, "未连接至计算网络！");
             return;
         }
-        recipeConsumers.put(event.getRecipeThread(), computation);
+        float required = computation * event.getActiveRecipe().getParallelism();
+        recipeConsumers.put(event.getRecipeThread(), required);
 
-        float consumed = center.consumeComputationPoint(computation);
-        if (consumed < computation) {
+        float consumed = center.consumeComputationPoint(required);
+        if (consumed < required) {
             event.preventProgressing(
-                    "算力不足！（预期算力：" + computation + "T FloPS，当前算力：" + consumed + "T FloPS）");
+                    "算力不足！预期：" + required + "T FloPS，当前：" + consumed + "T FloPS");
         }
     }
 
@@ -104,12 +105,13 @@ public class NetNodeImpl extends NetNode {
             event.setFailed(true, "未连接至计算网络！");
             return;
         }
-        recipeConsumers.put(event.getRecipeThread(), computation);
+        float required = computation * event.getActiveRecipe().getParallelism();
+        recipeConsumers.put(event.getRecipeThread(), required);
 
-        float consumed = center.consumeComputationPoint(computation);
-        if (consumed < computation) {
+        float consumed = center.consumeComputationPoint(required);
+        if (consumed < required) {
             event.preventProgressing(
-                    "算力不足！（预期算力：" + computation + "T FloPS，当前算力：" + consumed + "T FloPS）");
+                    "算力不足！预期：" + required + "T FloPS，当前：" + consumed + "T FloPS");
         }
     }
 

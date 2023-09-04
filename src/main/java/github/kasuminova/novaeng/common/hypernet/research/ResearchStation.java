@@ -3,11 +3,13 @@ package github.kasuminova.novaeng.common.hypernet.research;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.FactoryRecipeTickEvent;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
+import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.Database;
 import github.kasuminova.novaeng.common.hypernet.NetNode;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.crafting.ActiveMachineRecipe;
+import hellfirepvp.modularmachinery.common.crafting.helper.CraftingStatus;
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
 import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
@@ -24,8 +26,8 @@ import java.util.Objects;
 public class ResearchStation extends NetNode {
     private final ResearchStationType type;
     private ResearchCognitionData currentResearching = null;
-    private double currentResearchingProgress = 0;
-    private float computationPointConsumption = 0;
+    private double completedPoints = 0;
+    private float consumption = 0;
 
     public ResearchStation(final TileMultiblockMachineController owner) {
         super(owner);
@@ -54,7 +56,7 @@ public class ResearchStation extends NetNode {
 
         float pointPerTick = currentResearching.getMinComputationPointPerTick();
         if (center.getComputationPointGeneration() < pointPerTick) {
-            event.setFailed("算力不足！（预期算力：" + pointPerTick + "T FloPS，当前算力：" + center.getComputationPointGeneration() + "T FloPS）");
+            event.setFailed("算力不足！预期：" + pointPerTick + "T FloPS，当前：" + center.getComputationPointGeneration() + "T FloPS");
             return;
         }
 
@@ -87,23 +89,34 @@ public class ResearchStation extends NetNode {
             return;
         }
 
-        double left = currentResearching.getRequiredPoints() - currentResearchingProgress;
-        computationPointConsumption = (float) Math.min(currentResearching.getMinComputationPointPerTick(), left);
+        float consumed = center.consumeComputationPoint(consumption);
+        if (consumed < consumption) {
+            event.preventProgressing("算力不足！预期："
+                    + NovaEngUtils.formatFLOPS(consumption) + "，当前："
+                    + NovaEngUtils.formatFLOPS(consumed) + "T FloPS");
+        } else {
+            doResearch(event, consumed);
+        }
+    }
+
+    protected void doResearch(final FactoryRecipeTickEvent event, final float consumed) {
+        completedPoints += consumed;
+
+        double left = currentResearching.getRequiredPoints() - completedPoints;
+        consumption = (float) Math.min(currentResearching.getMinComputationPointPerTick(), left);
 
         if (left <= 0) {
             completeRecipe(event.getFactoryRecipeThread());
+            writeNBT();
             return;
         }
 
-        float consumed = center.consumeComputationPoint(computationPointConsumption);
-        if (consumed < computationPointConsumption) {
-            event.preventProgressing(
-                    "算力不足！（预期算力：" + computationPointConsumption + "T FloPS，当前算力：" + consumed + "T FloPS）");
-        } else {
-            currentResearchingProgress += consumed;
-            event.getRecipeThread().setStatusInfo("研究中...");
-            ModularMachinery.EXECUTE_MANAGER.addSyncTask(this::writeResearchProgressToDatabase);
-        }
+        ActiveMachineRecipe activeRecipe = event.getActiveRecipe();
+        int totalTick = activeRecipe.getTotalTick();
+        activeRecipe.setTick(Math.max((int) (getProgressPercent() * totalTick) - 1, 0));
+        event.getRecipeThread().setStatus(CraftingStatus.SUCCESS).setStatusInfo("研究中...");
+
+        ModularMachinery.EXECUTE_MANAGER.addSyncTask(this::writeResearchProgressToDatabase);
         writeNBT();
     }
 
@@ -138,7 +151,7 @@ public class ResearchStation extends NetNode {
         }
 
         for (Database database : center.getNode(Database.class)) {
-            if (database.writeResearchingData(currentResearching, currentResearchingProgress)) {
+            if (database.writeResearchingData(currentResearching, completedPoints)) {
                 break;
             }
         }
@@ -146,8 +159,8 @@ public class ResearchStation extends NetNode {
 
     public void resetResearchTask() {
         currentResearching = null;
-        currentResearchingProgress = 0;
-        computationPointConsumption = 0;
+        completedPoints = 0;
+        consumption = 0;
     }
 
     @Override
@@ -156,19 +169,19 @@ public class ResearchStation extends NetNode {
         super.onMachineTick();
 
         if (!isWorking()) {
-            computationPointConsumption = 0;
+            consumption = 0;
         }
     }
 
     public void provideTask(ResearchCognitionData data) {
         currentResearching = data;
         if (data == null) {
-            currentResearchingProgress = 0;
+            completedPoints = 0;
             writeNBT();
             return;
         }
 
-        computationPointConsumption = data.getMinComputationPointPerTick();
+        consumption = data.getMinComputationPointPerTick();
         double progress = center.getNode(Database.class)
                 .stream()
                 .map(database -> database.getResearchingData(data))
@@ -185,7 +198,7 @@ public class ResearchStation extends NetNode {
             progress = 0D;
         }
 
-        currentResearchingProgress = progress;
+        completedPoints = progress;
         writeNBT();
     }
 
@@ -204,9 +217,9 @@ public class ResearchStation extends NetNode {
     @Override
     public void readNBT(final NBTTagCompound customData) {
         super.readNBT(customData);
-        this.computationPointConsumption = customData.getFloat("computationPointConsumption");
+        this.consumption = customData.getFloat("consumption");
         this.currentResearching = RegistryHyperNet.getResearchCognitionData(customData.getString("researching"));
-        this.currentResearchingProgress = customData.getDouble("researchProgress");
+        this.completedPoints = customData.getDouble("completedPoints");
     }
 
     @Override
@@ -214,10 +227,10 @@ public class ResearchStation extends NetNode {
         super.writeNBT();
         NBTTagCompound tag = owner.getCustomDataTag();
 
-        tag.setFloat("computationPointConsumption", computationPointConsumption);
+        tag.setFloat("consumption", consumption);
         if (currentResearching != null) {
             tag.setString("researching", currentResearching.getResearchName());
-            tag.setDouble("researchProgress", currentResearchingProgress);
+            tag.setDouble("completedPoints", completedPoints);
         }
     }
 
@@ -228,7 +241,7 @@ public class ResearchStation extends NetNode {
 
     @Override
     public float getComputationPointConsumption() {
-        return computationPointConsumption;
+        return consumption;
     }
 
     @ZenGetter("type")
@@ -241,8 +254,16 @@ public class ResearchStation extends NetNode {
         return currentResearching;
     }
 
-    @ZenGetter("currentResearchingProgress")
-    public double getCurrentResearchingProgress() {
-        return currentResearchingProgress;
+    @ZenGetter("completedPoints")
+    public double getCompletedPoints() {
+        return completedPoints;
+    }
+
+    @ZenGetter("progressPercent")
+    public double getProgressPercent() {
+        if (currentResearching == null) {
+            return 0;
+        }
+        return completedPoints / currentResearching.getRequiredPoints();
     }
 }

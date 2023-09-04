@@ -33,7 +33,7 @@ public class RecipePrimerHyperNet {
         if (FMLCommonHandler.instance().getSide().isClient()) {
             primer.addRecipeTooltip(
                     I18n.format("novaeng.hypernet.computation_point_required.tip",
-                            NovaEngUtils.formatFLOPS(required))
+                            NovaEngUtils.formatFLOPS(required)).intern()
             );
         }
 
@@ -104,7 +104,7 @@ public class RecipePrimerHyperNet {
             String researchTip = Arrays.stream(researchRequired)
                     .map(ResearchCognitionData::getTranslatedName)
                     .collect(Collectors.joining(TextFormatting.RESET + ", "));
-            primer.addRecipeTooltip(I18n.format("novaeng.hypernet.research_required.tip", researchTip));
+            primer.addRecipeTooltip(I18n.format("novaeng.hypernet.research_required.tip", researchTip).intern());
         }
 
         return primer.addCheckHandler(event -> {
