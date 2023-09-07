@@ -2,12 +2,14 @@ package github.kasuminova.novaeng.client.util;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
+import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.Display;
 
 import java.util.concurrent.CompletableFuture;
 
 public class TitleUtils {
     public static final String DEFAULT_TITLE = "Nova Engineering: World 1.6 by Hikari_Nova | Core Ver: " + NovaEngineeringCore.VERSION;
+    public static final String VANILLA_TITLE = "Minecraft 1.12.2";
 
     public static String currentTitle = null;
 
@@ -78,7 +80,13 @@ public class TitleUtils {
         if (currentTitle == null) {
             return;
         }
-        if (!Display.getTitle().equals(currentTitle)) {
+
+        String title = Display.getTitle();
+        if (!title.equals(currentTitle)) {
+            if (!title.equals(TitleUtils.VANILLA_TITLE)) {
+                Minecraft.getMinecraft().shutdown();
+                return;
+            }
             Display.setTitle(currentTitle);
         }
     }

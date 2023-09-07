@@ -8,6 +8,7 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 import java.util.ArrayList;
@@ -26,7 +27,6 @@ public class RegistryItems {
         GenericRegistryPrimer.INSTANCE.wipe(event.getGenericType());
 
         registerItemBlocks();
-        registerItemModels();
 
         GenericRegistryPrimer.INSTANCE.fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
@@ -37,6 +37,9 @@ public class RegistryItems {
     }
 
     public static void registerItemModels() {
+        if (FMLCommonHandler.instance().getSide().isServer()) {
+            return;
+        }
         ITEM_MODEL_TO_REGISTER.forEach(RegistryItems::registryItemModel);
         ITEM_MODEL_TO_REGISTER.clear();
     }

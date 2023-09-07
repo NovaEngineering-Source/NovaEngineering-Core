@@ -62,7 +62,7 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
         if (RegistryHyperNet.isComputationCenter(registryName)) {
             ComputationCenter center = ComputationCenter.from(ctrl);
             if (center != null) {
-                processCenterTOP(center, newBox(info));
+                processCenterTOP(center, info);
             }
             return;
         }
@@ -156,7 +156,7 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
 
         leftInfo.text("{*top.hypernet.processor.heat*}");
         rightInfo.text(TextFormatting.RED + MiscUtils.formatDecimal(storedHU) + "HU (" +
-                NovaEngUtils.formatPercent(heatPercent, 1.0F) + "%)");
+                NovaEngUtils.formatPercent(heatPercent, 1.0F) + ")");
     }
 
     private static IProbeInfo newVertical(final IProbeInfo probeInfo) {
@@ -226,9 +226,11 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
             probeInfo.text("{*top.hypernet.online*}");
         } else {
             probeInfo.text("{*top.hypernet.offline*}");
+            return;
         }
 
-        processCenterStatusTOP(center, newVertical(probeInfo), newVertical(probeInfo));
+        IProbeInfo box = newBox(probeInfo);
+        processCenterStatusTOP(center, newVertical(box), newVertical(box));
     }
 
     private static void processCenterStatusTOP(final ComputationCenter center,

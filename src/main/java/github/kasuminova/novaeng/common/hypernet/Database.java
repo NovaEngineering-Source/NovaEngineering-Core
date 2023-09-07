@@ -32,8 +32,6 @@ public class Database extends NetNode {
     private final Object2DoubleOpenHashMap<ResearchCognitionData> researchingCognition = new Object2DoubleOpenHashMap<>();
     private final DatabaseType type;
 
-    private int energyUsageCache = 0;
-
     public Database(final TileMultiblockMachineController owner) {
         super(owner);
         this.type = RegistryHyperNet.getDatabaseType(
@@ -45,7 +43,7 @@ public class Database extends NetNode {
 
     @ZenMethod
     public void onWorkingTick(final FactoryRecipeTickEvent event) {
-        if (owner.getTicksExisted() % 20 == 0) {
+        if (owner.getTicksExisted() % 40 == 0) {
             return;
         }
 
@@ -56,8 +54,6 @@ public class Database extends NetNode {
                 RequirementTypesMM.REQUIREMENT_ENERGY,
                 IOType.INPUT, energyUsage, RecipeModifier.OPERATION_MULTIPLY,
                 false));
-
-        energyUsageCache = storedResearchCognition.size();
     }
 
     @Override

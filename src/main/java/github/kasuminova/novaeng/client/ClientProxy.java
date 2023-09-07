@@ -8,6 +8,7 @@ import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
 import github.kasuminova.novaeng.client.util.TitleUtils;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
+import github.kasuminova.novaeng.common.registry.RegistryItems;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -70,6 +71,7 @@ public class ClientProxy extends CommonProxy {
 
     @SubscribeEvent
     public void onModelRegister(ModelRegistryEvent event) {
+        RegistryItems.registerItemModels();
         RegistryBlocks.registerBlockModels();
     }
 

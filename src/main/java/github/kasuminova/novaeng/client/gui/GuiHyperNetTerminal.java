@@ -105,7 +105,8 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
     public static boolean isMouseOver(final int startX, final int startY,
                                       final int endX, final int endY,
-                                      final int mouseX, final int mouseY) {
+                                      final int mouseX, final int mouseY)
+    {
         return mouseX >= startX && mouseX <= endX && mouseY >= startY && mouseY <= endY;
     }
 
@@ -715,10 +716,10 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             return false;
         }
 
-        float consumption = ComputationCenterCache.getComputationPointConsumption();
-        if ((generation - consumption) < data.getMinComputationPointPerTick()) {
-            return false;
-        }
+//        float consumption = ComputationCenterCache.getComputationPointConsumption();
+//        if ((generation - consumption) < data.getMinComputationPointPerTick()) {
+//            return false;
+//        }
 
         if (!unlockedData.containsAll(data.getDependencies())) {
             return false;
