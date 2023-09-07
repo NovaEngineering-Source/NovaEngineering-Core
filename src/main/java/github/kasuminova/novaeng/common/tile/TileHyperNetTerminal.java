@@ -41,7 +41,7 @@ public class TileHyperNetTerminal extends TileCustomController {
 
     @Override
     public void doControllerTick() {
-        tickExecutor = ModularMachinery.EXECUTE_MANAGER.addParallelAsyncTask(() -> {
+        tickExecutor = ModularMachinery.EXECUTE_MANAGER.addTask(() -> {
             if (!doStructureCheck() || !isStructureFormed()) {
                 return;
             }

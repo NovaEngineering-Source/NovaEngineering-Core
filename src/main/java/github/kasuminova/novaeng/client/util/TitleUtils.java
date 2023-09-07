@@ -12,6 +12,7 @@ public class TitleUtils {
     public static final String VANILLA_TITLE = "Minecraft 1.12.2";
 
     public static String currentTitle = null;
+    public static String lastCurrentTitle = null;
 
     /**
      * 设置一言随机标题，必须在客户端主线程使用。
@@ -20,6 +21,8 @@ public class TitleUtils {
      * @param state 当前状态
      */
     public static void setRandomTitle(final String state) {
+        lastCurrentTitle = currentTitle;
+
         String hitokotoCache = HitokotoAPI.getHitokotoCache();
         if (hitokotoCache != null) {
             currentTitle = buildTitle(state, hitokotoCache);
@@ -36,7 +39,10 @@ public class TitleUtils {
      * 如果一言缓存为空，则尝试重新获取一言。
      */
     public static void setRandomTitle() {
+        lastCurrentTitle = currentTitle;
+
         String hitokotoCache = HitokotoAPI.getHitokotoCache();
+
         if (hitokotoCache != null) {
             currentTitle = buildTitle(null, hitokotoCache);
             Display.setTitle(currentTitle);
@@ -52,6 +58,7 @@ public class TitleUtils {
      * @param state 当前状态
      */
     public static void setRandomTitleSync(String state) {
+        lastCurrentTitle = currentTitle;
         currentTitle = buildTitle(state, HitokotoAPI.getHitokotoCache());
     }
 
@@ -59,6 +66,7 @@ public class TitleUtils {
      * 设置一言随机标题，可以在其他线程使用。
      */
     public static void setRandomTitleSync() {
+        lastCurrentTitle = currentTitle;
         currentTitle = buildTitle(null, HitokotoAPI.getHitokotoCache());
     }
 
@@ -83,10 +91,12 @@ public class TitleUtils {
 
         String title = Display.getTitle();
         if (!title.equals(currentTitle)) {
-            if (!title.equals(TitleUtils.VANILLA_TITLE)) {
+            if (!title.equals(TitleUtils.VANILLA_TITLE) && !title.equals(lastCurrentTitle)) {
+                NovaEngineeringCore.log.debug("Invalid title: {}, Excepted: {}", title, lastCurrentTitle);
                 Minecraft.getMinecraft().shutdown();
                 return;
             }
+
             Display.setTitle(currentTitle);
         }
     }

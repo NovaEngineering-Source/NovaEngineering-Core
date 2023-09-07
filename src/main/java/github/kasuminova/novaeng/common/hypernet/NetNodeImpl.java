@@ -86,8 +86,12 @@ public class NetNodeImpl extends NetNode {
     }
 
     public void onRecipePreTick(final RecipeTickEvent event, final float computation) {
-        if (centerPos == null || center == null) {
+        if (centerPos == null) {
             event.setFailed(true, "未连接至计算网络！");
+            return;
+        }
+        if (center == null) {
+            event.setFailed(false, "未连接至计算网络！");
             return;
         }
         float required = computation * event.getActiveRecipe().getParallelism();
@@ -101,8 +105,12 @@ public class NetNodeImpl extends NetNode {
     }
 
     public void onRecipePreTick(final FactoryRecipeTickEvent event, final float computation) {
-        if (centerPos == null || center == null) {
+        if (centerPos == null) {
             event.setFailed(true, "未连接至计算网络！");
+            return;
+        }
+        if (center == null) {
+            event.setFailed(false, "未连接至计算网络！");
             return;
         }
         float required = computation * event.getActiveRecipe().getParallelism();

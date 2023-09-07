@@ -1,8 +1,8 @@
 package github.kasuminova.novaeng.common.handler;
 
-import github.kasuminova.mmce.common.concurrent.Action;
 import github.kasuminova.mmce.common.event.Phase;
 import github.kasuminova.mmce.common.event.machine.MachineTickEvent;
+import github.kasuminova.mmce.common.util.concurrent.Action;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenter;

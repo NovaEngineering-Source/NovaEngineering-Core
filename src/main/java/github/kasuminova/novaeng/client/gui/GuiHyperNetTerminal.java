@@ -118,7 +118,8 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
                                             final RenderItem ri,
                                             final int x,
                                             final int y,
-                                            final ItemStack stack) {
+                                            final ItemStack stack)
+    {
         RenderHelper.enableGUIStandardItemLighting();
         ri.renderItemAndEffectIntoGUI(stack, x, y);
         ri.renderItemOverlays(mc.fontRenderer, stack, x, y);

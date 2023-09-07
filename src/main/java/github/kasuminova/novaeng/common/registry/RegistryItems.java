@@ -27,6 +27,7 @@ public class RegistryItems {
         GenericRegistryPrimer.INSTANCE.wipe(event.getGenericType());
 
         registerItemBlocks();
+        registerItemModels();
 
         GenericRegistryPrimer.INSTANCE.fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }

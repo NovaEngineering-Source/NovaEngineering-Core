@@ -94,6 +94,16 @@ public class DataProcessor extends NetNode {
 
     @ZenMethod
     public void onWorkingTick(FactoryRecipeTickEvent event) {
+        event.getActiveRecipe().setTick(0);
+
+        if (centerPos == null) {
+            event.setFailed(true, "未连接至计算网络！");
+            return;
+        }
+        if (center == null) {
+            event.setFailed(false, "未连接至计算网络！");
+            return;
+        }
         if (overheat) {
             event.setFailed(true, "处理器过热！");
             return;
@@ -180,20 +190,20 @@ public class DataProcessor extends NetNode {
 
     private int calculateHeatDist() {
         float heatPercent = getOverHeatPercent();
-        int heatDist = type.getHeatDistribution();
+        float heatDist = type.getHeatDistribution();
         if (dynamicPatternSize > 1) {
             heatDist *= dynamicPatternSize;
         }
 
         if (heatPercent <= 0.25F) {
-            heatDist /= 10;
-        } else if (heatPercent <= 0.5F) {
-            heatDist /= 5;
+            heatDist *= 0.25F;
         } else if (heatPercent <= 0.75F) {
-            heatDist /= 2;
+            heatDist *= 0.25F + (heatPercent);
+        } else {
+            heatDist *= 1.0F;
         }
 
-        return heatDist;
+        return (int) heatDist;
     }
 
     @Override
@@ -250,7 +260,7 @@ public class DataProcessor extends NetNode {
 
     public float getEfficiency() {
         float overHeatPercent = getOverHeatPercent();
-        return overHeatPercent >= 0.95F ? (1.0F - overHeatPercent) / 0.05F : 1F;
+        return overHeatPercent >= 0.85F ? (1.0F - overHeatPercent) / 0.15F : 1F;
     }
 
     @ZenGetter("overHeatPercent")

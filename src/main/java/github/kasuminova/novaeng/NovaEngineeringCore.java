@@ -24,7 +24,7 @@ public class NovaEngineeringCore {
     public static final String MOD_ID = "novaeng_core";
     public static final String MOD_NAME = "Nova Engineering: Core";
 
-    public static final String VERSION = "1.5.1";
+    public static final String VERSION = "1.5.2";
 
     public static final String CLIENT_PROXY = "github.kasuminova.novaeng.client.ClientProxy";
     public static final String COMMON_PROXY = "github.kasuminova.novaeng.common.CommonProxy";

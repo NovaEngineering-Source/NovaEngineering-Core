@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'github.kasuminova'
-version = '1.5.1'
+version = '1.5.2'
 
 repositories {
     flatDir {
@@ -99,7 +99,7 @@ dependencies {
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Mod Dependencies
-    implementation fg.deobf('hellfirepvp:modularmachinery:r45:main')
+    implementation fg.deobf('hellfirepvp:modularmachinery:r48:main')
     implementation fg.deobf("curse.maven:the-one-probe-245211:2667280")
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+"
 

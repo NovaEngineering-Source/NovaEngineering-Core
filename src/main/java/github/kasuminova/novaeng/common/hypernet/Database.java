@@ -43,6 +43,17 @@ public class Database extends NetNode {
 
     @ZenMethod
     public void onWorkingTick(final FactoryRecipeTickEvent event) {
+        event.getActiveRecipe().setTick(0);
+
+        if (centerPos == null) {
+            event.setFailed(true, "未连接至计算网络！");
+            return;
+        }
+        if (center == null) {
+            event.setFailed(false, "未连接至计算网络！");
+            return;
+        }
+
         if (owner.getTicksExisted() % 40 == 0) {
             return;
         }
