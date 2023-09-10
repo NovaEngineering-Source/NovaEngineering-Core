@@ -12,6 +12,7 @@ import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchStationType;
 import github.kasuminova.novaeng.common.network.PktResearchTaskProvide;
+import github.kasuminova.novaeng.common.network.PktResearchTaskProvideCreative;
 import github.kasuminova.novaeng.common.network.PktResearchTaskReset;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
@@ -266,10 +267,14 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             hoveredTip.addAll(errorTip);
             hoveredTip.add(I18n.format("gui.terminal_controller.screen.info.reset"));
         }
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
+        if (current.isLocked() && player != null && player.isCreative()) {
+            hoveredTip.add(I18n.format("gui.terminal_controller.screen.info.start.instant"));
+        }
 
         if (isMouseOver(316, 143, 316 + 16, 143 + 16, mouseX - guiLeft, mouseY - guiTop)) {
             drawHoveringText(hoveredTip.stream()
-                            .flatMap(s -> fontRenderer.listFormattedStringToWidth(s, width / 4).stream())
+                            .flatMap(s -> fontRenderer.listFormattedStringToWidth(s, (int) (width / 3.5)).stream())
                             .collect(Collectors.toList()),
                     316 + 16 - 4, 143 + 16);
         }
@@ -654,6 +659,12 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             }
             if (mouseButton == 1) {
                 NovaEngineeringCore.NET_CHANNEL.sendToServer(new PktResearchTaskReset());
+                startResearch.playPressSound(mc.getSoundHandler());
+                return;
+            }
+            EntityPlayerSP player = Minecraft.getMinecraft().player;
+            if (mouseButton == 2 && current != null && current.isLocked() && player != null && player.isCreative()) {
+                NovaEngineeringCore.NET_CHANNEL.sendToServer(new PktResearchTaskProvideCreative(current.getData()));
                 startResearch.playPressSound(mc.getSoundHandler());
                 return;
             }

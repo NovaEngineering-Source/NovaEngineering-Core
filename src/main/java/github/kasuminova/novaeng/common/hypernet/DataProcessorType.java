@@ -5,6 +5,7 @@ import crafttweaker.api.item.IIngredient;
 import github.kasuminova.novaeng.common.hypernet.base.NetNodeTypeRepairable;
 import hellfirepvp.modularmachinery.common.integration.crafttweaker.MachineModifier;
 import hellfirepvp.modularmachinery.common.integration.crafttweaker.RecipeBuilder;
+import hellfirepvp.modularmachinery.common.integration.crafttweaker.event.MMEvents;
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Tuple;
@@ -71,6 +72,13 @@ public class DataProcessorType extends NetNodeTypeRepairable {
         String name = typeName;
         MachineModifier.addCoreThread(name, FactoryRecipeThread.createCoreThread(PROCESSOR_WORKING_THREAD_NAME));
         MachineModifier.addCoreThread(name, FactoryRecipeThread.createCoreThread(FIX_THREAD_NAME));
+
+        MMEvents.onStructureUpdate(name, event -> {
+            DataProcessor processor = NetNodeCache.getCache(event.getController(), DataProcessor.class);
+            if (processor != null) {
+                processor.onStructureUpdate();
+            }
+        });
 
         RecipeBuilder.newBuilder(name + "_working", name, 20, 100, false)
                 .addEnergyPerTickInput(energyUsage)

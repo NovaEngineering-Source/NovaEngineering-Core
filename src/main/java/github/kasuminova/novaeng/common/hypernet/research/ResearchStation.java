@@ -259,6 +259,11 @@ public class ResearchStation extends NetNode {
         return completedPoints;
     }
 
+    public ResearchStation setCompletedPoints(final double completedPoints) {
+        this.completedPoints = completedPoints;
+        return this;
+    }
+
     @ZenGetter("progressPercent")
     public double getProgressPercent() {
         if (currentResearching == null) {

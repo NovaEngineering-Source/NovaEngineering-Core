@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'github.kasuminova'
-version = '1.5.2'
+version = '1.5.3'
 
 repositories {
     flatDir {
@@ -95,13 +95,16 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
 
     // Mixins
-    compileOnly("zone.rong:mixinbooter:7.0")
+    implementation("zone.rong:mixinbooter:7.0")
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
     // Mod Dependencies
     implementation fg.deobf('hellfirepvp:modularmachinery:r48:main')
-    implementation fg.deobf("curse.maven:the-one-probe-245211:2667280")
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+"
+
+    implementation fg.deobf("curse.maven:the-one-probe-245211:2667280")
+    implementation fg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197")
+    implementation fg.deobf("curse.maven:applied-energistics-2-223794:2747063")
 
     compileOnly fg.deobf("curse.maven:zenutil-401178:4394263")
     compileOnly fg.deobf("curse.maven:libvulpes-236541:3801015")
@@ -109,8 +112,7 @@ dependencies {
     compileOnly fg.deobf("curse.maven:immersive-engineering-231951:2974106")
     compileOnly fg.deobf("curse.maven:valkyrielib-245480:2691542")
     compileOnly fg.deobf("curse.maven:environmental-tech-245453:2691536")
-    compileOnly fg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197")
-    compileOnly fg.deobf("curse.maven:applied-energistics-2-223794:2747063")
+    compileOnly fg.deobf("curse.maven:smooth-font-285742:3944565")
 }
 
 jar {

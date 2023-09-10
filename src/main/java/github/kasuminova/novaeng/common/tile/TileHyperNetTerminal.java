@@ -148,7 +148,7 @@ public class TileHyperNetTerminal extends TileCustomController {
 
     @Override
     public boolean isWorking() {
-        return isStructureFormed();
+        return controllerStatus.isCrafting();
     }
 
 }

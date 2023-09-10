@@ -1,10 +1,7 @@
 package github.kasuminova.novaeng;
 
 import github.kasuminova.novaeng.common.CommonProxy;
-import github.kasuminova.novaeng.common.network.PktHyperNetStatus;
-import github.kasuminova.novaeng.common.network.PktResearchTaskProvide;
-import github.kasuminova.novaeng.common.network.PktResearchTaskReset;
-import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
+import github.kasuminova.novaeng.common.network.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -24,7 +21,7 @@ public class NovaEngineeringCore {
     public static final String MOD_ID = "novaeng_core";
     public static final String MOD_NAME = "Nova Engineering: Core";
 
-    public static final String VERSION = "1.5.2";
+    public static final String VERSION = "1.5.3";
 
     public static final String CLIENT_PROXY = "github.kasuminova.novaeng.client.ClientProxy";
     public static final String COMMON_PROXY = "github.kasuminova.novaeng.common.CommonProxy";
@@ -52,6 +49,7 @@ public class NovaEngineeringCore {
 
         NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, 100, Side.SERVER);
         NET_CHANNEL.registerMessage(PktResearchTaskReset.class, PktResearchTaskReset.class, 101, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktResearchTaskProvideCreative.class, PktResearchTaskProvideCreative.class, 102, Side.SERVER);
 
         proxy.preInit();
     }

@@ -9,11 +9,11 @@ import java.util.List;
 public class NovaEngineeringCoreMixinLoader implements ILateMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
-        return Collections.singletonList("mixins.novaeng_core.nco.json");
+        return Collections.singletonList("mixins.novaeng_core.json");
     }
 
     @Override
     public boolean shouldMixinConfigQueue(final String mixinConfig) {
-        return Loader.isModLoaded("nuclearcraft");
+        return Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("appliedenergistics2");
     }
 }

@@ -9,6 +9,7 @@ import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleCPU;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleRAM;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.util.RandomUtils;
+import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.lib.RequirementTypesMM;
 import hellfirepvp.modularmachinery.common.machine.IOType;
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
@@ -22,10 +23,7 @@ import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenSetter;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.DataProcessor")
@@ -36,14 +34,20 @@ public class DataProcessor extends NetNode {
     private final DataProcessorType type;
     private final LinkedList<Float> computationalLoadHistory = new LinkedList<>();
 
-    private int dynamicPatternSize = 0;
+    private volatile List<ProcessorModuleCPU> moduleCPUS = new ArrayList<>();
+    private volatile List<ProcessorModuleRAM> moduleRAMS = new ArrayList<>();
 
-    private int circuitDurability = 0;
+    private volatile int dynamicPatternSize = 0;
+
+    private volatile int circuitDurability = 0;
+
+    private volatile float maxGeneration = 0;
+    private volatile float generated = 0;
+
     private int storedHU = 0;
     private boolean overheat = false;
     private float computationalLoadHistoryCache = 0;
     private float computationalLoad = 0;
-    private float maxGeneration = 0;
 
     public DataProcessor(final TileMultiblockMachineController owner) {
         super(owner);
@@ -69,19 +73,18 @@ public class DataProcessor extends NetNode {
             return;
         }
 
-        Map<String, List<MachineUpgrade>> upgrades = owner.getFoundUpgrades();
-        if (upgrades.isEmpty()) {
+        if (moduleCPUS.isEmpty() && moduleRAMS.isEmpty()) {
             event.setFailed("未找到处理器和内存模块！");
             return;
         }
 
-        if (ProcessorModuleRAM.filter(upgrades.values()).isEmpty()) {
-            event.setFailed("至少需要安装一个内存模块！");
+        if (moduleCPUS.isEmpty()) {
+            event.setFailed("至少需要安装一个 CPU 或 GPU 模块！");
             return;
         }
 
-        if (ProcessorModuleCPU.filter(upgrades.values()).isEmpty()) {
-            event.setFailed("至少需要安装一个 CPU 或 GPU 模块！");
+        if (moduleRAMS.isEmpty()) {
+            event.setFailed("至少需要安装一个内存模块！");
         }
     }
 
@@ -136,7 +139,7 @@ public class DataProcessor extends NetNode {
     }
 
     @ZenMethod
-    public void fixCircuit(int durability) {
+    public synchronized void fixCircuit(int durability) {
         circuitDurability = Math.min(circuitDurability + durability, type.getCircuitDurability());
         writeNBT();
     }
@@ -146,13 +149,14 @@ public class DataProcessor extends NetNode {
         super.onMachineTick();
 
         if (!isWorking()) {
-            computationalLoad = 0;
-            computationalLoadHistoryCache = 0;
+            generated = 0F;
+            computationalLoad = 0F;
+            computationalLoadHistoryCache = 0F;
             computationalLoadHistory.clear();
         } else {
-            float totalCalculation = 0;
+            float totalCalculation = 0F;
             Float calculation;
-            while((calculation = recentCalculation.poll()) != null) {
+            while ((calculation = recentCalculation.poll()) != null) {
                 totalCalculation += calculation;
             }
 
@@ -163,6 +167,7 @@ public class DataProcessor extends NetNode {
             }
 
             computationalLoad = computationalLoadHistoryCache / computationalLoadHistory.size();
+            ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> generated = 0F);
         }
 
         if (owner.getTicksExisted() % 20 == 0) {
@@ -188,6 +193,14 @@ public class DataProcessor extends NetNode {
         }
     }
 
+    @ZenMethod
+    public synchronized void onStructureUpdate() {
+        moduleCPUS.clear();
+        moduleRAMS.clear();
+        moduleCPUS = ProcessorModuleCPU.filter(owner.getFoundUpgrades().values());
+        moduleRAMS = ProcessorModuleRAM.filter(owner.getFoundUpgrades().values());
+    }
+
     private int calculateHeatDist() {
         float heatPercent = getOverHeatPercent();
         float heatDist = type.getHeatDistribution();
@@ -207,22 +220,28 @@ public class DataProcessor extends NetNode {
     }
 
     @Override
-    public float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {
+    public synchronized float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {
         if (!isConnected() || center == null || !isWorking()) {
             return 0F;
         }
 
-        float generation = calculateComputationPointProvision(maxGeneration, doCalculate);
+        float generation = Math.min(this.maxGeneration - this.generated, maxGeneration);
+        if (generation < 0) {
+            return 0F;
+        }
+
+        float generated = calculateComputationPointProvision(generation, doCalculate);
 
         if (doCalculate) {
             consumeCircuitDurability();
-            doHeatGeneration(generation);
+            doHeatGeneration(generated);
+            this.generated += generation;
         }
 
-        return generation;
+        return generated;
     }
 
-    private void consumeCircuitDurability() {
+    private synchronized void consumeCircuitDurability() {
         if (owner.getTicksExisted() % 20 != 0) {
             return;
         }
@@ -285,13 +304,11 @@ public class DataProcessor extends NetNode {
             return 0;
         }
 
-        List<ProcessorModuleCPU> moduleCPUs = ProcessorModuleCPU.filter(upgrades.values());
-        if (moduleCPUs.isEmpty()) {
+        if (moduleCPUS.isEmpty()) {
             return 0;
         }
 
-        List<ProcessorModuleRAM> moduleRAMs = ProcessorModuleRAM.filter(upgrades.values());
-        if (moduleRAMs.isEmpty()) {
+        if (moduleRAMS.isEmpty()) {
             return 0;
         }
 
@@ -299,20 +316,29 @@ public class DataProcessor extends NetNode {
         float maxGen = maxGeneration * getEfficiency();
 
         float generationLimit = 0F;
-        for (ProcessorModuleRAM ram : moduleRAMs) {
-            float generated = ram.calculate(doCalculate, maxGen - generationLimit);
-            generationLimit += generated;
-            if (doCalculate) {
-                totalEnergyConsumption += (long) ((double) (generated / ram.getComputationPointGenerationLimit()) * ram.getEnergyConsumption());
-            }
-        }
-
         float totalGenerated = 0F;
-        for (final ProcessorModuleCPU cpu : moduleCPUs) {
-            float generated = cpu.calculate(doCalculate, generationLimit - totalGenerated);
-            totalGenerated += generated;
+
+        synchronized (this) {
             if (doCalculate) {
-                totalEnergyConsumption += (long) ((double) (generated / cpu.getComputationPointGeneration()) * cpu.getEnergyConsumption());
+                for (ProcessorModuleRAM ram : moduleRAMS) {
+                    float generated = ram.calculate(true, maxGen - generationLimit);
+                    generationLimit += generated;
+                    totalEnergyConsumption += (long) ((double) (generated / ram.getComputationPointGenerationLimit()) * ram.getEnergyConsumption());
+                }
+                for (final ProcessorModuleCPU cpu : moduleCPUS) {
+                    float generated = cpu.calculate(true, generationLimit - totalGenerated);
+                    totalGenerated += generated;
+                    totalEnergyConsumption += (long) ((double) (generated / cpu.getComputationPointGeneration()) * cpu.getEnergyConsumption());
+                }
+            } else {
+                for (ProcessorModuleRAM ram : moduleRAMS) {
+                    float generated = ram.calculate(false, maxGen - generationLimit);
+                    generationLimit += generated;
+                }
+                for (final ProcessorModuleCPU cpu : moduleCPUS) {
+                    float generated = cpu.calculate(false, generationLimit - totalGenerated);
+                    totalGenerated += generated;
+                }
             }
         }
 

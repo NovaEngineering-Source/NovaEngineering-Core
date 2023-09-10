@@ -43,6 +43,7 @@ top.hypernet.computation_point_consumption=§9算力消耗：
 top.hypernet.computation_point_generation=§9算力产出：
 
 top.hypernet.research_station.current=§9当前研究：
+top.hypernet.research_station.current.empty=§9当前研究：§c无
 top.hypernet.research_station.progress=§9研究进度
 
 top.hypernet.database.stored.research=§9已存储研究认知数量：
@@ -134,6 +135,7 @@ gui.terminal_controller.screen.info.required_points=需要研究点：§9
 gui.terminal_controller.screen.info.min_computation_point_per_tick=最低算力要求：§b
 
 gui.terminal_controller.screen.info.start=§a左击向研究站发送当前研究任务。
+gui.terminal_controller.screen.info.start.instant=§9中键点击向研究站强制发送当前研究任务，并立即完成研究（需要创造模式，网络中数据库已满时可能无法发送）。
 gui.terminal_controller.screen.info.reset=§e右击取消研究站当前正在进行的任务。
 gui.terminal_controller.screen.info.start.time=§9预计耗时：%s 小时 %s 分钟 %s 秒（%s Ticks）。
 gui.terminal_controller.screen.info.start.warn.computation=§e警告：当前算力可能不足以完成研究。
