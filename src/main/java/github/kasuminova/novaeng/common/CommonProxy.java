@@ -4,6 +4,7 @@ import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
+import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.base.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.integration.IntegrationCRT;
@@ -42,6 +43,8 @@ public class CommonProxy implements IGuiHandler {
 
         MinecraftForge.EVENT_BUS.register(IntegrationCRT.INSTANCE);
         MinecraftForge.EVENT_BUS.register(HyperNetEventHandler.INSTANCE);
+
+        ModularMachinery.EVENT_BUS.register(HyperNetMachineEventHandler.INSTANCE);
     }
 
     public void init() {

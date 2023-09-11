@@ -79,11 +79,13 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
     protected final List<ResearchDataContext> renderingData = new ArrayList<>();
 
     protected boolean darkMode = true;
+    protected boolean showLockedResearchDesc = false;
 
     protected GuiTextField searchTextField = null;
     protected GuiScrollbarThin dataScrollbar = null;
     protected GuiScrollbarThin screenScrollbar = null;
     protected GuiButtonImage startResearch = null;
+    protected GuiButtonImage toggleResearchDesc = null;
 
     protected ResearchDataContext current = null;
 
@@ -157,6 +159,11 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
                 60, 22,
                 0, TEXTURES_TERMINAL_ELEMENTS
         );
+        this.toggleResearchDesc = new GuiButtonImage(0,
+                296, 143, 16, 16,
+                76, 22,
+                0, TEXTURES_TERMINAL_ELEMENTS
+        );
 
         this.dataScrollbar = new GuiScrollbarThin();
         this.screenScrollbar = new GuiScrollbarThin();
@@ -205,21 +212,31 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         if (current == null) {
             fontRenderer.drawStringWithShadow(I18n.format("gui.terminal_controller.screen.none"), 115, 46, 0xFFFFFF);
             screenScrollbar.setRange(0, 0, 1);
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.popMatrix();
         } else {
             drawDataInfo();
-        }
+            GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+            GlStateManager.popMatrix();
 
-        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-        GlStateManager.popMatrix();
-
-//        startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
-        if (current != null) {
             startResearch.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
-            drawButtonOverlayAndHoveringText(mouseX, mouseY);
+            if (!current.isLocked()) {
+                toggleResearchDesc.drawButton(mc, mouseX, mouseY, Animation.getPartialTickTime());
+                drawToggleResearchDescBtnHoverText(mouseX, mouseY);
+            }
+            drawStartBtnOverlayAndHoveringText(mouseX, mouseY);
         }
     }
 
-    protected void drawButtonOverlayAndHoveringText(final int mouseX, final int mouseY) {
+    protected void drawToggleResearchDescBtnHoverText(final int mouseX, final int mouseY) {
+        if (isMouseOver(296, 143, 296 + 16, 143 + 16, mouseX - guiLeft, mouseY - guiTop)) {
+            String formatted = I18n.format("gui.terminal_controller.screen.info.toggle");
+            drawHoveringText(Collections.singletonList(formatted),
+                    296 - 20 - fontRenderer.getStringWidth(formatted), 143 + 16);
+        }
+    }
+
+    protected void drawStartBtnOverlayAndHoveringText(final int mouseX, final int mouseY) {
         List<String> hoveredTip = new ArrayList<>();
         List<String> warnTip = new ArrayList<>();
         List<String> errorTip = new ArrayList<>();
@@ -274,9 +291,9 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         if (isMouseOver(316, 143, 316 + 16, 143 + 16, mouseX - guiLeft, mouseY - guiTop)) {
             drawHoveringText(hoveredTip.stream()
-                            .flatMap(s -> fontRenderer.listFormattedStringToWidth(s, (int) (width / 3.5)).stream())
+                            .flatMap(s -> fontRenderer.listFormattedStringToWidth(s, width / 3).stream())
                             .collect(Collectors.toList()),
-                    316 + 16 - 4, 143 + 16);
+                    (guiLeft + 316) - (width / 3), 143 + 16 + 20);
         }
     }
 
@@ -289,6 +306,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
     protected void drawButtonOverlay(int textureX, int textureY) {
         this.mc.getTextureManager().bindTexture(TEXTURES_TERMINAL_ELEMENTS);
         GlStateManager.disableDepth();
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         drawTexturedModalRect(316, 143, textureX, textureY, 16, 16);
         GlStateManager.enableDepth();
     }
@@ -304,16 +322,21 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         float descDrawOffsetY = 60 / FONT_SCALE;
 
         List<String> lines;
-        if (current.isLocked()) {
+        if (current.isAvailable() && (current.isLocked() || showLockedResearchDesc)) {
             lines = data.getDescriptions()
                     .stream()
                     .flatMap(desc -> fontRenderer.listFormattedStringToWidth(desc, (int) (SCREEN_TEXT_MAX_WIDTH / FONT_SCALE)).stream())
                     .collect(Collectors.toList());
-        } else {
+        } else if (!current.isLocked()) {
             lines = data.getUnlockedDescriptions()
                     .stream()
                     .flatMap(desc -> fontRenderer.listFormattedStringToWidth(desc, (int) (SCREEN_TEXT_MAX_WIDTH / FONT_SCALE)).stream())
                     .collect(Collectors.toList());
+        } else {
+            lines = Arrays.asList(
+                    I18n.format("gui.terminal_controller.screen.info.unavailable.0"),
+                    I18n.format("gui.terminal_controller.screen.info.unavailable.1")
+            );
         }
 
         int currentIndex = 0;
@@ -666,6 +689,14 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             if (mouseButton == 2 && current != null && current.isLocked() && player != null && player.isCreative()) {
                 NovaEngineeringCore.NET_CHANNEL.sendToServer(new PktResearchTaskProvideCreative(current.getData()));
                 startResearch.playPressSound(mc.getSoundHandler());
+                return;
+            }
+        }
+
+        if (toggleResearchDesc.mousePressed(mc, x, y)) {
+            if (mouseButton == 0 && current != null && !current.isLocked()) {
+                showLockedResearchDesc = !showLockedResearchDesc;
+                toggleResearchDesc.playPressSound(mc.getSoundHandler());
                 return;
             }
         }

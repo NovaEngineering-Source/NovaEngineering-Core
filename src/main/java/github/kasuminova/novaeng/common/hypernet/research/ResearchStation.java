@@ -55,7 +55,7 @@ public class ResearchStation extends NetNode {
         }
 
         float pointPerTick = currentResearching.getMinComputationPointPerTick();
-        if (center.getComputationPointGeneration() < pointPerTick) {
+        if (center.getComputationPointGeneration() < Math.min(pointPerTick, getComputationLeft())) {
             event.setFailed("算力不足！预期：" + pointPerTick + "T FloPS，当前：" + center.getComputationPointGeneration() + "T FloPS");
             return;
         }
@@ -89,7 +89,11 @@ public class ResearchStation extends NetNode {
             return;
         }
 
-        float consumed = center.consumeComputationPoint(consumption);
+        if (checkCompleted(event)) {
+            return;
+        }
+
+        float consumed = center.consumeComputationPoint((float) Math.min(getComputationLeft(), consumption));
         if (consumed < consumption) {
             event.preventProgressing("算力不足！预期："
                     + NovaEngUtils.formatFLOPS(consumption) + "，当前："
@@ -99,17 +103,30 @@ public class ResearchStation extends NetNode {
         }
     }
 
-    protected void doResearch(final FactoryRecipeTickEvent event, final float consumed) {
-        completedPoints += consumed;
-
-        double left = currentResearching.getRequiredPoints() - completedPoints;
-        consumption = (float) Math.min(currentResearching.getMinComputationPointPerTick(), left);
-
+    protected boolean checkCompleted(final FactoryRecipeTickEvent event) {
+        double left = getComputationLeft();
         if (left <= 0) {
             completeRecipe(event.getFactoryRecipeThread());
             writeNBT();
+            return true;
+        }
+        return false;
+    }
+
+    private double getComputationLeft() {
+        if (currentResearching == null) {
+            return 0D;
+        }
+        return currentResearching.getRequiredPoints() - completedPoints;
+    }
+
+    protected void doResearch(final FactoryRecipeTickEvent event, final float consumed) {
+        if (checkCompleted(event)) {
             return;
         }
+
+        completedPoints += consumed;
+        consumption = (float) Math.min(currentResearching.getMinComputationPointPerTick(), getComputationLeft());
 
         ActiveMachineRecipe activeRecipe = event.getActiveRecipe();
         int totalTick = activeRecipe.getTotalTick();

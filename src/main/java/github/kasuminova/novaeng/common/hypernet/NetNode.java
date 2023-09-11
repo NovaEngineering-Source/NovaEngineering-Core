@@ -50,9 +50,7 @@ public abstract class NetNode {
             return ConnectResult.UNKNOWN_CENTER;
         }
 
-        if (center != null) {
-            center.onDisconnect(owner, this);
-        }
+        disconnect();
 
         ConnectResult result = connectToCenter();
         if (result.isSuccess()) {
@@ -60,6 +58,12 @@ public abstract class NetNode {
         }
         writeNBT();
         return result;
+    }
+
+    public void disconnect() {
+        if (center != null) {
+            center.onDisconnect(owner, this);
+        }
     }
 
     @ZenMethod

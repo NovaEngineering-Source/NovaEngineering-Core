@@ -214,8 +214,8 @@ public class ComputationCenter {
             }
         }
 
-        polledCounter[0] -= totalGenerated;
-        computationPointCounter.updateAndGet(counter -> counter + polledCounter[0]);
+        final float finalTotalGenerated = totalGenerated;
+        computationPointCounter.updateAndGet(counter -> counter + (polledCounter[0] - finalTotalGenerated));
 
         if (required > totalGenerated) {
             // 修复精度有概率不准确的问题

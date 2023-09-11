@@ -1,7 +1,5 @@
 package github.kasuminova.novaeng.common.handler;
 
-import github.kasuminova.mmce.common.event.Phase;
-import github.kasuminova.mmce.common.event.machine.MachineTickEvent;
 import github.kasuminova.mmce.common.util.concurrent.Action;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
@@ -102,24 +100,6 @@ public class HyperNetEventHandler {
                         cached.getNodeMaxPresences()
                 ));
                 break;
-        }
-    }
-
-    @SubscribeEvent
-    public void onMachineTick(final MachineTickEvent event) {
-        if (event.phase != Phase.START) {
-            return;
-        }
-
-        TileMultiblockMachineController ctrl = event.getController();
-        DynamicMachine foundMachine = ctrl.getFoundMachine();
-        if (!RegistryHyperNet.isHyperNetSupported(foundMachine)) {
-            return;
-        }
-
-        NetNode cached = NetNodeCache.getCache(ctrl, RegistryHyperNet.getNodeType(foundMachine));
-        if (cached != null) {
-            cached.onMachineTick();
         }
     }
 

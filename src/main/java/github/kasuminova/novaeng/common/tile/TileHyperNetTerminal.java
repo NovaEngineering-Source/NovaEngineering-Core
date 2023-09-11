@@ -50,6 +50,8 @@ public class TileHyperNetTerminal extends TileCustomController {
 
             if (consumeEnergy()) {
                 nodeProxy.onMachineTick();
+            } else {
+                nodeProxy.disconnect();
             }
 
             onMachineTick(Phase.END);

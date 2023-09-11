@@ -23,7 +23,11 @@ import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 import stanhebben.zenscript.annotations.ZenSetter;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.DataProcessor")
@@ -34,8 +38,8 @@ public class DataProcessor extends NetNode {
     private final DataProcessorType type;
     private final LinkedList<Float> computationalLoadHistory = new LinkedList<>();
 
-    private volatile List<ProcessorModuleCPU> moduleCPUS = new ArrayList<>();
-    private volatile List<ProcessorModuleRAM> moduleRAMS = new ArrayList<>();
+    private final List<ProcessorModuleCPU> moduleCPUS = new CopyOnWriteArrayList<>();
+    private final List<ProcessorModuleRAM> moduleRAMS = new CopyOnWriteArrayList<>();
 
     private volatile int dynamicPatternSize = 0;
 
@@ -197,8 +201,8 @@ public class DataProcessor extends NetNode {
     public synchronized void onStructureUpdate() {
         moduleCPUS.clear();
         moduleRAMS.clear();
-        moduleCPUS = ProcessorModuleCPU.filter(owner.getFoundUpgrades().values());
-        moduleRAMS = ProcessorModuleRAM.filter(owner.getFoundUpgrades().values());
+        moduleCPUS.addAll(ProcessorModuleCPU.filter(owner.getFoundUpgrades().values()));
+        moduleRAMS.addAll(ProcessorModuleRAM.filter(owner.getFoundUpgrades().values()));
     }
 
     private int calculateHeatDist() {
@@ -318,27 +322,18 @@ public class DataProcessor extends NetNode {
         float generationLimit = 0F;
         float totalGenerated = 0F;
 
-        synchronized (this) {
+        for (ProcessorModuleRAM ram : moduleRAMS) {
+            float generated = ram.calculate(true, maxGen - generationLimit);
+            generationLimit += generated;
             if (doCalculate) {
-                for (ProcessorModuleRAM ram : moduleRAMS) {
-                    float generated = ram.calculate(true, maxGen - generationLimit);
-                    generationLimit += generated;
-                    totalEnergyConsumption += (long) ((double) (generated / ram.getComputationPointGenerationLimit()) * ram.getEnergyConsumption());
-                }
-                for (final ProcessorModuleCPU cpu : moduleCPUS) {
-                    float generated = cpu.calculate(true, generationLimit - totalGenerated);
-                    totalGenerated += generated;
-                    totalEnergyConsumption += (long) ((double) (generated / cpu.getComputationPointGeneration()) * cpu.getEnergyConsumption());
-                }
-            } else {
-                for (ProcessorModuleRAM ram : moduleRAMS) {
-                    float generated = ram.calculate(false, maxGen - generationLimit);
-                    generationLimit += generated;
-                }
-                for (final ProcessorModuleCPU cpu : moduleCPUS) {
-                    float generated = cpu.calculate(false, generationLimit - totalGenerated);
-                    totalGenerated += generated;
-                }
+                totalEnergyConsumption += (long) ((double) (generated / ram.getComputationPointGenerationLimit()) * ram.getEnergyConsumption());
+            }
+        }
+        for (final ProcessorModuleCPU cpu : moduleCPUS) {
+            float generated = cpu.calculate(true, generationLimit - totalGenerated);
+            totalGenerated += generated;
+            if (doCalculate) {
+                totalEnergyConsumption += (long) ((double) (generated / cpu.getComputationPointGeneration()) * cpu.getEnergyConsumption());
             }
         }
 

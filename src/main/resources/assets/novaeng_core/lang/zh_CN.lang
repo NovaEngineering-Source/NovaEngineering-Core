@@ -60,7 +60,7 @@ top.hypernet.processor.heat=§9内部热量：
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 
 novaeng.hypernet.computation_point_required.tip=§9需要算力 (受并行影响)：§b%s
-novaeng.hypernet.research_required.tip=§6需要研究认知：§r%s
+novaeng.hypernet.research_required.tip=§6需要研究认知：§f%s
 
 gui.hypernet.controller.title=§9///////// HyperNet 代理网络 /////////
 gui.hypernet.controller.computation_point_consumption=§9算力消耗：§b
@@ -76,20 +76,20 @@ novaeng.hypernet.data_forwarding_processor=数据转发处理器
 novaeng.hypernet.craftcheck.durability.failed=电路板状态良好。
 
 novaeng.hypernet.computation_center.working.tooltip.0=闲置状态下，始终会消耗机械基础耗电量。
-novaeng.hypernet.computation_center.working.tooltip.1=每连接 §a1 §r个机械，最终耗电量 §c+5%%§r。
+novaeng.hypernet.computation_center.working.tooltip.1=每连接 §a1 §f个机械，最终耗电量 §c+5%%§f。
 
 novaeng.hypernet.data_processor.compute_scheduler=计算调度器
 novaeng.hypernet.data_processor.working.tooltip.0=闲置状态下，始终会消耗机械基础耗电量。
 novaeng.hypernet.data_processor.working.tooltip.1=最终耗电量取决于处理器模块当前的负载。
 
 novaeng.hypernet.database.working.tooltip.0=闲置状态下，始终会消耗机械基础电量。
-novaeng.hypernet.database.working.tooltip.1=每存储 §a1 §r个研究认知，最终耗电量 §c+10%%§r。
+novaeng.hypernet.database.working.tooltip.1=每存储 §a1 §f个研究认知，最终耗电量 §c+10%%§f。
 
 novaeng.hypernet.research_station.hypercol=HyperCol AI
 novaeng.hypernet.research_station.working.tooltip.0=仅在工作状态下消耗能量。
 novaeng.hypernet.research_station.working.tooltip.1=工作状态下根据当前研究，消耗指定数量的算力。
 
-novaeng.hypernet.repair.tooltip=完成时，修复 §a%s §r点耐久值。
+novaeng.hypernet.repair.tooltip=完成时，修复 §a%s §f点耐久值。
 
 novaeng.hypernet.tech_level.1=§a1§a.
 novaeng.hypernet.tech_level.2=§a2§a.
@@ -133,6 +133,11 @@ gui.terminal_controller.screen.info.dependencies.none=§2无
 gui.terminal_controller.screen.info.tech_level=科技等级：
 gui.terminal_controller.screen.info.required_points=需要研究点：§9
 gui.terminal_controller.screen.info.min_computation_point_per_tick=最低算力要求：§b
+
+gui.terminal_controller.screen.info.unavailable.0=§c研究描述不可用。
+gui.terminal_controller.screen.info.unavailable.1=§c解锁该研究所有的前置研究以继续。
+
+gui.terminal_controller.screen.info.toggle=§a点击切换未解锁和解锁状态的研究描述。§f
 
 gui.terminal_controller.screen.info.start=§a左击向研究站发送当前研究任务。
 gui.terminal_controller.screen.info.start.instant=§9中键点击向研究站强制发送当前研究任务，并立即完成研究（需要创造模式，网络中数据库已满时可能无法发送）。
