@@ -1,9 +1,6 @@
 package github.kasuminova.novaeng.common.crafttweaker.hypernet;
 
 import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.item.IItemStack;
-import crafttweaker.api.minecraft.CraftTweakerMC;
-import crafttweaker.api.world.IBlockPos;
 import github.kasuminova.mmce.common.event.client.ControllerGUIRenderEvent;
 import github.kasuminova.mmce.common.helper.IMachineController;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
@@ -11,6 +8,7 @@ import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenterCache;
 import github.kasuminova.novaeng.common.hypernet.NetNodeCache;
 import github.kasuminova.novaeng.common.hypernet.NetNodeImpl;
+import github.kasuminova.novaeng.common.hypernet.misc.HyperNetConnectCardInfo;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.integration.crafttweaker.event.MMEvents;
@@ -28,9 +26,9 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.HyperNetHelper")
@@ -110,33 +108,29 @@ public class HyperNetHelper {
         return RegistryHyperNet.isComputationCenter(foundMachine.getRegistryName());
     }
 
-    @ZenMethod
-    public static IItemStack writeConnectCardInfo(ComputationCenter center, IItemStack stackCT) {
-        return CraftTweakerMC.getIItemStack(writeConnectCardInfo(center, CraftTweakerMC.getItemStack(stackCT)));
-    }
-
-    public static ItemStack writeConnectCardInfo(ComputationCenter center, ItemStack stack) {
+    public static void writeConnectCardInfo(ComputationCenter center, UUID networkOwner, ItemStack stack) {
         NBTTagCompound tag = new NBTTagCompound();
         tag.setLong("pos", center.getOwner().getPos().toLong());
+        tag.setString("owner", networkOwner.toString());
         stack.setTagCompound(tag);
-
-        return stack;
     }
 
-    @Nullable
-    @ZenMethod
-    public static IBlockPos readConnectCardInfo(IMachineController ctrl, IItemStack stackCT) {
-        BlockPos blockPos = readConnectCardInfo(ctrl, CraftTweakerMC.getItemStack(stackCT));
-        return blockPos == null ? null : CraftTweakerMC.getIBlockPos(blockPos);
+    public static boolean isValidConnectCard(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return false;
+        }
+
+        NBTTagCompound tag = stack.getTagCompound();
+        return tag != null && tag.hasKey("pos") && tag.hasKey("owner");
     }
 
-    public static BlockPos readConnectCardInfo(IMachineController ctrl, ItemStack stack) {
+    public static HyperNetConnectCardInfo readConnectCardInfo(IMachineController ctrl, ItemStack stack) {
         if (stack.isEmpty()) {
             return null;
         }
 
         NBTTagCompound tag = stack.getTagCompound();
-        if (tag == null || !tag.hasKey("pos")) {
+        if (tag == null || !tag.hasKey("pos") || !tag.hasKey("owner")) {
             return null;
         }
 
@@ -155,8 +149,9 @@ public class HyperNetHelper {
         if (!HyperNetHelper.isComputationCenter(center)) {
             return null;
         }
+        UUID networkOwner = UUID.fromString(tag.getString("owner"));
 
-        return pos;
+        return new HyperNetConnectCardInfo(pos, networkOwner);
     }
 
 }

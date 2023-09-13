@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng.common.hypernet;
 
 import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
+import github.kasuminova.novaeng.common.hypernet.misc.HyperNetConnectCardInfo;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.item.ItemStack;
@@ -17,7 +18,14 @@ public class HyperNetTerminal extends NetNode {
     public void onMachineTick() {
         if (terminal.getTicksExisted() % 20 == 0 && terminal instanceof TileHyperNetTerminal) {
             ItemStack stack = ((TileHyperNetTerminal) terminal).getCardInventory().getStackInSlot(0);
-            centerPos = HyperNetHelper.readConnectCardInfo(terminal, stack);
+            HyperNetConnectCardInfo info = HyperNetHelper.readConnectCardInfo(terminal, stack);
+
+            if (info != null) {
+                centerPos = info.getPos();
+            } else {
+                centerPos = null;
+            }
+
             writeNBT();
         }
 

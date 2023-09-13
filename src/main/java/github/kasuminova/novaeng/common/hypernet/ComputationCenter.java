@@ -38,6 +38,8 @@ public class ComputationCenter {
     // 计算点计数器，计算当前 Tick 总共消耗了多少算力。
     private final AtomicReference<Float> computationPointCounter = new AtomicReference<>(0F);
 
+    private UUID networkOwner = null;
+
     private int circuitDurability = 0;
 
     public ComputationCenter(final TileMultiblockMachineController owner, final NBTTagCompound customData) {
@@ -253,12 +255,22 @@ public class ComputationCenter {
         } else {
             this.circuitDurability = type.getCircuitDurability();
         }
+
+        if (customData.hasKey("networkOwner")) {
+            this.networkOwner = UUID.fromString(customData.getString("networkOwner"));
+        } else {
+            this.networkOwner = null;
+        }
     }
 
     @ZenMethod
     public void writeNBT() {
         NBTTagCompound tag = owner.getCustomDataTag();
         tag.setInteger("circuitDurability", circuitDurability);
+
+        if (networkOwner != null) {
+            tag.setString("networkOwner", networkOwner.toString());
+        }
     }
 
     @ZenGetter("circuitDurability")
@@ -269,6 +281,15 @@ public class ComputationCenter {
     @ZenSetter("circuitDurability")
     public void setCircuitDurability(final int circuitDurability) {
         this.circuitDurability = circuitDurability;
+        writeNBT();
+    }
+
+    public UUID getNetworkOwner() {
+        return networkOwner;
+    }
+
+    public void setNetworkOwner(final UUID networkOwner) {
+        this.networkOwner = networkOwner;
         writeNBT();
     }
 

@@ -1,7 +1,6 @@
 package github.kasuminova.novaeng.common.hypernet;
 
 import crafttweaker.annotations.ZenRegister;
-import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import crafttweaker.api.world.IBlockPos;
 import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
@@ -113,11 +112,6 @@ public abstract class NetNode {
     @ZenGetter("computationPointConsumption")
     public float getComputationPointConsumption() {
         return 0;
-    }
-
-    @ZenMethod
-    public IItemStack getConnectCardOutput(IItemStack stackCT) {
-        return center == null ? stackCT : HyperNetHelper.writeConnectCardInfo(center, stackCT);
     }
 
     @ZenMethod

@@ -43,14 +43,14 @@ public class NovaEngUtils {
 
     @ZenMethod
     public static String formatPercent(double num1, double num2) {
-        return NovaEngUtils.formatDouble((num1 / num2) * 100D, 2) + "%";
+        return formatDouble((num1 / num2) * 100D, 2) + "%";
     }
 
     @ZenMethod
     public static String formatFLOPS(float value) {
         if (value < 1000.0F) {
-            return NovaEngUtils.formatFloat(value, 1) + "T FloPS";
+            return formatFloat(value, 1) + "T FloPS";
         }
-        return NovaEngUtils.formatFloat(value / 1000.0F, 1) + "P FloPS";
+        return formatFloat(value / 1000.0F, 1) + "P FloPS";
     }
 }

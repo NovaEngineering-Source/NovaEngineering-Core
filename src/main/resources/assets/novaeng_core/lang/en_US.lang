@@ -8,11 +8,17 @@ item.hypernet_connect_card.tooltip.pos.tip.0=§b存储卡中保存的坐标：§
 item.hypernet_connect_card.tooltip.pos.tip.1=§2右击任意等级的计算网络中心控制器来覆写数据。
 
 novaeng.hypernet.connect.result.success=§a连接成功§b（状态：%s 已连接 / %s 最大连接数）。
+novaeng.hypernet.connect.result.no_permission=§c连接失败，HyperNet 网络授权密钥不匹配（原因：非网络所有者）。
 novaeng.hypernet.connect.result.unknown_center=§c连接失败（原因：未知的计算网络中心，区块可能被卸载或控制器不存在）。
 novaeng.hypernet.connect.result.center_not_working=§c连接失败（原因：计算网络中心处于离线状态）。
 novaeng.hypernet.connect.result.center_reached_connection_limit=§c连接失败（原因：已达到计算网络中心的最大连接数：%s）。
 novaeng.hypernet.connect.result.unsupported_node=§c连接失败（原因：未知的网络节点）。
 novaeng.hypernet.connect.result.node_type_reached_max_presences=§c连接失败（原因：已达到当前网络节点类型的连接上限：%s）。
+
+novaeng.hypernet.connect_card.write_failed.no_permission=§cHyperNet 网络授权访问被拒绝（原因：非网络所有者）。
+
+novaeng.hypernet.connect_card.write_success=§a写入成功。
+novaeng.hypernet.connect_card.write_success.new_owner=§a写入成功，并且现在您是此网络中心的所有者。
 
 upgrade.data_processor.module.cpu.tip.0=§9CPU 模块为数据处理计算机提供算力。
 upgrade.data_processor.module.cpu.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c50%%。

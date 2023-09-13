@@ -140,7 +140,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         GlStateManager.scale(FONT_SCALE, FONT_SCALE, FONT_SCALE);
         fr.drawStringWithShadow(subLevelText,
-                (331F - subLevelTextWidth) / FONT_SCALE, 48 / FONT_SCALE, 0xFFFFFF);
+                (332F - subLevelTextWidth) / FONT_SCALE, 48 / FONT_SCALE, 0xFFFFFF);
     }
 
     @Override
@@ -467,7 +467,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         if (stack == ItemStack.EMPTY) {
             fontRenderer.drawStringWithShadow(I18n.format("gui.terminal_controller.connect_card.empty"),
                     statusRenderX, statusRenderY, 0xFFFFFF);
-        } else if (RegistryHyperNet.getHyperNetConnectCard() == stack.getItem() && HyperNetHelper.readConnectCardInfo(terminal, stack) != null) {
+        } else if (RegistryHyperNet.getHyperNetConnectCard() == stack.getItem() && HyperNetHelper.isValidConnectCard(stack)) {
             fontRenderer.drawStringWithShadow(I18n.format("gui.terminal_controller.connect_card.validate"),
                     statusRenderX, statusRenderY, 0xFFFFFF);
         } else {

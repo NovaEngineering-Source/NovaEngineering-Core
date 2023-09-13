@@ -100,6 +100,7 @@ dependencies {
 
     // Mod Dependencies
     implementation fg.deobf('hellfirepvp:modularmachinery:r48:main')
+    implementation fg.deobf('fred:rgbchat:0.6')
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+"
 
     implementation fg.deobf("curse.maven:the-one-probe-245211:2667280")

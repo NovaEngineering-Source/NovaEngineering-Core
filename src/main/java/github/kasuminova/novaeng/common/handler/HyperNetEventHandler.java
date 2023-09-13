@@ -7,6 +7,7 @@ import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
 import github.kasuminova.novaeng.common.hypernet.NetNode;
 import github.kasuminova.novaeng.common.hypernet.NetNodeCache;
 import github.kasuminova.novaeng.common.hypernet.misc.ConnectResult;
+import github.kasuminova.novaeng.common.hypernet.misc.HyperNetConnectCardInfo;
 import github.kasuminova.novaeng.common.network.PktHyperNetStatus;
 import github.kasuminova.novaeng.common.network.PktTerminalGuiData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
@@ -29,6 +30,8 @@ import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
+
+import java.util.UUID;
 
 @SuppressWarnings("MethodMayBeStatic")
 public class HyperNetEventHandler {
@@ -157,7 +160,25 @@ public class HyperNetEventHandler {
         event.setCanceled(true);
 
         if (RegistryHyperNet.isComputationCenter(foundMachine.getRegistryName())) {
-            HyperNetHelper.writeConnectCardInfo(ComputationCenter.from(ctrl), stack);
+            ComputationCenter center = ComputationCenter.from(ctrl);
+            if (center == null) {
+                return;
+            }
+
+            UUID networkOwner = center.getNetworkOwner();
+            UUID playerID = player.getGameProfile().getId();
+            if (networkOwner != null && !networkOwner.equals(playerID)) {
+                player.sendMessage(new TextComponentTranslation("novaeng.hypernet.connect_card.write_failed.no_permission"));
+                return;
+            }
+            if (networkOwner == null) {
+                center.setNetworkOwner(playerID);
+                player.sendMessage(new TextComponentTranslation("novaeng.hypernet.connect_card.write_success.new_owner"));
+            } else {
+                player.sendMessage(new TextComponentTranslation("novaeng.hypernet.connect_card.write_success"));
+            }
+
+            HyperNetHelper.writeConnectCardInfo(center, playerID, stack);
             return;
         }
 
@@ -165,13 +186,14 @@ public class HyperNetEventHandler {
     }
 
     private static void tryConnectToCenter(final TileMultiblockMachineController ctrl, final ItemStack stack, final World world, final EntityPlayer player, final DynamicMachine foundMachine) {
-        BlockPos centerPos = HyperNetHelper.readConnectCardInfo(ctrl, stack);
-        if (centerPos == null || !world.isBlockLoaded(centerPos)) {
+        HyperNetConnectCardInfo info = HyperNetHelper.readConnectCardInfo(ctrl, stack);
+        if (info == null || !world.isBlockLoaded(info.getPos())) {
             player.sendMessage(new TextComponentTranslation(
                     "novaeng.hypernet.connect.result.unknown_center"));
             return;
         }
 
+        BlockPos centerPos = info.getPos();
         TileEntity centerTE = world.getTileEntity(centerPos);
         TileFactoryController centerCtrl = centerTE instanceof TileFactoryController
                 ? (TileFactoryController) centerTE
@@ -187,6 +209,12 @@ public class HyperNetEventHandler {
         if (cached == null || center == null) {
             player.sendMessage(new TextComponentTranslation(
                     "novaeng.hypernet.connect.result.unknown_center"));
+            return;
+        }
+
+        if (!info.getNetworkOwner().equals(center.getNetworkOwner())) {
+            player.sendMessage(new TextComponentTranslation(
+                    "novaeng.hypernet.connect.result.no_permission"));
             return;
         }
 

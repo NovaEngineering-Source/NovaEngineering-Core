@@ -14,6 +14,11 @@ novaeng.hypernet.connect.result.center_reached_connection_limit=§c连接失败�
 novaeng.hypernet.connect.result.unsupported_node=§c连接失败（原因：未知的网络节点）。
 novaeng.hypernet.connect.result.node_type_reached_max_presences=§c连接失败（原因：已达到当前网络节点类型的连接上限：%s）。
 
+novaeng.hypernet.connect_card.write_failed.no_permission=§cHyperNet 网络授权访问被拒绝（原因：非网络所有者）。
+
+novaeng.hypernet.connect_card.write_success=§a写入成功。
+novaeng.hypernet.connect_card.write_success.new_owner=§a写入成功，并且现在您是此网络中心的所有者。
+
 upgrade.data_processor.module.cpu.tip.0=§9CPU 模块为数据处理计算机提供算力。
 upgrade.data_processor.module.cpu.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c50%%。
 upgrade.data_processor.module.cpu.tip.2=§9每秒有 §a1%% §9的概率降低 §e1 §9点耐久。
