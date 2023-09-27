@@ -263,10 +263,9 @@ public class ResearchCognitionData {
         if (this == obj) {
             return true;
         }
-        if (!(obj instanceof ResearchCognitionData)) {
+        if (!(obj instanceof final ResearchCognitionData another)) {
             return false;
         }
-        final ResearchCognitionData another = (ResearchCognitionData) obj;
         return researchName.equals(another.researchName);
     }
 }

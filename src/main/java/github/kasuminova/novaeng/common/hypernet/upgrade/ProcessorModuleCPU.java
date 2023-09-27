@@ -30,8 +30,10 @@ public class ProcessorModuleCPU extends DataProcessorModule {
         List<ProcessorModuleCPU> list = new ArrayList<>();
         for (List<MachineUpgrade> upgradeList : upgradeLists) {
             for (final MachineUpgrade upgrade : upgradeList) {
-                if (upgrade instanceof ProcessorModuleCPU) {
-                    ProcessorModuleCPU cpu = (ProcessorModuleCPU) upgrade;
+                if (upgrade instanceof final ProcessorModuleCPU cpu) {
+                    if (cpu.maxDurability == 0) {
+                        cpu.initDurability();
+                    }
                     if (cpu.durability > 0) {
                         list.add(cpu);
                     }
@@ -51,14 +53,14 @@ public class ProcessorModuleCPU extends DataProcessorModule {
         float left = Math.min((generationBase - maxGeneration), generationBase);
 
         if (left <= 0) {
-            if (doCalculate && RandomUtils.nextFloat() <= 0.01F) {
+            if (doCalculate && RandomUtils.nextFloat() <= 0.005F) {
                 durability--;
                 writeNBTToItem();
             }
             return generationBase;
         } else {
             float trueGenerated = generationBase - left;
-            if (doCalculate && RandomUtils.nextFloat() <= 0.01F * (trueGenerated / generationBase)) {
+            if (doCalculate && RandomUtils.nextFloat() <= 0.005F * (trueGenerated / generationBase)) {
                 durability--;
                 writeNBTToItem();
             }
@@ -90,6 +92,7 @@ public class ProcessorModuleCPU extends DataProcessorModule {
 
         maxDurability = min + RandomUtils.nextInt(max - min);
         durability = maxDurability;
+        writeNBTToItem();
     }
 
     @ZenGetter("computationalPointGeneration")

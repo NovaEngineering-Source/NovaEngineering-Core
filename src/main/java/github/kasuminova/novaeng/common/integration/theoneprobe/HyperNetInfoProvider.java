@@ -41,11 +41,10 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
         }
 
         TileEntity te = world.getTileEntity(data.getPos());
-        if (!(te instanceof TileMultiblockMachineController)) {
+        if (!(te instanceof final TileMultiblockMachineController ctrl)) {
             return;
         }
 
-        TileMultiblockMachineController ctrl = (TileMultiblockMachineController) te;
         DynamicMachine foundMachine = ctrl.getFoundMachine();
         if (!RegistryHyperNet.isHyperNetSupported(foundMachine)) {
             return;

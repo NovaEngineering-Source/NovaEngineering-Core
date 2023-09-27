@@ -7,17 +7,15 @@ import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineContr
 import net.minecraft.item.ItemStack;
 
 public class HyperNetTerminal extends NetNode {
-    protected final TileMultiblockMachineController terminal;
 
     public HyperNetTerminal(final TileMultiblockMachineController owner) {
         super(owner);
-        this.terminal = owner;
     }
 
     @Override
     public void onMachineTick() {
-        if (terminal.getTicksExisted() % 20 == 0 && terminal instanceof TileHyperNetTerminal) {
-            ItemStack stack = ((TileHyperNetTerminal) terminal).getCardInventory().getStackInSlot(0);
+        if (owner.getTicksExisted() % 20 == 0 && owner instanceof TileHyperNetTerminal terminal) {
+            ItemStack stack = terminal.getCardInventory().getStackInSlot(0);
             HyperNetConnectCardInfo info = HyperNetHelper.readConnectCardInfo(terminal, stack);
 
             if (info != null) {

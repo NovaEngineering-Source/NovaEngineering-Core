@@ -54,13 +54,17 @@ public class HyperNetHelper {
         ResourceLocation registryName = machine.getRegistryName();
         RegistryHyperNet.registerHyperNetNode(registryName, NetNodeImpl.class);
 
+        addControllerGUIHyperNetInfo(machine, NetNodeImpl.class);
+    }
+
+    public static <T extends NetNodeImpl> void addControllerGUIHyperNetInfo(final DynamicMachine machine, Class<T> netNodeType) {
         if (!FMLCommonHandler.instance().getSide().isClient()) {
             return;
         }
 
         machine.addMachineEventHandler(ControllerGUIRenderEvent.class, event -> {
             TileMultiblockMachineController ctrl = event.getController();
-            NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
+            T node = NetNodeCache.getCache(ctrl, netNodeType);
             if (node == null) {
                 return;
             }
@@ -87,10 +91,6 @@ public class HyperNetHelper {
             } else {
                 tips.add(I18n.format("gui.hypernet.controller.disconnected"));
             }
-
-//            tips.add(I18n.format("gui.hypernet.controller.version"));
-//            tips.add(I18n.format("gui.hypernet.controller.footer"));
-
             event.setExtraInfo(tips.toArray(new String[0]));
         });
     }
@@ -141,11 +141,10 @@ public class HyperNetHelper {
         }
 
         TileEntity te = world.getTileEntity(pos);
-        if (!(te instanceof TileMultiblockMachineController)) {
+        if (!(te instanceof final TileMultiblockMachineController center)) {
             return null;
         }
 
-        TileMultiblockMachineController center = (TileMultiblockMachineController) te;
         if (!HyperNetHelper.isComputationCenter(center)) {
             return null;
         }

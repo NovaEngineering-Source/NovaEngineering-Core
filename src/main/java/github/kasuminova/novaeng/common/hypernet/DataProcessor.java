@@ -102,17 +102,7 @@ public class DataProcessor extends NetNode {
     @ZenMethod
     public void onWorkingTick(FactoryRecipeTickEvent event) {
         event.getActiveRecipe().setTick(0);
-
-        if (centerPos == null) {
-            event.setFailed(true, "未连接至计算网络！");
-            return;
-        }
-        if (center == null) {
-            event.setFailed(false, "未连接至计算网络！");
-            return;
-        }
-        if (overheat) {
-            event.setFailed(true, "处理器过热！");
+        if (workingCheck(event)) {
             return;
         }
 
@@ -140,6 +130,38 @@ public class DataProcessor extends NetNode {
                 RequirementTypesMM.REQUIREMENT_ENERGY,
                 IOType.INPUT, mul, 1, false
         ));
+    }
+
+    protected boolean workingCheck(final FactoryRecipeTickEvent event) {
+        if (centerPos == null) {
+            event.setFailed(true, "未连接至计算网络！");
+            return true;
+        }
+        if (center == null) {
+            event.preventProgressing("未连接至计算网络！");
+            return true;
+        }
+        if (overheat) {
+            event.setFailed(true, "处理器过热！");
+            return true;
+        }
+        if (circuitDurability < type.getCircuitDurability() * 0.05F) {
+            event.setFailed(true, "主电路板耐久过低，无法正常工作！");
+            return true;
+        }
+        if (moduleCPUS.isEmpty() && moduleRAMS.isEmpty()) {
+            event.setFailed(true, "未找到处理器和内存模块！");
+            return true;
+        }
+        if (moduleCPUS.isEmpty()) {
+            event.setFailed(true, "至少需要安装一个 CPU 或 GPU 模块！");
+            return true;
+        }
+        if (moduleRAMS.isEmpty()) {
+            event.setFailed(true, "至少需要安装一个内存模块！");
+            return true;
+        }
+        return false;
     }
 
     @ZenMethod
@@ -266,11 +288,10 @@ public class DataProcessor extends NetNode {
 
     @Override
     public boolean isWorking() {
-        if (!(owner instanceof TileFactoryController)) {
+        if (!(owner instanceof final TileFactoryController factory)) {
             return false;
         }
 
-        TileFactoryController factory = (TileFactoryController) owner;
         FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(DataProcessorType.PROCESSOR_WORKING_THREAD_NAME);
 
         return thread != null && thread.isWorking();

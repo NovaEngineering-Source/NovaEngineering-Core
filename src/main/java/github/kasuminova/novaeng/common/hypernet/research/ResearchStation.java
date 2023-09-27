@@ -85,7 +85,7 @@ public class ResearchStation extends NetNode {
             return;
         }
         if (center == null) {
-            event.setFailed(false, "未连接至计算网络！");
+            event.preventProgressing( "未连接至计算网络！");
             return;
         }
 
@@ -97,7 +97,7 @@ public class ResearchStation extends NetNode {
         if (consumed < consumption) {
             event.preventProgressing("算力不足！预期："
                     + NovaEngUtils.formatFLOPS(consumption) + "，当前："
-                    + NovaEngUtils.formatFLOPS(consumed) + "T FloPS");
+                    + NovaEngUtils.formatFLOPS(consumed));
         } else {
             doResearch(event, consumed);
         }
@@ -221,11 +221,10 @@ public class ResearchStation extends NetNode {
 
     @Override
     public boolean isWorking() {
-        if (!(owner instanceof TileFactoryController)) {
+        if (!(owner instanceof final TileFactoryController factory)) {
             return false;
         }
 
-        TileFactoryController factory = (TileFactoryController) owner;
         FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(ResearchStationType.RESEARCH_STATION_WORKING_THREAD_NAME);
 
         return thread != null && thread.isWorking();

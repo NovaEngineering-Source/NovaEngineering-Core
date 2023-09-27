@@ -69,14 +69,12 @@ public class AdapterNCOPressurizer extends AdapterNCOMachine {
                     continue;
                 }
 
-                if (iItemIngredient instanceof ItemArrayIngredient) {
-                    ItemArrayIngredient arrayIngredient = (ItemArrayIngredient) iItemIngredient;
+                if (iItemIngredient instanceof final ItemArrayIngredient arrayIngredient) {
                     List<IItemIngredient> ingredientList = arrayIngredient.ingredientList;
                     List<ChancedIngredientStack> ingredientStackList = new ArrayList<>(ingredientList.size());
                     for (IItemIngredient itemIngredient : ingredientList) {
 
-                        if (itemIngredient instanceof OreIngredient) {
-                            OreIngredient oreIngredient = (OreIngredient) itemIngredient;
+                        if (itemIngredient instanceof final OreIngredient oreIngredient) {
                             int subInAmount = Math.round(RecipeModifier.applyModifiers(modifiers, RequirementTypesMM.REQUIREMENT_ITEM, IOType.INPUT, oreIngredient.stackSize, false));
 
                             ingredientStackList.add(new ChancedIngredientStack(oreIngredient.oreName, subInAmount));

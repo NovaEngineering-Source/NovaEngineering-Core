@@ -1,4 +1,4 @@
-package github.kasuminova.novaeng.common.hypernet.base;
+package github.kasuminova.novaeng.common.hypernet.recipe;
 
 import github.kasuminova.novaeng.common.hypernet.ComputationCenterType;
 import github.kasuminova.novaeng.common.hypernet.DataProcessorType;

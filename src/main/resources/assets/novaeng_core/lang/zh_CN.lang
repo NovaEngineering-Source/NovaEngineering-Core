@@ -8,6 +8,7 @@ item.hypernet_connect_card.tooltip.pos.tip.0=§b存储卡中保存的坐标：§
 item.hypernet_connect_card.tooltip.pos.tip.1=§2右击任意等级的计算网络中心控制器来覆写数据。
 
 novaeng.hypernet.connect.result.success=§a连接成功§b（状态：%s 已连接 / %s 最大连接数）。
+novaeng.hypernet.connect.result.no_permission=§c连接失败，HyperNet 网络授权密钥不匹配（原因：非网络所有者）。
 novaeng.hypernet.connect.result.unknown_center=§c连接失败（原因：未知的计算网络中心，区块可能被卸载或控制器不存在）。
 novaeng.hypernet.connect.result.center_not_working=§c连接失败（原因：计算网络中心处于离线状态）。
 novaeng.hypernet.connect.result.center_reached_connection_limit=§c连接失败（原因：已达到计算网络中心的最大连接数：%s）。
@@ -20,24 +21,24 @@ novaeng.hypernet.connect_card.write_success=§a写入成功。
 novaeng.hypernet.connect_card.write_success.new_owner=§a写入成功，并且现在您是此网络中心的所有者。
 
 upgrade.data_processor.module.cpu.tip.0=§9CPU 模块为数据处理计算机提供算力。
-upgrade.data_processor.module.cpu.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c50%%。
-upgrade.data_processor.module.cpu.tip.2=§9每秒有 §a1%% §9的概率降低 §e1 §9点耐久。
+upgrade.data_processor.module.cpu.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c25%%。
+upgrade.data_processor.module.cpu.tip.2=§9工作时每秒有 §a10%% §9的概率降低 §e1 §9点耐久。
 
 upgrade.data_processor.module.gpu.tip.0=§9GPU 模块为数据处理计算机提供§2大量§9算力。
 upgrade.data_processor.module.gpu.tip.1=§9耐久低于 §e50%%§9 时，算力产出逐渐开始§c降低§9，最多 §c50%%。
-upgrade.data_processor.module.gpu.tip.2=§9每秒有 §a1%% §9的概率降低 §e2 §9点耐久。
+upgrade.data_processor.module.gpu.tip.2=§9工作时每秒有 §a10%% §9的概率降低 §e1 §9点耐久。
 
 upgrade.data_processor.module.cpu.generate=§9算力: §b%s§9 (效率: %s)
 
 upgrade.data_processor.module.ram.tip.0=§9内存模块将决定数据处理计算机产出的算力§e上限§9。
-upgrade.data_processor.module.ram.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c50%%。
-upgrade.data_processor.module.ram.tip.2=§9每秒有 §a1%% §9的概率降低 §e1 §9点耐久。
+upgrade.data_processor.module.ram.tip.1=§9耐久低于 §e25%%§9 时，算力产出逐渐开始§c降低§9，最多 §c25%%。
+upgrade.data_processor.module.ram.tip.2=§9工作时每秒有 §a10%% §9的概率降低 §e1 §9点耐久。
 
 upgrade.data_processor.module.ram.limit_provision=§9上限提供: §e%s§9 (效率: %s)
 
 upgrade.data_processor.module.energy.tip=§9最大功耗：§c%s
 upgrade.data_processor.module.durability.tip=§9耐久：§e%s / %s§a（%s）
-upgrade.data_processor.module.durability.unknown.tip=§9最大耐久：§e%s ～ %s
+upgrade.data_processor.module.durability.unknown.tip=§9最大耐久（放入模块总线以初始化耐久）：§e%s ～ %s
 
 top.hypernet.online=§9HyperNet 网络状态：§a已连接
 top.hypernet.offline=§9HyperNet 网络状态：§c断开连接

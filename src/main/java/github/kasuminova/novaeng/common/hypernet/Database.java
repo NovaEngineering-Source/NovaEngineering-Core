@@ -20,6 +20,7 @@ import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nullable;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -50,7 +51,7 @@ public class Database extends NetNode {
             return;
         }
         if (center == null) {
-            event.setFailed(false, "未连接至计算网络！");
+            event.preventProgressing("未连接至计算网络！");
             return;
         }
 
@@ -69,13 +70,10 @@ public class Database extends NetNode {
 
     @Override
     public boolean isWorking() {
-        if (!(owner instanceof TileFactoryController)) {
+        if (!(owner instanceof final TileFactoryController factory)) {
             return false;
         }
-
-        TileFactoryController factory = (TileFactoryController) owner;
         FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(DatabaseType.DATABASE_WORKING_THREAD_NAME);
-
         return thread != null && thread.isWorking();
     }
 
@@ -198,11 +196,11 @@ public class Database extends NetNode {
     }
 
     public Object2DoubleOpenHashMap<ResearchCognitionData> getAllResearchingCognition() {
-        return researchingCognition;
+        return isWorking() ? researchingCognition : new Object2DoubleOpenHashMap<>();
     }
 
     public Set<ResearchCognitionData> getStoredResearchCognition() {
-        return storedResearchCognition;
+        return isWorking() ? storedResearchCognition : Collections.emptySet();
     }
 
     @ZenGetter("type")

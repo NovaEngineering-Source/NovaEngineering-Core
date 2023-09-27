@@ -9,7 +9,6 @@ import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleType;
 import hellfirepvp.modularmachinery.common.util.MiscUtils;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -45,15 +44,11 @@ public abstract class DataProcessorModule extends DynamicMachineUpgrade {
 
     @Override
     public void readItemNBT(final NBTTagCompound tag) {
-        if (tag.hasKey("durability")) {
-            durability = tag.getInteger("durability");
-        }
         if (tag.hasKey("maxDurability")) {
+            if (tag.hasKey("durability")) {
+                durability = tag.getInteger("durability");
+            }
             maxDurability = tag.getInteger("maxDurability");
-        }
-
-        if (maxDurability == 0) {
-            initDurability();
         }
     }
 
@@ -62,8 +57,10 @@ public abstract class DataProcessorModule extends DynamicMachineUpgrade {
     @Override
     public NBTTagCompound writeItemNBT() {
         NBTTagCompound tag = new NBTTagCompound();
-        tag.setInteger("durability", durability);
-        tag.setInteger("maxDurability", maxDurability);
+        if (maxDurability != 0) {
+            tag.setInteger("durability", durability);
+            tag.setInteger("maxDurability", maxDurability);
+        }
         return tag;
     }
 
@@ -87,7 +84,7 @@ public abstract class DataProcessorModule extends DynamicMachineUpgrade {
             DataProcessorModule processorModule = (DataProcessorModule) upgrade;
             processorModule.readItemNBT(writeItemNBT());
             if (parentBus != null) {
-                parentBus.markForUpdateSync();
+                parentBus.markNoUpdateSync();
             }
             return;
         }
@@ -121,7 +118,12 @@ public abstract class DataProcessorModule extends DynamicMachineUpgrade {
     }
 
     @Override
+    public int hashCode() {
+        return System.identityHashCode(this);
+    }
+
+    @Override
     public boolean equals(final Object obj) {
-        return false;
+        return this == obj;
     }
 }

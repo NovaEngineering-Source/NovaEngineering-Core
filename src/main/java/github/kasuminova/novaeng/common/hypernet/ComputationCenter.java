@@ -230,13 +230,10 @@ public class ComputationCenter {
     }
 
     public boolean isWorking() {
-        if (!(owner instanceof TileFactoryController)) {
+        if (!(owner instanceof final TileFactoryController factory)) {
             return false;
         }
-
-        TileFactoryController factory = (TileFactoryController) owner;
         FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(ComputationCenterType.CENTER_WORKING_THREAD_NAME);
-
         return thread != null && thread.isWorking();
     }
 

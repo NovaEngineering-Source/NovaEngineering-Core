@@ -1,7 +1,6 @@
 package github.kasuminova.novaeng;
 
 import github.kasuminova.novaeng.common.CommonProxy;
-import github.kasuminova.novaeng.common.command.ExportResearchDataToJson;
 import github.kasuminova.novaeng.common.network.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -22,7 +21,7 @@ public class NovaEngineeringCore {
     public static final String MOD_ID = "novaeng_core";
     public static final String MOD_NAME = "Nova Engineering: Core";
 
-    public static final String VERSION = "1.5.4";
+    public static final String VERSION = "1.6.0";
 
     public static final String CLIENT_PROXY = "github.kasuminova.novaeng.client.ClientProxy";
     public static final String COMMON_PROXY = "github.kasuminova.novaeng.common.CommonProxy";
@@ -68,10 +67,5 @@ public class NovaEngineeringCore {
     @Mod.EventHandler
     public void loadComplete(FMLLoadCompleteEvent event) {
         proxy.loadComplete();
-    }
-
-    @Mod.EventHandler
-    public void onServerStart(FMLServerStartingEvent event) {
-        event.registerServerCommand(ExportResearchDataToJson.INSTANCE);
     }
 }

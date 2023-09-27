@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.common.hypernet;
 
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.*;
+import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import hellfirepvp.modularmachinery.common.machine.RecipeThread;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
@@ -10,14 +11,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import java.util.Arrays;
 import java.util.Collection;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.NetNodeImpl")
 public class NetNodeImpl extends NetNode {
-    private final Object2FloatOpenHashMap<RecipeThread> recipeConsumers = new Object2FloatOpenHashMap<>();
-    private float computationPointConsumption = 0;
+    protected final Object2FloatOpenHashMap<RecipeThread> recipeConsumers = new Object2FloatOpenHashMap<>();
+    protected float computationPointConsumption = 0;
 
     public NetNodeImpl(final TileMultiblockMachineController owner) {
         super(owner);
@@ -50,8 +50,18 @@ public class NetNodeImpl extends NetNode {
             return;
         }
 
-        if (center.getComputationPointGeneration() < pointRequired) {
-            event.setFailed("算力不足！预期：" + pointRequired + "T FloPS，当前：" + center.getComputationPointGeneration() + "T FloPS");
+        float generation = center.getComputationPointGeneration();
+        if (generation < pointRequired) {
+            event.setFailed("算力不足！预期："
+                    + NovaEngUtils.formatFLOPS(pointRequired) + "，当前："
+                    + NovaEngUtils.formatFLOPS(generation));
+            return;
+        }
+
+        int currentParallelism = event.getActiveRecipe().getParallelism();
+        if (currentParallelism > 1) {
+            int max = (int) Math.min(currentParallelism, (double) (generation / pointRequired));
+            event.setParallelism(max);
         }
     }
 
@@ -70,11 +80,12 @@ public class NetNodeImpl extends NetNode {
             return;
         }
 
-        Arrays.stream(researchRequired)
-                .filter(research -> nodes.stream()
-                        .noneMatch(database -> database.hasResearchCognition(research)))
-                .findFirst()
-                .ifPresent(research -> event.setFailed("缺失研究：" + research.getResearchName() + "！"));
+        for (ResearchCognitionData researchCognitionData : researchRequired) {
+            if (nodes.stream().noneMatch(database -> database.hasResearchCognition(researchCognitionData))) {
+                event.setFailed("缺失研究：" + researchCognitionData.getTranslatedName() + "！");
+                break;
+            }
+        }
     }
 
     public void onRecipeStart(final RecipeStartEvent event, final float computation) {
@@ -85,13 +96,13 @@ public class NetNodeImpl extends NetNode {
         recipeConsumers.put(event.getRecipeThread(), computation * event.getActiveRecipe().getParallelism());
     }
 
-    public void onRecipePreTick(final RecipeTickEvent event, final float computation) {
+    public void onRecipePreTick(final RecipeTickEvent event, final float computation, final boolean triggerFailure) {
         if (centerPos == null) {
             event.setFailed(true, "未连接至计算网络！");
             return;
         }
         if (center == null) {
-            event.setFailed(false, "未连接至计算网络！");
+            event.preventProgressing("未连接至计算网络！");
             return;
         }
         float required = computation * event.getActiveRecipe().getParallelism();
@@ -99,18 +110,24 @@ public class NetNodeImpl extends NetNode {
 
         float consumed = center.consumeComputationPoint(required);
         if (consumed < required) {
-            event.preventProgressing(
-                    "算力不足！预期：" + required + "T FloPS，当前：" + consumed + "T FloPS");
+            String failureMessage = String.format("算力不足！预期：%s，当前：%s",
+                    NovaEngUtils.formatFLOPS(required), NovaEngUtils.formatFLOPS(consumed));
+
+            if (triggerFailure) {
+                event.setFailed(event.getActiveRecipe().getRecipe().doesCancelRecipeOnPerTickFailure(), failureMessage);
+            } else {
+                event.preventProgressing(failureMessage);
+            }
         }
     }
 
-    public void onRecipePreTick(final FactoryRecipeTickEvent event, final float computation) {
+    public void onRecipePreTick(final FactoryRecipeTickEvent event, final float computation, final boolean triggerFailure) {
         if (centerPos == null) {
             event.setFailed(true, "未连接至计算网络！");
             return;
         }
         if (center == null) {
-            event.setFailed(false, "未连接至计算网络！");
+            event.preventProgressing("未连接至计算网络！");
             return;
         }
         float required = computation * event.getActiveRecipe().getParallelism();
@@ -118,8 +135,14 @@ public class NetNodeImpl extends NetNode {
 
         float consumed = center.consumeComputationPoint(required);
         if (consumed < required) {
-            event.preventProgressing(
-                    "算力不足！预期：" + required + "T FloPS，当前：" + consumed + "T FloPS");
+            String failureMessage = String.format("算力不足！预期：%s，当前：%s",
+                    NovaEngUtils.formatFLOPS(required), NovaEngUtils.formatFLOPS(consumed));
+
+            if (triggerFailure) {
+                event.setFailed(event.getActiveRecipe().getRecipe().doesCancelRecipeOnPerTickFailure(), failureMessage);
+            } else {
+                event.preventProgressing(failureMessage);
+            }
         }
     }
 

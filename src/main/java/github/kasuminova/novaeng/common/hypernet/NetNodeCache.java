@@ -45,13 +45,19 @@ public class NetNodeCache {
             return type.cast(node);
         } else {
             Class<? extends NetNode> ctrlType = RegistryHyperNet.getNodeType(machine);
+            if (ctrlType == null) {
+                throw new IllegalStateException(String.format(
+                        "Invalid NetNode controller type: %s", machine.getRegistryName()));
+            }
             if (type != ctrlType) {
                 throw new IllegalStateException(String.format(
                         "Try to get node type %s, but controller type is %s.",
                         type.getSimpleName(), ctrlType.getSimpleName()
                 ));
             }
-            CACHED_NODES.remove(ctrl);
+            synchronized (CACHED_NODES) {
+                CACHED_NODES.remove(ctrl);
+            }
         }
 
         try {
@@ -59,7 +65,9 @@ public class NetNodeCache {
             T instance = constructor.newInstance(ctrl);
             instance.readNBT();
 
-            CACHED_NODES.put(ctrl, instance);
+            synchronized (CACHED_NODES) {
+                CACHED_NODES.put(ctrl, instance);
+            }
             return instance;
         } catch (NoSuchMethodException e) {
             throw new RuntimeException(

@@ -84,8 +84,7 @@ public class TileHyperNetTerminal extends TileCustomController {
         for (ProcessingComponent<?> foundComponent : foundComponents) {
             if (foundComponent.getComponent().getIOType() == IOType.INPUT) {
                 Object providedComponent = foundComponent.getProvidedComponent();
-                if (providedComponent instanceof IEnergyHandlerAsync) {
-                    IEnergyHandlerAsync iEnergyHandlerAsync = (IEnergyHandlerAsync) providedComponent;
+                if (providedComponent instanceof final IEnergyHandlerAsync iEnergyHandlerAsync) {
                     energyHandlers.add(iEnergyHandlerAsync);
                 }
             }
@@ -147,6 +146,16 @@ public class TileHyperNetTerminal extends TileCustomController {
     }
 
     // NO-OP
+
+    @Override
+    public int getExtraThreadCount() {
+        return 0;
+    }
+
+    @Override
+    public void setExtraThreadCount(final int extraThreadCount) {
+
+    }
 
     @Override
     public boolean isWorking() {

@@ -2,7 +2,8 @@ package github.kasuminova.novaeng.common.integration;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
-import github.kasuminova.novaeng.common.hypernet.base.HyperNetRecipeManager;
+import github.kasuminova.novaeng.common.hypernet.machine.AssemblyLine;
+import github.kasuminova.novaeng.common.hypernet.recipe.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import net.minecraft.command.ICommandSender;
@@ -42,5 +43,6 @@ public class IntegrationCRT {
         );
 
         HyperNetRecipeManager.registerRecipes();
+        AssemblyLine.registerNetNode();
     }
 }

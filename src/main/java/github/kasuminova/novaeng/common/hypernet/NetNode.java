@@ -74,21 +74,17 @@ public abstract class NetNode {
         }
 
         TileEntity te = owner.getWorld().getTileEntity(this.centerPos);
-        if (!(te instanceof TileMultiblockMachineController)) {
+        if (!(te instanceof final TileMultiblockMachineController ctrl)) {
             return ConnectResult.UNKNOWN_CENTER;
         }
 
-        TileMultiblockMachineController ctrl = (TileMultiblockMachineController) te;
         if (!HyperNetHelper.isComputationCenter(ctrl)) {
             return ConnectResult.UNKNOWN_CENTER;
         }
 
         ConnectResult result = ComputationCenter.from(ctrl).onConnect(owner, this);
         switch (result) {
-            case NODE_TYPE_REACHED_MAX_PRESENCES:
-            case CENTER_REACHED_CONNECTION_LIMIT:
-                centerPos = null;
-                break;
+            case NODE_TYPE_REACHED_MAX_PRESENCES, CENTER_REACHED_CONNECTION_LIMIT -> centerPos = null;
         }
 
         writeNBT();

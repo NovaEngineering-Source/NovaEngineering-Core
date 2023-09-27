@@ -75,24 +75,18 @@ public class DataProcessorType extends NetNodeTypeRepairable {
 
         MMEvents.onStructureUpdate(name, event -> {
             DataProcessor processor = NetNodeCache.getCache(event.getController(), DataProcessor.class);
-            if (processor != null) {
-                processor.onStructureUpdate();
-            }
+            if (processor != null) processor.onStructureUpdate();
         });
 
         RecipeBuilder.newBuilder(name + "_working", name, 20, 100, false)
                 .addEnergyPerTickInput(energyUsage)
                 .addCheckHandler(event -> {
                     DataProcessor processor = NetNodeCache.getCache(event.getController(), DataProcessor.class);
-                    if (processor != null) {
-                        processor.onRecipeCheck(event);
-                    }
+                    if (processor != null) processor.onRecipeCheck(event);
                 })
                 .addFactoryPreTickHandler(event -> {
                     DataProcessor processor = NetNodeCache.getCache(event.getController(), DataProcessor.class);
-                    if (processor != null) {
-                        processor.onWorkingTick(event);
-                    }
+                    if (processor != null) processor.onWorkingTick(event);
                 })
                 .addRecipeTooltip(
                         "novaeng.hypernet.data_processor.working.tooltip.0",
@@ -110,15 +104,11 @@ public class DataProcessorType extends NetNodeTypeRepairable {
                     .addInputs(input.toArray(new IIngredient[0]))
                     .addCheckHandler(event -> {
                         DataProcessor processor = NetNodeCache.getCache(event.getController(), DataProcessor.class);
-                        if (processor != null) {
-                            processor.onDurabilityFixRecipeCheck(event, durability);
-                        }
+                        if (processor != null) processor.onDurabilityFixRecipeCheck(event, durability);
                     })
                     .addFactoryFinishHandler(event -> {
                         DataProcessor processor = NetNodeCache.getCache(event.getController(), DataProcessor.class);
-                        if (processor != null) {
-                            processor.fixCircuit(durability);
-                        }
+                        if (processor != null) processor.fixCircuit(durability);
                     })
                     .addRecipeTooltip(FMLCommonHandler.instance().getSide().isClient()
                             ? new String[]{I18n.format("novaeng.hypernet.repair.tooltip", durability)}

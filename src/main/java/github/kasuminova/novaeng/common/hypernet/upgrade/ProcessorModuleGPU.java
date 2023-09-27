@@ -36,7 +36,7 @@ public class ProcessorModuleGPU extends ProcessorModuleCPU {
             return 1F;
         }
 
-        return Math.min(Math.max(durabilityPercent + 0.5F, 0.75F), 1.0F);
+        return Math.min(Math.max(durabilityPercent + 0.5F, 0.5F), 1.0F);
     }
 
     @Override

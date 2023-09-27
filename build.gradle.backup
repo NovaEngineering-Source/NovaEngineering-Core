@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'org.spongepowered.mixin'
 
 group = 'github.kasuminova'
-version = '1.5.3'
+version = '1.5.6'
 
 repositories {
     flatDir {
@@ -100,7 +100,6 @@ dependencies {
 
     // Mod Dependencies
     implementation fg.deobf('hellfirepvp:modularmachinery:r48:main')
-    implementation fg.deobf('fred:rgbchat:0.6')
     implementation "CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+"
 
     implementation fg.deobf("curse.maven:the-one-probe-245211:2667280")
@@ -114,6 +113,7 @@ dependencies {
     compileOnly fg.deobf("curse.maven:valkyrielib-245480:2691542")
     compileOnly fg.deobf("curse.maven:environmental-tech-245453:2691536")
     compileOnly fg.deobf("curse.maven:smooth-font-285742:3944565")
+    compileOnly fg.deobf("curse.maven:astral-sorcery-241721:3044416")
 }
 
 jar {

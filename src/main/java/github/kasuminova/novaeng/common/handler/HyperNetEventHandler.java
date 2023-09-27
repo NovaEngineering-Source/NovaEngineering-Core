@@ -59,11 +59,10 @@ public class HyperNetEventHandler {
         }
 
         TileEntity te = ctrl.getWorld().getTileEntity(centerPos);
-        if (!(te instanceof TileMultiblockMachineController)) {
+        if (!(te instanceof final TileMultiblockMachineController center)) {
             return null;
         }
 
-        TileMultiblockMachineController center = (TileMultiblockMachineController) te;
         if (!HyperNetHelper.supportsHyperNet(center) || !HyperNetHelper.isComputationCenter(center)) {
             return null;
         }
@@ -73,36 +72,24 @@ public class HyperNetEventHandler {
 
     private static void sendResultMessage(final ConnectResult result, final EntityPlayer player, final ComputationCenter center, final NetNode cached) {
         switch (result) {
-            case SUCCESS:
-                player.sendMessage(new TextComponentTranslation(
-                        "novaeng.hypernet.connect.result.success",
-                        center.getConnectedMachineryCount(), center.getType().getMaxConnections()
-                ));
-                break;
-            case UNKNOWN_CENTER:
-                player.sendMessage(new TextComponentTranslation(
-                        "novaeng.hypernet.connect.result.unknown_center"));
-                break;
-            case CENTER_NOT_WORKING:
-                player.sendMessage(new TextComponentTranslation(
-                        "novaeng.hypernet.connect.result.center_not_working"));
-                break;
-            case UNSUPPORTED_NODE:
-                player.sendMessage(new TextComponentTranslation(
-                        "novaeng.hypernet.connect.result.unsupported_node"));
-                break;
-            case CENTER_REACHED_CONNECTION_LIMIT:
-                player.sendMessage(new TextComponentTranslation(
-                        "novaeng.hypernet.connect.result.center_reached_connection_limit",
-                        center.getType().getMaxConnections()
-                ));
-                break;
-            case NODE_TYPE_REACHED_MAX_PRESENCES:
-                player.sendMessage(new TextComponentTranslation(
-                        "novaeng.hypernet.connect.result.node_type_reached_max_presences",
-                        cached.getNodeMaxPresences()
-                ));
-                break;
+            case SUCCESS -> player.sendMessage(new TextComponentTranslation(
+                    "novaeng.hypernet.connect.result.success",
+                    center.getConnectedMachineryCount(), center.getType().getMaxConnections()
+            ));
+            case UNKNOWN_CENTER -> player.sendMessage(new TextComponentTranslation(
+                    "novaeng.hypernet.connect.result.unknown_center"));
+            case CENTER_NOT_WORKING -> player.sendMessage(new TextComponentTranslation(
+                    "novaeng.hypernet.connect.result.center_not_working"));
+            case UNSUPPORTED_NODE -> player.sendMessage(new TextComponentTranslation(
+                    "novaeng.hypernet.connect.result.unsupported_node"));
+            case CENTER_REACHED_CONNECTION_LIMIT -> player.sendMessage(new TextComponentTranslation(
+                    "novaeng.hypernet.connect.result.center_reached_connection_limit",
+                    center.getType().getMaxConnections()
+            ));
+            case NODE_TYPE_REACHED_MAX_PRESENCES -> player.sendMessage(new TextComponentTranslation(
+                    "novaeng.hypernet.connect.result.node_type_reached_max_presences",
+                    cached.getNodeMaxPresences()
+            ));
         }
     }
 
@@ -136,12 +123,11 @@ public class HyperNetEventHandler {
         }
 
         TileEntity te = world.getTileEntity(event.getPos());
-        if (!(te instanceof TileMultiblockMachineController)) {
+        if (!(te instanceof final TileMultiblockMachineController ctrl)) {
             return;
         }
 
-        if (te instanceof TileHyperNetTerminal && player instanceof EntityPlayerMP) {
-            TileHyperNetTerminal terminal = (TileHyperNetTerminal) te;
+        if (te instanceof final TileHyperNetTerminal terminal && player instanceof EntityPlayerMP) {
             NovaEngineeringCore.NET_CHANNEL.sendTo(new PktTerminalGuiData(terminal), (EntityPlayerMP) player);
             return;
         }
@@ -151,7 +137,6 @@ public class HyperNetEventHandler {
             return;
         }
 
-        TileMultiblockMachineController ctrl = (TileMultiblockMachineController) te;
         DynamicMachine foundMachine = ctrl.getFoundMachine();
         if (!RegistryHyperNet.isHyperNetSupported(foundMachine)) {
             return;
@@ -227,11 +212,10 @@ public class HyperNetEventHandler {
         if (event.phase != TickEvent.Phase.START || event.side == Side.CLIENT) {
             return;
         }
-        if (!(event.player instanceof EntityPlayerMP)) {
+        if (!(event.player instanceof final EntityPlayerMP player)) {
             return;
         }
 
-        EntityPlayerMP player = (EntityPlayerMP) event.player;
         World world = player.getEntityWorld();
         if (world.getWorldTime() % 15 != 0) {
             return;
@@ -241,16 +225,14 @@ public class HyperNetEventHandler {
             return;
         }
         TileEntity te = ((ContainerBase<?>) player.openContainer).getOwner();
-        if (!(te instanceof TileMultiblockMachineController)) {
+        if (!(te instanceof final TileMultiblockMachineController ctrl)) {
             return;
         }
-        TileMultiblockMachineController ctrl = (TileMultiblockMachineController) te;
         if (!HyperNetHelper.supportsHyperNet(ctrl)) {
             return;
         }
 
-        if (ctrl instanceof TileHyperNetTerminal) {
-            TileHyperNetTerminal terminal = (TileHyperNetTerminal) ctrl;
+        if (ctrl instanceof final TileHyperNetTerminal terminal) {
             NovaEngineeringCore.NET_CHANNEL.sendTo(new PktTerminalGuiData(terminal), player);
         }
 

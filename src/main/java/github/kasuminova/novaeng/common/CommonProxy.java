@@ -6,7 +6,8 @@ import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
-import github.kasuminova.novaeng.common.hypernet.base.HyperNetRecipeManager;
+import github.kasuminova.novaeng.common.hypernet.machine.AssemblyLine;
+import github.kasuminova.novaeng.common.hypernet.recipe.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.integration.IntegrationCRT;
 import github.kasuminova.novaeng.common.integration.theoneprobe.IntegrationTOP;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
@@ -56,6 +57,8 @@ public class CommonProxy implements IGuiHandler {
         IntegrationTOP.registerProvider();
         RecipeAdapterExtended.registerAdapter();
         HyperNetRecipeManager.registerRecipes();
+
+        AssemblyLine.registerNetNode();
     }
 
     public void postInit() {
@@ -81,12 +84,9 @@ public class CommonProxy implements IGuiHandler {
             }
         }
 
-        switch (type) {
-            case HYPERNET_TERMINAL:
-                return new ContainerHyperNetTerminal((TileHyperNetTerminal) present, player);
-            default:
-                return null;
-        }
+        return switch (type) {
+            case HYPERNET_TERMINAL -> new ContainerHyperNetTerminal((TileHyperNetTerminal) present, player);
+        };
     }
 
     @Nullable

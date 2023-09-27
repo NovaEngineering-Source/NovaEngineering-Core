@@ -893,10 +893,9 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         @Override
         public boolean equals(final Object obj) {
-            if (!(obj instanceof ResearchDataContext)) {
+            if (!(obj instanceof final ResearchDataContext other)) {
                 return false;
             }
-            final ResearchDataContext other = (ResearchDataContext) obj;
             return data.equals(other.data);
         }
     }

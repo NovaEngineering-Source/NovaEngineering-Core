@@ -40,9 +40,7 @@ public class DatabaseType extends NetNodeType {
                 .addEnergyPerTickInput(energyUsage)
                 .addFactoryPreTickHandler(event -> {
                     Database database = NetNodeCache.getCache(event.getController(), Database.class);
-                    if (database != null) {
-                        database.onWorkingTick(event);
-                    }
+                    if (database != null) database.onWorkingTick(event);
                 })
                 .addRecipeTooltip(
                         "novaeng.hypernet.database.working.tooltip.0",

@@ -7,6 +7,8 @@ import github.kasuminova.novaeng.client.handler.HyperNetClientEventHandler;
 import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
 import github.kasuminova.novaeng.client.util.TitleUtils;
 import github.kasuminova.novaeng.common.CommonProxy;
+import github.kasuminova.novaeng.common.command.CommandPacketProfiler;
+import github.kasuminova.novaeng.common.command.ExportResearchDataToJson;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -14,6 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Mod;
@@ -58,6 +61,9 @@ public class ClientProxy extends CommonProxy {
     public void postInit() {
         super.postInit();
 
+        ClientCommandHandler.instance.registerCommand(ExportResearchDataToJson.INSTANCE);
+        ClientCommandHandler.instance.registerCommand(CommandPacketProfiler.INSTANCE);
+
         TitleUtils.setRandomTitle("*PostInit*");
     }
 
@@ -88,11 +94,8 @@ public class ClientProxy extends CommonProxy {
             }
         }
 
-        switch (type) {
-            case HYPERNET_TERMINAL:
-                return new GuiHyperNetTerminal((TileHyperNetTerminal) present, player);
-            default:
-                return null;
-        }
+        return switch (type) {
+            case HYPERNET_TERMINAL -> new GuiHyperNetTerminal((TileHyperNetTerminal) present, player);
+        };
     }
 }
