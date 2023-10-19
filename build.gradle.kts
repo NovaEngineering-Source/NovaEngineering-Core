@@ -11,8 +11,8 @@ plugins {
 }
 
 // Project properties
-group = "github.kasuminova"
-version = "1.6.0"
+group = "github.kasuminova.novaeng"
+version = "1.7.1"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -183,7 +183,7 @@ dependencies {
     }
 
     // Mod Dependencies
-    implementation(rfg.deobf("hellfirepvp:modularmachinery:r48:main"))
+    implementation(rfg.deobf("hellfirepvp:modularmachinery:r50:main"))
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
 
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))

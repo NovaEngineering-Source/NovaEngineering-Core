@@ -19,7 +19,7 @@ public class MixinStackSizeRenderer {
     )
     public float onRenderStackSize(final float ci) {
         if (ci == 0.5F) {
-            return 0.65F;
+            return 0.7F;
         }
         return ci;
     }

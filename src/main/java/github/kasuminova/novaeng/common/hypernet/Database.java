@@ -74,7 +74,7 @@ public class Database extends NetNode {
             return false;
         }
         FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(DatabaseType.DATABASE_WORKING_THREAD_NAME);
-        return thread != null && thread.isWorking();
+        return owner.isWorking() && thread != null && thread.isWorking();
     }
 
     @Override

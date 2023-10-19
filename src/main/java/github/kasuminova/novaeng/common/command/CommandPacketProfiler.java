@@ -5,6 +5,7 @@ import github.kasuminova.novaeng.common.profiler.TEUpdatePacketProfiler;
 import hellfirepvp.modularmachinery.common.util.MiscUtils;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.text.TextComponentString;
@@ -31,6 +32,11 @@ public class CommandPacketProfiler extends CommandBase {
     @Override
     public String getUsage(@Nonnull final ICommandSender sender) {
         return "Usage: /packet_profiler [reset]";
+    }
+
+    @Override
+    public boolean checkPermission(@Nonnull final MinecraftServer server, @Nonnull final ICommandSender sender) {
+        return sender instanceof EntityPlayer;
     }
 
     @Override

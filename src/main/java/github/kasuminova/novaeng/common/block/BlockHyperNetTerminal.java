@@ -7,9 +7,11 @@ import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.block.BlockController;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
+import hellfirepvp.modularmachinery.common.util.IOInventory;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -66,6 +68,18 @@ public class BlockHyperNetTerminal extends BlockController {
     }
 
     public void breakBlock(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof TileHyperNetTerminal terminal) {
+            IOInventory inv = terminal.getCardInventory();
+            for (int i = 0; i < inv.getSlots(); i++) {
+                ItemStack stack = inv.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    spawnAsEntity(worldIn, pos, stack);
+                    inv.setStackInSlot(i, ItemStack.EMPTY);
+                }
+            }
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Override

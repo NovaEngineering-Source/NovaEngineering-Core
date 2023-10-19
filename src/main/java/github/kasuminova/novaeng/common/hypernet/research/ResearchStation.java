@@ -54,9 +54,9 @@ public class ResearchStation extends NetNode {
             return;
         }
 
-        float pointPerTick = currentResearching.getMinComputationPointPerTick();
-        if (center.getComputationPointGeneration() < Math.min(pointPerTick, getComputationLeft())) {
-            event.setFailed("算力不足！预期：" + pointPerTick + "T FloPS，当前：" + center.getComputationPointGeneration() + "T FloPS");
+        float required = (float) Math.min(getComputationLeft(), currentResearching.getMinComputationPointPerTick());
+        if (center.getComputationPointGeneration() < required) {
+            event.setFailed("算力不足！预期：" + NovaEngUtils.formatFLOPS(required) + "，当前：" + NovaEngUtils.formatFLOPS(center.getComputationPointGeneration()));
             return;
         }
 
@@ -93,10 +93,11 @@ public class ResearchStation extends NetNode {
             return;
         }
 
-        float consumed = center.consumeComputationPoint((float) Math.min(getComputationLeft(), consumption));
-        if (consumed < consumption) {
+        float required = (float) Math.min(getComputationLeft(), currentResearching.getMinComputationPointPerTick());
+        float consumed = center.consumeComputationPoint(required);
+        if (consumed < required) {
             event.preventProgressing("算力不足！预期："
-                    + NovaEngUtils.formatFLOPS(consumption) + "，当前："
+                    + NovaEngUtils.formatFLOPS(required) + "，当前："
                     + NovaEngUtils.formatFLOPS(consumed));
         } else {
             doResearch(event, consumed);
@@ -126,14 +127,25 @@ public class ResearchStation extends NetNode {
         }
 
         completedPoints += consumed;
-        consumption = (float) Math.min(currentResearching.getMinComputationPointPerTick(), getComputationLeft());
+        float baseConsumption = currentResearching.getMinComputationPointPerTick();
+        consumption = (float) Math.min(baseConsumption, getComputationLeft());
 
         ActiveMachineRecipe activeRecipe = event.getActiveRecipe();
         int totalTick = activeRecipe.getTotalTick();
         activeRecipe.setTick(Math.max((int) (getProgressPercent() * totalTick) - 1, 0));
         event.getRecipeThread().setStatus(CraftingStatus.SUCCESS).setStatusInfo("研究中...");
 
-        ModularMachinery.EXECUTE_MANAGER.addSyncTask(this::writeResearchProgressToDatabase);
+        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> doExtraResearch((float) Math.min(baseConsumption * 4, getComputationLeft())));
+    }
+
+    protected void doExtraResearch(final float maxConsumption) {
+        if (center != null) {
+            float consumed = center.consumeComputationPoint(maxConsumption);
+            completedPoints += consumed;
+            consumption += consumed;
+        }
+
+        writeResearchProgressToDatabase();
         writeNBT();
     }
 
@@ -227,7 +239,7 @@ public class ResearchStation extends NetNode {
 
         FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(ResearchStationType.RESEARCH_STATION_WORKING_THREAD_NAME);
 
-        return thread != null && thread.isWorking();
+        return owner.isWorking() && thread != null && thread.isWorking();
     }
 
     @Override

@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.common.command;
 
+import com.github.bsideup.jabel.Desugar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import github.kasuminova.novaeng.NovaEngineeringCore;
@@ -61,16 +62,8 @@ public class ExportResearchDataToJson extends CommandBase {
         }
     }
 
-    private static class ToSerialize {
-        private final List<SimpleResearchData> dataList;
-
-        private ToSerialize(final List<SimpleResearchData> dataList) {
-            this.dataList = dataList;
-        }
-
-        public List<SimpleResearchData> getDataList() {
-            return dataList;
-        }
+    @Desugar
+    private record ToSerialize(List<SimpleResearchData> dataList) {
     }
 
 }

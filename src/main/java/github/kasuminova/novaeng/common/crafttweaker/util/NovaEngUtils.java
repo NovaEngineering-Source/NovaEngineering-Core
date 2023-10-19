@@ -23,6 +23,7 @@ public class NovaEngUtils {
         return nf.format(value);
     }
 
+    @ZenMethod
     public static String formatNumber(long value) {
         if (value < 1_000L) {
             return String.valueOf(value);

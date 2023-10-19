@@ -134,8 +134,6 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
         float maxGeneration = processor.getMaxGeneration();
         float load = Math.min(processor.getComputationalLoad(), maxGeneration);
         float efficiency = processor.getEfficiency();
-        int circuitDurability = processor.getCircuitDurability();
-        int maxCircuitDurability = processor.getType().getCircuitDurability();
         int storedHU = processor.getStoredHU();
         float heatPercent = processor.getOverHeatPercent();
 
@@ -148,10 +146,6 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
 
         leftInfo.text("{*top.hypernet.processor.efficiency*}");
         rightInfo.text(TextFormatting.GREEN + NovaEngUtils.formatPercent(efficiency, 1.0F));
-
-        leftInfo.text("{*top.hypernet.processor.circuit_durability*}");
-        rightInfo.text(TextFormatting.GREEN + MiscUtils.formatDecimal(circuitDurability) + " (" +
-                NovaEngUtils.formatPercent(circuitDurability, maxCircuitDurability) + ")");
 
         leftInfo.text("{*top.hypernet.processor.heat*}");
         rightInfo.text(TextFormatting.RED + MiscUtils.formatDecimal(storedHU) + "HU (" +

@@ -8,7 +8,6 @@ import github.kasuminova.mmce.common.upgrade.MachineUpgrade;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleCPU;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleRAM;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
-import github.kasuminova.novaeng.common.util.RandomUtils;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.lib.RequirementTypesMM;
 import hellfirepvp.modularmachinery.common.machine.IOType;
@@ -28,10 +27,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.DataProcessor")
 public class DataProcessor extends NetNode {
+    private final Lock lock = new ReentrantLock();
+
     private final MpscLinkedAtomicQueue<Long> recentEnergyUsage = new MpscLinkedAtomicQueue<>();
     private final MpscLinkedAtomicQueue<Float> recentCalculation = new MpscLinkedAtomicQueue<>();
 
@@ -42,8 +45,6 @@ public class DataProcessor extends NetNode {
     private final List<ProcessorModuleRAM> moduleRAMS = new CopyOnWriteArrayList<>();
 
     private volatile int dynamicPatternSize = 0;
-
-    private volatile int circuitDurability = 0;
 
     private volatile float maxGeneration = 0;
     private volatile float generated = 0;
@@ -72,11 +73,6 @@ public class DataProcessor extends NetNode {
             return;
         }
 
-        if (circuitDurability < type.getCircuitDurability() * 0.05F) {
-            event.setFailed("主电路板耐久过低，无法正常工作！");
-            return;
-        }
-
         if (moduleCPUS.isEmpty() && moduleRAMS.isEmpty()) {
             event.setFailed("未找到处理器和内存模块！");
             return;
@@ -93,9 +89,9 @@ public class DataProcessor extends NetNode {
     }
 
     @ZenMethod
-    public void onDurabilityFixRecipeCheck(RecipeCheckEvent event, int durability) {
-        if (circuitDurability + durability > type.getCircuitDurability()) {
-            event.setFailed("novaeng.hypernet.craftcheck.durability.failed");
+    public void heatDistributionRecipeCheck(RecipeCheckEvent event, int heatDistribution) {
+        if (storedHU - heatDistribution < 0) {
+            event.setFailed("novaeng.hypernet.craftcheck.heat_distribution.failed");
         }
     }
 
@@ -145,10 +141,6 @@ public class DataProcessor extends NetNode {
             event.setFailed(true, "处理器过热！");
             return true;
         }
-        if (circuitDurability < type.getCircuitDurability() * 0.05F) {
-            event.setFailed(true, "主电路板耐久过低，无法正常工作！");
-            return true;
-        }
         if (moduleCPUS.isEmpty() && moduleRAMS.isEmpty()) {
             event.setFailed(true, "未找到处理器和内存模块！");
             return true;
@@ -162,12 +154,6 @@ public class DataProcessor extends NetNode {
             return true;
         }
         return false;
-    }
-
-    @ZenMethod
-    public synchronized void fixCircuit(int durability) {
-        circuitDurability = Math.min(circuitDurability + durability, type.getCircuitDurability());
-        writeNBT();
     }
 
     @ZenMethod
@@ -220,11 +206,16 @@ public class DataProcessor extends NetNode {
     }
 
     @ZenMethod
-    public synchronized void onStructureUpdate() {
-        moduleCPUS.clear();
-        moduleRAMS.clear();
-        moduleCPUS.addAll(ProcessorModuleCPU.filter(owner.getFoundUpgrades().values()));
-        moduleRAMS.addAll(ProcessorModuleRAM.filter(owner.getFoundUpgrades().values()));
+    public void onStructureUpdate() {
+        try {
+            lock.lock();
+            moduleCPUS.clear();
+            moduleRAMS.clear();
+            moduleCPUS.addAll(ProcessorModuleCPU.filter(owner.getFoundUpgrades().values()));
+            moduleRAMS.addAll(ProcessorModuleRAM.filter(owner.getFoundUpgrades().values()));
+        } finally {
+            lock.unlock();
+        }
     }
 
     private int calculateHeatDist() {
@@ -246,44 +237,30 @@ public class DataProcessor extends NetNode {
     }
 
     @Override
-    public synchronized float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {
-        if (!isConnected() || center == null || !isWorking()) {
-            return 0F;
+    public float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {
+        try {
+            lock.lock();
+
+            if (!isConnected() || center == null || !isWorking()) {
+                return 0F;
+            }
+
+            float generation = Math.min(this.maxGeneration - this.generated, maxGeneration);
+            if (generation < 0) {
+                return 0F;
+            }
+
+            float generated = calculateComputationPointProvision(generation, doCalculate);
+
+            if (doCalculate) {
+                doHeatGeneration(generated);
+                this.generated += generation;
+            }
+
+            return generated;
+        } finally {
+            lock.unlock();
         }
-
-        float generation = Math.min(this.maxGeneration - this.generated, maxGeneration);
-        if (generation < 0) {
-            return 0F;
-        }
-
-        float generated = calculateComputationPointProvision(generation, doCalculate);
-
-        if (doCalculate) {
-            consumeCircuitDurability();
-            doHeatGeneration(generated);
-            this.generated += generation;
-        }
-
-        return generated;
-    }
-
-    private synchronized void consumeCircuitDurability() {
-        if (owner.getTicksExisted() % 20 != 0) {
-            return;
-        }
-        if (!(RandomUtils.nextFloat() <= (type.getCircuitConsumeChance() / getEfficiency()))) {
-            return;
-        }
-
-        int min = type.getMinCircuitConsumeAmount();
-        int max = type.getMaxCircuitConsumeAmount();
-
-        int consume = min + RandomUtils.nextInt(max - min);
-        if (dynamicPatternSize > 1) {
-            consume *= dynamicPatternSize;
-        }
-
-        circuitDurability -= Math.min(consume, circuitDurability);
     }
 
     @Override
@@ -294,7 +271,7 @@ public class DataProcessor extends NetNode {
 
         FactoryRecipeThread thread = factory.getCoreRecipeThreads().get(DataProcessorType.PROCESSOR_WORKING_THREAD_NAME);
 
-        return thread != null && thread.isWorking();
+        return owner.isWorking() && thread != null && thread.isWorking();
     }
 
     @ZenGetter("maxGeneration")
@@ -344,14 +321,14 @@ public class DataProcessor extends NetNode {
         float totalGenerated = 0F;
 
         for (ProcessorModuleRAM ram : moduleRAMS) {
-            float generated = ram.calculate(true, maxGen - generationLimit);
+            float generated = ram.calculate(doCalculate, maxGen - generationLimit);
             generationLimit += generated;
             if (doCalculate) {
                 totalEnergyConsumption += (long) ((double) (generated / ram.getComputationPointGenerationLimit()) * ram.getEnergyConsumption());
             }
         }
         for (final ProcessorModuleCPU cpu : moduleCPUS) {
-            float generated = cpu.calculate(true, generationLimit - totalGenerated);
+            float generated = cpu.calculate(doCalculate, generationLimit - totalGenerated);
             totalGenerated += generated;
             if (doCalculate) {
                 totalEnergyConsumption += (long) ((double) (generated / cpu.getComputationPointGeneration()) * cpu.getEnergyConsumption());
@@ -374,12 +351,6 @@ public class DataProcessor extends NetNode {
             this.overheat = customData.getBoolean("overheat");
         }
 
-        if (customData.hasKey("circuitDurability")) {
-            this.circuitDurability = customData.getInteger("circuitDurability");
-        } else {
-            this.circuitDurability = type.getCircuitDurability();
-        }
-
         this.computationalLoad = customData.getFloat("computationalLoad");
         this.maxGeneration = customData.getFloat("maxGeneration");
     }
@@ -390,7 +361,6 @@ public class DataProcessor extends NetNode {
         NBTTagCompound tag = owner.getCustomDataTag();
         tag.setInteger("storedHU", storedHU);
         tag.setBoolean("overheat", overheat);
-        tag.setInteger("circuitDurability", circuitDurability);
         tag.setFloat("computationalLoad", computationalLoad);
         tag.setFloat("maxGeneration", maxGeneration);
     }
@@ -408,17 +378,6 @@ public class DataProcessor extends NetNode {
     @ZenGetter("type")
     public DataProcessorType getType() {
         return type;
-    }
-
-    @ZenGetter("circuitDurability")
-    public int getCircuitDurability() {
-        return circuitDurability;
-    }
-
-    @ZenSetter("circuitDurability")
-    public void setCircuitDurability(final int circuitDurability) {
-        this.circuitDurability = circuitDurability;
-        writeNBT();
     }
 
     @ZenGetter("storedHU")

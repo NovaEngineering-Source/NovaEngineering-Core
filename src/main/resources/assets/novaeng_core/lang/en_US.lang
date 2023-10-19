@@ -80,11 +80,13 @@ novaeng.hypernet.maintenance_controller=维护控制器
 novaeng.hypernet.data_forwarding_processor=数据转发处理器
 
 novaeng.hypernet.craftcheck.durability.failed=电路板状态良好。
+novaeng.hypernet.craftcheck.heat_distribution.failed=当前无需使用冷却液散热。
 
 novaeng.hypernet.computation_center.working.tooltip.0=闲置状态下，始终会消耗机械基础耗电量。
 novaeng.hypernet.computation_center.working.tooltip.1=每连接 §a1 §f个机械，最终耗电量 §c+5%%§f。
 
 novaeng.hypernet.data_processor.compute_scheduler=计算调度器
+novaeng.hypernet.data_processor.radiator=外置散热控制器
 novaeng.hypernet.data_processor.working.tooltip.0=闲置状态下，始终会消耗机械基础耗电量。
 novaeng.hypernet.data_processor.working.tooltip.1=最终耗电量取决于处理器模块当前的负载。
 
@@ -96,6 +98,7 @@ novaeng.hypernet.research_station.working.tooltip.0=仅在工作状态下消耗�
 novaeng.hypernet.research_station.working.tooltip.1=工作状态下根据当前研究，消耗指定数量的算力。
 
 novaeng.hypernet.repair.tooltip=完成时，修复 §a%s §f点耐久值。
+novaeng.hypernet.radiator.tooltip=工作时，每秒可以吸收 §c%sHU§f 内部热量。
 
 novaeng.hypernet.tech_level.1=§a1§a.
 novaeng.hypernet.tech_level.2=§a2§a.
