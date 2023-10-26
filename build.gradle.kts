@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.7.1"
+version = "1.7.2"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -183,7 +183,7 @@ dependencies {
     }
 
     // Mod Dependencies
-    implementation(rfg.deobf("hellfirepvp:modularmachinery:r50:main"))
+    implementation(rfg.deobf("hellfirepvp:modularmachinery:r51:main"))
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
 
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
@@ -198,6 +198,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:environmental-tech-245453:2691536"))
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
     compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
+    compileOnly(rfg.deobf("curse.maven:openmodularturrets-224663:3466431"))
 }
 
 // Publishing to a Maven repository

@@ -81,7 +81,7 @@ public class TileHyperNetTerminal extends TileCustomController {
         super.updateComponents();
 
         energyHandlers.clear();
-        for (ProcessingComponent<?> foundComponent : foundComponents) {
+        for (ProcessingComponent<?> foundComponent : foundComponents.values()) {
             if (foundComponent.getComponent().getIOType() == IOType.INPUT) {
                 Object providedComponent = foundComponent.getProvidedComponent();
                 if (providedComponent instanceof final IEnergyHandlerAsync iEnergyHandlerAsync) {

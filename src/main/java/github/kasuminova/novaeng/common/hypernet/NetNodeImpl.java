@@ -29,7 +29,7 @@ public class NetNodeImpl extends NetNode {
         if (isWorking()) {
             if (owner.getTicksExisted() % 10 == 0) {
                 float total = 0;
-                for (final Float value : recipeConsumers.values()) {
+                for (final float value : recipeConsumers.values()) {
                     total += value;
                 }
                 computationPointConsumption = total;
@@ -153,7 +153,7 @@ public class NetNodeImpl extends NetNode {
     @Override
     public void readNBT(final NBTTagCompound customData) {
         super.readNBT(customData);
-        this.computationPointConsumption = customData.getInteger("c");
+        this.computationPointConsumption = customData.getFloat("c");
     }
 
     @Override

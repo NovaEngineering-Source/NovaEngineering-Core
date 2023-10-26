@@ -4,11 +4,19 @@ import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 @ZenRegister
 @ZenClass("novaeng.NovaEngUtils")
 public class NovaEngUtils {
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,###.##");
+
+    static {
+        DECIMAL_FORMAT.setRoundingMode(RoundingMode.HALF_UP);
+    }
+
     @ZenMethod
     public static String formatFloat(float value, int decimalFraction) {
         NumberFormat nf = NumberFormat.getNumberInstance();
@@ -21,6 +29,11 @@ public class NovaEngUtils {
         NumberFormat nf = NumberFormat.getNumberInstance();
         nf.setMaximumFractionDigits(decimalFraction);
         return nf.format(value);
+    }
+
+    @ZenMethod
+    public static String formatDecimal(double value) {
+        return DECIMAL_FORMAT.format(value);
     }
 
     @ZenMethod
