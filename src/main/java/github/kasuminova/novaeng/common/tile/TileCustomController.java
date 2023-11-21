@@ -56,6 +56,16 @@ public abstract class TileCustomController extends TileMultiblockMachineControll
     }
 
     @Override
+    public int getExtraThreadCount() {
+        return 0;
+    }
+
+    @Override
+    public void setExtraThreadCount(final int i) {
+
+    }
+
+    @Override
     public void addModifier(final String key, final RecipeModifier modifier) {
 
     }

@@ -148,16 +148,6 @@ public class TileHyperNetTerminal extends TileCustomController {
     // NO-OP
 
     @Override
-    public int getExtraThreadCount() {
-        return 0;
-    }
-
-    @Override
-    public void setExtraThreadCount(final int extraThreadCount) {
-
-    }
-
-    @Override
     public boolean isWorking() {
         return controllerStatus.isCrafting();
     }

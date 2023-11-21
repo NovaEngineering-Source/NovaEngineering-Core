@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.7.2"
+version = "1.7.5"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -94,6 +94,13 @@ tasks.javadoc.configure {
     actions = Collections.emptyList()
 }
 
+//tasks.jar.configure {
+//    manifest {
+//        val attributes = manifest.attributes
+//        attributes["FMLAT"] = "novaeng_core_at.cfg"
+//    }
+//}
+
 // Create a new dependency type for runtime-only dependencies that don't get included in the maven publication
 val runtimeOnlyNonPublishable: Configuration by configurations.creating {
     description = "Runtime only dependencies that are not published alongside the jar"
@@ -108,8 +115,12 @@ listOf(configurations.runtimeClasspath, configurations.testRuntimeClasspath).for
     }
 }
 
-// Add an access tranformer
-// tasks.deobfuscateMergedJarToSrg.configure {accessTransformerFiles.from("src/main/resources/META-INF/mymod_at.cfg")}
+//tasks.deobfuscateMergedJarToSrg.configure {
+//    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
+//}
+//tasks.srgifyBinpatchedJar.configure {
+//    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
+//}
 
 // Dependencies
 repositories {
@@ -183,7 +194,7 @@ dependencies {
     }
 
     // Mod Dependencies
-    implementation(rfg.deobf("hellfirepvp:modularmachinery:r51:main"))
+    implementation(rfg.deobf("hellfirepvp:modularmachinery:r52:main"))
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
 
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
@@ -198,7 +209,9 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:environmental-tech-245453:2691536"))
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
     compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
-    compileOnly(rfg.deobf("curse.maven:openmodularturrets-224663:3466431"))
+
+    compileOnly(rfg.deobf("curse.maven:endercore-231868:4671384"))
+    compileOnly(rfg.deobf("curse.maven:ender-io-64578:4674244"))
 }
 
 // Publishing to a Maven repository

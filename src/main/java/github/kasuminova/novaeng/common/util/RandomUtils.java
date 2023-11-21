@@ -1,15 +1,14 @@
 package github.kasuminova.novaeng.common.util;
 
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class RandomUtils {
-    public static final Random RD = new Random();
 
     public static int nextInt(int bound) {
-        return RD.nextInt(bound);
+        return ThreadLocalRandom.current().nextInt();
     }
 
     public static float nextFloat() {
-        return RD.nextFloat();
+        return ThreadLocalRandom.current().nextFloat();
     }
 }

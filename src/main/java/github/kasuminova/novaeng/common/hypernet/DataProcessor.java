@@ -4,7 +4,6 @@ import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.FactoryRecipeTickEvent;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
 import github.kasuminova.mmce.common.helper.IDynamicPatternInfo;
-import github.kasuminova.mmce.common.upgrade.MachineUpgrade;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleCPU;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleRAM;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
@@ -24,9 +23,9 @@ import stanhebben.zenscript.annotations.ZenSetter;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -47,7 +46,7 @@ public class DataProcessor extends NetNode {
     private volatile int dynamicPatternSize = 0;
 
     private volatile float maxGeneration = 0;
-    private volatile float generated = 0;
+    private final AtomicReference<Float> generated = new AtomicReference<>(0F);
 
     private int storedHU = 0;
     private boolean overheat = false;
@@ -161,7 +160,7 @@ public class DataProcessor extends NetNode {
         super.onMachineTick();
 
         if (!isWorking()) {
-            generated = 0F;
+            generated.set(0F);
             computationalLoad = 0F;
             computationalLoadHistoryCache = 0F;
             computationalLoadHistory.clear();
@@ -179,7 +178,7 @@ public class DataProcessor extends NetNode {
             }
 
             computationalLoad = computationalLoadHistoryCache / computationalLoadHistory.size();
-            ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> generated = 0F);
+            ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> generated.set(maxGeneration));
         }
 
         if (owner.getTicksExisted() % 20 == 0) {
@@ -238,29 +237,34 @@ public class DataProcessor extends NetNode {
 
     @Override
     public float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {
-        try {
-            lock.lock();
-
-            if (!isConnected() || center == null || !isWorking()) {
-                return 0F;
-            }
-
-            float generation = Math.min(this.maxGeneration - this.generated, maxGeneration);
-            if (generation < 0) {
-                return 0F;
-            }
-
-            float generated = calculateComputationPointProvision(generation, doCalculate);
-
-            if (doCalculate) {
-                doHeatGeneration(generated);
-                this.generated += generation;
-            }
-
-            return generated;
-        } finally {
-            lock.unlock();
+        if (!isConnected() || center == null || !isWorking()) {
+            return 0F;
         }
+
+        float[] polledCounter = {0};
+        this.generated.updateAndGet(generated -> {
+            if (generated < maxGeneration) {
+                polledCounter[0] = generated;
+                return 0F;
+            }
+
+            polledCounter[0] = maxGeneration;
+            return generated - maxGeneration;
+        });
+
+        if (polledCounter[0] < 0) {
+            return 0F;
+        }
+
+        float maxCanGenerated = polledCounter[0];
+        float generated = calculateComputationPointProvision(maxCanGenerated, doCalculate);
+
+        if (doCalculate) {
+            doHeatGeneration(generated);
+            this.generated.updateAndGet(counter -> counter + (maxCanGenerated - generated));
+        }
+
+        return generated;
     }
 
     @Override
@@ -301,8 +305,7 @@ public class DataProcessor extends NetNode {
             return 0;
         }
 
-        Map<String, List<MachineUpgrade>> upgrades = owner.getFoundUpgrades();
-        if (upgrades.isEmpty()) {
+        if (owner.getFoundUpgrades().isEmpty()) {
             return 0;
         }
 
@@ -332,6 +335,10 @@ public class DataProcessor extends NetNode {
             totalGenerated += generated;
             if (doCalculate) {
                 totalEnergyConsumption += (long) ((double) (generated / cpu.getComputationPointGeneration()) * cpu.getEnergyConsumption());
+            }
+
+            if (totalGenerated >= generationLimit) {
+                break;
             }
         }
 

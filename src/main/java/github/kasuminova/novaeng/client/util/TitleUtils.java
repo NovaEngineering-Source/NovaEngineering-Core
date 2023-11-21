@@ -8,7 +8,10 @@ import org.lwjgl.opengl.Display;
 import java.util.concurrent.CompletableFuture;
 
 public class TitleUtils {
-    public static final String DEFAULT_TITLE = "Nova Engineering: World 1.7 by Hikari_Nova | Core Ver: " + NovaEngineeringCore.VERSION;
+    /**
+     * TODO 喜欢我硬编码吗.jpg
+     */
+    public static final String DEFAULT_TITLE = "Nova Engineering: World 1.8 by Hikari_Nova | Core Ver: " + NovaEngineeringCore.VERSION;
     public static final String VANILLA_TITLE = "Minecraft 1.12.2";
 
     public static String currentTitle = null;
@@ -93,6 +96,7 @@ public class TitleUtils {
         if (!title.equals(currentTitle)) {
             if (!title.equals(TitleUtils.VANILLA_TITLE) && !title.equals(lastCurrentTitle)) {
                 NovaEngineeringCore.log.debug("Invalid title: {}, Excepted: {}", title, lastCurrentTitle);
+                // 嗯？
                 Minecraft.getMinecraft().shutdown();
                 return;
             }

@@ -12,22 +12,22 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @SuppressWarnings("MethodMayBeStatic")
 @Mixin(RadiationCapabilityHandler.class)
 public class MixinRadiationCapabilityHandler {
-    @Inject(method = "attachEntityRadiationCapability", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
+    @Inject(method = "attachEntityRadiationCapability", at = @At("HEAD"), cancellable = true, remap = false)
     public void onAttachEntityRadiationCapability(CallbackInfo ci) {
         ci.cancel();
     }
 
-    @Inject(method = "attachChunkRadiationCapability", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
+    @Inject(method = "attachChunkRadiationCapability", at = @At("HEAD"), cancellable = true, remap = false)
     public void onAttachChunkRadiationCapability(CallbackInfo ci) {
         ci.cancel();
     }
 
-    @Inject(method = "attachTileRadiationCapability", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
+    @Inject(method = "attachTileRadiationCapability", at = @At("HEAD"), cancellable = true, remap = false)
     public void onAttachTileRadiationCapability(CallbackInfo ci) {
         ci.cancel();
     }
 
-    @Inject(method = "attachStackRadiationCapability", at = @At("HEAD"), cancellable = true, require = 1, remap = false)
+    @Inject(method = "attachStackRadiationCapability", at = @At("HEAD"), cancellable = true, remap = false)
     public void onAttachStackRadiationCapability(CallbackInfo ci) {
         ci.cancel();
     }
