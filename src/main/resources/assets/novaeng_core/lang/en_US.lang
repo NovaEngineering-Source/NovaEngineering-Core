@@ -65,7 +65,14 @@ top.hypernet.processor.heat=§9内部热量：
 
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 
-novaeng.hypernet.computation_point_required.tip=§9需要算力 (受并行影响)：§b%s
+novaeng.hypernet.computation_point_required.tip=§9计算：§b%s
+novaeng.hypernet.computation_point_required.tip.parallelized=§9计算 (受并行影响)：§b%s
+
+novaeng.hypernet.calculate.type.intricate=%s 次复杂运算/t
+novaeng.hypernet.calculate.type.logic=%s 次逻辑运算/t
+novaeng.hypernet.calculate.type.neuron=%s 次神经模拟/t
+novaeng.hypernet.calculate.type.qbit=%s 量子位/t
+
 novaeng.hypernet.research_required.tip=§6需要研究认知：§f%s
 
 gui.hypernet.controller.title=§9///////// HyperNet 代理网络 /////////
