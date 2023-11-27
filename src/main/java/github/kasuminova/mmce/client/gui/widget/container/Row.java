@@ -16,7 +16,7 @@ public class Row extends WidgetContainer {
     protected boolean downAligned = false;
 
     @Override
-    public void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
+    protected void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
         int x = 0;
 
         int ySize = getYSize();
@@ -36,7 +36,7 @@ public class Row extends WidgetContainer {
     }
 
     @Override
-    public void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
+    protected void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
         int x = 0;
 
         int ySize = getYSize();

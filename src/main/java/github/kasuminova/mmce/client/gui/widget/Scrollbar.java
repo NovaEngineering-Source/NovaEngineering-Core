@@ -39,6 +39,11 @@ public class Scrollbar extends DynamicWidget {
 
     protected int scrollUnit = DEFAULT_SCROLL_UNIT;
 
+    public Scrollbar() {
+        this.xSize = scrollWidth;
+        this.ySize = scrollHeight * 2;
+    }
+
     @Override
     public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
         gui.mc.getTextureManager().bindTexture(textureLocation);
@@ -84,16 +89,18 @@ public class Scrollbar extends DynamicWidget {
         return scrollWidth;
     }
 
-    public void setScrollWidth(final int scrollWidth) {
+    public Scrollbar setScrollWidth(final int scrollWidth) {
         this.scrollWidth = scrollWidth;
+        return this;
     }
 
     public int getScrollHeight() {
         return scrollHeight;
     }
 
-    public void setScrollHeight(final int scrollHeight) {
+    public Scrollbar setScrollHeight(final int scrollHeight) {
         this.scrollHeight = scrollHeight;
+        return this;
     }
 
     // Scroll Texture Enabled/Disabled X/Y
@@ -102,32 +109,36 @@ public class Scrollbar extends DynamicWidget {
         return textureX;
     }
 
-    public void setTextureX(final int textureX) {
+    public Scrollbar setTextureX(final int textureX) {
         this.textureX = textureX;
+        return this;
     }
 
     public int getTextureY() {
         return textureY;
     }
 
-    public void setTextureY(final int textureY) {
+    public Scrollbar setTextureY(final int textureY) {
         this.textureY = textureY;
+        return this;
     }
 
     public int getDisabledTextureOffsetX() {
         return disabledTextureOffsetX;
     }
 
-    public void setDisabledTextureOffsetX(final int disabledTextureOffsetX) {
+    public Scrollbar setDisabledTextureOffsetX(final int disabledTextureOffsetX) {
         this.disabledTextureOffsetX = disabledTextureOffsetX;
+        return this;
     }
 
     public int getDisabledTextureOffsetY() {
         return disabledTextureOffsetY;
     }
 
-    public void setDisabledTextureOffsetY(final int disabledTextureOffsetY) {
+    public Scrollbar setDisabledTextureOffsetY(final int disabledTextureOffsetY) {
         this.disabledTextureOffsetY = disabledTextureOffsetY;
+        return this;
     }
 
     // Scroll Range
@@ -144,15 +155,16 @@ public class Scrollbar extends DynamicWidget {
         return currentScroll;
     }
 
-    public void setCurrentScroll(final int currentScroll) {
+    public Scrollbar setCurrentScroll(final int currentScroll) {
         this.currentScroll = Math.max(Math.min(currentScroll, this.maxScroll), this.minScroll);
+        return this;
     }
 
     public int getRange() {
         return this.maxScroll - this.minScroll;
     }
 
-    public void setRange(final int min, final int max) {
+    public Scrollbar setRange(final int min, final int max) {
         this.minScroll = min;
         this.maxScroll = max;
 
@@ -161,6 +173,7 @@ public class Scrollbar extends DynamicWidget {
         }
 
         setCurrentScroll(this.currentScroll);
+        return this;
     }
 
 }

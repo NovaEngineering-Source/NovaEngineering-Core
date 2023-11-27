@@ -23,8 +23,8 @@ public abstract class WidgetContainer extends DynamicWidget {
             Rectangle scissorFrame = new Rectangle(
                     offsetX * res.getScaleFactor(),
                     offsetY * res.getScaleFactor(),
-                    (renderSize.isWidthLimited() ? xSize : renderSize.width()) * res.getScaleFactor(),
-                    (renderSize.isHeightLimited() ? ySize : renderSize.height()) * res.getScaleFactor()
+                    (renderSize.isWidthLimited() ? renderSize.width() : xSize) * res.getScaleFactor(),
+                    (renderSize.isHeightLimited() ? renderSize.height() : ySize) * res.getScaleFactor()
             );
             GL11.glEnable(GL11.GL_SCISSOR_TEST);
             GL11.glScissor(scissorFrame.x, scissorFrame.y, scissorFrame.width, scissorFrame.height);
@@ -55,9 +55,9 @@ public abstract class WidgetContainer extends DynamicWidget {
         disableScissor(renderSize);
     }
 
-    public abstract void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY);
+    protected abstract void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY);
 
-    public abstract void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY);
+    protected abstract void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY);
 
     public abstract List<DynamicWidget> getWidgets();
 
@@ -93,16 +93,18 @@ public abstract class WidgetContainer extends DynamicWidget {
         return absX;
     }
 
-    public void setAbsX(final int absX) {
+    public WidgetContainer setAbsX(final int absX) {
         this.absX = absX;
+        return this;
     }
 
     public int getAbsY() {
         return absY;
     }
 
-    public void setAbsY(final int absY) {
+    public WidgetContainer setAbsY(final int absY) {
         this.absY = absY;
+        return this;
     }
 
 }

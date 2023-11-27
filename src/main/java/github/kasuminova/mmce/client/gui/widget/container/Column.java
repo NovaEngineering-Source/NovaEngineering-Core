@@ -16,7 +16,7 @@ public class Column extends WidgetContainer {
     protected boolean rightAligned = false;
 
     @Override
-    public void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
+    protected void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
         int y = 0;
 
         int xSize = getXSize();
@@ -36,7 +36,7 @@ public class Column extends WidgetContainer {
     }
 
     @Override
-    public void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
+    protected void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
         int y = 0;
 
         int xSize = getXSize();
