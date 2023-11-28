@@ -64,6 +64,7 @@ top.hypernet.processor.circuit_durability=§9电路板耐久剩余：
 top.hypernet.processor.heat=§9内部热量：
 
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
+tile.novaeng_core.modular_server_assembler.name=模块服务器组装台
 
 novaeng.hypernet.computation_point_required.tip=§9计算：§b%s
 novaeng.hypernet.computation_point_required.tip.parallelized=§9计算 (受并行影响)：§b%s

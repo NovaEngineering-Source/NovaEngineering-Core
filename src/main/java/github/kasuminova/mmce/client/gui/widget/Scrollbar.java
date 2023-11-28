@@ -1,12 +1,14 @@
 package github.kasuminova.mmce.client.gui.widget;
 
-import github.kasuminova.mmce.client.gui.util.RenderOffset;
+import github.kasuminova.mmce.client.gui.util.MousePos;
+import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 
+@SuppressWarnings("unused")
 public class Scrollbar extends DynamicWidget {
     public static final ResourceLocation DEFAULT_RES = new ResourceLocation(
             NovaEngineeringCore.MOD_ID, "textures/gui/guiterminalelement.png");
@@ -40,15 +42,15 @@ public class Scrollbar extends DynamicWidget {
     protected int scrollUnit = DEFAULT_SCROLL_UNIT;
 
     public Scrollbar() {
-        this.xSize = scrollWidth;
-        this.ySize = scrollHeight * 2;
+        this.width = scrollWidth;
+        this.height = scrollHeight * 2;
     }
 
     @Override
-    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
+    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         gui.mc.getTextureManager().bindTexture(textureLocation);
-        int offsetX = renderOffset.getOffsetX();
-        int offsetY = renderOffset.getOffsetY();
+        int offsetX = renderPos.posX();
+        int offsetY = renderPos.posY();
 
         if (this.getRange() == 0) {
             gui.drawTexturedModalRect(offsetX, offsetY,
@@ -57,18 +59,18 @@ public class Scrollbar extends DynamicWidget {
                     this.scrollWidth, this.scrollHeight
             );
         } else {
-            offsetY += (this.currentScroll - this.minScroll) * (this.ySize - this.scrollHeight) / this.getRange();
+            offsetY += (this.currentScroll - this.minScroll) * (this.height - this.scrollHeight) / this.getRange();
             gui.drawTexturedModalRect(offsetX, offsetY, this.textureX, this.textureY, this.scrollWidth, this.scrollHeight);
         }
     }
 
     @Override
-    public boolean onMouseClicked(final int absMouseX, final int absMouseY, final int mouseX, final int mouseY, final RenderOffset renderOffset, final int mouseButton) {
+    public boolean onMouseClicked(final MousePos mousePos, final RenderPos renderPos, final int mouseButton) {
         if (this.getRange() == 0) {
             return false;
         }
 
-        float clickedPercent = (float) mouseX / this.ySize;
+        float clickedPercent = (float) mousePos.mouseY() / this.height;
         int scroll = Math.round((float) getRange() * clickedPercent);
         setCurrentScroll(scroll + this.minScroll);
 
@@ -76,7 +78,7 @@ public class Scrollbar extends DynamicWidget {
     }
 
     @Override
-    public boolean onMouseDWheel(final int absMouseX, final int absMouseY, final int mouseX, final int mouseY, final RenderOffset renderOffset, final int dWheel) {
+    public boolean onMouseDWheel(final MousePos mousePos, final RenderPos renderPos, final int dWheel) {
         int wheel = Math.max(Math.min(-dWheel, 1), -1);
         setCurrentScroll(this.currentScroll + (wheel * this.scrollUnit));
 

@@ -2,7 +2,9 @@ package github.kasuminova.novaeng.common.registry;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
+import github.kasuminova.novaeng.common.block.BlockModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
+import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import hellfirepvp.modularmachinery.common.block.BlockCustomName;
 import hellfirepvp.modularmachinery.common.block.BlockDynamicColor;
 import hellfirepvp.modularmachinery.common.block.BlockMachineComponent;
@@ -43,10 +45,12 @@ public class RegistryBlocks {
 
     public static void registerBlocks() {
         prepareItemBlockRegister(registerBlock(BlockHyperNetTerminal.INSTANCE));
+        prepareItemBlockRegister(registerBlock(BlockModularServerAssembler.INSTANCE));
     }
 
     public static void registerTileEntities() {
         registerTileEntity(TileHyperNetTerminal.class, "hypernet_terminal");
+        registerTileEntity(TileModularServerAssembler.class, "modular_server_assembler");
     }
 
     public static void registerBlockModels() {

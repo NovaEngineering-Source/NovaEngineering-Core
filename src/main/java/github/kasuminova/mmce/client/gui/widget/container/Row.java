@@ -1,6 +1,7 @@
 package github.kasuminova.mmce.client.gui.widget.container;
 
-import github.kasuminova.mmce.client.gui.util.RenderOffset;
+import github.kasuminova.mmce.client.gui.util.MousePos;
+import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
@@ -9,6 +10,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class Row extends WidgetContainer {
     protected final List<DynamicWidget> widgets = new ArrayList<>();
 
@@ -16,42 +18,42 @@ public class Row extends WidgetContainer {
     protected boolean downAligned = false;
 
     @Override
-    protected void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
+    protected void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         int x = 0;
 
-        int ySize = getYSize();
+        int height = getHeight();
 
         for (final DynamicWidget widget : widgets) {
             if (widget.isDisabled()) {
                 continue;
             }
-            RenderOffset widgetRenderOffset = getWidgetRenderOffset(widget, ySize, x);
-            if (widgetRenderOffset == null) {
+            RenderPos widgetRenderPos = getWidgetRenderOffset(widget, height, x);
+            if (widgetRenderPos == null) {
                 continue;
             }
-
-            widget.preRender(gui, new RenderSize(widget.getXSize(), widget.getYSize()), widgetRenderOffset.add(renderOffset), mouseX, mouseY);
-            x += widget.getMarginLeft() + widget.getXSize() + widget.getMarginRight();
+            RenderPos absRenderPos = widgetRenderPos.add(renderPos);
+            widget.preRender(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
+            x += widget.getMarginLeft() + widget.getWidth() + widget.getMarginRight();
         }
     }
 
     @Override
-    protected void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
+    protected void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         int x = 0;
 
-        int ySize = getYSize();
+        int height = getHeight();
 
         for (final DynamicWidget widget : widgets) {
             if (widget.isDisabled()) {
                 continue;
             }
-            RenderOffset widgetRenderOffset = getWidgetRenderOffset(widget, ySize, x);
-            if (widgetRenderOffset == null) {
+            RenderPos widgetRenderPos = getWidgetRenderOffset(widget, height, x);
+            if (widgetRenderPos == null) {
                 continue;
             }
-
-            widget.postRender(gui, new RenderSize(widget.getXSize(), widget.getYSize()), widgetRenderOffset.add(renderOffset), mouseX, mouseY);
-            x += widget.getMarginLeft() + widget.getXSize() + widget.getMarginRight();
+            RenderPos absRenderPos = widgetRenderPos.add(renderPos);
+            widget.postRender(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
+            x += widget.getMarginLeft() + widget.getWidth() + widget.getMarginRight();
         }
     }
 
@@ -74,76 +76,76 @@ public class Row extends WidgetContainer {
     }
 
     @Override
-    public boolean onMouseClicked(final int absMouseX, final int absMouseY, final int mouseX, final int mouseY, final RenderOffset renderOffset, final int mouseButton) {
+    public boolean onMouseClicked(final MousePos mousePos, final RenderPos renderPos, final int mouseButton) {
         int x = 0;
 
-        int ySize = getYSize();
+        int height = getHeight();
 
         for (final DynamicWidget widget : widgets) {
             if (widget.isDisabled()) {
                 continue;
             }
-            RenderOffset widgetRenderOffset = getWidgetRenderOffset(widget, ySize, x);
-            if (widgetRenderOffset == null) {
+            RenderPos widgetRenderPos = getWidgetRenderOffset(widget, height, x);
+            if (widgetRenderPos == null) {
                 continue;
             }
-            int offsetX = widgetRenderOffset.getOffsetX();
-            int offsetY = widgetRenderOffset.getOffsetY();
+            int offsetX = widgetRenderPos.posX();
+            int offsetY = widgetRenderPos.posY();
 
-            if (widget.isMouseOver(offsetX, offsetY, mouseX, mouseY)) {
-                if (widget.onMouseClicked(absMouseX, absMouseY, mouseX, mouseY, widgetRenderOffset.add(renderOffset), mouseButton)) {
+            if (widget.isMouseOver(offsetX, offsetY, mousePos.mouseX(), mousePos.mouseY())) {
+                RenderPos absRenderPos = widgetRenderPos.add(renderPos);
+                if (widget.onMouseClicked(mousePos.relativeTo(widgetRenderPos), absRenderPos, mouseButton)) {
                     return true;
                 }
             }
-            x += widget.getMarginLeft() + widget.getXSize() + widget.getMarginRight();
+            x += widget.getMarginLeft() + widget.getWidth() + widget.getMarginRight();
         }
 
         return false;
     }
 
     @Override
-    public boolean onMouseReleased(final int absMouseX, final int absMouseY, final int mouseX, final int mouseY, final RenderOffset renderOffset) {
+    public boolean onMouseReleased(final MousePos mousePos, final RenderPos renderPos) {
         int x = 0;
 
-        int ySize = getYSize();
+        int height = getHeight();
 
         for (final DynamicWidget widget : widgets) {
             if (widget.isDisabled()) {
                 continue;
             }
-            RenderOffset widgetRenderOffset = getWidgetRenderOffset(widget, ySize, x);
-            if (widgetRenderOffset == null) {
+            RenderPos widgetRenderPos = getWidgetRenderOffset(widget, height, x);
+            if (widgetRenderPos == null) {
                 continue;
             }
-            if (widget.onMouseReleased(absMouseX, absMouseY, mouseX, mouseY, widgetRenderOffset.add(renderOffset))) {
+            RenderPos absRenderPos = widgetRenderPos.add(renderPos);
+            if (widget.onMouseReleased(mousePos.relativeTo(widgetRenderPos), absRenderPos)) {
                 return true;
             }
-            x += widget.getMarginLeft() + widget.getXSize() + widget.getMarginRight();
+            x += widget.getMarginLeft() + widget.getWidth() + widget.getMarginRight();
         }
         return false;
     }
 
     @Override
-    public boolean onMouseDWheel(final int absMouseX, final int absMouseY,
-                                 final int mouseX, final int mouseY,
-                                 final RenderOffset renderOffset,
-                                 final int wheel) {
+    public boolean onMouseDWheel(final MousePos mousePos, final RenderPos renderPos, final int wheel) {
         int x = 0;
 
-        int ySize = getYSize();
+        int height = getHeight();
 
         for (final DynamicWidget widget : widgets) {
             if (widget.isDisabled()) {
                 continue;
             }
-            RenderOffset widgetRenderOffset = getWidgetRenderOffset(widget, ySize, x);
-            if (widgetRenderOffset == null) {
+            RenderPos widgetRenderPos = getWidgetRenderOffset(widget, height, x);
+            if (widgetRenderPos == null) {
                 continue;
             }
-            if (widget.onMouseDWheel(absMouseX, absMouseY, mouseX, mouseY, widgetRenderOffset.add(renderOffset), wheel)) {
+            RenderPos absRenderPos = widgetRenderPos.add(renderPos);
+            if (widget.onMouseDWheel(mousePos.relativeTo(widgetRenderPos), absRenderPos, wheel)) {
                 return true;
             }
-            x += widget.getMarginLeft() + widget.getXSize() + widget.getMarginRight();
+            x += widget.getMarginLeft() + widget.getWidth() + widget.getMarginRight();
         }
         return false;
     }
@@ -178,58 +180,58 @@ public class Row extends WidgetContainer {
 
     // Utils
 
-    public RenderOffset getWidgetRenderOffset(DynamicWidget widget, int ySize, int x) {
+    public RenderPos getWidgetRenderOffset(DynamicWidget widget, int height, int x) {
         int xOffset;
         int yOffset;
 
         if (isCenterAligned()) {
             xOffset = x + widget.getMarginLeft();
-            yOffset = (ySize - (widget.getMarginUp() + widget.getYSize() + widget.getMarginDown())) / 2;
+            yOffset = (height - (widget.getMarginUp() + widget.getHeight() + widget.getMarginDown())) / 2;
         } else if (upAligned) {
             xOffset = x + widget.getMarginLeft();
             yOffset = widget.getMarginUp();
         } else if (downAligned) {
             xOffset = x + widget.getMarginLeft();
-            yOffset = ySize - (widget.getYSize() + widget.getMarginDown());
+            yOffset = height - (widget.getHeight() + widget.getMarginDown());
         } else {
             // Where does it align?
             return null;
         }
 
-        return new RenderOffset(xOffset, yOffset);
+        return new RenderPos(xOffset, yOffset);
     }
 
     // X/Y Size
 
     @Override
-    public int getXSize() {
-        int xSize = 0;
+    public int getWidth() {
+        int width = 0;
         for (final DynamicWidget widget : widgets) {
-            xSize += widget.getMarginLeft() + widget.getXSize() + widget.getMarginRight();
+            width += widget.getMarginLeft() + widget.getWidth() + widget.getMarginRight();
         }
-        return xSize;
+        return width;
     }
 
     @Override
-    public DynamicWidget setXSize(final int xSize) {
+    public DynamicWidget setWidth(final int width) {
         // It's dynamic, so ignore it.
         return this;
     }
 
     @Override
-    public int getYSize() {
+    public int getHeight() {
         int maxY = 0;
         for (final DynamicWidget widget : widgets) {
-            int ySize = widget.getMarginUp() + widget.getYSize() + widget.getMarginDown();
-            if (ySize > maxY) {
-                maxY = ySize;
+            int height = widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
+            if (height > maxY) {
+                maxY = height;
             }
         }
         return maxY;
     }
 
     @Override
-    public DynamicWidget setYSize(final int ySize) {
+    public DynamicWidget setHeight(final int height) {
         // It's dynamic, so ignore it.
         return this;
     }

@@ -1,6 +1,7 @@
 package github.kasuminova.mmce.client.gui.widget.base;
 
-import github.kasuminova.mmce.client.gui.util.RenderOffset;
+import github.kasuminova.mmce.client.gui.util.MousePos;
+import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -9,8 +10,8 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class DynamicWidget {
-    protected int xSize = 0;
-    protected int ySize = 0;
+    protected int width = 0;
+    protected int height = 0;
 
     protected int marginLeft = 0;
     protected int marginRight = 0;
@@ -25,25 +26,25 @@ public abstract class DynamicWidget {
 
     // Widget Render
 
-    public void preRender(GuiContainer gui, RenderSize renderSize, RenderOffset renderOffset, int mouseX, int mouseY) {
+    public void preRender(GuiContainer gui, RenderSize renderSize, RenderPos renderPos, MousePos mousePos) {
     }
 
-    public abstract void postRender(GuiContainer gui, RenderSize renderSize, RenderOffset renderOffset, int mouseX, int mouseY);
+    public abstract void postRender(GuiContainer gui, RenderSize renderSize, RenderPos renderPos, MousePos mousePos);
 
     // GUI EventHandlers
 
     public void update(GuiContainer gui) {
     }
 
-    public boolean onMouseClicked(int absMouseX, int absMouseY, int mouseX, int mouseY, RenderOffset renderOffset, int mouseButton) {
+    public boolean onMouseClicked(MousePos mousePos, RenderPos renderPos, int mouseButton) {
         return false;
     }
 
-    public boolean onMouseReleased(int absMouseX, int absMouseY, int mouseX, int mouseY, RenderOffset renderOffset) {
+    public boolean onMouseReleased(MousePos mousePos, RenderPos renderPos) {
         return false;
     }
 
-    public boolean onMouseDWheel(int absMouseX, int absMouseY, int mouseX, int mouseY, RenderOffset renderOffset, int wheel) {
+    public boolean onMouseDWheel(MousePos mousePos, RenderPos renderPos, int wheel) {
         return false;
     }
 
@@ -70,32 +71,40 @@ public abstract class DynamicWidget {
             return false;
         }
 
-        int endX = startX + xSize;
-        int endY = startY + ySize;
+        int endX = startX + getWidth();
+        int endY = startY + getHeight();
         return mouseX >= startX && mouseX <= endX && mouseY >= startY && mouseY <= endY;
     }
 
-    // Getter Setters
-
-    public int getXSize() {
-        return xSize;
+    public boolean isMouseOver(final MousePos mousePos) {
+        return isMouseOver(mousePos.mouseX(), mousePos.mouseY());
     }
 
-    public DynamicWidget setXSize(final int xSize) {
-        this.xSize = xSize;
+    public boolean isMouseOver(int mouseX, int mouseY) {
+        return isMouseOver(0, 0, mouseX, mouseY);
+    }
+
+    // Width Height
+
+    public int getWidth() {
+        return width;
+    }
+
+    public DynamicWidget setWidth(final int width) {
+        this.width = width;
         return this;
     }
 
-    public int getYSize() {
-        return ySize;
+    public int getHeight() {
+        return height;
     }
 
-    public DynamicWidget setYSize(final int ySize) {
-        this.ySize = ySize;
+    public DynamicWidget setHeight(final int height) {
+        this.height = height;
         return this;
     }
 
-    // Padding
+    // Margin
 
     public int getMarginLeft() {
         return marginLeft;
@@ -150,6 +159,14 @@ public abstract class DynamicWidget {
         this.marginRight = margin;
         this.marginUp = margin;
         this.marginDown = margin;
+        return this;
+    }
+
+    public DynamicWidget setMargin(final int marginLeft, final int marginRight, final int marginUp, final int marginDown) {
+        this.marginLeft = marginLeft;
+        this.marginRight = marginRight;
+        this.marginUp = marginUp;
+        this.marginDown = marginDown;
         return this;
     }
 

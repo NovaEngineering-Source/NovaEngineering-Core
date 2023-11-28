@@ -1,6 +1,7 @@
 package github.kasuminova.mmce.client.gui.widget;
 
-import github.kasuminova.mmce.client.gui.util.RenderOffset;
+import github.kasuminova.mmce.client.gui.util.MousePos;
+import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import net.minecraft.client.Minecraft;
@@ -26,13 +27,13 @@ public class MultiLineLabel extends DynamicWidget {
 
     public MultiLineLabel(List<String> contents) {
         this.contents.addAll(contents);
-        this.xSize = getMaxStringWidth();
-        this.ySize = getTotalHeight();
+        this.width = getMaxStringWidth();
+        this.height = getTotalHeight();
         setMargin(2);
     }
 
     @Override
-    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderOffset renderOffset, final int mouseX, final int mouseY) {
+    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         GlStateManager.scale(scale, scale, scale);
 
         int maxWidth;
@@ -42,8 +43,8 @@ public class MultiLineLabel extends DynamicWidget {
             maxWidth = -1;
         }
 
-        int offsetX = Math.round((float) renderOffset.getOffsetX() / scale);
-        int offsetY = Math.round((float) renderOffset.getOffsetY() / scale);
+        int offsetX = Math.round((float) renderPos.posX() / scale);
+        int offsetY = Math.round((float) renderPos.posY() / scale);
 
         FontRenderer fr = gui.mc.fontRenderer;
 

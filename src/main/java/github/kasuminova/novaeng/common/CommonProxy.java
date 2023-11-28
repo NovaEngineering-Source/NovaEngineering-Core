@@ -3,6 +3,7 @@ package github.kasuminova.novaeng.common;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
+import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
@@ -14,6 +15,7 @@ import github.kasuminova.novaeng.common.registry.RegistryBlocks;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
+import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
@@ -86,6 +88,7 @@ public class CommonProxy implements IGuiHandler {
 
         return switch (type) {
             case HYPERNET_TERMINAL -> new ContainerHyperNetTerminal((TileHyperNetTerminal) present, player);
+            case MODULAR_SERVER_ASSEMBLER -> new ContainerModularServerAssembler((TileModularServerAssembler) present, player);
         };
     }
 
@@ -98,6 +101,7 @@ public class CommonProxy implements IGuiHandler {
     public enum GuiType {
 
         HYPERNET_TERMINAL(TileHyperNetTerminal.class),
+        MODULAR_SERVER_ASSEMBLER(TileModularServerAssembler.class),
         ;
 
         public final Class<? extends TileEntity> requiredTileEntity;

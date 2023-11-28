@@ -196,6 +196,7 @@ dependencies {
     // Mod Dependencies
     implementation(rfg.deobf("hellfirepvp:modularmachinery:r52:main"))
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
+    implementation(rfg.deobf("curse.maven:had-enough-items-557549:4506796"))
 
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197"))
