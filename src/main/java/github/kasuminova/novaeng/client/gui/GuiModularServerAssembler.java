@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.client.gui;
 
+import github.kasuminova.mmce.client.gui.GuiContainerDynamic;
 import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
@@ -15,7 +16,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.io.IOException;
 
-public class GuiModularServerAssembler extends GuiContainerBase<ContainerModularServerAssembler> {
+public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModularServerAssembler> {
     public static final ResourceLocation TEXTURES_BACKGROUND = new ResourceLocation(
             NovaEngineeringCore.MOD_ID, "textures/gui/modular_server_assembler.png");
 
@@ -37,6 +38,9 @@ public class GuiModularServerAssembler extends GuiContainerBase<ContainerModular
         this.assemblyInvManager.addInv(new AssemblyInvExtension(assemblyInvManager));
         this.assemblyInvManager.addInv(new AssemblyInvHeatRadiator(assemblyInvManager));
         this.assemblyInvManager.addInv(new AssemblyInvPower(assemblyInvManager));
+        this.assemblyInvManager.setAbsX(MAIN_GUI_WIDTH);
+
+        this.widgetController.addWidgetContainer(assemblyInvManager);
     }
 
     @Override
@@ -46,7 +50,6 @@ public class GuiModularServerAssembler extends GuiContainerBase<ContainerModular
 
     @Override
     protected void setWidthHeight() {
-
     }
 
     @Override
@@ -58,47 +61,4 @@ public class GuiModularServerAssembler extends GuiContainerBase<ContainerModular
         Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, MAIN_GUI_WIDTH, MAIN_GUI_HEIGHT, 512, 512);
     }
 
-    @Override
-    protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
-        GlStateManager.pushMatrix();
-
-        final int x = (this.width - this.xSize) / 2;
-        final int y = (this.height - this.ySize) / 2;
-
-        RenderPos renderPos = new RenderPos(x + MAIN_GUI_WIDTH, y);
-        MousePos mousePos = new MousePos(mouseX, mouseY).relativeTo(renderPos);
-
-        assemblyInvManager.preRender(this, new RenderSize(-1, -1), renderPos.subtract(new RenderPos(x, y)), mousePos);
-        assemblyInvManager.postRender(this, new RenderSize(-1, -1), renderPos.subtract(new RenderPos(x, y)), mousePos);
-
-        GlStateManager.popMatrix();
-    }
-
-    @Override
-    public void handleMouseInput() throws IOException {
-        super.handleMouseInput();
-    }
-
-    @Override
-    protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException {
-        final int x = (this.width - this.xSize) / 2;
-        final int y = (this.height - this.ySize) / 2;
-
-        RenderPos renderPos = new RenderPos(x + MAIN_GUI_WIDTH, y);
-        MousePos mousePos = new MousePos(mouseX, mouseY).relativeTo(renderPos);
-
-        if (assemblyInvManager.isMouseOver(mousePos)) {
-            assemblyInvManager.onMouseClicked(mousePos, renderPos, mouseButton);
-        }
-
-        super.mouseClicked(mouseX, mouseY, mouseButton);
-    }
-
-    @Override
-    protected void mouseReleased(final int mouseX, final int mouseY, final int state) {
-//        final int x = (this.width - this.xSize) / 2;
-//        final int y = (this.height - this.ySize) / 2;
-
-        super.mouseReleased(mouseX, mouseY, state);
-    }
 }

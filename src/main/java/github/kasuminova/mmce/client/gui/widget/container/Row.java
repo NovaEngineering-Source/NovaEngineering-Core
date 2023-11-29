@@ -8,6 +8,7 @@ import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import net.minecraft.client.gui.inventory.GuiContainer;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @SuppressWarnings("unused")
@@ -161,6 +162,37 @@ public class Row extends WidgetContainer {
             }
         }
         return false;
+    }
+
+    // Tooltips
+
+    @Override
+    public List<String> getHoverTooltips(final MousePos mousePos) {
+        int x = 0;
+
+        int height = getHeight();
+
+        List<String> tooltips = null;
+
+        for (final DynamicWidget widget : widgets) {
+            if (widget.isDisabled()) {
+                continue;
+            }
+            RenderPos widgetRenderPos = getWidgetRenderOffset(widget, height, x);
+            if (widgetRenderPos == null) {
+                continue;
+            }
+
+            List<String> hoverTooltips = widget.getHoverTooltips(mousePos);
+            if (!hoverTooltips.isEmpty()) {
+                tooltips = hoverTooltips;
+                break;
+            }
+
+            x += widget.getMarginLeft() + widget.getWidth() + widget.getMarginRight();
+        }
+
+        return tooltips != null ? tooltips : Collections.emptyList();
     }
 
     // CustomEventHandlers

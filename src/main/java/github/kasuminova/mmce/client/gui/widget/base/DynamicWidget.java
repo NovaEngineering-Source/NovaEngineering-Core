@@ -60,7 +60,7 @@ public abstract class DynamicWidget {
 
     // Tooltips
 
-    public List<String> getHoverTooltips() {
+    public List<String> getHoverTooltips(final MousePos mousePos) {
         return Collections.emptyList();
     }
 

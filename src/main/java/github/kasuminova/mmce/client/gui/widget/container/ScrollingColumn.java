@@ -8,6 +8,9 @@ import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import net.minecraft.client.gui.inventory.GuiContainer;
 
+import java.util.Collections;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class ScrollingColumn extends Column {
     protected final Scrollbar scrollbar = new Scrollbar();
@@ -106,8 +109,9 @@ public class ScrollingColumn extends Column {
         RenderPos scrollbarRenderPos = new RenderPos(
                 width - (scrollbar.getMarginLeft() + scrollbar.getWidth() + scrollbar.getMarginRight()),
                 height - (scrollbar.getMarginUp() + scrollbar.getHeight() + scrollbar.getMarginDown()));
-        if (scrollbar.isMouseOver(scrollbarRenderPos.posX(), scrollbarRenderPos.posY())) {
-            return scrollbar.onMouseClicked(mousePos.relativeTo(scrollbarRenderPos), renderPos.add(scrollbarRenderPos), mouseButton);
+        MousePos scrollbarMousePos = mousePos.relativeTo(scrollbarRenderPos);
+        if (scrollbar.isMouseOver(scrollbarMousePos)) {
+            return scrollbar.onMouseClicked(scrollbarMousePos, renderPos.add(scrollbarRenderPos), mouseButton);
         }
 
         return false;
@@ -183,10 +187,60 @@ public class ScrollingColumn extends Column {
         return false;
     }
 
+    // Tooltips
+
+    @Override
+    public List<String> getHoverTooltips(final MousePos mousePos) {
+        int width = this.width;
+        int height = this.height;
+
+        int y = getTotalHeight() > height ? -scrollbar.getCurrentScroll() : 0;
+
+        List<String> tooltips = null;
+
+        for (final DynamicWidget widget : widgets) {
+            if (widget.isDisabled()) {
+                continue;
+            }
+            RenderPos widgetRenderPos = getWidgetRenderOffset(widget, width, y);
+            if (widgetRenderPos == null) {
+                continue;
+            }
+
+            List<String> hoverTooltips = widget.getHoverTooltips(mousePos);
+            if (!hoverTooltips.isEmpty()) {
+                tooltips = hoverTooltips;
+                break;
+            }
+
+            y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
+        }
+
+        if (tooltips != null) {
+            return tooltips;
+        }
+
+        RenderPos scrollbarRenderPos = new RenderPos(
+                width - (scrollbar.getMarginLeft() + scrollbar.getWidth() + scrollbar.getMarginRight()),
+                height - (scrollbar.getMarginUp() + scrollbar.getHeight() + scrollbar.getMarginDown()));
+        MousePos scrollbarMousePos = mousePos.relativeTo(scrollbarRenderPos);
+        if (scrollbar.isMouseOver(scrollbarMousePos)) {
+            List<String> hoverTooltips = scrollbar.getHoverTooltips(scrollbarMousePos);
+            if (!hoverTooltips.isEmpty()) {
+                tooltips = hoverTooltips;
+            }
+        }
+
+        return tooltips != null ? tooltips : Collections.emptyList();
+    }
+
     // CustomEventHandlers
 
     @Override
     public boolean onGuiEvent(final GuiEvent event) {
+        if (scrollbar.onGuiEvent(event)) {
+            return true;
+        }
         return super.onGuiEvent(event);
     }
 
