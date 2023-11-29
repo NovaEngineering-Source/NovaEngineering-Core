@@ -20,6 +20,9 @@ public abstract class WidgetContainer extends DynamicWidget {
     protected int absY;
 
     public static void enableScissor(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final int width, final int height) {
+        final int guiLeft = (gui.width - gui.getXSize()) / 2;
+        final int guiTop = (gui.height - gui.getYSize()) / 2;
+
         int offsetX = renderPos.posX();
         int offsetY = renderPos.posY();
 
@@ -27,11 +30,15 @@ public abstract class WidgetContainer extends DynamicWidget {
             LinkedList<Rectangle> scissorStack = SCISSOR_STACK.get();
 
             ScaledResolution res = new ScaledResolution(gui.mc);
+            int scissorWidth = renderSize.isWidthLimited() ? renderSize.width() : width;
+            int scissorHeight = renderSize.isHeightLimited() ? renderSize.height() : height;
+
             Rectangle scissorFrame = new Rectangle(
-                    offsetX * res.getScaleFactor(),
-                    offsetY * res.getScaleFactor(),
-                    (renderSize.isWidthLimited() ? renderSize.width() : width) * res.getScaleFactor(),
-                    (renderSize.isHeightLimited() ? renderSize.height() : height) * res.getScaleFactor()
+                    (guiLeft + offsetX) * res.getScaleFactor(),
+                    // y is left bottom...
+                    gui.mc.displayHeight - ((guiTop + offsetY + scissorHeight) * res.getScaleFactor()),
+                    scissorWidth * res.getScaleFactor(),
+                    scissorHeight * res.getScaleFactor()
             );
 
             if (scissorStack.peekFirst() == null) {
@@ -64,6 +71,7 @@ public abstract class WidgetContainer extends DynamicWidget {
         try {
             preRenderInternal(gui, renderSize, renderPos, mousePos);
         } catch (Exception e) {
+            SCISSOR_STACK.get().clear();
             NovaEngineeringCore.log.error("Error when rendering dynamic widgets!", e);
             throw e;
         } finally {
@@ -78,6 +86,7 @@ public abstract class WidgetContainer extends DynamicWidget {
         try {
             postRenderInternal(gui, renderSize, renderPos, mousePos);
         } catch (Exception e) {
+            SCISSOR_STACK.get().clear();
             NovaEngineeringCore.log.error("Error when rendering dynamic widgets!", e);
             throw e;
         } finally {
@@ -92,6 +101,13 @@ public abstract class WidgetContainer extends DynamicWidget {
     public abstract List<DynamicWidget> getWidgets();
 
     public abstract WidgetContainer addWidget(DynamicWidget widget);
+
+    public WidgetContainer addWidgets(DynamicWidget... widgets) {
+        for (final DynamicWidget widget : widgets) {
+            addWidget(widget);
+        }
+        return this;
+    }
 
     // GUI EventHandlers
 

@@ -1,7 +1,6 @@
 package github.kasuminova.mmce.client.gui;
 
 import github.kasuminova.mmce.client.gui.util.MousePos;
-import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
 import hellfirepvp.modularmachinery.client.gui.GuiContainerBase;
 import hellfirepvp.modularmachinery.common.container.ContainerBase;
@@ -21,49 +20,28 @@ public abstract class GuiContainerDynamic<T extends ContainerBase<?>> extends Gu
 
     @Override
     protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
-        final int x = (this.width - this.xSize) / 2;
-        final int y = (this.height - this.ySize) / 2;
-
-        RenderPos renderPos = new RenderPos(x, y);
-        MousePos mousePos = new MousePos(mouseX, mouseY).relativeTo(renderPos);
-        widgetController.render(mousePos);
+        widgetController.render(new MousePos(mouseX, mouseY));
     }
 
     @Override
     public void handleMouseInput() throws IOException {
-        final int x = (this.width - this.xSize) / 2;
-        final int y = (this.height - this.ySize) / 2;
-
         final int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
         final int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-
-        RenderPos renderPos = new RenderPos(x, y);
-        MousePos mousePos = new MousePos(mouseX, mouseY).relativeTo(renderPos);
-        widgetController.onMouseInput(mousePos);
+        widgetController.onMouseInput(new MousePos(mouseX, mouseY));
 
         super.handleMouseInput();
     }
 
     @Override
     protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException {
-        final int x = (this.width - this.xSize) / 2;
-        final int y = (this.height - this.ySize) / 2;
-
-        RenderPos renderPos = new RenderPos(x, y);
-        MousePos mousePos = new MousePos(mouseX, mouseY).relativeTo(renderPos);
-        widgetController.onMouseClicked(mousePos, mouseButton);
+        widgetController.onMouseClicked(new MousePos(mouseX, mouseY), mouseButton);
 
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     protected void mouseReleased(final int mouseX, final int mouseY, final int state) {
-        final int x = (this.width - this.xSize) / 2;
-        final int y = (this.height - this.ySize) / 2;
-
-        RenderPos renderPos = new RenderPos(x, y);
-        MousePos mousePos = new MousePos(mouseX, mouseY).relativeTo(renderPos);
-        widgetController.onMouseReleased(mousePos);
+        widgetController.onMouseReleased(new MousePos(mouseX, mouseY));
 
         super.mouseReleased(mouseX, mouseY, state);
     }

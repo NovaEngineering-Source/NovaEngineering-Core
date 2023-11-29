@@ -96,9 +96,10 @@ public class ScrollingColumn extends Column {
             int offsetY = widgetRenderPos.posY();
 
             if (offsetY + widget.getHeight() >= 0) {
-                if (widget.isMouseOver(offsetX, offsetY, mousePos.mouseX(), mousePos.mouseY())) {
+                MousePos relativeMousePos = mousePos.relativeTo(widgetRenderPos);
+                if (widget.isMouseOver(relativeMousePos)) {
                     RenderPos absRenderPos = widgetRenderPos.add(renderPos);
-                    if (widget.onMouseClicked(mousePos.relativeTo(widgetRenderPos), absRenderPos, mouseButton)) {
+                    if (widget.onMouseClicked(relativeMousePos, absRenderPos, mouseButton)) {
                         return true;
                     }
                 }
@@ -109,9 +110,9 @@ public class ScrollingColumn extends Column {
         RenderPos scrollbarRenderPos = new RenderPos(
                 width - (scrollbar.getMarginLeft() + scrollbar.getWidth() + scrollbar.getMarginRight()),
                 height - (scrollbar.getMarginUp() + scrollbar.getHeight() + scrollbar.getMarginDown()));
-        MousePos scrollbarMousePos = mousePos.relativeTo(scrollbarRenderPos);
-        if (scrollbar.isMouseOver(scrollbarMousePos)) {
-            return scrollbar.onMouseClicked(scrollbarMousePos, renderPos.add(scrollbarRenderPos), mouseButton);
+        MousePos scrollbarRelativeMousePos = mousePos.relativeTo(scrollbarRenderPos);
+        if (scrollbar.isMouseOver(scrollbarRelativeMousePos)) {
+            return scrollbar.onMouseClicked(scrollbarRelativeMousePos, renderPos.add(scrollbarRenderPos), mouseButton);
         }
 
         return false;
@@ -167,8 +168,9 @@ public class ScrollingColumn extends Column {
         RenderPos scrollbarRenderPos = new RenderPos(
                 width - (scrollbar.getMarginLeft() + scrollbar.getWidth() + scrollbar.getMarginRight()),
                 height - (scrollbar.getMarginUp() + scrollbar.getHeight() + scrollbar.getMarginDown()));
-        if (isMouseOver(mousePos.mouseX(), mousePos.mouseY())) {
-            return scrollbar.onMouseDWheel(mousePos.relativeTo(scrollbarRenderPos), renderPos.add(scrollbarRenderPos), wheel);
+        MousePos scrollbarRelativeMousePos = mousePos.relativeTo(scrollbarRenderPos);
+        if (scrollbar.isMouseOver(scrollbarRelativeMousePos)) {
+            return scrollbar.onMouseDWheel(scrollbarRelativeMousePos, renderPos.add(scrollbarRenderPos), wheel);
         }
 
         return false;
@@ -206,11 +208,16 @@ public class ScrollingColumn extends Column {
             if (widgetRenderPos == null) {
                 continue;
             }
+            int offsetX = widgetRenderPos.posX();
+            int offsetY = widgetRenderPos.posY();
 
-            List<String> hoverTooltips = widget.getHoverTooltips(mousePos);
-            if (!hoverTooltips.isEmpty()) {
-                tooltips = hoverTooltips;
-                break;
+            MousePos relativeMousePos = mousePos.relativeTo(widgetRenderPos);
+            if (widget.isMouseOver(relativeMousePos)) {
+                List<String> hoverTooltips = widget.getHoverTooltips(relativeMousePos);
+                if (!hoverTooltips.isEmpty()) {
+                    tooltips = hoverTooltips;
+                    break;
+                }
             }
 
             y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();

@@ -1,20 +1,14 @@
 package github.kasuminova.novaeng.client.gui;
 
 import github.kasuminova.mmce.client.gui.GuiContainerDynamic;
-import github.kasuminova.mmce.client.gui.util.MousePos;
-import github.kasuminova.mmce.client.gui.util.RenderPos;
-import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.widget.msa.*;
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
-import hellfirepvp.modularmachinery.client.gui.GuiContainerBase;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-
-import java.io.IOException;
 
 public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModularServerAssembler> {
     public static final ResourceLocation TEXTURES_BACKGROUND = new ResourceLocation(
@@ -30,10 +24,10 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
 
     public GuiModularServerAssembler(final TileModularServerAssembler assembler, final EntityPlayer opening) {
         super(new ContainerModularServerAssembler(assembler, opening));
-        this.xSize = 433;
+        this.xSize = 451;
         this.ySize = 206;
 
-        this.assemblyInvManager.addInv(new AssemblyInvCPU(assemblyInvManager));
+        this.assemblyInvManager.addInv(new AssemblyInvCPU(assemblyInvManager, widgetController));
         this.assemblyInvManager.addInv(new AssemblyInvCalculateCard(assemblyInvManager));
         this.assemblyInvManager.addInv(new AssemblyInvExtension(assemblyInvManager));
         this.assemblyInvManager.addInv(new AssemblyInvHeatRadiator(assemblyInvManager));
@@ -41,11 +35,6 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
         this.assemblyInvManager.setAbsX(MAIN_GUI_WIDTH);
 
         this.widgetController.addWidgetContainer(assemblyInvManager);
-    }
-
-    @Override
-    public void initGui() {
-        super.initGui();
     }
 
     @Override

@@ -30,27 +30,28 @@ public class WidgetController {
 
         GuiContainer gui = this.gui;
 
-        final int x = (gui.width - gui.getXSize()) / 2;
-        final int y = (gui.height - gui.getYSize()) / 2;
+        final int guiLeft = (gui.width - gui.getXSize()) / 2;
+        final int guiTop = (gui.height - gui.getYSize()) / 2;
 
         for (final WidgetContainer container : containers) {
-            RenderPos renderPos = new RenderPos(x + container.getAbsX(), y + container.getAbsY());
-            RenderPos relativeRenderPos = renderPos.subtract(new RenderPos(x, y));
+            RenderPos renderPos = new RenderPos(guiLeft + container.getAbsX(), guiTop + container.getAbsY());
+            RenderPos relativeRenderPos = renderPos.subtract(new RenderPos(guiLeft, guiTop));
             MousePos relativeMousePos = mousePos.relativeTo(renderPos);
-
-            container.preRender(gui, new RenderSize(-1, -1), relativeRenderPos, relativeMousePos);
+            RenderSize renderSize = new RenderSize(container.getWidth(), container.getHeight());
+            container.preRender(gui, renderSize, relativeRenderPos, relativeMousePos);
         }
         for (final WidgetContainer container : containers) {
-            RenderPos renderPos = new RenderPos(x + container.getAbsX(), y + container.getAbsY());
-            RenderPos relativeRenderPos = renderPos.subtract(new RenderPos(x, y));
+            RenderPos renderPos = new RenderPos(guiLeft + container.getAbsX(), guiTop + container.getAbsY());
+            RenderPos relativeRenderPos = renderPos.subtract(new RenderPos(guiLeft, guiTop));
             MousePos relativeMousePos = mousePos.relativeTo(renderPos);
-
-            container.postRender(gui, new RenderSize(-1, -1), relativeRenderPos, relativeMousePos);
+            RenderSize renderSize = new RenderSize(container.getWidth(), container.getHeight());
+            container.postRender(gui, renderSize, relativeRenderPos, relativeMousePos);
         }
 
         List<String> hoverTooltips = getHoverTooltips(mousePos);
         if (!hoverTooltips.isEmpty()) {
-            gui.drawHoveringText(hoverTooltips, mousePos.mouseX(), mousePos.mouseY());
+            MousePos relativeMousePos = mousePos.relativeTo(new RenderPos(guiLeft, guiTop));
+            gui.drawHoveringText(hoverTooltips, relativeMousePos.mouseX(), relativeMousePos.mouseY());
         }
 
         GlStateManager.popMatrix();
@@ -150,6 +151,14 @@ public class WidgetController {
         }
 
         return tooltips != null ? tooltips : Collections.emptyList();
+    }
+
+    public GuiContainer getGui() {
+        return gui;
+    }
+
+    public List<WidgetContainer> getContainers() {
+        return containers;
     }
 
 }

@@ -168,3 +168,6 @@ gui.terminal_controller.screen.info.start.error.tech_level=§c未找到研究站
 gui.terminal_controller.screen.info.start.error.computation=§c算力不足。
 gui.terminal_controller.screen.info.start.error.database_space=§c未找到网络数据库或网络数据库空间已满。
 gui.terminal_controller.screen.info.start.error.dependencies=§c缺失前置研究：%s
+
+gui.modular_server_assembler.assembly.cpu.name=CPU 槽位 #%s
+gui.modular_server_assembler.assembly.ram.name=RAM 槽位 #%s

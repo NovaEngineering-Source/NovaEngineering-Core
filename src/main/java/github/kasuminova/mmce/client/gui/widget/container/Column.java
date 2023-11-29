@@ -93,7 +93,8 @@ public class Column extends WidgetContainer {
             int offsetX = widgetRenderPos.posX();
             int offsetY = widgetRenderPos.posY();
 
-            if (widget.isMouseOver(offsetX, offsetY, mousePos.mouseX(), mousePos.mouseY())) {
+            MousePos relativeMousePos = mousePos.relativeTo(widgetRenderPos);
+            if (widget.isMouseOver(relativeMousePos)) {
                 RenderPos absRenderPos = widgetRenderPos.add(renderPos);
                 if (widget.onMouseClicked(mousePos.relativeTo(widgetRenderPos), absRenderPos, mouseButton)) {
                     return true;
@@ -182,11 +183,16 @@ public class Column extends WidgetContainer {
             if (widgetRenderPos == null) {
                 continue;
             }
+            int offsetX = widgetRenderPos.posX();
+            int offsetY = widgetRenderPos.posY();
 
-            List<String> hoverTooltips = widget.getHoverTooltips(mousePos);
-            if (!hoverTooltips.isEmpty()) {
-                tooltips = hoverTooltips;
-                break;
+            MousePos relativeMousePos = mousePos.relativeTo(widgetRenderPos);
+            if (widget.isMouseOver(relativeMousePos)) {
+                List<String> hoverTooltips = widget.getHoverTooltips(relativeMousePos);
+                if (!hoverTooltips.isEmpty()) {
+                    tooltips = hoverTooltips;
+                    break;
+                }
             }
 
             y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();

@@ -10,7 +10,7 @@ public class AssemblyInvExtension extends AssemblyInv {
     public static final int CLOSED_HEIGHT = 26;
 
     public static final int OPENED_WIDTH = 103;
-    public static final int OPENED_HEIGHT = 85;
+    public static final int OPENED_HEIGHT = 86;
 
     public static final int BUTTON_TEX_X = 55;
 
