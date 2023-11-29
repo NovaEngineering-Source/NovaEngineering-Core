@@ -149,6 +149,10 @@ repositories {
         url = uri("https://repo.spongepowered.org/maven")
     }
     maven {
+        name = "GeckoLib"
+        url = uri("https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/")
+    }
+    maven {
         name = "OvermindDL1 Maven"
         url = uri("https://gregtech.overminddl1.com/")
         mavenContent {
@@ -211,8 +215,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
     compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
 
-    compileOnly(rfg.deobf("curse.maven:endercore-231868:4671384"))
-    compileOnly(rfg.deobf("curse.maven:ender-io-64578:4674244"))
+    compileOnly(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
 }
 
 // Publishing to a Maven repository
