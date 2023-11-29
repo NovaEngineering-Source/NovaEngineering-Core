@@ -8,12 +8,15 @@ import net.minecraft.util.ResourceLocation;
 import java.util.Collections;
 import java.util.List;
 
-public class SlotCPUExtension extends SlotExtension {
-    public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_cpu.png");
+public class SlotCalculateCardExtension extends SlotExtension {
+    public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_calculate_card.png");
     public static final int TEX_X = 7;
-    public static final int TEX_Y = 43;
+    public static final int TEX_Y = 7;
 
-    public SlotCPUExtension() {
+    protected final int displayID;
+
+    public SlotCalculateCardExtension(final int displayID) {
+        this.displayID = displayID;
         this.texLocation = TEX_LOCATION;
         this.unavailableTexLocation = TEX_LOCATION;
         this.textureX = TEX_X;
@@ -29,6 +32,6 @@ public class SlotCPUExtension extends SlotExtension {
 
     @Override
     public List<String> getHoverTooltips(final MousePos mousePos) {
-        return Collections.singletonList(I18n.format("gui.modular_server_assembler.assembly.cpu_ext.name"));
+        return Collections.singletonList(I18n.format("gui.modular_server_assembler.assembly.calculate_card_ext.name", displayID));
     }
 }

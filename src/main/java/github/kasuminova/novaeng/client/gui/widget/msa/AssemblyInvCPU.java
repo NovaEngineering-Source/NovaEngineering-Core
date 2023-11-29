@@ -6,6 +6,7 @@ import github.kasuminova.mmce.client.gui.widget.container.Row;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
 import github.kasuminova.novaeng.client.gui.widget.msa.overlay.OverlayCPU;
+import github.kasuminova.novaeng.client.gui.widget.msa.overlay.OverlayRAM;
 import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotCPU;
 import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotCPUExtension;
 import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotDisabled;
@@ -22,10 +23,9 @@ public class AssemblyInvCPU extends AssemblyInv {
 
     public static final int BUTTON_TEX_X = 1;
 
-    protected final Column slotColum = new Column();
 
     public AssemblyInvCPU(final AssemblyInvManager assemblyInvManager, final WidgetController widgetController) {
-        super(assemblyInvManager);
+        super(assemblyInvManager, widgetController);
         this.width = CLOSED_WIDTH;
         this.height = CLOSED_HEIGHT;
 
@@ -61,13 +61,6 @@ public class AssemblyInvCPU extends AssemblyInv {
         SlotRAM ram_1_2 = new SlotRAM(6);
         SlotRAM ram_1_3 = new SlotRAM(7);
 
-        Column cpuOverlayCol = new Column();
-        cpuOverlayCol.setAbsX(216).setAbsY(39).addWidgets(
-                new OverlayCPU(cpu_0_0).setMarginDown(21),
-                new OverlayCPU(cpu_1_0)
-        );
-        widgetController.addWidgetContainer(cpuOverlayCol);
-
         SlotCPUExtension ext_2_0 = new SlotCPUExtension();
         SlotCPU cpu_2_0 = new SlotCPU(2).dependsOn(ext_2_0);
         SlotRAM ram_2_0 = new SlotRAM(8).dependsOn(ext_2_0);
@@ -86,8 +79,25 @@ public class AssemblyInvCPU extends AssemblyInv {
         slotColum.addWidgets(new Row().addWidgets(ext_1_0, cpu_1_0, ram_1_0, ram_1_1, ram_1_2, ram_1_3).setMarginLeft(7));
         slotColum.addWidgets(new Row().addWidgets(ext_2_0, cpu_2_0, ram_2_0, ram_2_1, ram_2_2, ram_2_3).setMarginLeft(7));
         slotColum.addWidgets(new Row().addWidgets(ext_3_0, cpu_3_0, ram_3_0, ram_3_1, ram_3_2, ram_3_3).setMarginLeft(7));
-        slotColum.setDisabled(true);
-        this.addWidget(slotColum);
+
+        Column cpuOverlayCol = new Column();
+        cpuOverlayCol.setAbsX(203).setAbsY(28).addWidgets(
+                new OverlayRAM(ram_0_0).setMarginDown(1),
+                new OverlayRAM(ram_0_1).setMarginDown(4),
+
+                new OverlayCPU(cpu_0_0).setMarginLeft(13).setMarginDown(4),
+
+                new OverlayRAM(ram_0_2),
+                new OverlayRAM(ram_0_3).setMarginDown(1),
+                new OverlayRAM(ram_1_0),
+                new OverlayRAM(ram_1_1).setMarginDown(4),
+
+                new OverlayCPU(cpu_1_0).setMarginLeft(13).setMarginDown(4),
+
+                new OverlayRAM(ram_1_2).setMarginDown(1),
+                new OverlayRAM(ram_1_3)
+        );
+        widgetController.addWidgetContainer(cpuOverlayCol);
     }
 
     @Override
@@ -96,7 +106,6 @@ public class AssemblyInvCPU extends AssemblyInv {
 
         this.width = OPENED_WIDTH;
         this.height = OPENED_HEIGHT;
-        this.slotColum.setEnabled(true);
     }
 
     @Override
@@ -105,6 +114,5 @@ public class AssemblyInvCPU extends AssemblyInv {
 
         this.width = CLOSED_WIDTH;
         this.height = CLOSED_HEIGHT;
-        this.slotColum.setDisabled(true);
     }
 }

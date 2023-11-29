@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.client.gui.widget.msa;
 
+import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
 import net.minecraft.util.ResourceLocation;
@@ -14,8 +15,8 @@ public class AssemblyInvHeatRadiator extends AssemblyInv {
 
     public static final int BUTTON_TEX_X = 91;
 
-    public AssemblyInvHeatRadiator(final AssemblyInvManager assemblyInvManager) {
-        super(assemblyInvManager);
+    public AssemblyInvHeatRadiator(final AssemblyInvManager assemblyInvManager, final WidgetController widgetController) {
+        super(assemblyInvManager, widgetController);
         this.width = CLOSED_WIDTH;
         this.height = CLOSED_HEIGHT;
 

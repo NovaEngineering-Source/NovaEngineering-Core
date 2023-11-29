@@ -5,6 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import javax.annotation.Nonnull;
 
 public abstract class ServerModule {
+
     protected final CalculateServer parent;
 
     public ServerModule(final CalculateServer parent) {

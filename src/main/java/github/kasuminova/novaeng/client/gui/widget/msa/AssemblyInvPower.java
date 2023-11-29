@@ -1,7 +1,11 @@
 package github.kasuminova.novaeng.client.gui.widget.msa;
 
+import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
+import github.kasuminova.mmce.client.gui.widget.container.Row;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
+import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotCapacitor;
+import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotPSU;
 import net.minecraft.util.ResourceLocation;
 
 public class AssemblyInvPower extends AssemblyInv {
@@ -14,8 +18,8 @@ public class AssemblyInvPower extends AssemblyInv {
 
     public static final int BUTTON_TEX_X = 73;
 
-    public AssemblyInvPower(final AssemblyInvManager assemblyInvManager) {
-        super(assemblyInvManager);
+    public AssemblyInvPower(final AssemblyInvManager assemblyInvManager, final WidgetController widgetController) {
+        super(assemblyInvManager, widgetController);
         this.width = CLOSED_WIDTH;
         this.height = CLOSED_HEIGHT;
 
@@ -36,6 +40,19 @@ public class AssemblyInvPower extends AssemblyInv {
         this.open.setWidth(18).setHeight(18);
         this.open.setTextureXY(BUTTON_TEX_X, 237);
         this.open.setHoveredTextureXY(BUTTON_TEX_X, 219);
+
+        SlotPSU slot_0_0 = new SlotPSU(0);
+        SlotPSU slot_0_1 = new SlotPSU(1);
+        SlotPSU slot_0_2 = new SlotPSU(2);
+        SlotPSU slot_0_3 = new SlotPSU(3);
+
+        SlotCapacitor slot_1_0 = new SlotCapacitor(0);
+        SlotCapacitor slot_1_1 = new SlotCapacitor(1);
+        SlotCapacitor slot_1_2 = new SlotCapacitor(2);
+        SlotCapacitor slot_1_3 = new SlotCapacitor(3);
+
+        slotColum.addWidgets(new Row().addWidgets(slot_0_0, slot_0_1, slot_0_2, slot_0_3).setMarginLeft(7).setMarginUp(7));
+        slotColum.addWidgets(new Row().addWidgets(slot_1_0, slot_1_1, slot_1_2, slot_1_3).setMarginLeft(7));
     }
 
     @Override

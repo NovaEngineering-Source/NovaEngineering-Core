@@ -8,5 +8,4 @@ public interface Calculable {
     double calculate(CalculateRequest request);
 
     double getCalculateTypeEfficiency(CalculateType type);
-
 }

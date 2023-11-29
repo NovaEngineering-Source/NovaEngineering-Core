@@ -170,4 +170,14 @@ gui.terminal_controller.screen.info.start.error.database_space=§c未找到网�
 gui.terminal_controller.screen.info.start.error.dependencies=§c缺失前置研究：%s
 
 gui.modular_server_assembler.assembly.cpu.name=CPU 槽位 #%s
+gui.modular_server_assembler.assembly.cpu_ext.name=CPU 扩展板槽位
 gui.modular_server_assembler.assembly.ram.name=RAM 槽位 #%s
+
+gui.modular_server_assembler.assembly.calculate_card.name=计算卡槽位 #%s
+gui.modular_server_assembler.assembly.calculate_card_ext.name=计算卡总线槽位 #%s
+
+gui.modular_server_assembler.assembly.extension.name=扩展卡槽位 #%s
+gui.modular_server_assembler.assembly.extension_ext.name=扩展卡总线槽位 #%s
+
+gui.modular_server_assembler.assembly.psu.name=PSU 电源槽位 #%s
+gui.modular_server_assembler.assembly.capacitor.name=电容槽位 #%s

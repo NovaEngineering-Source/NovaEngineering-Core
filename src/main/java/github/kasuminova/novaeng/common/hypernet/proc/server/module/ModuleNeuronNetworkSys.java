@@ -10,9 +10,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 
-public class ModuleCPUNeuron extends ServerModule implements Calculable {
+public class ModuleNeuronNetworkSys extends ServerModule implements Calculable {
 
-    public ModuleCPUNeuron(final CalculateServer parent) {
+    public ModuleNeuronNetworkSys(final CalculateServer parent) {
         super(parent);
     }
 

@@ -4,6 +4,8 @@ import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.Button;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
+import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.mmce.client.gui.widget.container.Row;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +14,8 @@ public abstract class AssemblyInv extends Row {
     protected final AssemblyInvManager assemblyInvManager;
 
     protected final Button open = new Button();
+
+    protected final Column slotColum = new Column();
 
     protected ResourceLocation closedBgTexLocation = null;
     protected ResourceLocation openedBgTexLocation = null;
@@ -26,10 +30,14 @@ public abstract class AssemblyInv extends Row {
     protected int openedInvBgTexHeight = 0;
     protected int openedInvBgTexOffsetY = 0;
 
-    public AssemblyInv(final AssemblyInvManager assemblyInvManager) {
+    public AssemblyInv(final AssemblyInvManager assemblyInvManager, final WidgetController widgetController) {
         this.assemblyInvManager = assemblyInvManager;
+
         this.open.setOnClickedListener(button -> assemblyInvManager.openInv(this));
         this.addWidget(this.open);
+
+        this.slotColum.setDisabled(true);
+        this.addWidget(slotColum);
     }
 
     @Override
@@ -57,10 +65,12 @@ public abstract class AssemblyInv extends Row {
 
     public void openInv() {
         this.open.setDisabled(true);
+        this.slotColum.setEnabled(true);
     }
 
     public void closeInv() {
         this.open.setEnabled(true);
+        this.slotColum.setDisabled(true);
     }
 
     // Width / Height

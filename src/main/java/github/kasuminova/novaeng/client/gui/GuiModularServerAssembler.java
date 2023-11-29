@@ -28,10 +28,10 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
         this.ySize = 206;
 
         this.assemblyInvManager.addInv(new AssemblyInvCPU(assemblyInvManager, widgetController));
-        this.assemblyInvManager.addInv(new AssemblyInvCalculateCard(assemblyInvManager));
-        this.assemblyInvManager.addInv(new AssemblyInvExtension(assemblyInvManager));
-        this.assemblyInvManager.addInv(new AssemblyInvHeatRadiator(assemblyInvManager));
-        this.assemblyInvManager.addInv(new AssemblyInvPower(assemblyInvManager));
+        this.assemblyInvManager.addInv(new AssemblyInvCalculateCard(assemblyInvManager, widgetController));
+        this.assemblyInvManager.addInv(new AssemblyInvExtension(assemblyInvManager, widgetController));
+        this.assemblyInvManager.addInv(new AssemblyInvHeatRadiator(assemblyInvManager, widgetController));
+        this.assemblyInvManager.addInv(new AssemblyInvPower(assemblyInvManager, widgetController));
         this.assemblyInvManager.setAbsX(MAIN_GUI_WIDTH);
 
         this.widgetController.addWidgetContainer(assemblyInvManager);

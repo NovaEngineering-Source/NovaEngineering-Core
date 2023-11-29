@@ -10,9 +10,9 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 
-public class ModuleCPUQuantum extends ServerModule implements Calculable {
+public class ModuleQuantumBitCalculateSys extends ServerModule implements Calculable {
 
-    public ModuleCPUQuantum(final CalculateServer parent) {
+    public ModuleQuantumBitCalculateSys(final CalculateServer parent) {
         super(parent);
     }
 

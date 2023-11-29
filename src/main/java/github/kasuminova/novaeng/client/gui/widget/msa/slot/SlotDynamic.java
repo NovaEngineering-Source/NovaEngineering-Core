@@ -26,13 +26,19 @@ public class SlotDynamic extends DynamicWidget {
     }
 
     @Override
+    public void update(final GuiContainer gui) {
+        if (!isVisible()) {
+            hovered = false;
+        }
+    }
+
+    @Override
     public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         if (isVisible() && unavailableTexLocation != null && texLocation != null) {
-            hovered = isMouseOver(mousePos);
-
             int texX;
             int texY;
             if (isAvailable()) {
+                hovered = isMouseOver(mousePos);
                 texX = textureX;
                 texY = textureY;
                 gui.mc.getTextureManager().bindTexture(texLocation);
@@ -43,8 +49,6 @@ public class SlotDynamic extends DynamicWidget {
             }
 
             gui.drawTexturedModalRect(renderPos.posX(), renderPos.posY(), texX, texY, width, height);
-        } else {
-            hovered = false;
         }
     }
 

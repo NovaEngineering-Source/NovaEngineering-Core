@@ -1,22 +1,22 @@
 package github.kasuminova.novaeng.client.gui.widget.msa.overlay;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotCPU;
+import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotRAM;
 import net.minecraft.util.ResourceLocation;
 
-public class OverlayCPU extends TextureOverlay {
+public class OverlayRAM extends TextureOverlay {
     public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_elements.png");
 
-    public static final int TEX_X = 234;
-    public static final int TEX_Y = 0;
+    public static final int TEX_X = 207;
+    public static final int TEX_Y = 97;
 
-    public static final int WIDTH = 22;
-    public static final int HEIGHT = 14;
+    public static final int WIDTH = 48;
+    public static final int HEIGHT = 3;
 
-    protected final SlotCPU slotCPU;
+    protected final SlotRAM slotRAM;
 
-    public OverlayCPU(final SlotCPU slotCPU) {
-        this.slotCPU = slotCPU;
+    public OverlayRAM(final SlotRAM slotRAM) {
+        this.slotRAM = slotRAM;
         this.texLocation = TEX_LOCATION;
         this.textureX = TEX_X;
         this.textureY = TEX_Y;
@@ -26,7 +26,7 @@ public class OverlayCPU extends TextureOverlay {
 
     @Override
     public boolean isVisible() {
-        return slotCPU.isHovered();
+        return slotRAM.isHovered();
     }
 
 }
