@@ -4,10 +4,16 @@ import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
+import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvUpdateEvent;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.items.SlotItemHandler;
 
-public class SlotDynamic extends DynamicWidget {
+public abstract class SlotDynamic<T extends SlotItemHandler> extends DynamicWidget {
+    protected final int slotID;
+
+    protected T slot = null;
 
     protected ResourceLocation texLocation = null;
     protected ResourceLocation unavailableTexLocation = null;
@@ -20,25 +26,35 @@ public class SlotDynamic extends DynamicWidget {
 
     protected boolean hovered = false;
 
-    public SlotDynamic() {
+    public SlotDynamic(final int slotID) {
+        this.slotID = slotID;
         this.width = 18;
         this.height = 18;
     }
 
     @Override
-    public void update(final GuiContainer gui) {
-        if (!isVisible()) {
-            hovered = false;
+    public void initWidget(final GuiContainer gui) {
+        this.slot = getSlot();
+    }
+
+    @Override
+    public void preRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        if (slot != null) {
+            if (isAvailable() && slot.isEnabled()) {
+                slot.xPos = renderPos.posX() + 1;
+                slot.yPos = renderPos.posY() + 1;
+            }
         }
     }
 
     @Override
     public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         if (isVisible() && unavailableTexLocation != null && texLocation != null) {
+            hovered = isMouseOver(mousePos);
+
             int texX;
             int texY;
             if (isAvailable()) {
-                hovered = isMouseOver(mousePos);
                 texX = textureX;
                 texY = textureY;
                 gui.mc.getTextureManager().bindTexture(texLocation);
@@ -52,8 +68,18 @@ public class SlotDynamic extends DynamicWidget {
         }
     }
 
+    protected abstract T getSlot();
+
     public boolean isAvailable() {
         return true;
+    }
+
+    @Override
+    public boolean onGuiEvent(final GuiEvent event) {
+        if (event instanceof AssemblyInvUpdateEvent) {
+            this.slot = getSlot();
+        }
+        return false;
     }
 
     // Getters / Setters
@@ -62,7 +88,7 @@ public class SlotDynamic extends DynamicWidget {
         return texLocation;
     }
 
-    public SlotDynamic setTexLocation(final ResourceLocation texLocation) {
+    public SlotDynamic<T> setTexLocation(final ResourceLocation texLocation) {
         this.texLocation = texLocation;
         return this;
     }
@@ -71,7 +97,7 @@ public class SlotDynamic extends DynamicWidget {
         return unavailableTexLocation;
     }
 
-    public SlotDynamic setUnavailableTexLocation(final ResourceLocation unavailableTexLocation) {
+    public SlotDynamic<T> setUnavailableTexLocation(final ResourceLocation unavailableTexLocation) {
         this.unavailableTexLocation = unavailableTexLocation;
         return this;
     }
@@ -80,7 +106,7 @@ public class SlotDynamic extends DynamicWidget {
         return textureX;
     }
 
-    public SlotDynamic setTextureX(final int textureX) {
+    public SlotDynamic<T> setTextureX(final int textureX) {
         this.textureX = textureX;
         return this;
     }
@@ -89,7 +115,7 @@ public class SlotDynamic extends DynamicWidget {
         return textureY;
     }
 
-    public SlotDynamic setTextureY(final int textureY) {
+    public SlotDynamic<T> setTextureY(final int textureY) {
         this.textureY = textureY;
         return this;
     }
@@ -98,7 +124,7 @@ public class SlotDynamic extends DynamicWidget {
         return unavailableTextureX;
     }
 
-    public SlotDynamic setUnavailableTextureX(final int unavailableTextureX) {
+    public SlotDynamic<T> setUnavailableTextureX(final int unavailableTextureX) {
         this.unavailableTextureX = unavailableTextureX;
         return this;
     }
@@ -107,7 +133,7 @@ public class SlotDynamic extends DynamicWidget {
         return unavailableTextureY;
     }
 
-    public SlotDynamic setUnavailableTextureY(final int unavailableTextureY) {
+    public SlotDynamic<T> setUnavailableTextureY(final int unavailableTextureY) {
         this.unavailableTextureY = unavailableTextureY;
         return this;
     }
@@ -116,7 +142,7 @@ public class SlotDynamic extends DynamicWidget {
         return hovered;
     }
 
-    public SlotDynamic setHovered(final boolean hovered) {
+    public SlotDynamic<T> setHovered(final boolean hovered) {
         this.hovered = hovered;
         return this;
     }

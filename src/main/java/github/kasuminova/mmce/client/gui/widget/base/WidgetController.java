@@ -4,6 +4,7 @@ import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.container.WidgetContainer;
+import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Mouse;
@@ -13,9 +14,11 @@ import java.util.Collections;
 import java.util.List;
 
 public class WidgetController {
-    private final GuiContainer gui;
 
-    private final List<WidgetContainer> containers = new ArrayList<>();
+    protected final GuiContainer gui;
+    protected final List<WidgetContainer> containers = new ArrayList<>();
+
+    private boolean initialized = false;
 
     public WidgetController(final GuiContainer gui) {
         this.gui = gui;
@@ -33,6 +36,8 @@ public class WidgetController {
         final int guiLeft = (gui.width - gui.getXSize()) / 2;
         final int guiTop = (gui.height - gui.getYSize()) / 2;
 
+        GlStateManager.translate(guiLeft, guiTop, 0F);
+
         for (final WidgetContainer container : containers) {
             RenderPos renderPos = new RenderPos(guiLeft + container.getAbsX(), guiTop + container.getAbsY());
             RenderPos relativeRenderPos = renderPos.subtract(new RenderPos(guiLeft, guiTop));
@@ -48,24 +53,47 @@ public class WidgetController {
             container.postRender(gui, renderSize, relativeRenderPos, relativeMousePos);
         }
 
+        GlStateManager.popMatrix();
+    }
+
+    public void renderTooltip(final MousePos mousePos) {
+        final int guiLeft = (gui.width - gui.getXSize()) / 2;
+        final int guiTop = (gui.height - gui.getYSize()) / 2;
+
         List<String> hoverTooltips = getHoverTooltips(mousePos);
         if (!hoverTooltips.isEmpty()) {
             MousePos relativeMousePos = mousePos.relativeTo(new RenderPos(guiLeft, guiTop));
             gui.drawHoveringText(hoverTooltips, relativeMousePos.mouseX(), relativeMousePos.mouseY());
         }
+    }
 
-        GlStateManager.popMatrix();
+    public void init() {
+        if (!initialized) {
+            GuiContainer gui = this.gui;
+            containers.forEach(container -> container.initWidget(gui));
+        }
+        this.initialized = true;
     }
 
     public void update() {
         GuiContainer gui = this.gui;
+        containers.forEach(container -> container.update(gui));
+    }
 
+    public void onGUIClosed() {
+        GuiContainer gui = this.gui;
+        containers.forEach(container -> container.onGUIClosed(gui));
+    }
+
+    public void postGuiEvent(GuiEvent event) {
         for (final WidgetContainer container : containers) {
-            container.update(gui);
+            if (container.onGuiEvent(event)) {
+                break;
+            }
         }
     }
 
-    public void onMouseClicked(final MousePos mousePos, final int mouseButton) {
+    public boolean onMouseClicked(final MousePos mousePos, final int mouseButton) {
         GuiContainer gui = this.gui;
 
         final int x = (gui.width - gui.getXSize()) / 2;
@@ -78,13 +106,14 @@ public class WidgetController {
 
             if (container.isMouseOver(relativeMousePos)) {
                 if (container.onMouseClicked(relativeMousePos, relativeRenderPos, mouseButton)) {
-                    break;
+                    return true;
                 }
             }
         }
+        return false;
     }
 
-    public void onMouseReleased(final MousePos mousePos) {
+    public boolean onMouseReleased(final MousePos mousePos) {
         GuiContainer gui = this.gui;
 
         final int x = (gui.width - gui.getXSize()) / 2;
@@ -96,15 +125,16 @@ public class WidgetController {
             MousePos relativeMousePos = mousePos.relativeTo(renderPos);
 
             if (container.onMouseReleased(relativeMousePos, relativeRenderPos)) {
-                break;
+                return true;
             }
         }
+        return false;
     }
 
-    public void onMouseInput(final MousePos mousePos) {
+    public boolean onMouseInput(final MousePos mousePos) {
         final int wheel = Mouse.getEventDWheel();
         if (wheel == 0) {
-            return;
+            return false;
         }
         GuiContainer gui = this.gui;
 
@@ -117,17 +147,19 @@ public class WidgetController {
             MousePos relativeMousePos = mousePos.relativeTo(renderPos);
 
             if (container.onMouseDWheel(relativeMousePos, relativeRenderPos, wheel)) {
-                break;
+                return true;
             }
         }
+        return false;
     }
 
-    public void onKeyTyped(final char typedChar, final int keyCode) {
+    public boolean onKeyTyped(final char typedChar, final int keyCode) {
         for (final WidgetContainer container : containers) {
             if (container.onKeyTyped(typedChar, keyCode)) {
-                break;
+                return true;
             }
         }
+        return false;
     }
 
     public List<String> getHoverTooltips(final MousePos mousePos) {

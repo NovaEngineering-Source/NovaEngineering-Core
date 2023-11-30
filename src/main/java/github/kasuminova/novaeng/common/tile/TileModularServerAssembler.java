@@ -1,48 +1,80 @@
 package github.kasuminova.novaeng.common.tile;
 
+import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.ServerInvProvider;
+import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import hellfirepvp.modularmachinery.ModularMachinery;
+import hellfirepvp.modularmachinery.common.crafting.helper.CraftingStatus;
+import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import hellfirepvp.modularmachinery.common.util.IOInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.common.capabilities.Capability;
-
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 
 public class TileModularServerAssembler extends TileCustomController implements ServerInvProvider {
+    protected IOInventory serverInventory;
 
-    private IOInventory serverInv;
-    private IOInventory assemblyCPUInv;
-    private IOInventory assemblyCalculateCardInv;
-    private IOInventory assemblyExtensionInv;
-    private IOInventory assemblyHeatRadiatorInv;
-    private IOInventory assemblyPowerInv;
+    protected ModularServer server = new ModularServer(this, ItemStack.EMPTY);
+
+    public TileModularServerAssembler() {
+        this.serverInventory = (IOInventory) new IOInventory(this, new int[0], new int[0]).setMiscSlots(0);
+        this.serverInventory.setStackLimit(1, 0);
+        this.serverInventory.setListener(this::onServerInventoryUpdate);
+        this.parentMachine = MachineRegistry.getRegistry().getMachine(new ResourceLocation(ModularMachinery.MODID, "modular_server_assembler"));
+        this.server.initInv();
+    }
 
     @Override
     public void doControllerTick() {
 
     }
 
-    public void writeAssemblyDataToServer(final ItemStack stack) {
+    public void onServerInventoryUpdate() {
+        ItemStack stackInSlot = serverInventory.getStackInSlot(0);
+        if (server == null || server.requiresUpdate(stackInSlot)) {
+            server = new ModularServer(this, stackInSlot);
+            if (stackInSlot.getTagCompound() != null) {
+                server.readFullInvNBT(stackInSlot.getTagCompound());
+            } else {
+                server.initInv();
+            }
+        }
+    }
 
+    public ModularServer getServer() {
+        return server;
+    }
+
+    public TileModularServerAssembler setServer(final ModularServer server) {
+        this.server = server;
+        return this;
     }
 
     @Override
-    public IOInventory getInvByName(final String name) {
-        return switch (name) {
-            case "server" -> serverInv;
-            case "cpu" -> assemblyCPUInv;
-            case "calculate_card" -> assemblyCalculateCardInv;
-            case "heat_radiator" -> assemblyHeatRadiatorInv;
-            case "power" -> assemblyPowerInv;
-            default -> null;
-        };
+    public ServerModuleInv getInvByName(final String name) {
+        return server.getInvByName(name);
     }
 
-    @Nullable
     @Override
-    public <T> T getCapability(@Nonnull final Capability<T> capability, @Nullable final EnumFacing facing) {
-        return super.getCapability(capability, facing);
+    public void readCustomNBT(final NBTTagCompound compound) {
+        super.readCustomNBT(compound);
+
+        if (compound.hasKey("serverInv")) {
+            serverInventory = IOInventory.deserialize(this, compound.getCompoundTag("serverInv"));
+            serverInventory.setListener(this::onServerInventoryUpdate);
+            onServerInventoryUpdate();
+        }
+        if (compound.hasKey("controllerStatus")) {
+            controllerStatus = CraftingStatus.deserialize(compound.getCompoundTag("controllerStatus"));
+        }
+    }
+
+    @Override
+    public void writeCustomNBT(final NBTTagCompound compound) {
+        super.writeCustomNBT(compound);
+
+        compound.setTag("serverInv", serverInventory.writeNBT());
+        compound.setTag("controllerStatus", controllerStatus.serialize());
     }
 
     @Override

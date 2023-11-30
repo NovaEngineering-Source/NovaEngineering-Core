@@ -1,14 +1,13 @@
 package github.kasuminova.novaeng.client.gui.widget.msa.slot;
 
-import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
+import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
+import github.kasuminova.novaeng.common.container.slot.SlotPSUItemHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.Collections;
-import java.util.List;
-
-public class SlotPSU extends SlotCondition {
+public class SlotPSU extends SlotAssembly<SlotPSUItemHandler> {
     public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_power.png");
     public static final int TEX_X = 7;
     public static final int TEX_Y = 7;
@@ -18,7 +17,8 @@ public class SlotPSU extends SlotCondition {
 
     protected final int displayID;
 
-    public SlotPSU(final int displayID) {
+    public SlotPSU(final int displayID, final int slotID, final AssemblySlotManager slotManager) {
+        super(slotID, slotManager);
         this.displayID = displayID;
         this.texLocation = TEX_LOCATION;
         this.unavailableTexLocation = TEX_LOCATION;
@@ -29,12 +29,19 @@ public class SlotPSU extends SlotCondition {
     }
 
     @Override
-    public SlotPSU dependsOn(final SlotExtension dependency) {
+    protected SlotPSUItemHandler getSlot() {
+        SlotConditionItemHandler slot = slotManager.getSlot("power", slotID);
+        return slot instanceof SlotPSUItemHandler ? (SlotPSUItemHandler) slot : null;
+    }
+
+    @Override
+    public <SLOT extends SlotAssembly<?>> SlotPSU dependsOn(SLOT dependency) {
         return (SlotPSU) super.dependsOn(dependency);
     }
 
     @Override
-    public List<String> getHoverTooltips(final MousePos mousePos) {
-        return Collections.singletonList(I18n.format("gui.modular_server_assembler.assembly.psu.name", displayID));
+    public String getSlotDescription() {
+        return I18n.format("gui.modular_server_assembler.assembly.psu.name", displayID);
     }
+
 }

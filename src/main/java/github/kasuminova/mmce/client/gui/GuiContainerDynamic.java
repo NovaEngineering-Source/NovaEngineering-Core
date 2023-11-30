@@ -19,37 +19,65 @@ public abstract class GuiContainerDynamic<T extends ContainerBase<?>> extends Gu
     }
 
     @Override
-    protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
+    public void updateScreen() {
+        super.updateScreen();
+        widgetController.update();
+    }
+
+    @Override
+    public void initGui() {
+        super.initGui();
+        widgetController.init();
+    }
+
+    @Override
+    public void onGuiClosed() {
+        widgetController.onGUIClosed();
+        super.onGuiClosed();
+    }
+
+    @Override
+    protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
         widgetController.render(new MousePos(mouseX, mouseY));
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
+        super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        widgetController.renderTooltip(new MousePos(mouseX, mouseY));
     }
 
     @Override
     public void handleMouseInput() throws IOException {
         final int mouseX = Mouse.getEventX() * this.width / this.mc.displayWidth;
         final int mouseY = this.height - Mouse.getEventY() * this.height / this.mc.displayHeight - 1;
-        widgetController.onMouseInput(new MousePos(mouseX, mouseY));
-
+        if (widgetController.onMouseInput(new MousePos(mouseX, mouseY))) {
+            return;
+        }
         super.handleMouseInput();
     }
 
     @Override
     protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException {
-        widgetController.onMouseClicked(new MousePos(mouseX, mouseY), mouseButton);
-
+        if (widgetController.onMouseClicked(new MousePos(mouseX, mouseY), mouseButton)) {
+            return;
+        }
         super.mouseClicked(mouseX, mouseY, mouseButton);
     }
 
     @Override
     protected void mouseReleased(final int mouseX, final int mouseY, final int state) {
-        widgetController.onMouseReleased(new MousePos(mouseX, mouseY));
-
+        if (widgetController.onMouseReleased(new MousePos(mouseX, mouseY))) {
+            return;
+        }
         super.mouseReleased(mouseX, mouseY, state);
     }
 
     @Override
     protected void keyTyped(final char typedChar, final int keyCode) throws IOException {
-        widgetController.onKeyTyped(typedChar, keyCode);
-
+        if (widgetController.onKeyTyped(typedChar, keyCode)) {
+            return;
+        }
         super.keyTyped(typedChar, keyCode);
     }
 

@@ -1,9 +1,9 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server;
 
-import hellfirepvp.modularmachinery.common.util.IOInventory;
+import github.kasuminova.novaeng.common.util.ServerModuleInv;
 
 public interface ServerInvProvider {
 
-    IOInventory getInvByName(final String name);
+    ServerModuleInv getInvByName(final String invName);
 
 }

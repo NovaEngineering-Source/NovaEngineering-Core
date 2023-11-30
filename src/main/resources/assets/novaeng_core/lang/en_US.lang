@@ -181,3 +181,8 @@ gui.modular_server_assembler.assembly.extension_ext.name=扩展卡总线槽位 #
 
 gui.modular_server_assembler.assembly.psu.name=PSU 电源槽位 #%s
 gui.modular_server_assembler.assembly.capacitor.name=电容槽位 #%s
+
+gui.modular_server_assembler.assembly.dependencies=依赖以下插槽：
+gui.modular_server_assembler.assembly.dependencies.installed=（§a已安装§f）
+gui.modular_server_assembler.assembly.dependencies.uninstalled=（§c缺失§f）
+gui.modular_server_assembler.assembly.dependents=以下插槽依赖于此插槽：

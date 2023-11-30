@@ -36,6 +36,9 @@ public abstract class DynamicWidget {
     public void update(GuiContainer gui) {
     }
 
+    public void onGUIClosed(GuiContainer gui) {
+    }
+
     public boolean onMouseClicked(MousePos mousePos, RenderPos renderPos, int mouseButton) {
         return false;
     }

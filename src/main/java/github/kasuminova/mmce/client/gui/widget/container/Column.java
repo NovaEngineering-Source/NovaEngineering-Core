@@ -72,11 +72,6 @@ public class Column extends WidgetContainer {
     // GUI EventHandlers
 
     @Override
-    public void update(final GuiContainer gui) {
-        widgets.forEach(widget -> widget.update(gui));
-    }
-
-    @Override
     public boolean onMouseClicked(final MousePos mousePos, final RenderPos renderPos, final int mouseButton) {
         int y = 0;
 

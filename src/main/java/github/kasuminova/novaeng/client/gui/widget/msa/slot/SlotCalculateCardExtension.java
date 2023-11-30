@@ -1,21 +1,21 @@
 package github.kasuminova.novaeng.client.gui.widget.msa.slot;
 
-import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
+import github.kasuminova.novaeng.common.container.slot.SlotCalculateCardExtItemHandler;
+import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.Collections;
-import java.util.List;
-
-public class SlotCalculateCardExtension extends SlotExtension {
+public class SlotCalculateCardExtension extends SlotAssembly<SlotCalculateCardExtItemHandler> {
     public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_calculate_card.png");
     public static final int TEX_X = 7;
     public static final int TEX_Y = 7;
 
     protected final int displayID;
 
-    public SlotCalculateCardExtension(final int displayID) {
+    public SlotCalculateCardExtension(final int displayID, final int slotID, final AssemblySlotManager slotManager) {
+        super(slotID, slotManager);
         this.displayID = displayID;
         this.texLocation = TEX_LOCATION;
         this.unavailableTexLocation = TEX_LOCATION;
@@ -26,12 +26,18 @@ public class SlotCalculateCardExtension extends SlotExtension {
     }
 
     @Override
-    public boolean isAvailable() {
-        return true;
+    protected SlotCalculateCardExtItemHandler getSlot() {
+        SlotConditionItemHandler slot = slotManager.getSlot("calculate_card", slotID);
+        return slot instanceof SlotCalculateCardExtItemHandler ? (SlotCalculateCardExtItemHandler) slot : null;
     }
 
     @Override
-    public List<String> getHoverTooltips(final MousePos mousePos) {
-        return Collections.singletonList(I18n.format("gui.modular_server_assembler.assembly.calculate_card_ext.name", displayID));
+    public boolean isAvailable() {
+        return slot != null;
+    }
+
+    @Override
+    public String getSlotDescription() {
+        return I18n.format("gui.modular_server_assembler.assembly.calculate_card_ext.name", displayID);
     }
 }

@@ -20,7 +20,7 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
     public static final int MAIN_GUI_WIDTH = 329;
     public static final int MAIN_GUI_HEIGHT = 206;
 
-    protected AssemblyInvManager assemblyInvManager = new AssemblyInvManager();
+    protected AssemblyInvManager assemblyInvManager = new AssemblyInvManager(container.getSlotManager());
 
     public GuiModularServerAssembler(final TileModularServerAssembler assembler, final EntityPlayer opening) {
         super(new ContainerModularServerAssembler(assembler, opening));
@@ -48,6 +48,7 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
         final int x = (this.width - this.xSize) / 2;
         final int y = (this.height - this.ySize) / 2;
         Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, MAIN_GUI_WIDTH, MAIN_GUI_HEIGHT, 512, 512);
+        super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
     }
 
 }

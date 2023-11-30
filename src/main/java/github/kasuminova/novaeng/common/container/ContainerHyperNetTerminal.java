@@ -33,7 +33,6 @@ public class ContainerHyperNetTerminal extends ContainerBase<TileHyperNetTermina
 
             if (index < 36) {
                 if (!slotStack.isEmpty()) {
-//                if (!slotStack.isEmpty() && slotStack.getItem() instanceof ItemBlueprint) {
                     Slot sb = this.inventorySlots.get(this.slotCard.slotNumber);
                     if (!sb.getHasStack()) {
                         if (!this.mergeItemStack(slotStack, sb.slotNumber, sb.slotNumber + 1, false)) {

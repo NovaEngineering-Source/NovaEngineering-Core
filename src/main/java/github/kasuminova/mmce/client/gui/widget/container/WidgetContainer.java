@@ -112,7 +112,24 @@ public abstract class WidgetContainer extends DynamicWidget {
     // GUI EventHandlers
 
     @Override
-    public abstract void update(final GuiContainer gui);
+    public void update(final GuiContainer gui) {
+        for (DynamicWidget widget : getWidgets()) {
+            if (widget.isDisabled()) {
+                continue;
+            }
+            widget.update(gui);
+        }
+    }
+
+    @Override
+    public void onGUIClosed(final GuiContainer gui) {
+        getWidgets().forEach(widget -> widget.onGUIClosed(gui));
+    }
+
+    @Override
+    public void initWidget(final GuiContainer gui) {
+        getWidgets().forEach(widget -> widget.initWidget(gui));
+    }
 
     @Override
     public abstract boolean onMouseClicked(final MousePos mousePos, final RenderPos renderPos, final int mouseButton);

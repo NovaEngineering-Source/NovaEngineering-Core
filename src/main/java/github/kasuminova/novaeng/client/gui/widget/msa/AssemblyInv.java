@@ -7,6 +7,8 @@ import github.kasuminova.mmce.client.gui.widget.Button;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
 import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.mmce.client.gui.widget.container.Row;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvCloseEvent;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvOpenEvent;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 
@@ -63,12 +65,19 @@ public abstract class AssemblyInv extends Row {
         }
     }
 
+    @Override
+    public void onGUIClosed(final GuiContainer gui) {
+        closeInv();
+    }
+
     public void openInv() {
         this.open.setDisabled(true);
         this.slotColum.setEnabled(true);
+        onGuiEvent(new AssemblyInvOpenEvent(null));
     }
 
     public void closeInv() {
+        onGuiEvent(new AssemblyInvCloseEvent(null));
         this.open.setEnabled(true);
         this.slotColum.setDisabled(true);
     }

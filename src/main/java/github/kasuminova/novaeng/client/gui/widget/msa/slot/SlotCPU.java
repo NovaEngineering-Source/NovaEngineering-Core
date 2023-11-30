@@ -1,14 +1,13 @@
 package github.kasuminova.novaeng.client.gui.widget.msa.slot;
 
-import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
+import github.kasuminova.novaeng.common.container.slot.SlotCPUItemHandler;
+import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.Collections;
-import java.util.List;
-
-public class SlotCPU extends SlotCondition {
+public class SlotCPU extends SlotAssembly<SlotCPUItemHandler> {
     public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_cpu.png");
     public static final int TEX_X = 122;
     public static final int TEX_Y = 0;
@@ -18,7 +17,8 @@ public class SlotCPU extends SlotCondition {
 
     protected final int displayID;
 
-    public SlotCPU(final int displayID) {
+    public SlotCPU(final int displayID, final int slotID, final AssemblySlotManager slotManager) {
+        super(slotID, slotManager);
         this.displayID = displayID;
         this.texLocation = TEX_LOCATION;
         this.unavailableTexLocation = TEX_LOCATION;
@@ -29,12 +29,19 @@ public class SlotCPU extends SlotCondition {
     }
 
     @Override
-    public SlotCPU dependsOn(final SlotExtension dependency) {
+    protected SlotCPUItemHandler getSlot() {
+        SlotConditionItemHandler slot = slotManager.getSlot("cpu", slotID);
+        return slot instanceof SlotCPUItemHandler ? (SlotCPUItemHandler) slot : null;
+    }
+
+    @Override
+    public <SLOT extends SlotAssembly<?>> SlotCPU dependsOn(SLOT dependency) {
         return (SlotCPU) super.dependsOn(dependency);
     }
 
     @Override
-    public List<String> getHoverTooltips(final MousePos mousePos) {
-        return Collections.singletonList(I18n.format("gui.modular_server_assembler.assembly.cpu.name", displayID));
+    public String getSlotDescription() {
+        return I18n.format("gui.modular_server_assembler.assembly.cpu.name", displayID);
     }
+
 }
