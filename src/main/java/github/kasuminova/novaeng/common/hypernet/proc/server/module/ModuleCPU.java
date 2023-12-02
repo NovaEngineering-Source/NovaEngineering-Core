@@ -5,7 +5,7 @@ import github.kasuminova.novaeng.common.hypernet.proc.CalculateType;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateTypes;
 import github.kasuminova.novaeng.common.hypernet.proc.server.Calculable;
 import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
-import github.kasuminova.novaeng.common.hypernet.proc.server.ServerModule;
+import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
@@ -17,7 +17,7 @@ public class ModuleCPU extends ServerModule implements Calculable {
     }
 
     @Override
-    public double calculate(final CalculateRequest request) {
+    public double calculate(final CalculateRequest request) throws ModularServerException {
         return 0;
     }
 

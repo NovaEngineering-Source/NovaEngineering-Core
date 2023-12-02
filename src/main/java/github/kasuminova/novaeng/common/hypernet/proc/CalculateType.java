@@ -21,6 +21,10 @@ public abstract class CalculateType {
         return false;
     }
 
+    public String getModifierKey() {
+        return "calculate_type_" + typeName;
+    }
+
     public String getTypeName() {
         return typeName;
     }

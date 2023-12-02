@@ -3,21 +3,17 @@ package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateRequest;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateType;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateTypes;
-import github.kasuminova.novaeng.common.hypernet.proc.server.Calculable;
 import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
-import github.kasuminova.novaeng.common.hypernet.proc.server.ServerModule;
-import net.minecraft.nbt.NBTTagCompound;
+import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
 
-import javax.annotation.Nonnull;
-
-public class ModuleQuantumBitCalculateSys extends ServerModule implements Calculable {
+public class ModuleQuantumBitCalculateSys extends ModuleCalculateCard {
 
     public ModuleQuantumBitCalculateSys(final CalculateServer parent) {
         super(parent);
     }
 
     @Override
-    public double calculate(final CalculateRequest request) {
+    public double calculate(final CalculateRequest request) throws ModularServerException {
         return 0;
     }
 
@@ -37,16 +33,6 @@ public class ModuleQuantumBitCalculateSys extends ServerModule implements Calcul
         }
 
         return 0;
-    }
-
-    @Override
-    public void readNBT(@Nonnull final NBTTagCompound nbt) {
-
-    }
-
-    @Override
-    public void writeNBT(@Nonnull final NBTTagCompound nbt) {
-
     }
 
 }

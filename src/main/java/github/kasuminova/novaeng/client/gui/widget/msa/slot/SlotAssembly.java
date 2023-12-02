@@ -11,17 +11,12 @@ import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.resources.I18n;
 
 import java.util.Collections;
-import java.util.LinkedList;
 import java.util.List;
 
 public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends SlotDynamic<T> {
     protected final AssemblySlotManager slotManager;
-
-    protected final List<SlotAssembly<?>> dependencies = new LinkedList<>();
-    protected final List<SlotAssembly<?>> dependents = new LinkedList<>();
 
     public SlotAssembly(final int slotID, final AssemblySlotManager slotManager) {
         super(slotID);
@@ -40,7 +35,11 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
     public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         super.postRender(gui, renderSize, renderPos, mousePos);
 
-        for (final SlotAssembly<?> dependency : dependencies) {
+        if (slot == null) {
+            return;
+        }
+
+        for (final SlotConditionItemHandler dependency : slot.getDependencies()) {
             if (dependency.isHovered()) {
                 Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
                         renderPos.posX() + 17, renderPos.posY() + 17,
@@ -51,7 +50,7 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
             }
         }
 
-        for (final SlotAssembly<?> dependent : dependents) {
+        for (final SlotConditionItemHandler dependent : slot.getDependents()) {
             if (dependent.isHovered()) {
                 if (isInstalled()) {
                     Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
@@ -70,16 +69,6 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
         }
     }
 
-    public <SLOT extends SlotAssembly<?>> SlotAssembly<T> dependsOn(SLOT dependency) {
-        dependencies.add(dependency);
-        dependency.addDependent(this);
-        return this;
-    }
-
-    public void addDependent(SlotAssembly<?> dependent) {
-        dependents.add(dependent);
-    }
-
     @Override
     public boolean onGuiEvent(final GuiEvent event) {
         if (slot != null) {
@@ -94,52 +83,15 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
 
     @Override
     public boolean isAvailable() {
-        if (slot == null) {
-            return false;
-        }
-        for (final SlotAssembly<?> dependency : dependencies) {
-            if (!dependency.isInstalled()) {
-                return false;
-            }
-        }
-        return true;
+        return slot != null && slot.isAvailable();
     }
 
     public boolean isInstalled() {
-        return slot != null && slot.isEnabled() && slot.getHasStack();
+        return slot != null && slot.getHasStack();
     }
 
     @Override
     public List<String> getHoverTooltips(final MousePos mousePos) {
-        if (isInstalled()) {
-            return Collections.emptyList();
-        }
-
-        String slotDesc = getSlotDescription();
-        List<String> tooltips = new LinkedList<>();
-        tooltips.add(slotDesc);
-
-        if (!dependencies.isEmpty()) {
-            tooltips.add(I18n.format("gui.modular_server_assembler.assembly.dependencies"));
-            for (final SlotAssembly<?> dependency : dependencies) {
-                if (dependency.isInstalled()) {
-                    tooltips.add(dependency.getSlotDescription() + I18n.format("gui.modular_server_assembler.assembly.dependencies.installed"));
-                } else {
-                    tooltips.add(dependency.getSlotDescription() + I18n.format("gui.modular_server_assembler.assembly.dependencies.uninstalled"));
-                }
-            }
-        }
-        if (!dependents.isEmpty()) {
-            tooltips.add(I18n.format("gui.modular_server_assembler.assembly.dependents"));
-            for (final SlotAssembly<?> dependent : dependents) {
-                tooltips.add(dependent.getSlotDescription());
-            }
-        }
-
-        return tooltips;
-    }
-
-    public String getSlotDescription() {
-        return "";
+        return slot == null ? Collections.emptyList() : slot.getHoverTooltips();
     }
 }

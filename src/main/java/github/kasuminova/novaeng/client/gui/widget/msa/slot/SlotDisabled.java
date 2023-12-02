@@ -1,10 +1,10 @@
 package github.kasuminova.novaeng.client.gui.widget.msa.slot;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.items.SlotItemHandler;
 
-public class SlotDisabled extends SlotDynamic<SlotItemHandler> {
+public class SlotDisabled extends SlotDynamic<SlotConditionItemHandler> {
     public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_cpu.png");
     public static final int TEX_X = 7;
     public static final int TEX_Y = 7;
@@ -20,7 +20,7 @@ public class SlotDisabled extends SlotDynamic<SlotItemHandler> {
     }
 
     @Override
-    protected SlotItemHandler getSlot() {
+    protected SlotConditionItemHandler getSlot() {
         return null;
     }
 

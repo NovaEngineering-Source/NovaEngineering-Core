@@ -51,32 +51,32 @@ public class AssemblyInvCPU extends AssemblyInv {
         AssemblySlotManager slotManager = assemblyInvManager.slotManager;
 
         SlotDisabled ext_0_0 = new SlotDisabled();
-        SlotCPU cpu_0_0 = new SlotCPU(0, 0, slotManager);
-        SlotRAM ram_0_0 = new SlotRAM(0, 4, slotManager);
-        SlotRAM ram_0_1 = new SlotRAM(1, 5, slotManager);
-        SlotRAM ram_0_2 = new SlotRAM(2, 6, slotManager);
-        SlotRAM ram_0_3 = new SlotRAM(3, 7, slotManager);
+        SlotCPU cpu_0_0 = new SlotCPU(0, slotManager);
+        SlotRAM ram_0_0 = new SlotRAM(4, slotManager);
+        SlotRAM ram_0_1 = new SlotRAM(5, slotManager);
+        SlotRAM ram_0_2 = new SlotRAM(6, slotManager);
+        SlotRAM ram_0_3 = new SlotRAM(7, slotManager);
 
         SlotDisabled ext_1_0 = new SlotDisabled();
-        SlotCPU cpu_1_0 = new SlotCPU(1, 1, slotManager);
-        SlotRAM ram_1_0 = new SlotRAM(4, 8, slotManager);
-        SlotRAM ram_1_1 = new SlotRAM(5, 9, slotManager);
-        SlotRAM ram_1_2 = new SlotRAM(6, 10, slotManager);
-        SlotRAM ram_1_3 = new SlotRAM(7, 11, slotManager);
+        SlotCPU cpu_1_0 = new SlotCPU(1, slotManager);
+        SlotRAM ram_1_0 = new SlotRAM(8, slotManager);
+        SlotRAM ram_1_1 = new SlotRAM(9, slotManager);
+        SlotRAM ram_1_2 = new SlotRAM(10, slotManager);
+        SlotRAM ram_1_3 = new SlotRAM(11, slotManager);
 
         SlotCPUExtension ext_2_0 = new SlotCPUExtension(AssemblyInvCPUConst.CPU_EXTENSION_SLOT_ID, slotManager);
-        SlotCPU cpu_2_0 = new SlotCPU(2, 2, slotManager).dependsOn(ext_2_0);
-        SlotRAM ram_2_0 = new SlotRAM(8, 12, slotManager).dependsOn(ext_2_0);
-        SlotRAM ram_2_1 = new SlotRAM(9, 13, slotManager).dependsOn(ext_2_0);
-        SlotRAM ram_2_2 = new SlotRAM(10, 14, slotManager).dependsOn(ext_2_0);
-        SlotRAM ram_2_3 = new SlotRAM(11, 15, slotManager).dependsOn(ext_2_0);
+        SlotCPU cpu_2_0 = new SlotCPU(2, slotManager);
+        SlotRAM ram_2_0 = new SlotRAM(12, slotManager);
+        SlotRAM ram_2_1 = new SlotRAM(13, slotManager);
+        SlotRAM ram_2_2 = new SlotRAM(14, slotManager);
+        SlotRAM ram_2_3 = new SlotRAM(15, slotManager);
 
         SlotDisabled ext_3_0 = new SlotDisabled();
-        SlotCPU cpu_3_0 = new SlotCPU(3, 3, slotManager).dependsOn(ext_2_0);
-        SlotRAM ram_3_0 = new SlotRAM(12, 16, slotManager).dependsOn(ext_2_0);
-        SlotRAM ram_3_1 = new SlotRAM(13, 17, slotManager).dependsOn(ext_2_0);
-        SlotRAM ram_3_2 = new SlotRAM(14, 18, slotManager).dependsOn(ext_2_0);
-        SlotRAM ram_3_3 = new SlotRAM(15, 19, slotManager).dependsOn(ext_2_0);
+        SlotCPU cpu_3_0 = new SlotCPU(3, slotManager);
+        SlotRAM ram_3_0 = new SlotRAM(16, slotManager);
+        SlotRAM ram_3_1 = new SlotRAM(17, slotManager);
+        SlotRAM ram_3_2 = new SlotRAM(18, slotManager);
+        SlotRAM ram_3_3 = new SlotRAM(19, slotManager);
 
         slotColum.addWidgets(new Row().addWidgets(ext_0_0, cpu_0_0, ram_0_0, ram_0_1, ram_0_2, ram_0_3).setMarginLeft(7).setMarginUp(7));
         slotColum.addWidgets(new Row().addWidgets(ext_1_0, cpu_1_0, ram_1_0, ram_1_1, ram_1_2, ram_1_3).setMarginLeft(7));

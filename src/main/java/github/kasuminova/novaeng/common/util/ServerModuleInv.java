@@ -13,22 +13,24 @@ import java.util.BitSet;
 import java.util.function.Consumer;
 
 public class ServerModuleInv extends IItemHandlerImpl {
+    protected final String invName;
     protected final BitSet availableSlots = new BitSet();
     protected final TileEntitySynchronized owner;
 
     private Consumer<ServerModuleInv> onChangedListener = null;
 
-    public static ServerModuleInv create(final TileEntitySynchronized owner, final int slotCount) {
+    public static ServerModuleInv create(final TileEntitySynchronized owner, final int slotCount, final String invName) {
         int[] slotIDs = new int[slotCount];
         for (int slotID = 0; slotID < slotIDs.length; slotID++) {
             slotIDs[slotID] = slotID;
         }
-        return new ServerModuleInv(owner, slotIDs, slotIDs).setAllSlotAvailable();
+        return new ServerModuleInv(owner, slotIDs, slotIDs, invName).setAllSlotAvailable();
     }
 
-    public ServerModuleInv(final TileEntitySynchronized owner, final int[] inSlots, final int[] outSlots) {
+    public ServerModuleInv(final TileEntitySynchronized owner, final int[] inSlots, final int[] outSlots, final String invName) {
         super(inSlots, outSlots);
         this.owner = owner;
+        this.invName = invName;
     }
 
     public ServerModuleInv updateInOutSlots() {
@@ -65,6 +67,22 @@ public class ServerModuleInv extends IItemHandlerImpl {
     public ServerModuleInv setAllSlotAvailable() {
         availableSlots.set(0, inventory.length);
         return this;
+    }
+
+    public ServerModuleInv setUnavailableSlots(final int[] slotIDs) {
+        for (final int slotID : slotIDs) {
+            availableSlots.set(slotID, false);
+        }
+        return this;
+    }
+
+    public ServerModuleInv setUnavailableSlot(final int slotID) {
+        availableSlots.set(slotID, false);
+        return this;
+    }
+
+    public String getInvName() {
+        return invName;
     }
 
     @Override

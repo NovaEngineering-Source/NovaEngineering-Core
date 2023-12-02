@@ -29,13 +29,12 @@ public class WidgetController {
     }
 
     public void render(final MousePos mousePos) {
-        GlStateManager.pushMatrix();
-
         GuiContainer gui = this.gui;
 
         final int guiLeft = (gui.width - gui.getXSize()) / 2;
         final int guiTop = (gui.height - gui.getYSize()) / 2;
 
+        GlStateManager.pushMatrix();
         GlStateManager.translate(guiLeft, guiTop, 0F);
 
         for (final WidgetContainer container : containers) {

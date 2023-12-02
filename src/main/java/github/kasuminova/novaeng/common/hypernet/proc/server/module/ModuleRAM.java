@@ -2,7 +2,6 @@ package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
 import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.HardwareBandwidthProvider;
-import github.kasuminova.novaeng.common.hypernet.proc.server.ServerModule;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;

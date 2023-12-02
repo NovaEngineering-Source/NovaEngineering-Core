@@ -1,5 +1,6 @@
-package github.kasuminova.novaeng.common.hypernet.proc.server;
+package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
+import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;

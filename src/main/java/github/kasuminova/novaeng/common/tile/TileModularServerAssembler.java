@@ -34,10 +34,20 @@ public class TileModularServerAssembler extends TileCustomController implements 
         if (server == null || server.requiresUpdate(stackInSlot)) {
             server = new ModularServer(this, stackInSlot);
             if (stackInSlot.getTagCompound() != null) {
-                server.readFullInvNBT(stackInSlot.getTagCompound());
+                server.readFullInvNBT(stackInSlot.getTagCompound().getCompoundTag("server"));
             } else {
                 server.initInv();
             }
+        }
+    }
+
+    public void onServerModuleInvUpdate() {
+        ItemStack stackInSlot = serverInventory.getStackInSlot(0);
+        if (server == null) {
+            if (stackInSlot.getTagCompound() == null) {
+                stackInSlot.setTagCompound(new NBTTagCompound());
+            }
+            stackInSlot.getTagCompound().setTag("server", server.writeNBT());
         }
     }
 

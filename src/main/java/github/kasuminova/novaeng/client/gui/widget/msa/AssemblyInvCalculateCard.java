@@ -47,29 +47,29 @@ public class AssemblyInvCalculateCard extends AssemblyInv {
 
         AssemblySlotManager slotManager = assemblyInvManager.slotManager;
 
-        SlotCalculateCardExtension ext_0_0 = new SlotCalculateCardExtension(0, AssemblyInvCalculateCardConst.EXTENSION_SLOT_0_ID, slotManager);
-        SlotCalculateCard slot_0_0 = new SlotCalculateCard(0, 0, slotManager).dependsOn(ext_0_0);
-        SlotCalculateCard slot_0_1 = new SlotCalculateCard(1, 1, slotManager).dependsOn(ext_0_0);
-        SlotCalculateCard slot_0_2 = new SlotCalculateCard(2, 2, slotManager).dependsOn(ext_0_0);
-        SlotCalculateCard slot_0_3 = new SlotCalculateCard(3, 3, slotManager).dependsOn(ext_0_0);
+        SlotCalculateCardExtension ext_0_0 = new SlotCalculateCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_0_ID, slotManager);
+        SlotCalculateCard slot_0_0 = new SlotCalculateCard(0, slotManager);
+        SlotCalculateCard slot_0_1 = new SlotCalculateCard(1, slotManager);
+        SlotCalculateCard slot_0_2 = new SlotCalculateCard(2, slotManager);
+        SlotCalculateCard slot_0_3 = new SlotCalculateCard(3, slotManager);
 
-        SlotCalculateCardExtension ext_1_0 = new SlotCalculateCardExtension(1, AssemblyInvCalculateCardConst.EXTENSION_SLOT_1_ID, slotManager);
-        SlotCalculateCard slot_1_0 = new SlotCalculateCard(4, 4, slotManager).dependsOn(ext_1_0);
-        SlotCalculateCard slot_1_1 = new SlotCalculateCard(5, 5, slotManager).dependsOn(ext_1_0);
-        SlotCalculateCard slot_1_2 = new SlotCalculateCard(6, 6, slotManager).dependsOn(ext_1_0);
-        SlotCalculateCard slot_1_3 = new SlotCalculateCard(7, 7, slotManager).dependsOn(ext_1_0);
+        SlotCalculateCardExtension ext_1_0 = new SlotCalculateCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_1_ID, slotManager);
+        SlotCalculateCard slot_1_0 = new SlotCalculateCard(4, slotManager);
+        SlotCalculateCard slot_1_1 = new SlotCalculateCard(5, slotManager);
+        SlotCalculateCard slot_1_2 = new SlotCalculateCard(6, slotManager);
+        SlotCalculateCard slot_1_3 = new SlotCalculateCard(7, slotManager);
 
-        SlotCalculateCardExtension ext_2_0 = new SlotCalculateCardExtension(2, AssemblyInvCalculateCardConst.EXTENSION_SLOT_2_ID, slotManager);
-        SlotCalculateCard slot_2_0 = new SlotCalculateCard(8, 8, slotManager).dependsOn(ext_2_0);
-        SlotCalculateCard slot_2_1 = new SlotCalculateCard(9, 9, slotManager).dependsOn(ext_2_0);
-        SlotCalculateCard slot_2_2 = new SlotCalculateCard(10, 10, slotManager).dependsOn(ext_2_0);
-        SlotCalculateCard slot_2_3 = new SlotCalculateCard(11, 11, slotManager).dependsOn(ext_2_0);
+        SlotCalculateCardExtension ext_2_0 = new SlotCalculateCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_2_ID, slotManager);
+        SlotCalculateCard slot_2_0 = new SlotCalculateCard(8, slotManager);
+        SlotCalculateCard slot_2_1 = new SlotCalculateCard(9, slotManager);
+        SlotCalculateCard slot_2_2 = new SlotCalculateCard(10, slotManager);
+        SlotCalculateCard slot_2_3 = new SlotCalculateCard(11, slotManager);
 
-        SlotCalculateCardExtension ext_3_0 = new SlotCalculateCardExtension(3, AssemblyInvCalculateCardConst.EXTENSION_SLOT_3_ID, slotManager);
-        SlotCalculateCard slot_3_0 = new SlotCalculateCard(12, 12, slotManager).dependsOn(ext_3_0);
-        SlotCalculateCard slot_3_1 = new SlotCalculateCard(13, 13, slotManager).dependsOn(ext_3_0);
-        SlotCalculateCard slot_3_2 = new SlotCalculateCard(14, 14, slotManager).dependsOn(ext_3_0);
-        SlotCalculateCard slot_3_3 = new SlotCalculateCard(15, 15, slotManager).dependsOn(ext_3_0);
+        SlotCalculateCardExtension ext_3_0 = new SlotCalculateCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_3_ID, slotManager);
+        SlotCalculateCard slot_3_0 = new SlotCalculateCard(12, slotManager);
+        SlotCalculateCard slot_3_1 = new SlotCalculateCard(13, slotManager);
+        SlotCalculateCard slot_3_2 = new SlotCalculateCard(14, slotManager);
+        SlotCalculateCard slot_3_3 = new SlotCalculateCard(15, slotManager);
 
         slotColum.addWidgets(new Row().addWidgets(ext_0_0, slot_0_0, slot_0_1, slot_0_2, slot_0_3).setMarginLeft(7).setMarginUp(7));
         slotColum.addWidgets(new Row().addWidgets(ext_1_0, slot_1_0, slot_1_1, slot_1_2, slot_1_3).setMarginLeft(7));

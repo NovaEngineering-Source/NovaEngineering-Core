@@ -4,7 +4,6 @@ import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
 import github.kasuminova.novaeng.common.container.slot.SlotCPUExtItemHandler;
 import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
 public class SlotCPUExtension extends SlotAssembly<SlotCPUExtItemHandler> {
@@ -26,15 +25,5 @@ public class SlotCPUExtension extends SlotAssembly<SlotCPUExtItemHandler> {
     protected SlotCPUExtItemHandler getSlot() {
         SlotConditionItemHandler slot = slotManager.getSlot("cpu", slotID);
         return slot instanceof SlotCPUExtItemHandler ? (SlotCPUExtItemHandler) slot : null;
-    }
-
-    @Override
-    public boolean isAvailable() {
-        return slot != null;
-    }
-
-    @Override
-    public String getSlotDescription() {
-        return I18n.format("gui.modular_server_assembler.assembly.cpu_ext.name");
     }
 }

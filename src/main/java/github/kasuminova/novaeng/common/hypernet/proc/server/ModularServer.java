@@ -6,6 +6,8 @@ import github.kasuminova.novaeng.common.hypernet.proc.CalculateRequest;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateType;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateTypes;
 import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.*;
+import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyDeficitException;
+import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import hellfirepvp.modularmachinery.common.tiles.base.TileEntitySynchronized;
 import hellfirepvp.modularmachinery.common.util.ItemUtils;
@@ -20,8 +22,12 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
 
     protected final TileEntitySynchronized owner;
 
+    protected final Properties prop = new Properties();
+
     protected final Map<CalculateType, TreeSet<Calculable>> calculableTypeSet = new HashMap<>();
     protected final List<Extension> extensions = new LinkedList<>();
+
+    protected boolean started = false;
 
     protected long energyCap = 0;
     protected long maxEnergyCap = 0;
@@ -50,6 +56,9 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
 
     @Override
     public CalculateReply calculate(final CalculateRequest request) {
+        if (!started) {
+            return new CalculateReply(0);
+        }
         TreeSet<Calculable> calculableSet = calculableTypeSet.get(request.type());
         if (calculableSet == null) {
             return new CalculateReply(0);
@@ -61,7 +70,12 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
             extension.onCalculate(request);
         }
         for (final Calculable calculable : calculableSet) {
-            totalGenerated += calculable.calculate(request.subtractMaxRequired(totalGenerated));
+            try {
+                totalGenerated += calculable.calculate(request.subtractMaxRequired(totalGenerated));
+            } catch (ModularServerException e) {
+                started = false;
+                return new CalculateReply(0);
+            }
             if (totalGenerated >= maxRequired) {
                 break;
             }
@@ -81,8 +95,13 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         }
     }
 
-    public long consumeEnergy(long amount) {
-        long maxCanConsume = Math.min(Math.min(maxEnergyConsume - energyConsumed, energyCap), amount);
+    public long consumeEnergy(long amount) throws EnergyDeficitException {
+        if (amount > energyCap) {
+            energyCap = 0;
+            throw new EnergyDeficitException();
+        }
+
+        long maxCanConsume = Math.min(maxEnergyConsume - energyConsumed, amount);
         energyConsumed += maxCanConsume;
         energyCap -= maxCanConsume;
         return maxCanConsume;
@@ -139,7 +158,22 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         readAssemblyHeatRadiatorInv(stackTag.getCompoundTag("heatInv"));
         readAssemblyPowerInv(stackTag.getCompoundTag("powerInv"));
 
+        prop.readNBT(stackTag.getCompoundTag("prop"));
+
         slotManager.initSlots();
+    }
+
+    public NBTTagCompound writeNBT() {
+        NBTTagCompound tag = new NBTTagCompound();
+
+        tag.setTag("cpuInv", assemblyCPUInv.writeNBT());
+        tag.setTag("calInv", assemblyCalculateCardInv.writeNBT());
+        tag.setTag("extInv", assemblyExtensionInv.writeNBT());
+        tag.setTag("heatInv", assemblyHeatRadiatorInv.writeNBT());
+        tag.setTag("powerInv", assemblyPowerInv.writeNBT());
+        tag.setTag("prop", prop.writeNBT());
+
+        return tag;
     }
 
     public void initInv() {
@@ -161,7 +195,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyCPUInv() {
-        assemblyCPUInv = ServerModuleInv.create(owner, AssemblyInvCPUConst.INV_SIZE);
+        assemblyCPUInv = ServerModuleInv.create(owner, AssemblyInvCPUConst.INV_SIZE, "cpu");
     }
 
     public void readAssemblyCalculateCardInv(final NBTTagCompound stackTag) {
@@ -173,7 +207,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyCalculateCardInv() {
-        assemblyCalculateCardInv = ServerModuleInv.create(owner, AssemblyInvCalculateCardConst.INV_SIZE);
+        assemblyCalculateCardInv = ServerModuleInv.create(owner, AssemblyInvCalculateCardConst.INV_SIZE, "calculate_card");
     }
 
     public void readAssemblyExtensionInv(final NBTTagCompound stackTag) {
@@ -185,7 +219,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyExtensionInv() {
-        assemblyExtensionInv = ServerModuleInv.create(owner, AssemblyInvExtensionConst.INV_SIZE);
+        assemblyExtensionInv = ServerModuleInv.create(owner, AssemblyInvExtensionConst.INV_SIZE, "extension");
     }
 
     public void readAssemblyHeatRadiatorInv(final NBTTagCompound stackTag) {
@@ -198,7 +232,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyHeatRadiatorInv() {
-        assemblyHeatRadiatorInv = ServerModuleInv.create(owner, AssemblyInvHeatRadiatorConst.INV_SIZE);
+        assemblyHeatRadiatorInv = ServerModuleInv.create(owner, AssemblyInvHeatRadiatorConst.INV_SIZE, "heat_radiator");
         initAssemblyHeatRadiatorStackLimit();
     }
 
@@ -218,22 +252,24 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyPowerInv() {
-        assemblyPowerInv = ServerModuleInv.create(owner, AssemblyInvPowerConst.INV_SIZE);
-    }
-
-    public NBTTagCompound writeNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
-
-        tag.setTag("cpuInv", assemblyCPUInv.writeNBT());
-        tag.setTag("calInv", assemblyCalculateCardInv.writeNBT());
-        tag.setTag("extInv", assemblyExtensionInv.writeNBT());
-        tag.setTag("heatInv", assemblyHeatRadiatorInv.writeNBT());
-        tag.setTag("powerInv", assemblyPowerInv.writeNBT());
-
-        return tag;
+        assemblyPowerInv = ServerModuleInv.create(owner, AssemblyInvPowerConst.INV_SIZE, "power");
     }
 
     public AssemblySlotManager getSlotManager() {
         return slotManager;
+    }
+
+    public static class Properties {
+        private float unlockLimit = 2.0F;
+
+        public NBTTagCompound writeNBT() {
+            NBTTagCompound tag = new NBTTagCompound();
+            tag.setFloat("unlockLimit", unlockLimit);
+            return tag;
+        }
+
+        public void readNBT(NBTTagCompound tag) {
+            unlockLimit = tag.getFloat("unlockLimit");
+        }
     }
 }

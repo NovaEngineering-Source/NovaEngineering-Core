@@ -23,66 +23,117 @@ public class AssemblySlotManager {
     }
 
     public void initSlots() {
-        // CPU Slots
+        addCPUSlots();
+        addCalculateCardSlots();
+        addExtensionCardSlots();
+        addPowerSlots();
+        addHeatRadiatorSlots();
+    }
+
+    protected void addCPUSlots() {
         ServerModuleInv invCPU = modularServer.getInvByName("cpu");
-        for (int slotID = 0; slotID < 4; slotID++) {
-            addSlot(new SlotCPUItemHandler(invCPU, slotID), invCPU, "cpu", slotID);
-        }
-        for (int slotID = AssemblyInvCPUConst.RAM_SLOT_ID_START; slotID < 20; slotID++) {
-            addSlot(new SlotRAMItemHandler(invCPU, slotID), invCPU, "cpu", slotID);
-        }
-        addSlot(new SlotCPUExtItemHandler(invCPU, AssemblyInvCPUConst.CPU_EXTENSION_SLOT_ID), invCPU, "cpu",
-                AssemblyInvCPUConst.CPU_EXTENSION_SLOT_ID);
 
-        // Calculate Card Slots
+        SlotCPUExtItemHandler ext_2 = addSlot(new SlotCPUExtItemHandler(AssemblyInvCPUConst.CPU_EXTENSION_SLOT_ID, invCPU));
+
+        // Default CPU Slots
+        addSlot(new SlotCPUItemHandler(0, 0, invCPU));
+        addSlot(new SlotCPUItemHandler(1, 1, invCPU));
+
+        // Extension CPU Slots
+        addSlot(new SlotCPUItemHandler(2, 2, invCPU).dependsOn(ext_2));
+        addSlot(new SlotCPUItemHandler(3, 3, invCPU).dependsOn(ext_2));
+
+        // Default RAM Slots
+        addSlot(new SlotRAMItemHandler(0, 4, invCPU));
+        addSlot(new SlotRAMItemHandler(1, 5, invCPU));
+        addSlot(new SlotRAMItemHandler(2, 6, invCPU));
+        addSlot(new SlotRAMItemHandler(3, 7, invCPU));
+        addSlot(new SlotRAMItemHandler(4, 8, invCPU));
+        addSlot(new SlotRAMItemHandler(5, 9, invCPU));
+        addSlot(new SlotRAMItemHandler(6, 10, invCPU));
+        addSlot(new SlotRAMItemHandler(7, 11, invCPU));
+
+        // Extension RAM Slots
+        addSlot(new SlotRAMItemHandler(8, 12, invCPU).dependsOn(ext_2));
+        addSlot(new SlotRAMItemHandler(9, 13, invCPU).dependsOn(ext_2));
+        addSlot(new SlotRAMItemHandler(10, 14, invCPU).dependsOn(ext_2));
+        addSlot(new SlotRAMItemHandler(11, 15, invCPU).dependsOn(ext_2));
+        addSlot(new SlotRAMItemHandler(12, 16, invCPU).dependsOn(ext_2));
+        addSlot(new SlotRAMItemHandler(13, 17, invCPU).dependsOn(ext_2));
+        addSlot(new SlotRAMItemHandler(14, 18, invCPU).dependsOn(ext_2));
+        addSlot(new SlotRAMItemHandler(15, 19, invCPU).dependsOn(ext_2));
+    }
+
+    protected void addCalculateCardSlots() {
         ServerModuleInv invCalculateCard = modularServer.getInvByName("calculate_card");
-        for (int slotID = 0; slotID < 16; slotID++) {
-            addSlot(new SlotCalculateCardItemHandler(invCalculateCard, slotID), invCalculateCard, "calculate_card", slotID);
-        }
-        addSlot(new SlotCalculateCardExtItemHandler(invCalculateCard, AssemblyInvCalculateCardConst.EXTENSION_SLOT_0_ID),
-                invCalculateCard, "calculate_card", AssemblyInvCalculateCardConst.EXTENSION_SLOT_0_ID);
-        addSlot(new SlotCalculateCardExtItemHandler(invCalculateCard, AssemblyInvCalculateCardConst.EXTENSION_SLOT_1_ID),
-                invCalculateCard, "calculate_card", AssemblyInvCalculateCardConst.EXTENSION_SLOT_1_ID);
-        addSlot(new SlotCalculateCardExtItemHandler(invCalculateCard, AssemblyInvCalculateCardConst.EXTENSION_SLOT_2_ID),
-                invCalculateCard, "calculate_card", AssemblyInvCalculateCardConst.EXTENSION_SLOT_2_ID);
-        addSlot(new SlotCalculateCardExtItemHandler(invCalculateCard, AssemblyInvCalculateCardConst.EXTENSION_SLOT_3_ID),
-                invCalculateCard, "calculate_card", AssemblyInvCalculateCardConst.EXTENSION_SLOT_3_ID);
 
-        // Extension Card Slots
-        ServerModuleInv invExtension = modularServer.getInvByName("extension");
-        for (int slotID = 0; slotID < 16; slotID++) {
-            addSlot(new SlotExtensionCardItemHandler(invExtension, slotID), invExtension, "extension", slotID);
-        }
-        addSlot(new SlotExtensionCardExtItemHandler(invExtension, AssemblyInvExtensionConst.EXTENSION_SLOT_0_ID),
-                invExtension, "extension", AssemblyInvExtensionConst.EXTENSION_SLOT_0_ID);
-        addSlot(new SlotExtensionCardExtItemHandler(invExtension, AssemblyInvExtensionConst.EXTENSION_SLOT_1_ID),
-                invExtension, "extension", AssemblyInvExtensionConst.EXTENSION_SLOT_1_ID);
-        addSlot(new SlotExtensionCardExtItemHandler(invExtension, AssemblyInvExtensionConst.EXTENSION_SLOT_2_ID),
-                invExtension, "extension", AssemblyInvExtensionConst.EXTENSION_SLOT_2_ID);
-        addSlot(new SlotExtensionCardExtItemHandler(invExtension, AssemblyInvExtensionConst.EXTENSION_SLOT_3_ID),
-                invExtension, "extension", AssemblyInvExtensionConst.EXTENSION_SLOT_3_ID);
-
-        // Power Slots
-        ServerModuleInv invPower = modularServer.getInvByName("power");
+        SlotCalculateCardExtItemHandler ext_0 = addSlot(new SlotCalculateCardExtItemHandler(0, AssemblyInvCalculateCardConst.EXTENSION_SLOT_0_ID, invCalculateCard));
         for (int slotID = 0; slotID < 4; slotID++) {
-            addSlot(new SlotPSUItemHandler(invPower, slotID), invPower, "power", slotID);
+            addSlot(new SlotCalculateCardItemHandler(slotID, slotID, invCalculateCard).dependsOn(ext_0));
+        }
+        SlotCalculateCardExtItemHandler ext_1 = addSlot(new SlotCalculateCardExtItemHandler(1, AssemblyInvCalculateCardConst.EXTENSION_SLOT_1_ID, invCalculateCard));
+        for (int slotID = 4; slotID < 8; slotID++) {
+            addSlot(new SlotCalculateCardItemHandler(slotID, slotID, invCalculateCard).dependsOn(ext_1));
+        }
+        SlotCalculateCardExtItemHandler ext_2 = addSlot(new SlotCalculateCardExtItemHandler(2, AssemblyInvCalculateCardConst.EXTENSION_SLOT_2_ID, invCalculateCard));
+        for (int slotID = 8; slotID < 12; slotID++) {
+            addSlot(new SlotCalculateCardItemHandler(slotID, slotID, invCalculateCard).dependsOn(ext_2));
+        }
+        SlotCalculateCardExtItemHandler ext_3 = addSlot(new SlotCalculateCardExtItemHandler(3, AssemblyInvCalculateCardConst.EXTENSION_SLOT_3_ID, invCalculateCard));
+        for (int slotID = 12; slotID < 16; slotID++) {
+            addSlot(new SlotCalculateCardItemHandler(slotID, slotID, invCalculateCard).dependsOn(ext_3));
+        }
+    }
+
+    protected void addExtensionCardSlots() {
+        ServerModuleInv invExtensionCard = modularServer.getInvByName("extension");
+
+        SlotExtensionCardExtItemHandler ext_0 = addSlot(new SlotExtensionCardExtItemHandler(0, AssemblyInvExtensionConst.EXTENSION_SLOT_0_ID, invExtensionCard));
+        for (int slotID = 0; slotID < 4; slotID++) {
+            addSlot(new SlotExtensionCardItemHandler(slotID, slotID, invExtensionCard).dependsOn(ext_0));
+        }
+        SlotExtensionCardExtItemHandler ext_1 = addSlot(new SlotExtensionCardExtItemHandler(1, AssemblyInvExtensionConst.EXTENSION_SLOT_1_ID, invExtensionCard));
+        for (int slotID = 4; slotID < 8; slotID++) {
+            addSlot(new SlotExtensionCardItemHandler(slotID, slotID, invExtensionCard).dependsOn(ext_1));
+        }
+        SlotExtensionCardExtItemHandler ext_2 = addSlot(new SlotExtensionCardExtItemHandler(2, AssemblyInvExtensionConst.EXTENSION_SLOT_2_ID, invExtensionCard));
+        for (int slotID = 8; slotID < 12; slotID++) {
+            addSlot(new SlotExtensionCardItemHandler(slotID, slotID, invExtensionCard).dependsOn(ext_2));
+        }
+        SlotExtensionCardExtItemHandler ext_3 = addSlot(new SlotExtensionCardExtItemHandler(3, AssemblyInvExtensionConst.EXTENSION_SLOT_3_ID, invExtensionCard));
+        for (int slotID = 12; slotID < 16; slotID++) {
+            addSlot(new SlotExtensionCardItemHandler(slotID, slotID, invExtensionCard).dependsOn(ext_3));
+        }
+    }
+
+    protected void addPowerSlots() {
+        ServerModuleInv invPower = modularServer.getInvByName("power");
+
+        for (int slotID = 0; slotID < 4; slotID++) {
+            addSlot(new SlotPSUItemHandler(slotID, slotID, invPower));
         }
         for (int slotID = 4; slotID < 8; slotID++) {
-            addSlot(new SlotCapacitorItemHandler(invPower, slotID), invPower, "power", slotID);
+            addSlot(new SlotCapacitorItemHandler(slotID - 4, slotID, invPower));
         }
+    }
 
-        // Heat Radiator Slots
+    protected void addHeatRadiatorSlots() {
         ServerModuleInv invHeatRadiator = modularServer.getInvByName("heat_radiator");
-        addSlot(new SlotCPUHeatRadiatorItemHandler(invHeatRadiator, AssemblyInvHeatRadiatorConst.CPU_HEAT_RADIATOR_SLOT_ID),
-                invHeatRadiator, "heat_radiator", AssemblyInvHeatRadiatorConst.CPU_HEAT_RADIATOR_SLOT_ID);
-        addSlot(new SlotRAMHeatRadiatorItemHandler(invHeatRadiator, AssemblyInvHeatRadiatorConst.RAM_HEAT_RADIATOR_SLOT_ID),
-                invHeatRadiator, "heat_radiator", AssemblyInvHeatRadiatorConst.RAM_HEAT_RADIATOR_SLOT_ID);
-        addSlot(new SlotCalculateCardHeatRadiatorItemHandler(invHeatRadiator, AssemblyInvHeatRadiatorConst.CALCULATE_CARD_HEAT_RADIATOR_SLOT_ID),
-                invHeatRadiator, "heat_radiator", AssemblyInvHeatRadiatorConst.CALCULATE_CARD_HEAT_RADIATOR_SLOT_ID);
-        addSlot(new SlotExtensionCardHeatRadiatorItemHandler(invHeatRadiator, AssemblyInvHeatRadiatorConst.EXTENSION_CARD_HEAT_RADIATOR_SLOT_ID),
-                invHeatRadiator, "heat_radiator", AssemblyInvHeatRadiatorConst.EXTENSION_CARD_HEAT_RADIATOR_SLOT_ID);
-        addSlot(new SlotCopperPipeItemHandler(invHeatRadiator, AssemblyInvHeatRadiatorConst.COPPER_PIPE_SLOT_ID),
-                invHeatRadiator, "heat_radiator", AssemblyInvHeatRadiatorConst.COPPER_PIPE_SLOT_ID);
+
+        addSlot(new SlotCPUHeatRadiatorItemHandler(AssemblyInvHeatRadiatorConst.CPU_HEAT_RADIATOR_SLOT_ID, invHeatRadiator));
+        addSlot(new SlotRAMHeatRadiatorItemHandler(AssemblyInvHeatRadiatorConst.RAM_HEAT_RADIATOR_SLOT_ID, invHeatRadiator));
+        addSlot(new SlotCalculateCardHeatRadiatorItemHandler(AssemblyInvHeatRadiatorConst.CALCULATE_CARD_HEAT_RADIATOR_SLOT_ID, invHeatRadiator));
+        addSlot(new SlotExtensionCardHeatRadiatorItemHandler(AssemblyInvHeatRadiatorConst.EXTENSION_CARD_HEAT_RADIATOR_SLOT_ID, invHeatRadiator));
+        addSlot(new SlotCopperPipeItemHandler(AssemblyInvHeatRadiatorConst.COPPER_PIPE_SLOT_ID, invHeatRadiator));
+    }
+
+    public <SLOT extends SlotConditionItemHandler> SLOT addSlot(@Nonnull final SLOT slot) {
+        ServerModuleInv inv = slot.getItemHandler();
+        int slotID = slot.getSlotIndex();
+        if (inv.isSlotAvailable(slotID)) {
+            inventorySlots.computeIfAbsent(inv.getInvName(), v -> new IntObjectHashMap<>()).put(slotID, slot);
+        }
+        return slot;
     }
 
     public void addSlot(@Nonnull final SlotConditionItemHandler slot, @Nonnull final ServerModuleInv serverModuleInv, @Nonnull final String invName, final int slotId) {

@@ -6,11 +6,11 @@ import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvUpdateEvent;
+import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.items.SlotItemHandler;
 
-public abstract class SlotDynamic<T extends SlotItemHandler> extends DynamicWidget {
+public abstract class SlotDynamic<T extends SlotConditionItemHandler> extends DynamicWidget {
     protected final int slotID;
 
     protected T slot = null;
@@ -23,8 +23,6 @@ public abstract class SlotDynamic<T extends SlotItemHandler> extends DynamicWidg
 
     protected int unavailableTextureX = 0;
     protected int unavailableTextureY = 0;
-
-    protected boolean hovered = false;
 
     public SlotDynamic(final int slotID) {
         this.slotID = slotID;
@@ -50,7 +48,9 @@ public abstract class SlotDynamic<T extends SlotItemHandler> extends DynamicWidg
     @Override
     public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         if (isVisible() && unavailableTexLocation != null && texLocation != null) {
-            hovered = isMouseOver(mousePos);
+            if (slot != null) {
+                slot.setHovered(isMouseOver(mousePos));
+            }
 
             int texX;
             int texY;
@@ -139,11 +139,6 @@ public abstract class SlotDynamic<T extends SlotItemHandler> extends DynamicWidg
     }
 
     public boolean isHovered() {
-        return hovered;
-    }
-
-    public SlotDynamic<T> setHovered(final boolean hovered) {
-        this.hovered = hovered;
-        return this;
+        return slot != null && slot.isHovered();
     }
 }

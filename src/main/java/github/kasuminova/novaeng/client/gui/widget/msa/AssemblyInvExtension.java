@@ -48,29 +48,29 @@ public class AssemblyInvExtension extends AssemblyInv {
 
         AssemblySlotManager slotManager = assemblyInvManager.slotManager;
 
-        SlotExtensionCardExtension ext_0_0 = new SlotExtensionCardExtension(0, AssemblyInvCalculateCardConst.EXTENSION_SLOT_0_ID, slotManager);
-        SlotExtensionCard ext_c_0_0 = new SlotExtensionCard(0, 0, slotManager).dependsOn(ext_0_0);
-        SlotExtensionCard ext_c_0_1 = new SlotExtensionCard(1, 1, slotManager).dependsOn(ext_0_0);
-        SlotExtensionCard ext_c_0_2 = new SlotExtensionCard(2, 2, slotManager).dependsOn(ext_0_0);
-        SlotExtensionCard ext_c_0_3 = new SlotExtensionCard(3, 3, slotManager).dependsOn(ext_0_0);
+        SlotExtensionCardExtension ext_0_0 = new SlotExtensionCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_0_ID, slotManager);
+        SlotExtensionCard ext_c_0_0 = new SlotExtensionCard(0, slotManager);
+        SlotExtensionCard ext_c_0_1 = new SlotExtensionCard(1, slotManager);
+        SlotExtensionCard ext_c_0_2 = new SlotExtensionCard(2, slotManager);
+        SlotExtensionCard ext_c_0_3 = new SlotExtensionCard(3, slotManager);
 
-        SlotExtensionCardExtension ext_1_0 = new SlotExtensionCardExtension(1, AssemblyInvCalculateCardConst.EXTENSION_SLOT_1_ID, slotManager);
-        SlotExtensionCard ext_c_1_0 = new SlotExtensionCard(4, 4, slotManager).dependsOn(ext_1_0);
-        SlotExtensionCard ext_c_1_1 = new SlotExtensionCard(5, 5, slotManager).dependsOn(ext_1_0);
-        SlotExtensionCard ext_c_1_2 = new SlotExtensionCard(6, 6, slotManager).dependsOn(ext_1_0);
-        SlotExtensionCard ext_c_1_3 = new SlotExtensionCard(7, 7, slotManager).dependsOn(ext_1_0);
+        SlotExtensionCardExtension ext_1_0 = new SlotExtensionCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_1_ID, slotManager);
+        SlotExtensionCard ext_c_1_0 = new SlotExtensionCard(4, slotManager);
+        SlotExtensionCard ext_c_1_1 = new SlotExtensionCard(5, slotManager);
+        SlotExtensionCard ext_c_1_2 = new SlotExtensionCard(6, slotManager);
+        SlotExtensionCard ext_c_1_3 = new SlotExtensionCard(7, slotManager);
 
-        SlotExtensionCardExtension ext_2_0 = new SlotExtensionCardExtension(2, AssemblyInvCalculateCardConst.EXTENSION_SLOT_2_ID, slotManager);
-        SlotExtensionCard ext_c_2_0 = new SlotExtensionCard(8, 8, slotManager).dependsOn(ext_2_0);
-        SlotExtensionCard ext_c_2_1 = new SlotExtensionCard(9, 9, slotManager).dependsOn(ext_2_0);
-        SlotExtensionCard ext_c_2_2 = new SlotExtensionCard(10, 10, slotManager).dependsOn(ext_2_0);
-        SlotExtensionCard ext_c_2_3 = new SlotExtensionCard(11, 11, slotManager).dependsOn(ext_2_0);
+        SlotExtensionCardExtension ext_2_0 = new SlotExtensionCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_2_ID, slotManager);
+        SlotExtensionCard ext_c_2_0 = new SlotExtensionCard(8, slotManager);
+        SlotExtensionCard ext_c_2_1 = new SlotExtensionCard(9, slotManager);
+        SlotExtensionCard ext_c_2_2 = new SlotExtensionCard(10, slotManager);
+        SlotExtensionCard ext_c_2_3 = new SlotExtensionCard(11, slotManager);
 
-        SlotExtensionCardExtension ext_3_0 = new SlotExtensionCardExtension(3, AssemblyInvCalculateCardConst.EXTENSION_SLOT_3_ID, slotManager);
-        SlotExtensionCard ext_c_3_0 = new SlotExtensionCard(12, 12, slotManager).dependsOn(ext_3_0);
-        SlotExtensionCard ext_c_3_1 = new SlotExtensionCard(13, 13, slotManager).dependsOn(ext_3_0);
-        SlotExtensionCard ext_c_3_2 = new SlotExtensionCard(14, 14, slotManager).dependsOn(ext_3_0);
-        SlotExtensionCard ext_c_3_3 = new SlotExtensionCard(15, 15, slotManager).dependsOn(ext_3_0);
+        SlotExtensionCardExtension ext_3_0 = new SlotExtensionCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_3_ID, slotManager);
+        SlotExtensionCard ext_c_3_0 = new SlotExtensionCard(12, slotManager);
+        SlotExtensionCard ext_c_3_1 = new SlotExtensionCard(13, slotManager);
+        SlotExtensionCard ext_c_3_2 = new SlotExtensionCard(14, slotManager);
+        SlotExtensionCard ext_c_3_3 = new SlotExtensionCard(15, slotManager);
 
         slotColum.addWidgets(new Row().addWidgets(ext_0_0, ext_c_0_0, ext_c_0_1, ext_c_0_2, ext_c_0_3).setMarginLeft(7).setMarginUp(7));
         slotColum.addWidgets(new Row().addWidgets(ext_1_0, ext_c_1_0, ext_c_1_1, ext_c_1_2, ext_c_1_3).setMarginLeft(7));
