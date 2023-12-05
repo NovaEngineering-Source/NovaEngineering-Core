@@ -47,7 +47,7 @@ public class Scrollbar extends DynamicWidget {
     }
 
     @Override
-    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         gui.mc.getTextureManager().bindTexture(textureLocation);
         int offsetX = renderPos.posX();
         int offsetY = renderPos.posY();

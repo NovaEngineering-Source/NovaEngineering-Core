@@ -80,7 +80,7 @@ public abstract class WidgetContainer extends DynamicWidget {
     }
 
     @Override
-    public final void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public final void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         enableScissor(gui, renderSize, renderPos, getWidth(), getHeight());
 
         try {
@@ -108,6 +108,8 @@ public abstract class WidgetContainer extends DynamicWidget {
         }
         return this;
     }
+
+    public abstract WidgetContainer removeWidget(DynamicWidget widget);
 
     // GUI EventHandlers
 

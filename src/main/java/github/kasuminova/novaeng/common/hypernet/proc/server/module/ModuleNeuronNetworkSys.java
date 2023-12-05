@@ -35,4 +35,8 @@ public class ModuleNeuronNetworkSys extends ModuleCalculateCard {
         return 0;
     }
 
+    @Override
+    public int getHardwareBandwidth() {
+        return 0;
+    }
 }

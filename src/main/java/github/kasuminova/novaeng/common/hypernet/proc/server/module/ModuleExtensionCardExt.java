@@ -1,11 +1,12 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
 import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.HardwareBandwidthConsumer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 
-public class ModuleExtensionCardExt extends ServerModule {
+public class ModuleExtensionCardExt extends ServerModule implements HardwareBandwidthConsumer {
 
     public ModuleExtensionCardExt(final CalculateServer parent) {
         super(parent);
@@ -21,4 +22,8 @@ public class ModuleExtensionCardExt extends ServerModule {
 
     }
 
+    @Override
+    public int getHardwareBandwidth() {
+        return 0;
+    }
 }

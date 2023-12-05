@@ -34,4 +34,8 @@ public class ModuleGPU extends ModuleCalculateCard {
         return 0;
     }
 
+    @Override
+    public int getHardwareBandwidth() {
+        return 0;
+    }
 }

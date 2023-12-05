@@ -46,7 +46,7 @@ public abstract class SlotDynamic<T extends SlotConditionItemHandler> extends Dy
     }
 
     @Override
-    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         if (isVisible() && unavailableTexLocation != null && texLocation != null) {
             if (slot != null) {
                 slot.setHovered(isMouseOver(mousePos));

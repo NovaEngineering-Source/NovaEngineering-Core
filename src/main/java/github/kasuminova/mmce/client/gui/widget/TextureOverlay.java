@@ -17,7 +17,7 @@ public class TextureOverlay extends DynamicWidget {
     protected int textureY = 0;
 
     @Override
-    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         float partialTickTime = ClientScheduler.getClientTick();
 
         if (isVisible() && texLocation != null) {

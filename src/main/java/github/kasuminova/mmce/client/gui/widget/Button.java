@@ -22,7 +22,7 @@ public class Button extends DynamicWidget {
     protected Consumer<Button> onClickedListener = null;
 
     @Override
-    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         if (isVisible() && textureLocation != null) {
             int texX;
             int texY;

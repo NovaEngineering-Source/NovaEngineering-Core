@@ -1,6 +1,9 @@
 package github.kasuminova.novaeng.client.gui;
 
 import github.kasuminova.mmce.client.gui.GuiContainerDynamic;
+import github.kasuminova.mmce.client.gui.widget.DragBar;
+import github.kasuminova.mmce.client.gui.widget.container.Column;
+import github.kasuminova.mmce.common.util.DataReference;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.widget.msa.*;
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
@@ -35,6 +38,11 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
         this.assemblyInvManager.setAbsX(MAIN_GUI_WIDTH);
 
         this.widgetController.addWidgetContainer(assemblyInvManager);
+
+        Column column = new Column();
+        column.addWidget(new DragBar(new DataReference<>(0D), new DataReference<>(0D), new DataReference<>(5D)));
+//        column.setAbsY(-20);
+        this.widgetController.addWidgetContainer(column);
     }
 
     @Override

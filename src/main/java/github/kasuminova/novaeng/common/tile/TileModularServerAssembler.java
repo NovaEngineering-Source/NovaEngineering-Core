@@ -43,7 +43,7 @@ public class TileModularServerAssembler extends TileCustomController implements 
 
     public void onServerModuleInvUpdate() {
         ItemStack stackInSlot = serverInventory.getStackInSlot(0);
-        if (server == null) {
+        if (server != null) {
             if (stackInSlot.getTagCompound() == null) {
                 stackInSlot.setTagCompound(new NBTTagCompound());
             }

@@ -32,8 +32,8 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
     }
 
     @Override
-    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
-        super.postRender(gui, renderSize, renderPos, mousePos);
+    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        super.render(gui, renderSize, renderPos, mousePos);
 
         if (slot == null) {
             return;

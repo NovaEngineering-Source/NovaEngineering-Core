@@ -53,7 +53,7 @@ public class Column extends WidgetContainer {
                 continue;
             }
             RenderPos absRenderPos = widgetRenderPos.add(renderPos);
-            widget.postRender(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
+            widget.render(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
             y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
         }
     }
@@ -66,6 +66,12 @@ public class Column extends WidgetContainer {
     @Override
     public Column addWidget(final DynamicWidget widget) {
         widgets.add(widget);
+        return this;
+    }
+
+    @Override
+    public Column removeWidget(final DynamicWidget widget) {
+        widgets.remove(widget);
         return this;
     }
 

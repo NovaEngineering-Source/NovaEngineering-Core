@@ -33,7 +33,7 @@ public class MultiLineLabel extends DynamicWidget {
     }
 
     @Override
-    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         GlStateManager.scale(scale, scale, scale);
 
         int maxWidth;
@@ -56,6 +56,8 @@ public class MultiLineLabel extends DynamicWidget {
             fr.drawStringWithShadow(s, offsetX, offsetY, 0xFFFFFF);
             offsetX += Math.round((float) DEFAULT_FONT_HEIGHT * scale);
         }
+
+        GlStateManager.scale(1.0F, 1.0F, 1.0F);
     }
 
     // Utils

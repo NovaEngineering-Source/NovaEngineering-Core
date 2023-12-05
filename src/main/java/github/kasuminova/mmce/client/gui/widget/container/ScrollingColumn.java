@@ -57,7 +57,7 @@ public class ScrollingColumn extends Column {
             int offsetY = widgetRenderPos.posY();
             if (offsetY + widget.getHeight() >= 0) {
                 RenderPos absRenderPos = widgetRenderPos.add(renderPos);
-                widget.postRender(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
+                widget.render(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
             }
             y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
         }

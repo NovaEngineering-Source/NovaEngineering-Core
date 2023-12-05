@@ -49,7 +49,7 @@ public class WidgetController {
             RenderPos relativeRenderPos = renderPos.subtract(new RenderPos(guiLeft, guiTop));
             MousePos relativeMousePos = mousePos.relativeTo(renderPos);
             RenderSize renderSize = new RenderSize(container.getWidth(), container.getHeight());
-            container.postRender(gui, renderSize, relativeRenderPos, relativeMousePos);
+            container.render(gui, renderSize, relativeRenderPos, relativeMousePos);
         }
 
         GlStateManager.popMatrix();

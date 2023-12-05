@@ -7,7 +7,7 @@ import github.kasuminova.novaeng.common.container.slot.SlotExtensionCardItemHand
 import net.minecraft.util.ResourceLocation;
 
 public class SlotExtensionCard extends SlotAssembly<SlotExtensionCardItemHandler> {
-    public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_extensions.png");
+    public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_extension.png");
     public static final int TEX_X = 103;
     public static final int TEX_Y = 0;
 

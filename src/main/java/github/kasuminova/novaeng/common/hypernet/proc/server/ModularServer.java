@@ -8,6 +8,7 @@ import github.kasuminova.novaeng.common.hypernet.proc.CalculateTypes;
 import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.*;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyDeficitException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
+import github.kasuminova.novaeng.common.hypernet.proc.server.module.ServerModule;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import hellfirepvp.modularmachinery.common.tiles.base.TileEntitySynchronized;
 import hellfirepvp.modularmachinery.common.util.ItemUtils;
@@ -24,6 +25,9 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
 
     protected final Properties prop = new Properties();
 
+    protected final List<ServerModule> modules = new ArrayList<>();
+    protected final Map<Class<?>, List<ServerModule>> typeModulesCache = new HashMap<>();
+
     protected final Map<CalculateType, TreeSet<Calculable>> calculableTypeSet = new HashMap<>();
     protected final List<Extension> extensions = new LinkedList<>();
 
@@ -36,6 +40,9 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     protected long maxEnergyConsume = 0;
 
     protected int heatGenerated = 0;
+
+    protected int totalHardwareBandwidth = 0;
+    protected int usedHardwareBandwidth = 0;
 
     protected ItemStack cachedStack;
 
@@ -84,6 +91,34 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         return new CalculateReply(totalGenerated);
     }
 
+    // Hardware Bandwidth
+
+    public void recalculateHardwareBandwidth() {
+        int totalProvided = 0;
+        int totalConsumed = 0;
+
+        for (final ServerModule module : modules) {
+            if (module instanceof HardwareBandwidthProvider provider) {
+                totalProvided += provider.getHardwareBandwidthProvision();
+            } else if (module instanceof HardwareBandwidthConsumer consumer) {
+                totalConsumed += consumer.getHardwareBandwidth();
+            }
+        }
+
+        totalHardwareBandwidth = totalProvided;
+        usedHardwareBandwidth = totalConsumed;
+    }
+
+    public int getTotalHardwareBandwidth() {
+        return totalHardwareBandwidth;
+    }
+
+    public int getUsedHardwareBandwidth() {
+        return usedHardwareBandwidth;
+    }
+
+    // Energy System
+
     public long provideEnergy(long amount) {
         long maxCanProvide = maxEnergyCap - energyCap;
         if (amount > maxCanProvide) {
@@ -106,6 +141,8 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         energyCap -= maxCanConsume;
         return maxCanConsume;
     }
+
+    // Heat System
 
     public void generateHeat(int amount) {
         heatGenerated += amount;
@@ -147,6 +184,25 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
             case "power" -> assemblyPowerInv;
             default -> null;
         };
+    }
+
+    // typeModules
+
+    public List<ServerModule> getModulesByType(Class<? extends ServerModule> type) {
+        List<ServerModule> cache = typeModulesCache.get(type);
+        if (cache != null) {
+            return cache;
+        }
+
+        List<ServerModule> matched = new ArrayList<>();
+        for (final ServerModule module : modules) {
+            if (module.getClass().isAssignableFrom(type)) {
+                matched.add(module);
+            }
+        }
+
+        typeModulesCache.put(type, matched);
+        return matched;
     }
 
     // NBT read / write

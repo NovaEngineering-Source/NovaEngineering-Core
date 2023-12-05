@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class SlotConditionItemHandler extends SlotItemHandler {
     protected final int displayID;
 
-    protected boolean enabled = true;
+    protected boolean enabled = false;
     protected boolean hovered = false;
 
     protected final List<SlotConditionItemHandler> dependencies = new LinkedList<>();

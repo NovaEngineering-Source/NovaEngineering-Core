@@ -23,7 +23,7 @@ public class ModuleRAM extends ServerModule implements HardwareBandwidthProvider
     }
 
     @Override
-    public double getHardwareBandwidthProvision() {
+    public int getHardwareBandwidthProvision() {
         return 0;
     }
 }

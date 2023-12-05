@@ -29,7 +29,10 @@ public abstract class DynamicWidget {
     public void preRender(GuiContainer gui, RenderSize renderSize, RenderPos renderPos, MousePos mousePos) {
     }
 
-    public abstract void postRender(GuiContainer gui, RenderSize renderSize, RenderPos renderPos, MousePos mousePos);
+    public abstract void render(GuiContainer gui, RenderSize renderSize, RenderPos renderPos, MousePos mousePos);
+
+    public void postRender(GuiContainer gui, RenderSize renderSize, RenderPos renderPos, MousePos mousePos) {
+    }
 
     // GUI EventHandlers
 

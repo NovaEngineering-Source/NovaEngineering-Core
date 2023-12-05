@@ -12,4 +12,9 @@ public class SingletonWidgetColumn extends Column {
     public Column addWidget(final DynamicWidget widget) {
         throw new UnsupportedOperationException();
     }
+
+    @Override
+    public Column removeWidget(final DynamicWidget widget) {
+        throw new UnsupportedOperationException();
+    }
 }
