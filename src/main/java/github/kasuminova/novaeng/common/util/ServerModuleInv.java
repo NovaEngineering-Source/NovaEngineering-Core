@@ -11,6 +11,7 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.function.Consumer;
+import java.util.stream.IntStream;
 
 public class ServerModuleInv extends IItemHandlerImpl {
     protected final String invName;
@@ -79,6 +80,10 @@ public class ServerModuleInv extends IItemHandlerImpl {
     public ServerModuleInv setUnavailableSlot(final int slotID) {
         availableSlots.set(slotID, false);
         return this;
+    }
+
+    public IntStream getAvailableSlotsStream() {
+        return availableSlots.stream();
     }
 
     public String getInvName() {

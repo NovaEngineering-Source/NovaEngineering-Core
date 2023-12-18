@@ -9,6 +9,7 @@ import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.*;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyDeficitException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyOverloadException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
+import github.kasuminova.novaeng.common.hypernet.proc.server.module.ModuleRegistry;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.ServerModule;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
@@ -19,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class ModularServer extends CalculateServer implements ServerInvProvider {
     protected final AssemblySlotManager slotManager = new AssemblySlotManager(this);
@@ -28,12 +30,14 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     protected final Properties prop = new Properties();
 
     protected final List<ServerModule> modules = new ArrayList<>();
+    protected final List<Extension> extensions = new LinkedList<>();
+
+    protected final Map<CalculateType, TreeSet<Calculable>> calculableTypeSet = new HashMap<>();
 
     protected final Map<Class<?>, List<ServerModule>> typeModulesCache = new HashMap<>();
     protected final Map<ServerModuleBase<?>, List<ServerModule>> baseModulesCache = new HashMap<>();
 
-    protected final Map<CalculateType, TreeSet<Calculable>> calculableTypeSet = new HashMap<>();
-    protected final List<Extension> extensions = new LinkedList<>();
+    protected Consumer<ModularServer> onServerInvChangedListener = null;
 
     protected boolean started = false;
 
@@ -63,7 +67,15 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public boolean requiresUpdate(final ItemStack newStack) {
-        return !ItemUtils.matchStacks(cachedStack, newStack);
+        return newStack != cachedStack && !ItemUtils.matchStacks(cachedStack, newStack);
+    }
+
+    public ItemStack getCachedStack() {
+        return cachedStack;
+    }
+
+    public void setCachedStack(final ItemStack cachedStack) {
+        this.cachedStack = cachedStack;
     }
 
     @Override
@@ -94,6 +106,71 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         }
 
         return new CalculateReply(totalGenerated);
+    }
+
+    // Modules
+
+    public void initModules() {
+        modules.clear();
+        extensions.clear();
+        calculableTypeSet.clear();
+        typeModulesCache.clear();
+        baseModulesCache.clear();
+
+        scanInvModules(assemblyCPUInv);
+        scanInvModules(assemblyCalculateCardInv);
+        scanInvModules(assemblyExtensionInv);
+        scanInvModules(assemblyPowerInv);
+        scanInvModules(assemblyHeatRadiatorInv);
+
+        recalculateHardwareBandwidth();
+    }
+
+    protected void scanInvModules(ServerModuleInv moduleInv) {
+        moduleInv.getAvailableSlotsStream().forEach(slot -> {
+            if (!slotManager.getSlot(moduleInv.getInvName(), slot).isAvailable()) {
+                return;
+            }
+            ItemStack stackInSlot = moduleInv.getStackInSlot(slot);
+            if (stackInSlot.isEmpty()) {
+                return;
+            }
+            ServerModuleBase<?> module = ModuleRegistry.getModule(stackInSlot);
+            if (module == null) {
+                return;
+            }
+
+            ServerModule moduleInstance = module.createInstance(this, stackInSlot);
+            modules.add(moduleInstance);
+            baseModulesCache.computeIfAbsent(module, v -> new ArrayList<>()).add(moduleInstance);
+
+            if (moduleInstance instanceof Extension) {
+                addExtension((Extension) moduleInstance);
+            }
+            if (moduleInstance instanceof Calculable) {
+                addCalculable((Calculable) moduleInstance);
+            }
+        });
+    }
+
+    public void addExtension(@Nonnull final Extension extension) {
+        extensions.add(extension);
+    }
+
+    public void addCalculable(@Nonnull final Calculable calculable) {
+        for (CalculateType calculateType : CalculateTypes.getAvailableTypes().values()) {
+            if (calculable.getCalculateTypeEfficiency(calculateType) <= 0D) {
+                continue;
+            }
+            calculableTypeSet.computeIfAbsent(calculateType, v -> new TreeSet<>((o1, o2) -> {
+                double efficiencyLeft = o1.getCalculateTypeEfficiency(calculateType);
+                double efficiencyRight = o2.getCalculateTypeEfficiency(calculateType);
+                if (efficiencyLeft == efficiencyRight) {
+                    return 0;
+                }
+                return efficiencyLeft < efficiencyRight ? 1 : -1;
+            })).add(calculable);
+        }
     }
 
     // Hardware Bandwidth
@@ -163,38 +240,6 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         return prev;
     }
 
-    public void addExtension(@Nonnull final Extension extension) {
-        extensions.add(extension);
-    }
-
-    public void addCalculable(@Nonnull final Calculable calculable) {
-        for (CalculateType calculateType : CalculateTypes.getAvailableTypes().values()) {
-            if (calculable.getCalculateTypeEfficiency(calculateType) <= 0D) {
-                continue;
-            }
-            calculableTypeSet.computeIfAbsent(calculateType, v -> new TreeSet<>((o1, o2) -> {
-                double efficiencyLeft = o1.getCalculateTypeEfficiency(calculateType);
-                double efficiencyRight = o2.getCalculateTypeEfficiency(calculateType);
-                if (efficiencyLeft == efficiencyRight) {
-                    return 0;
-                }
-                return efficiencyLeft < efficiencyRight ? 1 : -1;
-            })).add(calculable);
-        }
-    }
-
-    @Override
-    public ServerModuleInv getInvByName(final String name) {
-        return switch (name) {
-            case "cpu" -> assemblyCPUInv;
-            case "calculate_card" -> assemblyCalculateCardInv;
-            case "extension" -> assemblyExtensionInv;
-            case "heat_radiator" -> assemblyHeatRadiatorInv;
-            case "power" -> assemblyPowerInv;
-            default -> null;
-        };
-    }
-
     // typeModules
 
     public List<ServerModule> getModulesByType(Class<? extends ServerModule> type) {
@@ -217,20 +262,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     // baseModules
 
     public List<ServerModule> getModulesByBase(ServerModuleBase<?> base) {
-        List<ServerModule> cache = baseModulesCache.get(base);
-        if (cache != null) {
-            return cache;
-        }
-
-        List<ServerModule> matched = new ArrayList<>();
-        for (final ServerModule module : modules) {
-            if (module.getModuleBase().equals(base)) {
-                matched.add(module);
-            }
-        }
-
-        baseModulesCache.put(base, matched);
-        return matched;
+        return baseModulesCache.getOrDefault(base, Collections.emptyList());
     }
 
     // NBT read / write
@@ -260,6 +292,8 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         return tag;
     }
 
+    // ServerModule inv
+
     public void initInv() {
         createDefaultAssemblyCPUInv();
         createDefaultAssemblyCalculateCardInv();
@@ -268,6 +302,10 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         createDefaultAssemblyPowerInv();
 
         slotManager.initSlots();
+    }
+
+    public void onAssemblyInvUpdate(final ServerModuleInv changedInv) {
+
     }
 
     public void readAssemblyCPUInv(final NBTTagCompound stackTag) {
@@ -279,7 +317,8 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyCPUInv() {
-        assemblyCPUInv = ServerModuleInv.create(owner, AssemblyInvCPUConst.INV_SIZE, "cpu");
+        assemblyCPUInv = ServerModuleInv.create(owner, AssemblyInvCPUConst.INV_SIZE, "cpu")
+                .setOnChangedListener(this::onAssemblyInvUpdate);
     }
 
     public void readAssemblyCalculateCardInv(final NBTTagCompound stackTag) {
@@ -291,7 +330,8 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyCalculateCardInv() {
-        assemblyCalculateCardInv = ServerModuleInv.create(owner, AssemblyInvCalculateCardConst.INV_SIZE, "calculate_card");
+        assemblyCalculateCardInv = ServerModuleInv.create(owner, AssemblyInvCalculateCardConst.INV_SIZE, "calculate_card")
+                .setOnChangedListener(this::onAssemblyInvUpdate);
     }
 
     public void readAssemblyExtensionInv(final NBTTagCompound stackTag) {
@@ -303,7 +343,8 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyExtensionInv() {
-        assemblyExtensionInv = ServerModuleInv.create(owner, AssemblyInvExtensionConst.INV_SIZE, "extension");
+        assemblyExtensionInv = ServerModuleInv.create(owner, AssemblyInvExtensionConst.INV_SIZE, "extension")
+                .setOnChangedListener(this::onAssemblyInvUpdate);
     }
 
     public void readAssemblyHeatRadiatorInv(final NBTTagCompound stackTag) {
@@ -316,7 +357,8 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyHeatRadiatorInv() {
-        assemblyHeatRadiatorInv = ServerModuleInv.create(owner, AssemblyInvHeatRadiatorConst.INV_SIZE, "heat_radiator");
+        assemblyHeatRadiatorInv = ServerModuleInv.create(owner, AssemblyInvHeatRadiatorConst.INV_SIZE, "heat_radiator")
+                .setOnChangedListener(this::onAssemblyInvUpdate);;
         initAssemblyHeatRadiatorStackLimit();
     }
 
@@ -336,7 +378,24 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyPowerInv() {
-        assemblyPowerInv = ServerModuleInv.create(owner, AssemblyInvPowerConst.INV_SIZE, "power");
+        assemblyPowerInv = ServerModuleInv.create(owner, AssemblyInvPowerConst.INV_SIZE, "power")
+                .setOnChangedListener(this::onAssemblyInvUpdate);;
+    }
+
+    @Override
+    public ServerModuleInv getInvByName(final String name) {
+        return switch (name) {
+            case "cpu" -> assemblyCPUInv;
+            case "calculate_card" -> assemblyCalculateCardInv;
+            case "extension" -> assemblyExtensionInv;
+            case "heat_radiator" -> assemblyHeatRadiatorInv;
+            case "power" -> assemblyPowerInv;
+            default -> null;
+        };
+    }
+
+    public void setOnServerInvChangedListener(final Consumer<ModularServer> onServerInvChangedListener) {
+        this.onServerInvChangedListener = onServerInvChangedListener;
     }
 
     public AssemblySlotManager getSlotManager() {

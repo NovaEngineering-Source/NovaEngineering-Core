@@ -4,13 +4,13 @@ public enum ConnectResult {
     SUCCESS(true),
 
     // Node Only
-    UNKNOWN_CENTER(),
+    UNKNOWN_CENTER,
 
     // Center Only
-    CENTER_NOT_WORKING(),
-    CENTER_REACHED_CONNECTION_LIMIT(),
-    UNSUPPORTED_NODE(),
-    NODE_TYPE_REACHED_MAX_PRESENCES(),
+    CENTER_NOT_WORKING,
+    CENTER_REACHED_CONNECTION_LIMIT,
+    UNSUPPORTED_NODE,
+    NODE_TYPE_REACHED_MAX_PRESENCES,
     ;
 
     private final boolean success;

@@ -1,17 +1,17 @@
 package github.kasuminova.novaeng.common.tile;
 
+import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
-import github.kasuminova.novaeng.common.hypernet.proc.server.ServerInvProvider;
-import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.crafting.helper.CraftingStatus;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import hellfirepvp.modularmachinery.common.util.IOInventory;
+import hellfirepvp.modularmachinery.common.util.MiscUtils;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
-public class TileModularServerAssembler extends TileCustomController implements ServerInvProvider {
+public class TileModularServerAssembler extends TileCustomController {
     protected IOInventory serverInventory;
 
     protected ModularServer server = new ModularServer(this, ItemStack.EMPTY);
@@ -22,6 +22,7 @@ public class TileModularServerAssembler extends TileCustomController implements 
         this.serverInventory.setListener(this::onServerInventoryUpdate);
         this.parentMachine = MachineRegistry.getRegistry().getMachine(new ResourceLocation(ModularMachinery.MODID, "modular_server_assembler"));
         this.server.initInv();
+        this.server.setOnServerInvChangedListener(this::onServerInternalInventoryUpdate);
     }
 
     @Override
@@ -29,8 +30,13 @@ public class TileModularServerAssembler extends TileCustomController implements 
 
     }
 
-    public void onServerInventoryUpdate(int changedSlot) {
-        ItemStack stackInSlot = serverInventory.getStackInSlot(0);
+    public void onServerInventoryUpdate(final int changedSlot) {
+        ItemStack stackInSlot = serverInventory.getStackInSlot(changedSlot);
+        if (stackInSlot.isEmpty()) {
+            server = null;
+            return;
+        }
+
         if (server == null || server.requiresUpdate(stackInSlot)) {
             server = new ModularServer(this, stackInSlot);
             if (stackInSlot.getTagCompound() != null) {
@@ -38,17 +44,26 @@ public class TileModularServerAssembler extends TileCustomController implements 
             } else {
                 server.initInv();
             }
+            server.setOnServerInvChangedListener(this::onServerInternalInventoryUpdate);
         }
     }
 
-    public void onServerModuleInvUpdate() {
+    public void onServerInternalInventoryUpdate(final ModularServer server) {
         ItemStack stackInSlot = serverInventory.getStackInSlot(0);
-        if (server != null) {
-            if (stackInSlot.getTagCompound() == null) {
-                stackInSlot.setTagCompound(new NBTTagCompound());
-            }
-            stackInSlot.getTagCompound().setTag("server", server.writeNBT());
+        if (stackInSlot.isEmpty() || server.requiresUpdate(stackInSlot)) {
+            NovaEngineeringCore.log.warn("Server stack is not equals the cachedStack or it's empty! Assembler world: " + getWorld() + ", pos: " + MiscUtils.posToString(getPos()));
         }
+
+        ItemStack copied = stackInSlot.copy();
+        NBTTagCompound tag = copied.getTagCompound();
+        if (tag == null) {
+            tag = new NBTTagCompound();
+            copied.setTagCompound(tag);
+        }
+        tag.setTag("server", server.writeNBT());
+
+        server.setCachedStack(copied);
+        serverInventory.setStackInSlot(0, copied);
     }
 
     public ModularServer getServer() {
@@ -57,12 +72,10 @@ public class TileModularServerAssembler extends TileCustomController implements 
 
     public TileModularServerAssembler setServer(final ModularServer server) {
         this.server = server;
+        if (server != null) {
+            server.setOnServerInvChangedListener(this::onServerInternalInventoryUpdate);
+        }
         return this;
-    }
-
-    @Override
-    public ServerModuleInv getInvByName(final String name) {
-        return server.getInvByName(name);
     }
 
     @Override

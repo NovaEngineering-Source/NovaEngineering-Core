@@ -92,11 +92,6 @@ public abstract class SlotConditionItemHandler extends SlotItemHandler {
         return (ServerModuleInv) super.getItemHandler();
     }
 
-    public SlotConditionItemHandler setEnabled(final boolean enabled) {
-        this.enabled = enabled;
-        return this;
-    }
-
     public boolean isHovered() {
         return hovered;
     }
@@ -109,5 +104,10 @@ public abstract class SlotConditionItemHandler extends SlotItemHandler {
     @Override
     public boolean isEnabled() {
         return enabled;
+    }
+
+    public SlotConditionItemHandler setEnabled(final boolean enabled) {
+        this.enabled = enabled;
+        return this;
     }
 }

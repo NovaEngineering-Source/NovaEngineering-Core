@@ -130,9 +130,7 @@ public class AssemblySlotManager {
     public <SLOT extends SlotConditionItemHandler> SLOT addSlot(@Nonnull final SLOT slot) {
         ServerModuleInv inv = slot.getItemHandler();
         int slotID = slot.getSlotIndex();
-        if (inv.isSlotAvailable(slotID)) {
-            inventorySlots.computeIfAbsent(inv.getInvName(), v -> new IntObjectHashMap<>()).put(slotID, slot);
-        }
+        inventorySlots.computeIfAbsent(inv.getInvName(), v -> new IntObjectHashMap<>()).put(slotID, slot);
         return slot;
     }
 
@@ -152,7 +150,13 @@ public class AssemblySlotManager {
 
     public SlotConditionItemHandler getSlot(@Nonnull final String invName, final int slotId) {
         IntObjectHashMap<SlotConditionItemHandler> invSlots = inventorySlots.get(invName);
-        return invSlots == null ? null : invSlots.get(slotId);
+        if (invSlots != null) {
+            SlotConditionItemHandler slot = invSlots.get(slotId);
+            if (slot.getItemHandler().isSlotAvailable(slotId)) {
+                return slot;
+            }
+        }
+        return null;
     }
 
 }
