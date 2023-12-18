@@ -1,4 +1,4 @@
-package github.kasuminova.novaeng.mixin.nco;
+package github.kasuminova.novaeng.mixin.cleanroom.nco;
 
 import nc.util.I18nHelper;
 import nc.util.Lang;

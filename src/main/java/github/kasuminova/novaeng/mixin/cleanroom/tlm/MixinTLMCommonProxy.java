@@ -1,4 +1,4 @@
-package github.kasuminova.novaeng.mixin.tlm;
+package github.kasuminova.novaeng.mixin.cleanroom.tlm;
 
 import com.github.tartaricacid.touhoulittlemaid.proxy.CommonProxy;
 import org.spongepowered.asm.mixin.Mixin;
