@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module.base;
 
-import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.ModuleExtensionCardHeatRadiator;
 import net.minecraft.item.ItemStack;
 
@@ -11,8 +11,8 @@ public class ModuleExtensionCardHeatRadiatorBase extends ServerModuleBase<Module
     }
 
     @Override
-    public ModuleExtensionCardHeatRadiator createInstance(final CalculateServer server, final ItemStack moduleStack) {
-        return null;
+    public ModuleExtensionCardHeatRadiator createInstance(final ModularServer server, final ItemStack moduleStack) {
+        return new ModuleExtensionCardHeatRadiator(server, this, moduleStack.getCount());
     }
 
 }

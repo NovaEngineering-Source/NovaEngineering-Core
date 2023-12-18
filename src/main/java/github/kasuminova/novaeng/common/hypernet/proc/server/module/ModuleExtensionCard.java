@@ -1,30 +1,29 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
 import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.Extension;
 import github.kasuminova.novaeng.common.hypernet.proc.server.HardwareBandwidthConsumer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 
-public abstract class ModuleExtensionCard extends ServerModule implements HardwareBandwidthConsumer {
+public abstract class ModuleExtensionCard extends ServerModule implements HardwareBandwidthConsumer, Extension {
 
-    public ModuleExtensionCard(final ModularServer parent) {
-        super(parent);
-    }
+    protected int hardwareBandwidth;
 
-    @Override
-    public void readNBT(@Nonnull final NBTTagCompound nbt) {
-
-    }
-
-    @Override
-    public void writeNBT(@Nonnull final NBTTagCompound nbt) {
-
+    public ModuleExtensionCard(final ModularServer server,final ServerModuleBase<?> moduleBase) {
+        super(server, moduleBase);
     }
 
     @Override
     public int getHardwareBandwidth() {
-        return 0;
+        return hardwareBandwidth;
     }
+
+    public void setHardwareBandwidth(final int hardwareBandwidth) {
+        this.hardwareBandwidth = hardwareBandwidth;
+    }
+
 }

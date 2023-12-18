@@ -1,23 +1,33 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
-import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
+import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
 import net.minecraft.nbt.NBTTagCompound;
+import stanhebben.zenscript.annotations.ZenClass;
 
 import javax.annotation.Nonnull;
 
+@ZenRegister
+@ZenClass("novaeng.hypernet.module.ServerModule")
 public abstract class ServerModule {
 
     protected final ModularServer server;
+    protected final ServerModuleBase<?> moduleBase;
 
     protected boolean broken;
 
-    public ServerModule(final ModularServer server) {
+    public ServerModule(final ModularServer server,final ServerModuleBase<?> moduleBase) {
         this.server = server;
+        this.moduleBase = moduleBase;
     }
 
     public ModularServer getServer() {
         return server;
+    }
+
+    public ServerModuleBase<?> getModuleBase() {
+        return moduleBase;
     }
 
     public void readNBT(@Nonnull NBTTagCompound nbt) {

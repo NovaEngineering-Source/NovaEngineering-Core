@@ -7,8 +7,10 @@ import github.kasuminova.novaeng.common.hypernet.proc.CalculateType;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateTypes;
 import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.*;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyDeficitException;
+import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyOverloadException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.ServerModule;
+import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import hellfirepvp.modularmachinery.common.tiles.base.TileEntitySynchronized;
 import hellfirepvp.modularmachinery.common.util.ItemUtils;
@@ -26,7 +28,9 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     protected final Properties prop = new Properties();
 
     protected final List<ServerModule> modules = new ArrayList<>();
+
     protected final Map<Class<?>, List<ServerModule>> typeModulesCache = new HashMap<>();
+    protected final Map<ServerModuleBase<?>, List<ServerModule>> baseModulesCache = new HashMap<>();
 
     protected final Map<CalculateType, TreeSet<Calculable>> calculableTypeSet = new HashMap<>();
     protected final List<Extension> extensions = new LinkedList<>();
@@ -37,7 +41,8 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     protected long maxEnergyCap = 0;
 
     protected long energyConsumed = 0;
-    protected long maxEnergyConsume = 0;
+    protected long maxEnergyConsumption = 0;
+    protected long maxEnergyProvision = 0;
 
     protected int heatGenerated = 0;
 
@@ -120,26 +125,30 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     // Energy System
 
     public long provideEnergy(long amount) {
-        long maxCanProvide = maxEnergyCap - energyCap;
-        if (amount > maxCanProvide) {
-            energyCap = maxEnergyCap;
-            return maxCanProvide;
-        } else {
-            energyCap += amount;
-            return amount;
-        }
+        long maxCanProvide = Math.min(Math.min(maxEnergyCap - energyCap, maxEnergyProvision), amount);
+        energyCap += maxCanProvide;
+        return maxCanProvide;
     }
 
-    public long consumeEnergy(long amount) throws EnergyDeficitException {
+    public long consumeEnergy(long amount) throws ModularServerException {
         if (amount > energyCap) {
+            energyConsumed += energyCap;
             energyCap = 0;
             throw new EnergyDeficitException();
         }
 
-        long maxCanConsume = Math.min(maxEnergyConsume - energyConsumed, amount);
+        long maxCanConsume = Math.min(maxEnergyConsumption - energyConsumed, amount);
         energyConsumed += maxCanConsume;
         energyCap -= maxCanConsume;
+
+        if (amount > maxCanConsume) {
+            throw new EnergyOverloadException();
+        }
         return maxCanConsume;
+    }
+
+    public long getEnergyCap() {
+        return energyCap;
     }
 
     // Heat System
@@ -160,7 +169,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
 
     public void addCalculable(@Nonnull final Calculable calculable) {
         for (CalculateType calculateType : CalculateTypes.getAvailableTypes().values()) {
-            if (calculable.getCalculateTypeEfficiency(calculateType) <= 0) {
+            if (calculable.getCalculateTypeEfficiency(calculateType) <= 0D) {
                 continue;
             }
             calculableTypeSet.computeIfAbsent(calculateType, v -> new TreeSet<>((o1, o2) -> {
@@ -202,6 +211,25 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         }
 
         typeModulesCache.put(type, matched);
+        return matched;
+    }
+
+    // baseModules
+
+    public List<ServerModule> getModulesByBase(ServerModuleBase<?> base) {
+        List<ServerModule> cache = baseModulesCache.get(base);
+        if (cache != null) {
+            return cache;
+        }
+
+        List<ServerModule> matched = new ArrayList<>();
+        for (final ServerModule module : modules) {
+            if (module.getModuleBase().equals(base)) {
+                matched.add(module);
+            }
+        }
+
+        baseModulesCache.put(base, matched);
         return matched;
     }
 

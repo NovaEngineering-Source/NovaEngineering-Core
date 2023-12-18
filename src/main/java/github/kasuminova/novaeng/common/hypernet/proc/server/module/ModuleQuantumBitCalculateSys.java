@@ -1,16 +1,27 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
+import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateRequest;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateType;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateTypes;
 import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
+import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
 
+@ZenRegister
+@ZenClass("novaeng.hypernet.module.ModuleQuantumBitCalculateSys")
 public class ModuleQuantumBitCalculateSys extends ModuleCalculateCard {
 
-    public ModuleQuantumBitCalculateSys(final ModularServer parent) {
-        super(parent);
+    public ModuleQuantumBitCalculateSys(final ModularServer server,final ServerModuleBase<?> moduleBase, final double baseGeneration, final double energyConsumeRatio, final int hardwareBandwidth) {
+        super(server, moduleBase, baseGeneration, energyConsumeRatio, hardwareBandwidth);
+    }
+
+    @ZenMethod
+    public static ModuleQuantumBitCalculateSys cast(ServerModule module) {
+        return module instanceof ModuleQuantumBitCalculateSys ? (ModuleQuantumBitCalculateSys) module : null;
     }
 
     @Override
@@ -31,8 +42,4 @@ public class ModuleQuantumBitCalculateSys extends ModuleCalculateCard {
         return 0;
     }
 
-    @Override
-    public int getHardwareBandwidth() {
-        return 0;
-    }
 }

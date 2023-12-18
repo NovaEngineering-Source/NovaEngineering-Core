@@ -1,25 +1,28 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
+import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateRequest;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateType;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateTypes;
 import github.kasuminova.novaeng.common.hypernet.proc.server.*;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
+import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
 import net.minecraft.nbt.NBTTagCompound;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
 
 import javax.annotation.Nonnull;
 
-public class ModuleCPU extends ServerModule implements CalculablePowered, HardwareBandwidthConsumer {
+@ZenRegister
+@ZenClass("novaeng.hypernet.module.ModuleCPU")
+public class ModuleCPU extends ModuleCalculable {
+    public ModuleCPU(final ModularServer server,final ServerModuleBase<?> moduleBase, final double baseGeneration, final double energyConsumeRatio, final int hardwareBandwidth) {
+        super(server, moduleBase, baseGeneration, energyConsumeRatio, hardwareBandwidth);
+    }
 
-    protected double baseGeneration;
-    protected double energyConsumeRatio;
-    protected int hardwareBandwidth;
-
-    public ModuleCPU(final ModularServer parent, final double baseGeneration, final double energyConsumeRatio, final int hardwareBandwidth) {
-        super(parent);
-        this.baseGeneration = baseGeneration;
-        this.energyConsumeRatio = energyConsumeRatio;
-        this.hardwareBandwidth = hardwareBandwidth;
+    @ZenMethod
+    public static ModuleCPU cast(ServerModule module) {
+        return module instanceof ModuleCPU ? (ModuleCPU) module : null;
     }
 
     @Override
@@ -47,30 +50,4 @@ public class ModuleCPU extends ServerModule implements CalculablePowered, Hardwa
         super.writeNBT(nbt);
     }
 
-    @Override
-    public int getHardwareBandwidth() {
-        return 0;
-    }
-
-    @Override
-    public double getBaseGeneration() {
-        return baseGeneration;
-    }
-
-    public void setBaseGeneration(final double baseGeneration) {
-        this.baseGeneration = baseGeneration;
-    }
-
-    @Override
-    public double getEnergyConsumeRatio() {
-        return energyConsumeRatio;
-    }
-
-    public void setEnergyConsumeRatio(final double energyConsumeRatio) {
-        this.energyConsumeRatio = energyConsumeRatio;
-    }
-
-    public void setHardwareBandwidth(final int hardwareBandwidth) {
-        this.hardwareBandwidth = hardwareBandwidth;
-    }
 }

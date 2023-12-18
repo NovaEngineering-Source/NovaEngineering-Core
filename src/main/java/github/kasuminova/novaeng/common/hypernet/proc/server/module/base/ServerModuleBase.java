@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module.base;
 
-import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.ServerModule;
 import net.minecraft.item.ItemStack;
 
@@ -17,7 +17,7 @@ public abstract class ServerModuleBase<M extends ServerModule> {
         this.registryName = registryName;
     }
 
-    public abstract M createInstance(final CalculateServer server, final ItemStack moduleStack);
+    public abstract M createInstance(final ModularServer server, final ItemStack moduleStack);
 
     public List<String> getTooltip(M moduleInstance) {
         return tooltipFunction == null ? Collections.emptyList() : tooltipFunction.apply(moduleInstance);
@@ -30,5 +30,15 @@ public abstract class ServerModuleBase<M extends ServerModule> {
 
     public String getRegistryName() {
         return registryName;
+    }
+
+    @Override
+    public int hashCode() {
+        return registryName.hashCode();
+    }
+
+    @Override
+    public boolean equals(final Object obj) {
+        return obj instanceof ServerModuleBase<?> module && registryName.equals(module.registryName);
     }
 }
