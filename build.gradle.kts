@@ -197,10 +197,15 @@ dependencies {
         isTransitive = false
     }
 
+    // Third party libs
+    implementation("org.openjdk.nashorn:nashorn-core:15.4")
+
     // Mod Dependencies
     implementation(rfg.deobf("hellfirepvp:modularmachinery:r53:main"))
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4506796"))
+
+    compileOnly(rfg.deobf("com.github.tartaricacid:touhoulittlemaid:1.12.2-1.2.5-release"))
 
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197"))
@@ -214,7 +219,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:environmental-tech-245453:2691536"))
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
     compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
-
+    compileOnly(rfg.deobf("curse.maven:artisan-worktables-284351:3205284"))
     compileOnly(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
 }
 

@@ -1,14 +1,15 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
-import github.kasuminova.novaeng.common.hypernet.proc.server.Calculable;
-import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
-import github.kasuminova.novaeng.common.hypernet.proc.server.HardwareBandwidthConsumer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.*;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 
-public abstract class ModuleCalculateCard extends ServerModule implements Calculable, HardwareBandwidthConsumer {
-    public ModuleCalculateCard(final CalculateServer parent) {
+public abstract class ModuleCalculateCard extends ServerModule implements CalculablePowered, HardwareBandwidthConsumer {
+    protected double baseGeneration;
+    protected double energyConsumeRatio;
+
+    public ModuleCalculateCard(final ModularServer parent) {
         super(parent);
     }
 
@@ -21,4 +22,23 @@ public abstract class ModuleCalculateCard extends ServerModule implements Calcul
     public void writeNBT(@Nonnull final NBTTagCompound nbt) {
 
     }
+
+    @Override
+    public double getBaseGeneration() {
+        return baseGeneration;
+    }
+
+    public void setBaseGeneration(final double baseGeneration) {
+        this.baseGeneration = baseGeneration;
+    }
+
+    @Override
+    public double getEnergyConsumeRatio() {
+        return energyConsumeRatio;
+    }
+
+    public void setEnergyConsumeRatio(final double energyConsumeRatio) {
+        this.energyConsumeRatio = energyConsumeRatio;
+    }
+
 }

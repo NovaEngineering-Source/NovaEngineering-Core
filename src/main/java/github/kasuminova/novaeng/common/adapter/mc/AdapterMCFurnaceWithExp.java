@@ -48,7 +48,7 @@ public class AdapterMCFurnaceWithExp extends RecipeAdapter {
             float experience = furnaceRecipes.getSmeltingExperience(output);
 
             MachineRecipe recipe = createRecipeShell(
-                    new ResourceLocation("minecraft", "smelting_with_exp_" + incId),
+                    new ResourceLocation("minecraft",  "smelting_with_exp_" + incId + "_" + input + "_" + output),
                     owningMachineName,
                     tickTime, 0, false);
 
@@ -79,8 +79,8 @@ public class AdapterMCFurnaceWithExp extends RecipeAdapter {
             RecipeAdapter.addAdditionalRequirements(recipe, additionalRequirements, eventHandlers, recipeTooltips);
 
             smeltingRecipes.add(recipe);
-            incId++;
         }
+        incId++;
         return smeltingRecipes;
     }
 }

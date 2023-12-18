@@ -4,6 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.FactoryRecipeTickEvent;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
 import github.kasuminova.mmce.common.helper.IDynamicPatternInfo;
+import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleCPU;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleRAM;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
@@ -178,7 +179,7 @@ public class DataProcessor extends NetNode {
             }
 
             computationalLoad = computationalLoadHistoryCache / computationalLoadHistory.size();
-            ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> generated.set(maxGeneration));
+            HyperNetEventHandler.addTickStartAction(() -> generated.set(maxGeneration));
         }
 
         if (owner.getTicksExisted() % 20 == 0) {

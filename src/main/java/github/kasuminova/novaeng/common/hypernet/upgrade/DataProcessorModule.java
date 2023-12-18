@@ -65,29 +65,32 @@ public abstract class DataProcessorModule extends DynamicMachineUpgrade {
     }
 
     public void writeNBTToItem() {
-        if (parentStack == null) {
-            return;
+        if (parentBus != null && isValid()) {
+            parentBus.markNoUpdateSync();
         }
-
-        CapabilityUpgrade capability = parentStack.getCapability(CapabilityUpgrade.MACHINE_UPGRADE_CAPABILITY, null);
-        if (capability == null) {
-            return;
-        }
-
-        List<MachineUpgrade> upgrades = capability.getUpgrades();
-
-        for (final MachineUpgrade upgrade : upgrades) {
-            if (!upgradeEquals(upgrade)) {
-                continue;
-            }
-
-            DataProcessorModule processorModule = (DataProcessorModule) upgrade;
-            processorModule.readItemNBT(writeItemNBT());
-            if (parentBus != null) {
-                parentBus.markNoUpdateSync();
-            }
-            return;
-        }
+//        if (parentStack == null) {
+//            return;
+//        }
+//
+//        CapabilityUpgrade capability = parentStack.getCapability(CapabilityUpgrade.MACHINE_UPGRADE_CAPABILITY, null);
+//        if (capability == null) {
+//            return;
+//        }
+//
+//        List<MachineUpgrade> upgrades = capability.getUpgrades();
+//
+//        for (final MachineUpgrade upgrade : upgrades) {
+//            if (!upgradeEquals(upgrade)) {
+//                continue;
+//            }
+//
+//            DataProcessorModule processorModule = (DataProcessorModule) upgrade;
+//            processorModule.readItemNBT(writeItemNBT());
+//            if (parentBus != null) {
+//                parentBus.markNoUpdateSync();
+//            }
+//            return;
+//        }
     }
 
     @ZenGetter("durability")

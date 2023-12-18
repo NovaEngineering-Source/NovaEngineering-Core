@@ -6,9 +6,11 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "appeng.MixinStackSizeRenderer",
-    "nco.MixinRadiationCapabilityHandler"
+    "nco.MixinRadiationCapabilityHandler",
+    "tlm.MixinTLMCommonProxy"
   ],
   "client": [
-    "minecraft.MixinNettyPacketDecoder"
+    "minecraft.MixinNettyPacketDecoder",
+    "nco.MixinPlacementRule"
   ]
 }

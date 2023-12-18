@@ -1,13 +1,14 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
 import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 
 public class ModuleRAMHeatRadiator extends ServerModule {
 
-    public ModuleRAMHeatRadiator(final CalculateServer parent) {
+    public ModuleRAMHeatRadiator(final ModularServer parent) {
         super(parent);
     }
 

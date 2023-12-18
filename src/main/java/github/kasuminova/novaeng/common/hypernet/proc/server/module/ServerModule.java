@@ -1,24 +1,33 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
 import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import net.minecraft.nbt.NBTTagCompound;
 
 import javax.annotation.Nonnull;
 
 public abstract class ServerModule {
 
-    protected final CalculateServer parent;
+    protected final ModularServer server;
 
-    public ServerModule(final CalculateServer parent) {
-        this.parent = parent;
+    protected boolean broken;
+
+    public ServerModule(final ModularServer server) {
+        this.server = server;
     }
 
-    public CalculateServer getParent() {
-        return parent;
+    public ModularServer getServer() {
+        return server;
     }
 
-    public abstract void readNBT(@Nonnull NBTTagCompound nbt);
+    public void readNBT(@Nonnull NBTTagCompound nbt) {
+        broken = nbt.getBoolean("broken");
+    }
 
-    public abstract void writeNBT(@Nonnull NBTTagCompound nbt);
+    public void writeNBT(@Nonnull NBTTagCompound nbt) {
+        if (broken) {
+            nbt.setBoolean("broken", true);
+        }
+    }
 
 }

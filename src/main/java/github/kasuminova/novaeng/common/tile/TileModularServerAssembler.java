@@ -29,7 +29,7 @@ public class TileModularServerAssembler extends TileCustomController implements 
 
     }
 
-    public void onServerInventoryUpdate() {
+    public void onServerInventoryUpdate(int changedSlot) {
         ItemStack stackInSlot = serverInventory.getStackInSlot(0);
         if (server == null || server.requiresUpdate(stackInSlot)) {
             server = new ModularServer(this, stackInSlot);
@@ -72,7 +72,7 @@ public class TileModularServerAssembler extends TileCustomController implements 
         if (compound.hasKey("serverInv")) {
             serverInventory = IOInventory.deserialize(this, compound.getCompoundTag("serverInv"));
             serverInventory.setListener(this::onServerInventoryUpdate);
-            onServerInventoryUpdate();
+            onServerInventoryUpdate(-1);
         }
         if (compound.hasKey("controllerStatus")) {
             controllerStatus = CraftingStatus.deserialize(compound.getCompoundTag("controllerStatus"));

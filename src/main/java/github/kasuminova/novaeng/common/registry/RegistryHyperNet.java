@@ -239,31 +239,31 @@ public class RegistryHyperNet {
 
     public static void clearRegistry(ICommandSender sender) {
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s supported machinery registry.", SUPPORTED_MACHINERY.size()))
+                "[NovaEng-Core] Cleared %s supported machinery registry.", SUPPORTED_MACHINERY.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s computation center type registry.", COMPUTATION_CENTER_TYPE.size()))
+                "[NovaEng-Core] Cleared %s computation center type registry.", COMPUTATION_CENTER_TYPE.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s data processor type registry.", DATA_PROCESSOR_TYPE.size()))
+                "[NovaEng-Core] Cleared %s data processor type registry.", DATA_PROCESSOR_TYPE.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s research station type registry.", RESEARCH_STATION_TYPE.size()))
+                "[NovaEng-Core] Cleared %s research station type registry.", RESEARCH_STATION_TYPE.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s database type registry.", DATABASE_TYPE.size()))
+                "[NovaEng-Core] Cleared %s database type registry.", DATABASE_TYPE.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s registered node type.", REGISTERED_NODE_TYPE.size()))
+                "[NovaEng-Core] Cleared %s registered node type.", REGISTERED_NODE_TYPE.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s research cognition registry.", RESEARCH_COGNITION.size()))
+                "[NovaEng-Core] Cleared %s research cognition registry.", RESEARCH_COGNITION.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s data processor cpu type registry.", DATA_PROCESSOR_MODULE_CPU_TYPE.size()))
+                "[NovaEng-Core] Cleared %s data processor cpu type registry.", DATA_PROCESSOR_MODULE_CPU_TYPE.size()))
         );
         sender.sendMessage(new TextComponentString(String.format(
-                "[NovaEngineering-Core] Cleared %s data processor ram type registry.", DATA_PROCESSOR_MODULE_RAM_TYPE.size()))
+                "[NovaEng-Core] Cleared %s data processor ram type registry.", DATA_PROCESSOR_MODULE_RAM_TYPE.size()))
         );
 
         clearRegistry();

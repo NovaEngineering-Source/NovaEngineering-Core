@@ -4,17 +4,13 @@ import github.kasuminova.novaeng.common.hypernet.proc.CalculateRequest;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateType;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateTypes;
 import github.kasuminova.novaeng.common.hypernet.proc.server.CalculateServer;
+import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
 
 public class ModuleQuantumBitCalculateSys extends ModuleCalculateCard {
 
-    public ModuleQuantumBitCalculateSys(final CalculateServer parent) {
+    public ModuleQuantumBitCalculateSys(final ModularServer parent) {
         super(parent);
-    }
-
-    @Override
-    public double calculate(final CalculateRequest request) throws ModularServerException {
-        return 0;
     }
 
     @Override

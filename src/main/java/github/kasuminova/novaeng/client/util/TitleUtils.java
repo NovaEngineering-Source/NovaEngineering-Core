@@ -88,20 +88,20 @@ public class TitleUtils {
     }
 
     public static void checkTitleState() {
-        if (currentTitle == null) {
-            return;
-        }
+        // TODO: CleanroomLoader 把 title 部分搞砸了，所以...
+//        if (currentTitle == null) {
+//            return;
+//        }
 
-        String title = Display.getTitle();
-        if (!title.equals(currentTitle)) {
-            if (!title.equals(TitleUtils.VANILLA_TITLE) && !title.equals(lastCurrentTitle)) {
-                NovaEngineeringCore.log.debug("Invalid title: {}, Excepted: {}", title, lastCurrentTitle);
-                // 嗯？
-                Minecraft.getMinecraft().shutdown();
-                return;
-            }
-
-            Display.setTitle(currentTitle);
-        }
+//        String title = Display.getTitle();
+//        if (!title.equals(currentTitle)) {
+//            if (!title.equals(TitleUtils.VANILLA_TITLE) && !title.equals(lastCurrentTitle)) {
+//                NovaEngineeringCore.log.debug("Invalid title: {}, Excepted: {}", title, lastCurrentTitle);
+//                // 嗯？
+//                Minecraft.getMinecraft().shutdown();
+//                return;
+//            }
+//        }
+//        Display.setTitle(currentTitle);
     }
 }
