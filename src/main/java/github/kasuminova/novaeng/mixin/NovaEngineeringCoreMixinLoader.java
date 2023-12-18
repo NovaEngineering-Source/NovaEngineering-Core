@@ -4,10 +4,10 @@ import net.minecraftforge.fml.common.Loader;
 import zone.rong.mixinbooter.ILateMixinLoader;
 
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class NovaEngineeringCoreMixinLoader implements ILateMixinLoader {
+
     @Override
     public List<String> getMixinConfigs() {
         return Arrays.asList("mixins.novaeng_core.json", "mixins.novaeng_cleanroom_compatibility.json");
@@ -20,9 +20,18 @@ public class NovaEngineeringCoreMixinLoader implements ILateMixinLoader {
                 return Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("appliedenergistics2");
             }
             case "mixins.novaeng_cleanroom_compatibility.json" -> {
-                return Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("touhoulittlemaid");
+                return isCleanroomLoader() && Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("touhoulittlemaid");
             }
         }
         return false;
+    }
+
+    public static boolean isCleanroomLoader() {
+        try {
+            Class.forName("com.cleanroommc.boot.Main");
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 }
