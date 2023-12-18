@@ -1,9 +1,7 @@
 package github.kasuminova.novaeng.common.hypernet.upgrade;
 
 import crafttweaker.annotations.ZenRegister;
-import github.kasuminova.mmce.common.capability.CapabilityUpgrade;
 import github.kasuminova.mmce.common.upgrade.DynamicMachineUpgrade;
-import github.kasuminova.mmce.common.upgrade.MachineUpgrade;
 import github.kasuminova.mmce.common.upgrade.UpgradeType;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.upgrade.type.ProcessorModuleType;

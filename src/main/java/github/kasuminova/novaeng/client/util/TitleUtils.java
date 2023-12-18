@@ -2,7 +2,6 @@ package github.kasuminova.novaeng.client.util;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
-import net.minecraft.client.Minecraft;
 import org.lwjgl.opengl.Display;
 
 import java.util.concurrent.CompletableFuture;

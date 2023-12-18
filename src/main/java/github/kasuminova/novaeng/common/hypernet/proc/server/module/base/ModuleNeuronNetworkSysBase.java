@@ -2,7 +2,6 @@ package github.kasuminova.novaeng.common.hypernet.proc.server.module.base;
 
 import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.ModuleNeuronNetworkSys;
-import github.kasuminova.novaeng.common.hypernet.proc.server.module.ModuleQuantumBitCalculateSys;
 import net.minecraft.item.ItemStack;
 
 public class ModuleNeuronNetworkSysBase extends ModuleCalculateCardBase<ModuleNeuronNetworkSys> {

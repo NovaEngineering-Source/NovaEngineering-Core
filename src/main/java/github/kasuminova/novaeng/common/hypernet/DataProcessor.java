@@ -8,7 +8,6 @@ import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleCPU;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleRAM;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
-import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.lib.RequirementTypesMM;
 import hellfirepvp.modularmachinery.common.machine.IOType;
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;

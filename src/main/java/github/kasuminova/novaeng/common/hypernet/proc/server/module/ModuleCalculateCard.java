@@ -1,10 +1,7 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
-import github.kasuminova.novaeng.common.hypernet.proc.server.*;
+import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
-import net.minecraft.nbt.NBTTagCompound;
-
-import javax.annotation.Nonnull;
 
 public abstract class ModuleCalculateCard extends ModuleCalculable {
 

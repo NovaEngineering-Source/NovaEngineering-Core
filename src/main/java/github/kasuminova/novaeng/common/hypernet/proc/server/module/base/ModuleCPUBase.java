@@ -2,7 +2,6 @@ package github.kasuminova.novaeng.common.hypernet.proc.server.module.base;
 
 import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.ModuleCPU;
-import github.kasuminova.novaeng.common.hypernet.proc.server.module.ModuleGPU;
 import net.minecraft.item.ItemStack;
 
 public class ModuleCPUBase extends ModuleCalculableBase<ModuleCPU> {

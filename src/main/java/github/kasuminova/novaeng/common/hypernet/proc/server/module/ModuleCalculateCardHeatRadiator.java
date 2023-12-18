@@ -3,11 +3,8 @@ package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
-import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-
-import javax.annotation.Nonnull;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.module.ModuleCalculateCardHeatRadiator")
