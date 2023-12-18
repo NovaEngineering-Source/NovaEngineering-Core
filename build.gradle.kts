@@ -201,7 +201,7 @@ dependencies {
     implementation("org.openjdk.nashorn:nashorn-core:15.4")
 
     // Mod Dependencies
-    implementation(rfg.deobf("hellfirepvp:modularmachinery:r53:main"))
+    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4961183"))
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4506796"))
 
