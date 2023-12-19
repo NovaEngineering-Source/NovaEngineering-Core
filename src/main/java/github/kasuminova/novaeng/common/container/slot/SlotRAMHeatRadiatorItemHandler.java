@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.container.slot;
 
-import github.kasuminova.novaeng.common.hypernet.proc.server.module.ModuleRegistry;
+import github.kasuminova.novaeng.common.hypernet.proc.server.module.ServerModuleRegistry;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ModuleRAMHeatRadiatorBase;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import net.minecraft.item.ItemStack;
@@ -20,7 +20,7 @@ public class SlotRAMHeatRadiatorItemHandler extends SlotConditionItemHandler {
 
     @Override
     public boolean isItemValid(@Nonnull final ItemStack stack) {
-        return ModuleRegistry.getModule(stack) instanceof ModuleRAMHeatRadiatorBase;
+        return ServerModuleRegistry.getModule(stack) instanceof ModuleRAMHeatRadiatorBase;
     }
 
 }

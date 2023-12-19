@@ -1,12 +1,16 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
+import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateRequest;
 import github.kasuminova.novaeng.common.hypernet.proc.server.Calculable;
 import github.kasuminova.novaeng.common.hypernet.proc.server.HardwareBandwidthConsumer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
+import stanhebben.zenscript.annotations.ZenClass;
 
+@ZenRegister
+@ZenClass("novaeng.hypernet.server.module.ModuleCalculable")
 public abstract class ModuleCalculable extends ServerModule implements Calculable, HardwareBandwidthConsumer {
     protected double baseGeneration;
     protected double energyConsumeRatio;

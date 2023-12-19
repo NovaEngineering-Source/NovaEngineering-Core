@@ -12,7 +12,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import javax.annotation.Nonnull;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModuleCPU")
+@ZenClass("novaeng.hypernet.server.module.ModuleCPU")
 public class ModuleCPU extends ModuleCalculable {
     public ModuleCPU(final ModularServer server,final ServerModuleBase<?> moduleBase, final double baseGeneration, final double energyConsumeRatio, final int hardwareBandwidth) {
         super(server, moduleBase, baseGeneration, energyConsumeRatio, hardwareBandwidth);

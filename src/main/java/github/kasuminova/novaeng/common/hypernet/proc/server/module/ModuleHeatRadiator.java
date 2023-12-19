@@ -1,8 +1,12 @@
 package github.kasuminova.novaeng.common.hypernet.proc.server.module;
 
+import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
+import stanhebben.zenscript.annotations.ZenClass;
 
+@ZenRegister
+@ZenClass("novaeng.hypernet.server.module.ModuleHeatRadiator")
 public abstract class ModuleHeatRadiator extends ServerModule {
 
     protected int moduleAmount;

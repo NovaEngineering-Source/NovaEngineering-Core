@@ -9,7 +9,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModuleGPU")
+@ZenClass("novaeng.hypernet.server.module.ModuleGPU")
 public class ModuleGPU extends ModuleCalculateCard {
 
     public ModuleGPU(final ModularServer server,final ServerModuleBase<?> moduleBase, final double baseGeneration, final double energyConsumeRatio, final int hardwareBandwidth) {

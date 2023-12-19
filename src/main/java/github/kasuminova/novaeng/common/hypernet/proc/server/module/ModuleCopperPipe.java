@@ -7,7 +7,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModuleCopperPipe")
+@ZenClass("novaeng.hypernet.server.module.ModuleCopperPipe")
 public class ModuleCopperPipe extends ModuleHeatRadiator {
 
     public ModuleCopperPipe(final ModularServer server,final ServerModuleBase<?> moduleBase, final int moduleAmount) {

@@ -10,7 +10,7 @@ import stanhebben.zenscript.annotations.ZenMethod;
 import javax.annotation.Nonnull;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModuleCapacitor")
+@ZenClass("novaeng.hypernet.server.module.ModuleCapacitor")
 public class ModuleCapacitor extends ServerModule {
 
     protected long maxEnergyCapProvide;

@@ -9,8 +9,8 @@ import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.*;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyDeficitException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyOverloadException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
-import github.kasuminova.novaeng.common.hypernet.proc.server.module.ModuleRegistry;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.ServerModule;
+import github.kasuminova.novaeng.common.hypernet.proc.server.module.ServerModuleRegistry;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import hellfirepvp.modularmachinery.common.tiles.base.TileEntitySynchronized;
@@ -135,7 +135,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
             if (stackInSlot.isEmpty()) {
                 return;
             }
-            ServerModuleBase<?> module = ModuleRegistry.getModule(stackInSlot);
+            ServerModuleBase<?> module = ServerModuleRegistry.getModule(stackInSlot);
             if (module == null) {
                 return;
             }

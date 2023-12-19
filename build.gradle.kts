@@ -197,16 +197,10 @@ dependencies {
         isTransitive = false
     }
 
-    // Third party libs
-    implementation("org.openjdk.nashorn:nashorn-core:15.4")
-
     // Mod Dependencies
-    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4961183"))
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
+    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4961183"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4506796"))
-
-    compileOnly(rfg.deobf("com.github.tartaricacid:touhoulittlemaid:1.12.2-1.2.5-release"))
-
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197"))
     implementation(rfg.deobf("curse.maven:applied-energistics-2-223794:2747063"))
@@ -221,6 +215,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
     compileOnly(rfg.deobf("curse.maven:artisan-worktables-284351:3205284"))
     compileOnly(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
+    compileOnly(rfg.deobf("com.github.tartaricacid:touhoulittlemaid:1.12.2-1.2.5-release"))
 }
 
 // Publishing to a Maven repository

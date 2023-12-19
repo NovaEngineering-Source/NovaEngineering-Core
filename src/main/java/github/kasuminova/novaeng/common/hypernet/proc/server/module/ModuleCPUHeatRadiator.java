@@ -7,7 +7,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModuleCPUHeatRadiator")
+@ZenClass("novaeng.hypernet.server.module.ModuleCPUHeatRadiator")
 public class ModuleCPUHeatRadiator extends ModuleHeatRadiator {
 
     public ModuleCPUHeatRadiator(final ModularServer server,final ServerModuleBase<?> moduleBase, final int moduleAmount) {

@@ -9,7 +9,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModuleQuantumBitCalculateSys")
+@ZenClass("novaeng.hypernet.server.module.ModuleQuantumBitCalculateSys")
 public class ModuleQuantumBitCalculateSys extends ModuleCalculateCard {
 
     public ModuleQuantumBitCalculateSys(final ModularServer server,final ServerModuleBase<?> moduleBase, final double baseGeneration, final double energyConsumeRatio, final int hardwareBandwidth) {

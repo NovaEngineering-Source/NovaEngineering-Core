@@ -9,7 +9,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModuleNeuronNetworkSys")
+@ZenClass("novaeng.hypernet.server.module.ModuleNeuronNetworkSys")
 public class ModuleNeuronNetworkSys extends ModuleCalculateCard {
 
     public ModuleNeuronNetworkSys(final ModularServer server,final ServerModuleBase<?> moduleBase, final double baseGeneration, final double energyConsumeRatio, final int hardwareBandwidth) {

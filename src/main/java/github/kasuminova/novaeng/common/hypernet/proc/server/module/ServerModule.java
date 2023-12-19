@@ -9,7 +9,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import javax.annotation.Nonnull;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ServerModule")
+@ZenClass("novaeng.hypernet.server.module.ServerModule")
 public abstract class ServerModule {
 
     protected final ModularServer server;

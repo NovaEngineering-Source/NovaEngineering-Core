@@ -8,7 +8,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModuleExtensionCardExt")
+@ZenClass("novaeng.hypernet.server.module.ModuleExtensionCardExt")
 public class ModuleExtensionCardExt extends ServerModule implements HardwareBandwidthConsumer {
 
     protected int hardwareBandwidth;

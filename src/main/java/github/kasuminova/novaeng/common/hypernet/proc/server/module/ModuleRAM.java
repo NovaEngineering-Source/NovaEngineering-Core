@@ -8,7 +8,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModuleRAM")
+@ZenClass("novaeng.hypernet.server.module.ModuleRAM")
 public class ModuleRAM extends ServerModule implements HardwareBandwidthProvider {
 
     protected int hardwareBandwidthProvision;

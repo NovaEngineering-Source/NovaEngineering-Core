@@ -7,7 +7,7 @@ import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 @ZenRegister
-@ZenClass("novaeng.hypernet.module.ModulePSU")
+@ZenClass("novaeng.hypernet.server.module.ModulePSU")
 public class ModulePSU extends ServerModule {
 
     protected long maxEnergyProvision;
