@@ -214,8 +214,8 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
     compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
     compileOnly(rfg.deobf("curse.maven:artisan-worktables-284351:3205284"))
+    compileOnly(rfg.deobf("curse.maven:touhou-little-maid-355044:3576415"))
     compileOnly(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
-    compileOnly(rfg.deobf("com.github.tartaricacid:touhoulittlemaid:1.12.2-1.2.5-release"))
 }
 
 // Publishing to a Maven repository
