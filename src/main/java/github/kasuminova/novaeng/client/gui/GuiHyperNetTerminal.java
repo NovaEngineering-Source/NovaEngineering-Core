@@ -652,6 +652,10 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
     }
 
     @Override
+    protected void setWidthHeight() {
+    }
+
+    @Override
     protected void mouseClicked(final int mouseX, final int mouseY, final int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
 
@@ -847,10 +851,6 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
         screenScrollbar.draw(this, mc);
 
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-    }
-
-    @Override
-    protected void setWidthHeight() {
     }
 
     public static class ResearchDataContext {

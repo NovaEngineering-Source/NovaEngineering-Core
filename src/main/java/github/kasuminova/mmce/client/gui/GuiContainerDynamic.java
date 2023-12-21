@@ -19,6 +19,10 @@ public abstract class GuiContainerDynamic<T extends ContainerBase<?>> extends Gu
     }
 
     @Override
+    protected void setWidthHeight() {
+    }
+
+    @Override
     public void updateScreen() {
         super.updateScreen();
         widgetController.update();

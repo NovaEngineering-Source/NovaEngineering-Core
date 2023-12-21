@@ -1,6 +1,7 @@
 package github.kasuminova.mmce.client.gui.widget.container;
 
 import github.kasuminova.mmce.client.gui.util.MousePos;
+import github.kasuminova.mmce.client.gui.util.RenderFunction;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
@@ -20,26 +21,21 @@ public class Column extends WidgetContainer {
 
     @Override
     protected void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
-        int y = 0;
+        doRender(gui, renderSize, renderPos, mousePos, DynamicWidget::preRender);
+    }
 
-        int width = getWidth();
-
-        for (final DynamicWidget widget : widgets) {
-            if (widget.isDisabled()) {
-                continue;
-            }
-            RenderPos widgetRenderPos = getWidgetRenderOffset(widget, width, y);
-            if (widgetRenderPos == null) {
-                continue;
-            }
-            RenderPos absRenderPos = widgetRenderPos.add(renderPos);
-            widget.preRender(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
-            y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
-        }
+    @Override
+    protected void renderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        doRender(gui, renderSize, renderPos, mousePos, DynamicWidget::render);
     }
 
     @Override
     protected void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        doRender(gui, renderSize, renderPos, mousePos, DynamicWidget::postRender);
+    }
+
+    protected void doRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos,
+                            final RenderFunction renderFunction) {
         int y = 0;
 
         int width = getWidth();
@@ -53,7 +49,7 @@ public class Column extends WidgetContainer {
                 continue;
             }
             RenderPos absRenderPos = widgetRenderPos.add(renderPos);
-            widget.render(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
+            renderFunction.doRender(widget, gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
             y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
         }
     }

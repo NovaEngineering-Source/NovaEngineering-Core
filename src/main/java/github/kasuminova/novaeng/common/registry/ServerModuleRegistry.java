@@ -1,10 +1,11 @@
-package github.kasuminova.novaeng.common.hypernet.proc.server.module;
+package github.kasuminova.novaeng.common.registry;
 
 import com.google.common.base.Preconditions;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
+import github.kasuminova.novaeng.common.item.ItemServerModule;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
@@ -43,7 +44,15 @@ public class ServerModuleRegistry {
     }
 
     public static ServerModuleBase<?> getModule(final ItemStack toMatch) {
-        ItemModuleRegistry itemModuleRegistry = MODULE_ITEM_REGISTRY.get(toMatch.getItem());
+        Item item = toMatch.getItem();
+        if (item instanceof ItemServerModule itemServerModule) {
+            ServerModuleBase<?> boundedModule = itemServerModule.getBoundedModule();
+            if (boundedModule != null) {
+                return boundedModule;
+            }
+        }
+
+        ItemModuleRegistry itemModuleRegistry = MODULE_ITEM_REGISTRY.get(item);
         return itemModuleRegistry == null ? null : itemModuleRegistry.getModule(toMatch);
     }
 

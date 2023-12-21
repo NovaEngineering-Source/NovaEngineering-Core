@@ -1,6 +1,7 @@
 package github.kasuminova.mmce.client.gui.widget.container;
 
 import github.kasuminova.mmce.client.gui.util.MousePos;
+import github.kasuminova.mmce.client.gui.util.RenderFunction;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.Scrollbar;
@@ -16,7 +17,7 @@ public class ScrollingColumn extends Column {
     protected final Scrollbar scrollbar = new Scrollbar();
 
     @Override
-    protected void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    protected void doRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos, final RenderFunction renderFunction) {
         int width = renderSize.width();
         int height = renderSize.height();
 
@@ -33,39 +34,25 @@ public class ScrollingColumn extends Column {
             int offsetY = widgetRenderPos.posY();
             if (offsetY + widget.getHeight() >= 0) {
                 RenderPos absRenderPos = widgetRenderPos.add(renderPos);
-                widget.preRender(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
+                renderFunction.doRender(widget, gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
             }
+
             y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
-        }
-    }
-
-    @Override
-    protected void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
-        int width = renderSize.width();
-        int height = renderSize.height();
-
-        int y = getTotalHeight() > height ? -scrollbar.getCurrentScroll() : 0;
-
-        for (final DynamicWidget widget : widgets) {
-            if (widget.isDisabled()) {
-                continue;
+            if (renderSize.isHeightLimited() && y >= renderSize.height()) {
+                break;
             }
-            RenderPos widgetRenderPos = getWidgetRenderOffset(widget, width, y);
-            if (widgetRenderPos == null) {
-                continue;
-            }
-            int offsetY = widgetRenderPos.posY();
-            if (offsetY + widget.getHeight() >= 0) {
-                RenderPos absRenderPos = widgetRenderPos.add(renderPos);
-                widget.render(gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
-            }
-            y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
         }
     }
 
     @Override
     public ScrollingColumn addWidget(final DynamicWidget widget) {
         super.addWidget(widget);
+        return this;
+    }
+
+    @Override
+    public ScrollingColumn removeWidget(final DynamicWidget widget) {
+        super.removeWidget(widget);
         return this;
     }
 

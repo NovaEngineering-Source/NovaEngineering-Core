@@ -10,8 +10,8 @@ import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyDef
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyOverloadException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.ServerModule;
-import github.kasuminova.novaeng.common.hypernet.proc.server.module.ServerModuleRegistry;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
+import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import hellfirepvp.modularmachinery.common.tiles.base.TileEntitySynchronized;
 import hellfirepvp.modularmachinery.common.util.ItemUtils;

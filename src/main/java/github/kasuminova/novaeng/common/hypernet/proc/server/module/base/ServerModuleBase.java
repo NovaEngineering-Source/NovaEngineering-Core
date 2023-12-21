@@ -16,7 +16,7 @@ import java.util.function.Function;
 public abstract class ServerModuleBase<M extends ServerModule> {
 
     protected final String registryName;
-    protected Function<M, List<String>> tooltipFunction = null;
+    protected Function<ServerModule, List<String>> tooltipFunction = null;
 
     public ServerModuleBase(final String registryName) {
         this.registryName = registryName;
@@ -29,9 +29,8 @@ public abstract class ServerModuleBase<M extends ServerModule> {
     }
 
     @ZenMethod
-    public ServerModuleBase<M> setTooltipFunction(final Function<M, List<String>> tooltipFunction) {
+    public void setTooltipFunction(final Function<ServerModule, List<String>> tooltipFunction) {
         this.tooltipFunction = tooltipFunction;
-        return this;
     }
 
     public String getRegistryName() {

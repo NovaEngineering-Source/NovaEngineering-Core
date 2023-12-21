@@ -84,6 +84,21 @@ public abstract class WidgetContainer extends DynamicWidget {
         enableScissor(gui, renderSize, renderPos, getWidth(), getHeight());
 
         try {
+            renderInternal(gui, renderSize, renderPos, mousePos);
+        } catch (Exception e) {
+            SCISSOR_STACK.get().clear();
+            NovaEngineeringCore.log.error("Error when rendering dynamic widgets!", e);
+            throw e;
+        } finally {
+            disableScissor(renderSize);
+        }
+    }
+
+    @Override
+    public final void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        enableScissor(gui, renderSize, renderPos, getWidth(), getHeight());
+
+        try {
             postRenderInternal(gui, renderSize, renderPos, mousePos);
         } catch (Exception e) {
             SCISSOR_STACK.get().clear();
@@ -95,6 +110,8 @@ public abstract class WidgetContainer extends DynamicWidget {
     }
 
     protected abstract void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos);
+
+    protected abstract void renderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos);
 
     protected abstract void postRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos);
 
