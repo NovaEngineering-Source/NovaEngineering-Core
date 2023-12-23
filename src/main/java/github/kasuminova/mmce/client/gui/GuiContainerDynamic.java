@@ -48,6 +48,7 @@ public abstract class GuiContainerDynamic<T extends ContainerBase<?>> extends Gu
     @Override
     protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
+        widgetController.postRender(new MousePos(mouseX, mouseY));
         widgetController.renderTooltip(new MousePos(mouseX, mouseY));
     }
 

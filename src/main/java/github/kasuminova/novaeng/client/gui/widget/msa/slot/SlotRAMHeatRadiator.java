@@ -3,30 +3,31 @@ package github.kasuminova.novaeng.client.gui.widget.msa.slot;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
 import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
-import github.kasuminova.novaeng.common.container.slot.SlotExtensionCardItemHandler;
+import github.kasuminova.novaeng.common.container.slot.SlotRAMHeatRadiatorItemHandler;
 import github.kasuminova.novaeng.common.util.RandomUtils;
 import net.minecraft.util.ResourceLocation;
 
-public class SlotExtensionCard extends SlotAssemblyDecor<SlotExtensionCardItemHandler> {
-    public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_extension.png");
-    public static final int TEX_X = 121;
-    public static final int TEX_Y = 38;
+public class SlotRAMHeatRadiator extends SlotAssemblyDecor<SlotRAMHeatRadiatorItemHandler> {
+    public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_cpu.png");
 
-    public static final int UNAVAILABLE_TEX_X = 147;
+    public static final int TEX_X = 139;
+    public static final int TEX_Y = 56;
+
+    public static final int UNAVAILABLE_TEX_X = 165;
     public static final int UNAVAILABLE_TEX_Y = 1;
 
-    public static final int OVERLAY_X = 221;
-    public static final int OVERLAY_Y = 19;
+    public static final int OVERLAY_X = 167;
+    public static final int OVERLAY_Y = 37;
     public static final int OVERLAY_WIDTH = 18;
     public static final int OVERLAY_HEIGHT = 18;
 
     public static final int DECOR_OVERLAY_AMOUNT = 6;
-    public static final int[] DECOR_OVERLAY_X = {167, 185, 203, 167, 185, 203};
+    public static final int[] DECOR_OVERLAY_X = {186, 204, 222, 186, 203, 221};
     public static final int[] DECOR_OVERLAY_Y = {1, 1, 1, 19, 19, 19};
     public static final int DECOR_OVERLAY_WIDTH = 18;
     public static final int DECOR_OVERLAY_HEIGHT = 18;
 
-    public SlotExtensionCard(final int slotID, final AssemblySlotManager slotManager) {
+    public SlotRAMHeatRadiator(final int slotID, final AssemblySlotManager slotManager) {
         super(slotID, slotManager);
         this.texLocation = TEX_LOCATION;
         this.unavailableTexLocation = TEX_LOCATION;
@@ -48,8 +49,8 @@ public class SlotExtensionCard extends SlotAssemblyDecor<SlotExtensionCardItemHa
     }
 
     @Override
-    protected SlotExtensionCardItemHandler getSlot() {
-        SlotConditionItemHandler slot = slotManager.getSlot("extension", slotID);
-        return slot instanceof SlotExtensionCardItemHandler ? (SlotExtensionCardItemHandler) slot : null;
+    protected SlotRAMHeatRadiatorItemHandler getSlot() {
+        SlotConditionItemHandler slot = slotManager.getSlot("cpu", slotID);
+        return slot instanceof SlotRAMHeatRadiatorItemHandler ? (SlotRAMHeatRadiatorItemHandler) slot : null;
     }
 }

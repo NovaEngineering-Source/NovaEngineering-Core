@@ -5,7 +5,10 @@ import github.kasuminova.novaeng.common.hypernet.proc.CalculateReply;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateRequest;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateType;
 import github.kasuminova.novaeng.common.hypernet.proc.CalculateTypes;
-import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.*;
+import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvCPUConst;
+import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvCalculateCardConst;
+import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvExtensionConst;
+import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvPowerConst;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyDeficitException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.EnergyOverloadException;
 import github.kasuminova.novaeng.common.hypernet.proc.server.exception.ModularServerException;
@@ -58,7 +61,6 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     protected ServerModuleInv assemblyCPUInv = null;
     protected ServerModuleInv assemblyCalculateCardInv = null;
     protected ServerModuleInv assemblyExtensionInv = null;
-    protected ServerModuleInv assemblyHeatRadiatorInv = null;
     protected ServerModuleInv assemblyPowerInv = null;
 
     public ModularServer(final TileEntitySynchronized owner, final ItemStack stack) {
@@ -121,7 +123,6 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         scanInvModules(assemblyCalculateCardInv);
         scanInvModules(assemblyExtensionInv);
         scanInvModules(assemblyPowerInv);
-        scanInvModules(assemblyHeatRadiatorInv);
 
         recalculateHardwareBandwidth();
     }
@@ -271,7 +272,6 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         readAssemblyCPUInv(stackTag.getCompoundTag("cpuInv"));
         readAssemblyCalculateCardInv(stackTag.getCompoundTag("calInv"));
         readAssemblyExtensionInv(stackTag.getCompoundTag("extInv"));
-        readAssemblyHeatRadiatorInv(stackTag.getCompoundTag("heatInv"));
         readAssemblyPowerInv(stackTag.getCompoundTag("powerInv"));
 
         prop.readNBT(stackTag.getCompoundTag("prop"));
@@ -285,7 +285,6 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         tag.setTag("cpuInv", assemblyCPUInv.writeNBT());
         tag.setTag("calInv", assemblyCalculateCardInv.writeNBT());
         tag.setTag("extInv", assemblyExtensionInv.writeNBT());
-        tag.setTag("heatInv", assemblyHeatRadiatorInv.writeNBT());
         tag.setTag("powerInv", assemblyPowerInv.writeNBT());
         tag.setTag("prop", prop.writeNBT());
 
@@ -298,7 +297,6 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         createDefaultAssemblyCPUInv();
         createDefaultAssemblyCalculateCardInv();
         createDefaultAssemblyExtensionInv();
-        createDefaultAssemblyHeatRadiatorInv();
         createDefaultAssemblyPowerInv();
 
         slotManager.initSlots();
@@ -347,28 +345,6 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
                 .setOnChangedListener(this::onAssemblyInvUpdate);
     }
 
-    public void readAssemblyHeatRadiatorInv(final NBTTagCompound stackTag) {
-        if (stackTag.isEmpty()) {
-            createDefaultAssemblyHeatRadiatorInv();
-            return;
-        }
-        assemblyHeatRadiatorInv.readNBT(stackTag);
-        initAssemblyHeatRadiatorStackLimit();
-    }
-
-    public void createDefaultAssemblyHeatRadiatorInv() {
-        assemblyHeatRadiatorInv = ServerModuleInv.create(owner, AssemblyInvHeatRadiatorConst.INV_SIZE, "heat_radiator")
-                .setOnChangedListener(this::onAssemblyInvUpdate);;
-        initAssemblyHeatRadiatorStackLimit();
-    }
-
-    public void initAssemblyHeatRadiatorStackLimit() {
-        assemblyHeatRadiatorInv.setStackLimit(AssemblyInvHeatRadiatorConst.CPU_HEAT_RADIATOR_SLOT_ID, AssemblyInvHeatRadiatorConst.CPU_HEAT_RADIATOR_AMOUNT);
-        assemblyHeatRadiatorInv.setStackLimit(AssemblyInvHeatRadiatorConst.RAM_HEAT_RADIATOR_SLOT_ID, AssemblyInvHeatRadiatorConst.RAM_HEAT_RADIATOR_AMOUNT);
-        assemblyHeatRadiatorInv.setStackLimit(AssemblyInvHeatRadiatorConst.CALCULATE_CARD_HEAT_RADIATOR_SLOT_ID, AssemblyInvHeatRadiatorConst.CALCULATE_CARD_HEAT_RADIATOR_AMOUNT);
-        assemblyHeatRadiatorInv.setStackLimit(AssemblyInvHeatRadiatorConst.COPPER_PIPE_SLOT_ID, AssemblyInvHeatRadiatorConst.COPPER_PIPE_AMOUNT);
-    }
-
     public void readAssemblyPowerInv(final NBTTagCompound stackTag) {
         if (stackTag.isEmpty()) {
             createDefaultAssemblyPowerInv();
@@ -388,7 +364,6 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
             case "cpu" -> assemblyCPUInv;
             case "calculate_card" -> assemblyCalculateCardInv;
             case "extension" -> assemblyExtensionInv;
-            case "heat_radiator" -> assemblyHeatRadiatorInv;
             case "power" -> assemblyPowerInv;
             default -> null;
         };

@@ -3,19 +3,23 @@ package github.kasuminova.novaeng.common.container.slot;
 import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ModuleExtensionCardHeatRadiatorBase;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import javax.annotation.Nonnull;
 
 public class SlotExtensionCardHeatRadiatorItemHandler extends SlotConditionItemHandler {
 
-    public SlotExtensionCardHeatRadiatorItemHandler(final int index, final ServerModuleInv inventoryIn) {
-        super(inventoryIn, index, -1, 0, 0);
+    public SlotExtensionCardHeatRadiatorItemHandler(final int displayID, final int index, final ServerModuleInv inventoryIn) {
+        super(inventoryIn, index, displayID);
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public String getSlotDescription() {
-        return "";
+        return I18n.format("gui.modular_server_assembler.assembly.extension_card_heat_radiator.name", displayID);
     }
 
     @Override

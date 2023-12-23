@@ -17,20 +17,20 @@ public abstract class AssemblyInv extends Row {
 
     protected final Button open = new Button();
 
-    protected final Column slotColum = new Column();
+    protected final Column slotColumn = new Column();
 
     protected ResourceLocation closedBgTexLocation = null;
     protected ResourceLocation openedBgTexLocation = null;
 
-    protected int closedInvBgTexWidth = 0;
     protected int closedInvBgTexOffsetX = 0;
-    protected int closedInvBgTexHeight = 0;
     protected int closedInvBgTexOffsetY = 0;
+    protected int closedInvBgTexWidth = 0;
+    protected int closedInvBgTexHeight = 0;
 
-    protected int openedInvBgTexWidth = 0;
     protected int openedInvBgTexOffsetX = 0;
-    protected int openedInvBgTexHeight = 0;
     protected int openedInvBgTexOffsetY = 0;
+    protected int openedInvBgTexWidth = 0;
+    protected int openedInvBgTexHeight = 0;
 
     public AssemblyInv(final AssemblyInvManager assemblyInvManager, final WidgetController widgetController) {
         this.assemblyInvManager = assemblyInvManager;
@@ -38,8 +38,8 @@ public abstract class AssemblyInv extends Row {
         this.open.setOnClickedListener(button -> assemblyInvManager.openInv(this));
         this.addWidget(this.open);
 
-        this.slotColum.setDisabled(true);
-        this.addWidget(slotColum);
+        this.slotColumn.setDisabled(true);
+        this.addWidget(this.slotColumn);
     }
 
     @Override
@@ -72,14 +72,16 @@ public abstract class AssemblyInv extends Row {
 
     public void openInv() {
         this.open.setDisabled(true);
-        this.slotColum.setEnabled(true);
-        onGuiEvent(new AssemblyInvOpenEvent(null));
+
+        this.slotColumn.setEnabled(true);
+        this.slotColumn.onGuiEvent(new AssemblyInvOpenEvent(null));
     }
 
     public void closeInv() {
-        onGuiEvent(new AssemblyInvCloseEvent(null));
         this.open.setEnabled(true);
-        this.slotColum.setDisabled(true);
+
+        this.slotColumn.onGuiEvent(new AssemblyInvCloseEvent(null));
+        this.slotColumn.setDisabled(true);
     }
 
     // Width / Height

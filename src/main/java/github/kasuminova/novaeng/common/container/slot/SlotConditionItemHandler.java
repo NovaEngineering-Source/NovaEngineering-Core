@@ -18,20 +18,48 @@ public abstract class SlotConditionItemHandler extends SlotItemHandler {
 
     protected final List<SlotConditionItemHandler> dependencies = new LinkedList<>();
     protected final List<SlotConditionItemHandler> dependents = new LinkedList<>();
+    protected final List<SlotConditionItemHandler> softDependents = new LinkedList<>();
+    protected final List<SlotConditionItemHandler> softDependencies = new LinkedList<>();
 
-    public SlotConditionItemHandler(final ServerModuleInv inventoryIn, final int index, final int displayID, final int xPosition, final int yPosition) {
-        super(inventoryIn, index, xPosition, yPosition);
+    public SlotConditionItemHandler(final ServerModuleInv inventoryIn, final int index, final int displayID) {
+        super(inventoryIn, index, 0, 0);
         this.displayID = displayID;
     }
 
     public SlotConditionItemHandler dependsOn(SlotConditionItemHandler dependency) {
-        dependencies.add(dependency);
-        dependency.addDependent(this);
+        if (this == dependency) {
+            throw new IllegalArgumentException("Cannot add self as dependency!");
+        }
+        if (dependents.contains(dependency)) {
+            throw new IllegalArgumentException("Circular dependency!");
+        }
+        if (!dependencies.contains(this)) {
+            dependencies.add(dependency);
+            dependency.addDependent(this);
+        }
         return this;
     }
 
-    public void addDependent(SlotConditionItemHandler dependent) {
+    public SlotConditionItemHandler softDependsOn(SlotConditionItemHandler softDependency) {
+        if (this == softDependency) {
+            throw new IllegalArgumentException("Cannot add self as soft dependency!");
+        }
+        if (softDependents.contains(softDependency)) {
+            throw new IllegalArgumentException("Circular soft dependency!");
+        }
+        if (!softDependencies.contains(softDependency)) {
+            softDependencies.add(softDependency);
+            softDependency.addSoftDependent(this);
+        }
+        return this;
+    }
+
+    protected void addDependent(SlotConditionItemHandler dependent) {
         dependents.add(dependent);
+    }
+
+    protected void addSoftDependent(SlotConditionItemHandler dependent) {
+        softDependents.add(dependent);
     }
 
     public boolean isInstalled() {

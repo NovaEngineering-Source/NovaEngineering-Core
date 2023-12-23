@@ -8,8 +8,8 @@ import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
 import github.kasuminova.novaeng.client.gui.widget.msa.overlay.OverlayCalculateCardExt;
 import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotCalculateCard;
 import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotCalculateCardExtension;
+import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotCalculateCardHeatRadiator;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
-import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvCalculateCardConst;
 import net.minecraft.util.ResourceLocation;
 
 public class AssemblyInvCalculateCard extends AssemblyInv {
@@ -47,34 +47,35 @@ public class AssemblyInvCalculateCard extends AssemblyInv {
 
         AssemblySlotManager slotManager = assemblyInvManager.slotManager;
 
-        SlotCalculateCardExtension ext_0_0 = new SlotCalculateCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_0_ID, slotManager);
+        SlotCalculateCardExtension ext_0_0 = new SlotCalculateCardExtension(8, slotManager);
         SlotCalculateCard slot_0_0 = new SlotCalculateCard(0, slotManager);
         SlotCalculateCard slot_0_1 = new SlotCalculateCard(1, slotManager);
-        SlotCalculateCard slot_0_2 = new SlotCalculateCard(2, slotManager);
-        SlotCalculateCard slot_0_3 = new SlotCalculateCard(3, slotManager);
+        SlotCalculateCardHeatRadiator slot_heat_radiator_0_0 = new SlotCalculateCardHeatRadiator(12, slotManager);
+        SlotCalculateCardHeatRadiator slot_heat_radiator_0_1 = new SlotCalculateCardHeatRadiator(13, slotManager);
 
-        SlotCalculateCardExtension ext_1_0 = new SlotCalculateCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_1_ID, slotManager);
-        SlotCalculateCard slot_1_0 = new SlotCalculateCard(4, slotManager);
-        SlotCalculateCard slot_1_1 = new SlotCalculateCard(5, slotManager);
-        SlotCalculateCard slot_1_2 = new SlotCalculateCard(6, slotManager);
-        SlotCalculateCard slot_1_3 = new SlotCalculateCard(7, slotManager);
+        SlotCalculateCardExtension ext_1_0 = new SlotCalculateCardExtension(9, slotManager);
+        SlotCalculateCard slot_1_0 = new SlotCalculateCard(2, slotManager);
+        SlotCalculateCard slot_1_1 = new SlotCalculateCard(3, slotManager);
+        SlotCalculateCardHeatRadiator slot_heat_radiator_1_0 = new SlotCalculateCardHeatRadiator(14, slotManager);
+        SlotCalculateCardHeatRadiator slot_heat_radiator_1_1 = new SlotCalculateCardHeatRadiator(15, slotManager);
 
-        SlotCalculateCardExtension ext_2_0 = new SlotCalculateCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_2_ID, slotManager);
-        SlotCalculateCard slot_2_0 = new SlotCalculateCard(8, slotManager);
-        SlotCalculateCard slot_2_1 = new SlotCalculateCard(9, slotManager);
-        SlotCalculateCard slot_2_2 = new SlotCalculateCard(10, slotManager);
-        SlotCalculateCard slot_2_3 = new SlotCalculateCard(11, slotManager);
+        SlotCalculateCardExtension ext_2_0 = new SlotCalculateCardExtension(10, slotManager);
+        SlotCalculateCard slot_2_0 = new SlotCalculateCard(4, slotManager);
+        SlotCalculateCard slot_2_1 = new SlotCalculateCard(5, slotManager);
+        SlotCalculateCardHeatRadiator slot_heat_radiator_2_0 = new SlotCalculateCardHeatRadiator(16, slotManager);
+        SlotCalculateCardHeatRadiator slot_heat_radiator_2_1 = new SlotCalculateCardHeatRadiator(17, slotManager);
 
-        SlotCalculateCardExtension ext_3_0 = new SlotCalculateCardExtension(AssemblyInvCalculateCardConst.EXTENSION_SLOT_3_ID, slotManager);
-        SlotCalculateCard slot_3_0 = new SlotCalculateCard(12, slotManager);
-        SlotCalculateCard slot_3_1 = new SlotCalculateCard(13, slotManager);
-        SlotCalculateCard slot_3_2 = new SlotCalculateCard(14, slotManager);
-        SlotCalculateCard slot_3_3 = new SlotCalculateCard(15, slotManager);
+        SlotCalculateCardExtension ext_3_0 = new SlotCalculateCardExtension(11, slotManager);
+        SlotCalculateCard slot_3_0 = new SlotCalculateCard(6, slotManager);
+        SlotCalculateCard slot_3_1 = new SlotCalculateCard(7, slotManager);
+        SlotCalculateCardHeatRadiator slot_heat_radiator_3_0 = new SlotCalculateCardHeatRadiator(18, slotManager);
+        SlotCalculateCardHeatRadiator slot_heat_radiator_3_1 = new SlotCalculateCardHeatRadiator(19, slotManager);
 
-        slotColum.addWidgets(new Row().addWidgets(ext_0_0, slot_0_0, slot_0_1, slot_0_2, slot_0_3).setMarginLeft(7).setMarginUp(7));
-        slotColum.addWidgets(new Row().addWidgets(ext_1_0, slot_1_0, slot_1_1, slot_1_2, slot_1_3).setMarginLeft(7));
-        slotColum.addWidgets(new Row().addWidgets(ext_2_0, slot_2_0, slot_2_1, slot_2_2, slot_2_3).setMarginLeft(7));
-        slotColum.addWidgets(new Row().addWidgets(ext_3_0, slot_3_0, slot_3_1, slot_3_2, slot_3_3).setMarginLeft(7));
+        slotColumn.setMarginLeft(7).setMarginUp(7);
+        slotColumn.addWidgets(new Row().addWidgets(ext_0_0, slot_0_0, slot_0_1, slot_heat_radiator_0_0, slot_heat_radiator_0_1));
+        slotColumn.addWidgets(new Row().addWidgets(ext_1_0, slot_1_0, slot_1_1, slot_heat_radiator_1_0, slot_heat_radiator_1_1));
+        slotColumn.addWidgets(new Row().addWidgets(ext_2_0, slot_2_0, slot_2_1, slot_heat_radiator_2_0, slot_heat_radiator_2_1));
+        slotColumn.addWidgets(new Row().addWidgets(ext_3_0, slot_3_0, slot_3_1, slot_heat_radiator_3_0, slot_heat_radiator_3_1));
 
         Column slotCalculateCardExtOverlay = new Column();
         slotCalculateCardExtOverlay.setAbsX(147).setAbsY(59).addWidgets(

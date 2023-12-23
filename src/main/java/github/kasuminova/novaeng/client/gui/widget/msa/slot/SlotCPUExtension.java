@@ -8,8 +8,11 @@ import net.minecraft.util.ResourceLocation;
 
 public class SlotCPUExtension extends SlotAssembly<SlotCPUExtItemHandler> {
     public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_cpu.png");
-    public static final int TEX_X = 7;
+    public static final int TEX_X = 23;
     public static final int TEX_Y = 43;
+
+    public static final int UNAVAILABLE_TEX_X = 165;
+    public static final int UNAVAILABLE_TEX_Y = 1;
 
     public SlotCPUExtension(final int slotID, final AssemblySlotManager slotManager) {
         super(slotID, slotManager);
@@ -17,8 +20,8 @@ public class SlotCPUExtension extends SlotAssembly<SlotCPUExtItemHandler> {
         this.unavailableTexLocation = TEX_LOCATION;
         this.textureX = TEX_X;
         this.textureY = TEX_Y;
-        this.unavailableTextureX = TEX_X;
-        this.unavailableTextureY = TEX_Y;
+        this.unavailableTextureX = UNAVAILABLE_TEX_X;
+        this.unavailableTextureY = UNAVAILABLE_TEX_Y;
     }
 
     @Override

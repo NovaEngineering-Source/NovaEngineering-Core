@@ -55,6 +55,26 @@ public class WidgetController {
         GlStateManager.popMatrix();
     }
 
+    public void postRender(final MousePos mousePos) {
+        GuiContainer gui = this.gui;
+
+        final int guiLeft = (gui.width - gui.getXSize()) / 2;
+        final int guiTop = (gui.height - gui.getYSize()) / 2;
+
+        GlStateManager.pushMatrix();
+//        GlStateManager.translate(guiLeft, guiTop, 0F);
+
+        for (final WidgetContainer container : containers) {
+            RenderPos renderPos = new RenderPos(guiLeft + container.getAbsX(), guiTop + container.getAbsY());
+            RenderPos relativeRenderPos = renderPos.subtract(new RenderPos(guiLeft, guiTop));
+            MousePos relativeMousePos = mousePos.relativeTo(renderPos);
+            RenderSize renderSize = new RenderSize(container.getWidth(), container.getHeight());
+            container.postRender(gui, renderSize, relativeRenderPos, relativeMousePos);
+        }
+
+        GlStateManager.popMatrix();
+    }
+
     public void renderTooltip(final MousePos mousePos) {
         final int guiLeft = (gui.width - gui.getXSize()) / 2;
         final int guiTop = (gui.height - gui.getYSize()) / 2;

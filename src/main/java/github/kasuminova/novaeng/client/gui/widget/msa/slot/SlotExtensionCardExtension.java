@@ -8,7 +8,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class SlotExtensionCardExtension extends SlotAssembly<SlotExtensionCardExtItemHandler> {
     public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_extension.png");
-    public static final int TEX_X = 7;
+    public static final int TEX_X = 23;
     public static final int TEX_Y = 7;
 
     public SlotExtensionCardExtension(final int slotID, final AssemblySlotManager slotManager) {

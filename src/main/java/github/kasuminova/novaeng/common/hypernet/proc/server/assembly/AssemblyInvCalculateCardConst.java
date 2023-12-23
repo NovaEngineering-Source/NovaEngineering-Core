@@ -4,9 +4,11 @@ public class AssemblyInvCalculateCardConst {
 
     public static final int INV_SIZE = 20;
 
-    public static final int EXTENSION_SLOT_0_ID = 16;
-    public static final int EXTENSION_SLOT_1_ID = 17;
-    public static final int EXTENSION_SLOT_2_ID = 18;
-    public static final int EXTENSION_SLOT_3_ID = 19;
+    public static final int LINES = 4;
+
+    public static final int LINE_SLOTS = 2;
+    public static final int HEAT_RADIATOR_SLOT_ID_START = 12;
+
+    public static final int EXT_SLOT_ID_START = 8;
 
 }

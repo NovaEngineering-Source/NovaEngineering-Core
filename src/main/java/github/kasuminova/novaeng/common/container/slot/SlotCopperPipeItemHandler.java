@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 public class SlotCopperPipeItemHandler extends SlotConditionItemHandler {
 
     public SlotCopperPipeItemHandler(final int index, final ServerModuleInv inventoryIn) {
-        super(inventoryIn, index, -1, 0, 0);
+        super(inventoryIn, index, -1);
     }
 
     @Override

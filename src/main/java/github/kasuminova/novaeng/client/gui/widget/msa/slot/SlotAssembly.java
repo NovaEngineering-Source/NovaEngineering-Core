@@ -32,8 +32,8 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
     }
 
     @Override
-    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
-        super.render(gui, renderSize, renderPos, mousePos);
+    public void postRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        super.postRender(gui, renderSize, renderPos, mousePos);
 
         if (slot == null) {
             return;
@@ -41,17 +41,23 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
 
         for (final SlotConditionItemHandler dependency : slot.getDependencies()) {
             if (dependency.isHovered()) {
+                GlStateManager.colorMask(true, true, true, false);
+
                 Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
                         renderPos.posX() + 17, renderPos.posY() + 17,
                         0x8096FF96
                 );
                 GlStateManager.color(1F, 1F, 1F, 1F);
+
+                GlStateManager.colorMask(true, true, true, true);
                 return;
             }
         }
 
         for (final SlotConditionItemHandler dependent : slot.getDependents()) {
             if (dependent.isHovered()) {
+                GlStateManager.colorMask(true, true, true, false);
+
                 if (isInstalled()) {
                     Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
                             renderPos.posX() + 17, renderPos.posY() + 17,
@@ -64,6 +70,8 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
                     );
                 }
                 GlStateManager.color(1F, 1F, 1F, 1F);
+
+                GlStateManager.colorMask(true, true, true, true);
                 return;
             }
         }

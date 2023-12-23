@@ -11,7 +11,7 @@ import javax.annotation.Nonnull;
 public class SlotCalculateCardExtItemHandler extends SlotConditionItemHandler {
 
     public SlotCalculateCardExtItemHandler(final int displayID, final int index, final ServerModuleInv inventoryIn) {
-        super(inventoryIn, index, displayID, 0, 0);
+        super(inventoryIn, index, displayID);
     }
 
     @Override

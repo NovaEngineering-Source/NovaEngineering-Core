@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 public class SlotRAMItemHandler extends SlotConditionItemHandler {
 
     public SlotRAMItemHandler(final int displayID, final int index, final ServerModuleInv inventoryIn) {
-        super(inventoryIn, index, displayID, 0, 0);
+        super(inventoryIn, index, displayID);
     }
 
     public SlotRAMItemHandler dependsOn(SlotConditionItemHandler dependency) {

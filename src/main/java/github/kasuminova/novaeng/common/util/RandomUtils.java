@@ -5,7 +5,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RandomUtils {
 
     public static int nextInt(int bound) {
-        return ThreadLocalRandom.current().nextInt();
+        return ThreadLocalRandom.current().nextInt(bound);
     }
 
     public static float nextFloat() {

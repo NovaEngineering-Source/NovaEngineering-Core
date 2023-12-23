@@ -54,8 +54,8 @@ public class AssemblyInvPower extends AssemblyInv {
         SlotCapacitor slot_1_2 = new SlotCapacitor(6, slotManager);
         SlotCapacitor slot_1_3 = new SlotCapacitor(7, slotManager);
 
-        slotColum.addWidgets(new Row().addWidgets(slot_0_0, slot_0_1, slot_0_2, slot_0_3).setMarginLeft(7).setMarginUp(7));
-        slotColum.addWidgets(new Row().addWidgets(slot_1_0, slot_1_1, slot_1_2, slot_1_3).setMarginLeft(7));
+        slotColumn.addWidgets(new Row().addWidgets(slot_0_0, slot_0_1, slot_0_2, slot_0_3).setMarginLeft(7).setMarginUp(7));
+        slotColumn.addWidgets(new Row().addWidgets(slot_1_0, slot_1_1, slot_1_2, slot_1_3).setMarginLeft(7));
     }
 
     @Override

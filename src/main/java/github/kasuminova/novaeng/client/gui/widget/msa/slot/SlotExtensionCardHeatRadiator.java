@@ -3,11 +3,11 @@ package github.kasuminova.novaeng.client.gui.widget.msa.slot;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
 import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
-import github.kasuminova.novaeng.common.container.slot.SlotExtensionCardItemHandler;
+import github.kasuminova.novaeng.common.container.slot.SlotExtensionCardHeatRadiatorItemHandler;
 import github.kasuminova.novaeng.common.util.RandomUtils;
 import net.minecraft.util.ResourceLocation;
 
-public class SlotExtensionCard extends SlotAssemblyDecor<SlotExtensionCardItemHandler> {
+public class SlotExtensionCardHeatRadiator extends SlotAssemblyDecor<SlotExtensionCardHeatRadiatorItemHandler> {
     public static final ResourceLocation TEX_LOCATION = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/msa_extension.png");
     public static final int TEX_X = 121;
     public static final int TEX_Y = 38;
@@ -16,7 +16,7 @@ public class SlotExtensionCard extends SlotAssemblyDecor<SlotExtensionCardItemHa
     public static final int UNAVAILABLE_TEX_Y = 1;
 
     public static final int OVERLAY_X = 221;
-    public static final int OVERLAY_Y = 19;
+    public static final int OVERLAY_Y = 1;
     public static final int OVERLAY_WIDTH = 18;
     public static final int OVERLAY_HEIGHT = 18;
 
@@ -26,7 +26,7 @@ public class SlotExtensionCard extends SlotAssemblyDecor<SlotExtensionCardItemHa
     public static final int DECOR_OVERLAY_WIDTH = 18;
     public static final int DECOR_OVERLAY_HEIGHT = 18;
 
-    public SlotExtensionCard(final int slotID, final AssemblySlotManager slotManager) {
+    public SlotExtensionCardHeatRadiator(final int slotID, final AssemblySlotManager slotManager) {
         super(slotID, slotManager);
         this.texLocation = TEX_LOCATION;
         this.unavailableTexLocation = TEX_LOCATION;
@@ -48,8 +48,8 @@ public class SlotExtensionCard extends SlotAssemblyDecor<SlotExtensionCardItemHa
     }
 
     @Override
-    protected SlotExtensionCardItemHandler getSlot() {
+    protected SlotExtensionCardHeatRadiatorItemHandler getSlot() {
         SlotConditionItemHandler slot = slotManager.getSlot("extension", slotID);
-        return slot instanceof SlotExtensionCardItemHandler ? (SlotExtensionCardItemHandler) slot : null;
+        return slot instanceof SlotExtensionCardHeatRadiatorItemHandler ? (SlotExtensionCardHeatRadiatorItemHandler) slot : null;
     }
 }

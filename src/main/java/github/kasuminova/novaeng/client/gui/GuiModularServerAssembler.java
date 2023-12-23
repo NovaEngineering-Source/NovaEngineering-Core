@@ -27,13 +27,12 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
 
     public GuiModularServerAssembler(final TileModularServerAssembler assembler, final EntityPlayer opening) {
         super(new ContainerModularServerAssembler(assembler, opening));
-        this.xSize = 451;
+        this.xSize = MAIN_GUI_WIDTH + 138;
         this.ySize = 206;
 
         this.assemblyInvManager.addInv(new AssemblyInvCPU(assemblyInvManager, widgetController));
         this.assemblyInvManager.addInv(new AssemblyInvCalculateCard(assemblyInvManager, widgetController));
         this.assemblyInvManager.addInv(new AssemblyInvExtension(assemblyInvManager, widgetController));
-        this.assemblyInvManager.addInv(new AssemblyInvHeatRadiator(assemblyInvManager, widgetController));
         this.assemblyInvManager.addInv(new AssemblyInvPower(assemblyInvManager, widgetController));
         this.assemblyInvManager.setAbsX(MAIN_GUI_WIDTH);
 

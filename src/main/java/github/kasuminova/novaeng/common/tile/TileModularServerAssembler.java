@@ -32,10 +32,10 @@ public class TileModularServerAssembler extends TileCustomController {
 
     public void onServerInventoryUpdate(final int changedSlot) {
         ItemStack stackInSlot = serverInventory.getStackInSlot(changedSlot);
-        if (stackInSlot.isEmpty()) {
-            server = null;
-            return;
-        }
+//        if (stackInSlot.isEmpty()) {
+//            server = null;
+//            return;
+//        }
 
         if (server == null || server.requiresUpdate(stackInSlot)) {
             server = new ModularServer(this, stackInSlot);
