@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
-import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
+import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.item.ItemServerModule;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -23,6 +23,7 @@ public class ServerModuleRegistry {
     private static final Map<String, ServerModuleBase<?>> MODULE_BASE_REGISTRY = new HashMap<>();
     private static final Map<Item, ItemModuleRegistry> MODULE_ITEM_REGISTRY = new HashMap<>();
 
+    @ZenMethod
     public static void registryModuleBase(final ServerModuleBase<?> module) {
         Preconditions.checkNotNull(module);
         MODULE_BASE_REGISTRY.put(module.getRegistryName(), module);
@@ -39,6 +40,7 @@ public class ServerModuleRegistry {
         registryItemStackMatch(CraftTweakerMC.getItemStack(matchCT), module);
     }
 
+    @ZenMethod
     public static ServerModuleBase<?> getModule(final String moduleRegistryName) {
         return MODULE_BASE_REGISTRY.get(moduleRegistryName);
     }

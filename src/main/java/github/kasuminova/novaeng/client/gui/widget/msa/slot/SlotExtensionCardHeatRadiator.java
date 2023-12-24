@@ -49,7 +49,7 @@ public class SlotExtensionCardHeatRadiator extends SlotAssemblyDecor<SlotExtensi
 
     @Override
     protected SlotExtensionCardHeatRadiatorItemHandler getSlot() {
-        SlotConditionItemHandler slot = slotManager.getSlot("extension", slotID);
+        SlotConditionItemHandler slot = slotManager == null ? null : slotManager.getSlot("extension", slotID);
         return slot instanceof SlotExtensionCardHeatRadiatorItemHandler ? (SlotExtensionCardHeatRadiatorItemHandler) slot : null;
     }
 }

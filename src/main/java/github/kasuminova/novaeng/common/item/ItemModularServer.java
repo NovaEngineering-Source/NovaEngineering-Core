@@ -7,10 +7,10 @@ import net.minecraft.util.ResourceLocation;
 
 public class ItemModularServer extends Item {
 
-    public ItemModularServer() {
+    public ItemModularServer(final String registryName) {
         setMaxStackSize(1);
         setCreativeTab(CreativeTabHyperNet.INSTANCE);
-        setRegistryName(new ResourceLocation(NovaEngineeringCore.MOD_ID, "modular_server"));
+        setRegistryName(new ResourceLocation(NovaEngineeringCore.MOD_ID, registryName)).setTranslationKey(NovaEngineeringCore.MOD_ID + '.' + registryName);;
     }
 
 }

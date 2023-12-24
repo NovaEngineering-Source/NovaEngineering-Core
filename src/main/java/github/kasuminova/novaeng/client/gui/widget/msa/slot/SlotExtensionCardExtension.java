@@ -23,7 +23,7 @@ public class SlotExtensionCardExtension extends SlotAssembly<SlotExtensionCardEx
 
     @Override
     protected SlotExtensionCardExtItemHandler getSlot() {
-        SlotConditionItemHandler slot = slotManager.getSlot("extension", slotID);
+        SlotConditionItemHandler slot = slotManager == null ? null : slotManager.getSlot("extension", slotID);
         return slot instanceof SlotExtensionCardExtItemHandler ? (SlotExtensionCardExtItemHandler) slot : null;
     }
 }

@@ -94,7 +94,7 @@ public class RegistryBlocks {
         String translationKey = block.getTranslationKey();
 
         item.setRegistryName(registryName).setTranslationKey(translationKey);
-        RegistryItems.ITEM_BLOCKS_TO_REGISTER.add(item);
+        RegistryItems.ITEMS_TO_REGISTER.add(item);
         return item;
     }
 

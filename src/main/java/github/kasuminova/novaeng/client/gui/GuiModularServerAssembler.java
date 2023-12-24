@@ -6,6 +6,7 @@ import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.mmce.common.util.DataReference;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.widget.msa.*;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.ModularServerUpdateEvent;
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import net.minecraft.client.gui.Gui;
@@ -23,10 +24,12 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
     public static final int MAIN_GUI_WIDTH = 329;
     public static final int MAIN_GUI_HEIGHT = 206;
 
+    protected final TileModularServerAssembler assembler;
     protected AssemblyInvManager assemblyInvManager = new AssemblyInvManager(container.getSlotManager());
 
     public GuiModularServerAssembler(final TileModularServerAssembler assembler, final EntityPlayer opening) {
         super(new ContainerModularServerAssembler(assembler, opening));
+        this.assembler = assembler;
         this.xSize = MAIN_GUI_WIDTH + 138;
         this.ySize = 206;
 
@@ -44,8 +47,8 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
         this.widgetController.addWidgetContainer(column);
     }
 
-    @Override
-    protected void setWidthHeight() {
+    public void onServerInventoryUpdate() {
+        this.assemblyInvManager.onGuiEvent(new ModularServerUpdateEvent(this, assembler.getServer()));
     }
 
     @Override

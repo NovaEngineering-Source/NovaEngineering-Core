@@ -50,7 +50,7 @@ public class SlotCalculateCardExtension extends SlotAssemblyDecor<SlotCalculateC
 
     @Override
     protected SlotCalculateCardExtItemHandler getSlot() {
-        SlotConditionItemHandler slot = slotManager.getSlot("calculate_card", slotID);
+        SlotConditionItemHandler slot = slotManager == null ? null : slotManager.getSlot("calculate_card", slotID);
         return slot instanceof SlotCalculateCardExtItemHandler ? (SlotCalculateCardExtItemHandler) slot : null;
     }
 }

@@ -26,7 +26,7 @@ public class SlotPSU extends SlotAssembly<SlotPSUItemHandler> {
 
     @Override
     protected SlotPSUItemHandler getSlot() {
-        SlotConditionItemHandler slot = slotManager.getSlot("power", slotID);
+        SlotConditionItemHandler slot = slotManager == null ? null : slotManager.getSlot("power", slotID);
         return slot instanceof SlotPSUItemHandler ? (SlotPSUItemHandler) slot : null;
     }
 }

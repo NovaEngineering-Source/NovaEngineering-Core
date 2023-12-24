@@ -1,6 +1,9 @@
 package github.kasuminova.novaeng.client.handler;
 
+import github.kasuminova.novaeng.common.hypernet.server.module.ServerModule;
+import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
+import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -12,10 +15,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 @SuppressWarnings("MethodMayBeStatic")
 public class HyperNetClientEventHandler {
     public static final HyperNetClientEventHandler INSTANCE = new HyperNetClientEventHandler();
+
+    protected final Map<ItemStack, ServerModule> moduleCache = new WeakHashMap<>();
 
     private HyperNetClientEventHandler() {
     }
@@ -48,5 +55,28 @@ public class HyperNetClientEventHandler {
             tips.add(I18n.format("item.hypernet_connect_card.tooltip.pos.tip.0", pos.getX(), pos.getY(), pos.getZ()));
             tips.add(I18n.format("item.hypernet_connect_card.tooltip.pos.tip.1"));
         }
+    }
+
+    @SubscribeEvent
+    @SuppressWarnings("unchecked")
+    public void onServerModuleItemTooltip(ItemTooltipEvent event) {
+        ItemStack stack = event.getItemStack();
+        if (stack.isEmpty()) {
+            return;
+        }
+
+        ServerModule cachedModule = moduleCache.get(stack);
+        if (cachedModule == null) {
+            ServerModuleBase<ServerModule> moduleBase = (ServerModuleBase<ServerModule>) ServerModuleRegistry.getModule(stack);
+            if (moduleBase == null) {
+                return;
+            }
+            cachedModule = moduleBase.createInstance(null, stack);
+        }
+
+        moduleCache.put(stack, cachedModule);
+
+        ServerModuleBase<ServerModule> moduleBase = (ServerModuleBase<ServerModule>) cachedModule.getModuleBase();
+        event.getToolTip().addAll(moduleBase.getTooltip(cachedModule));
     }
 }

@@ -1,11 +1,11 @@
 package github.kasuminova.novaeng.common.container.slot;
 
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
-import github.kasuminova.novaeng.common.hypernet.proc.server.ModularServer;
-import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvCPUConst;
-import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvCalculateCardConst;
-import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvExtensionConst;
-import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvPowerConst;
+import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvCPUConst;
+import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvCalculateCardConst;
+import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvExtensionConst;
+import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvPowerConst;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import io.netty.util.collection.IntObjectHashMap;
 

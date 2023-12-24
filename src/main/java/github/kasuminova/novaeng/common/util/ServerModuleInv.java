@@ -2,14 +2,19 @@ package github.kasuminova.novaeng.common.util;
 
 import hellfirepvp.modularmachinery.common.tiles.base.TileEntitySynchronized;
 import hellfirepvp.modularmachinery.common.util.IItemHandlerImpl;
+import hellfirepvp.modularmachinery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTPrimitive;
+import net.minecraft.nbt.NBTTagByte;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.IntStream;
 
@@ -25,7 +30,7 @@ public class ServerModuleInv extends IItemHandlerImpl {
         for (int slotID = 0; slotID < slotIDs.length; slotID++) {
             slotIDs[slotID] = slotID;
         }
-        return new ServerModuleInv(owner, slotIDs, slotIDs, invName).setAllSlotAvailable();
+        return new ServerModuleInv(owner, slotIDs, slotIDs, invName).setAllSlotAvailable().updateSlotLimits();
     }
 
     public ServerModuleInv(final TileEntitySynchronized owner, final int[] inSlots, final int[] outSlots, final String invName) {
@@ -133,48 +138,70 @@ public class ServerModuleInv extends IItemHandlerImpl {
     }
 
     public NBTTagCompound writeNBT() {
-        NBTTagCompound tag = new NBTTagCompound();
-        NBTTagList inv = new NBTTagList();
-        for (int slot = 0; slot < inventory.length; slot++) {
-            SlotStackHolder holder = this.inventory[slot];
-            NBTTagCompound holderTag = new NBTTagCompound();
-            ItemStack stack = holder.itemStack;
+        List<ItemStack> stackSet = new ArrayList<>();
+        int[] stackSetIdxSet = new int[inventory.length];
 
-            holderTag.setInteger("id", slot);
-            if (stack.isEmpty()) {
-                holderTag.setBoolean("empty", true);
-            } else {
-                stack.writeToNBT(holderTag);
-                if (stack.getCount() >= 127) {
-                    holderTag.setInteger("Count", stack.getCount());
+        invSet:
+        for (int i = 0; i < inventory.length; i++) {
+            SlotStackHolder holder = this.inventory[i];
+            ItemStack stackInHolder = holder.itemStack;
+            if (stackInHolder.isEmpty()) {
+                stackSetIdxSet[i] = -1;
+                continue;
+            }
+
+            for (int stackSetIdx = 0; stackSetIdx < stackSet.size(); stackSetIdx++) {
+                ItemStack stackInSet = stackSet.get(stackSetIdx);
+                if (ItemUtils.matchStacks(stackInHolder, stackInSet)) {
+                    stackSetIdxSet[i] = stackSetIdx;
+                    continue invSet;
                 }
             }
 
-            inv.appendTag(holderTag);
+            stackSet.add(stackInHolder);
+            stackSetIdxSet[i] = stackSet.size() - 1;
         }
-        tag.setTag("inv", inv);
+
+        NBTTagList stackSetTag = new NBTTagList();
+        NBTTagList invSetTag = new NBTTagList();
+
+        for (final ItemStack stack : stackSet) {
+            NBTTagCompound stackTag = stack.writeToNBT(new NBTTagCompound());
+            if (stack.getCount() >= 127) {
+                stackTag.setInteger("Count", stack.getCount());
+            }
+            stackSetTag.appendTag(stackTag);
+        }
+        for (final int setIdx : stackSetIdxSet) {
+            invSetTag.appendTag(new NBTTagByte((byte) setIdx));
+        }
+
+        NBTTagCompound tag = new NBTTagCompound();
+        tag.setTag("stackSet", stackSetTag);
+        tag.setTag("invSet", invSetTag);
         return tag;
     }
 
     public void readNBT(NBTTagCompound tag) {
-        NBTTagList list = tag.getTagList("inv", Constants.NBT.TAG_COMPOUND);
+        NBTTagList stackSetTag = tag.getTagList("stackSet", Constants.NBT.TAG_COMPOUND);
+        NBTTagList invSetTag = tag.getTagList("invSet", Constants.NBT.TAG_BYTE);
 
-        int tagCount = list.tagCount();
-        this.inventory = new SlotStackHolder[tagCount];
-        for (int i = 0; i < tagCount; i++) {
-            NBTTagCompound holderTag = list.getCompoundTagAt(i);
-            int slot = holderTag.getInteger("id");
-            checkInventoryLength(slot);
+        List<ItemStack> stackSet = new ArrayList<>();
+        for (int i = 0; i < stackSetTag.tagCount(); i++) {
+            NBTTagCompound stackTag = stackSetTag.getCompoundTagAt(i);
+            ItemStack stack = new ItemStack(stackTag);
+            stack.setCount(stackTag.getInteger("Count"));
+            stackSet.add(stack);
+        }
 
-            ItemStack stack = ItemStack.EMPTY;
-            if (!holderTag.hasKey("empty")) {
-                stack = new ItemStack(holderTag);
-                stack.setCount(holderTag.getInteger("Count"));
+        this.inventory = new SlotStackHolder[invSetTag.tagCount()];
+        for (int i = 0; i < invSetTag.tagCount(); i++) {
+            SlotStackHolder holder = new SlotStackHolder(i);
+            int setIdx = ((NBTPrimitive) invSetTag.get(i)).getByte();
+            if (setIdx != -1) {
+                holder.itemStack = stackSet.get(setIdx).copy();
             }
-
-            SlotStackHolder holder = new SlotStackHolder(slot);
-            holder.itemStack = stack;
-            this.inventory[slot] = holder;
+            this.inventory[i] = holder;
         }
 
         updateInOutSlots();

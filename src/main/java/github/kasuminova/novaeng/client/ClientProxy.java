@@ -11,6 +11,7 @@ import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.command.CommandPacketProfiler;
 import github.kasuminova.novaeng.common.command.ExportResearchDataToJson;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
+import github.kasuminova.novaeng.common.registry.RegistryItems;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,6 +35,10 @@ public class ClientProxy extends CommonProxy {
 
     static {
         CompletableFuture.runAsync(HitokotoAPI::getRandomHitokoto);
+    }
+
+    public ClientProxy() {
+        MinecraftForge.EVENT_BUS.register(this);
     }
 
     @Override
@@ -79,6 +84,7 @@ public class ClientProxy extends CommonProxy {
     @SubscribeEvent
     public void onModelRegister(ModelRegistryEvent event) {
         RegistryBlocks.registerBlockModels();
+        RegistryItems.registerItemModels();
     }
 
     @Nullable

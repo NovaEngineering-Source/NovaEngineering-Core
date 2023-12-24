@@ -203,9 +203,9 @@ public class Column extends WidgetContainer {
     @Override
     public boolean onGuiEvent(final GuiEvent event) {
         for (final DynamicWidget widget : widgets) {
-            if (widget.isDisabled()) {
-                continue;
-            }
+//            if (widget.isDisabled()) {
+//                continue;
+//            }
             if (widget.onGuiEvent(event)) {
                 return true;
             }

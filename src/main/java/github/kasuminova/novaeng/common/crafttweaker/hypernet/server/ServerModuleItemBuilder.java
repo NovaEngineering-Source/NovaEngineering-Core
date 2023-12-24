@@ -1,10 +1,14 @@
 package github.kasuminova.novaeng.common.crafttweaker.hypernet.server;
 
-import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ServerModuleBase;
+import crafttweaker.annotations.ZenRegister;
+import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.item.ItemServerModule;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
+import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
+@ZenRegister
+@ZenClass("novaeng.hypernet.item.ServerModuleItemBuilder")
 public class ServerModuleItemBuilder {
 
     protected final String registryName;
@@ -15,6 +19,7 @@ public class ServerModuleItemBuilder {
         this.registryName = registryName;
     }
 
+    @ZenMethod
     public static ServerModuleItemBuilder create(final String registryName) {
         return new ServerModuleItemBuilder(registryName);
     }
@@ -43,7 +48,7 @@ public class ServerModuleItemBuilder {
 
     @ZenMethod
     public void register() {
-        RegistryItems.registerItem(new ItemServerModule(registryName, boundedModule).setMaxStackSize(stackSize));
+        RegistryItems.ITEMS_TO_REGISTER_CT.add(new ItemServerModule(registryName, boundedModule).setMaxStackSize(stackSize));
     }
 
 }

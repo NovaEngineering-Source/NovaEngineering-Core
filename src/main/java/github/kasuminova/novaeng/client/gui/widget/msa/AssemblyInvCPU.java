@@ -9,7 +9,7 @@ import github.kasuminova.novaeng.client.gui.widget.msa.overlay.OverlayCPU;
 import github.kasuminova.novaeng.client.gui.widget.msa.overlay.OverlayRAM;
 import github.kasuminova.novaeng.client.gui.widget.msa.slot.*;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
-import github.kasuminova.novaeng.common.hypernet.proc.server.assembly.AssemblyInvCPUConst;
+import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvCPUConst;
 import net.minecraft.util.ResourceLocation;
 
 public class AssemblyInvCPU extends AssemblyInvToggleable {

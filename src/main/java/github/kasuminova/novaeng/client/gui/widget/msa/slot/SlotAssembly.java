@@ -6,8 +6,10 @@ import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvCloseEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvOpenEvent;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.ModularServerUpdateEvent;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
 import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
+import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -16,7 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends SlotDynamic<T> {
-    protected final AssemblySlotManager slotManager;
+    protected AssemblySlotManager slotManager;
 
     public SlotAssembly(final int slotID, final AssemblySlotManager slotManager) {
         super(slotID);
@@ -79,7 +81,10 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
 
     @Override
     public boolean onGuiEvent(final GuiEvent event) {
-        if (slot != null) {
+        if (event instanceof ModularServerUpdateEvent serverUpdateEvent) {
+            ModularServer server = serverUpdateEvent.getServer();
+            this.slotManager = server == null ? null : server.getSlotManager();
+        } else if (slot != null) {
             if (event instanceof AssemblyInvCloseEvent) {
                 slot.setEnabled(false);
             } else if (event instanceof AssemblyInvOpenEvent) {

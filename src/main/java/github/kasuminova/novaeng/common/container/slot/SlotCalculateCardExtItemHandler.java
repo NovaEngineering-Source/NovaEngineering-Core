@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.container.slot;
 
-import github.kasuminova.novaeng.common.hypernet.proc.server.module.base.ModuleCalculateCardExtBase;
+import github.kasuminova.novaeng.common.hypernet.server.module.base.ModuleCalculateCardExtBase;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import net.minecraft.client.resources.I18n;

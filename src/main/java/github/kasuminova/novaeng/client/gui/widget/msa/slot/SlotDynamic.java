@@ -5,7 +5,7 @@ import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
-import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvUpdateEvent;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.ModularServerUpdateEvent;
 import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
@@ -76,7 +76,7 @@ public abstract class SlotDynamic<T extends SlotConditionItemHandler> extends Dy
 
     @Override
     public boolean onGuiEvent(final GuiEvent event) {
-        if (event instanceof AssemblyInvUpdateEvent) {
+        if (event instanceof ModularServerUpdateEvent) {
             this.slot = getSlot();
         }
         return false;

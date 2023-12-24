@@ -1,6 +1,8 @@
 package github.kasuminova.novaeng.common.container;
 
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
+import github.kasuminova.novaeng.common.container.slot.SlotModularServer;
+import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import hellfirepvp.modularmachinery.common.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,12 +12,44 @@ import net.minecraft.item.ItemStack;
 import javax.annotation.Nonnull;
 
 public class ContainerModularServerAssembler extends ContainerBase<TileModularServerAssembler> {
-    protected final AssemblySlotManager slotManager;
+    protected final EntityPlayer opening;
+    protected final SlotModularServer slotModularServer;
+
+    protected AssemblySlotManager slotManager;
 
     public ContainerModularServerAssembler(final TileModularServerAssembler owner, final EntityPlayer opening) {
         super(owner, opening);
-        this.slotManager = owner.getServer().getSlotManager();
-        this.slotManager.addAllSlotToContainer(this);
+        this.opening = opening;
+
+        ModularServer server = owner.getServer();
+        this.slotManager = server == null ? null : server.getSlotManager();
+        if (this.slotManager != null) {
+            this.slotManager.addAllSlotToContainer(this);
+        }
+
+        slotModularServer = new SlotModularServer(owner.getServerInventory().asGUIAccess(), 0, 302, 126);
+        this.addSlotToContainer(slotModularServer);
+        this.owner.addContainer(this);
+    }
+
+    @Override
+    public void onContainerClosed(@Nonnull final EntityPlayer playerIn) {
+        super.onContainerClosed(playerIn);
+        this.owner.removeContainer(this);
+    }
+
+    public void reInitSlots() {
+        this.inventorySlots.clear();
+        this.inventoryItemStacks.clear();
+        this.addPlayerSlots(opening);
+
+        ModularServer server = owner.getServer();
+        this.slotManager = server == null ? null : server.getSlotManager();
+        if (this.slotManager != null) {
+            this.slotManager.addAllSlotToContainer(this);
+        }
+
+        this.addSlotToContainer(slotModularServer);
     }
 
     @Nonnull
@@ -75,6 +109,10 @@ public class ContainerModularServerAssembler extends ContainerBase<TileModularSe
 
     public AssemblySlotManager getSlotManager() {
         return slotManager;
+    }
+
+    public SlotModularServer getSlotModularServer() {
+        return slotModularServer;
     }
 
     @Override

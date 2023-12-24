@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.common.registry;
 
+import github.kasuminova.novaeng.NovaEngineeringCore;
 import hellfirepvp.modularmachinery.common.item.ItemDynamicColor;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -11,7 +12,7 @@ import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -19,34 +20,37 @@ import static hellfirepvp.modularmachinery.common.registry.RegistryItems.pending
 
 @SuppressWarnings({"MethodMayBeStatic", "UnusedReturnValue"})
 public class RegistryItems {
-    public static final List<Item> ITEM_BLOCKS_TO_REGISTER = new ArrayList<>();
-    public static final List<Item> ITEM_MODEL_TO_REGISTER  = new ArrayList<>();
+    public static final List<Item> ITEMS_TO_REGISTER = new LinkedList<>();
+    public static final List<Item> ITEMS_TO_REGISTER_CT = new LinkedList<>();
+    public static final List<Item> ITEM_MODELS_TO_REGISTER = new LinkedList<>();
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
         GenericRegistryPrimer.INSTANCE.wipe(event.getGenericType());
 
-        registerItemBlocks();
-        registerItemModels();
+        registerItems();
+//        registerItemModels();
 
         GenericRegistryPrimer.INSTANCE.fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }
 
-    public static void registerItemBlocks() {
-        ITEM_BLOCKS_TO_REGISTER.forEach(RegistryItems::registerItem);
-        ITEM_BLOCKS_TO_REGISTER.clear();
+    public static void registerItems() {
+        ITEMS_TO_REGISTER.forEach(RegistryItems::registerItem);
+        ITEMS_TO_REGISTER.clear();
+        ITEMS_TO_REGISTER_CT.forEach(RegistryItems::registerItem);
+        ITEMS_TO_REGISTER_CT.clear();
     }
 
     public static void registerItemModels() {
         if (FMLCommonHandler.instance().getSide().isServer()) {
             return;
         }
-        ITEM_MODEL_TO_REGISTER.forEach(RegistryItems::registryItemModel);
-        ITEM_MODEL_TO_REGISTER.clear();
+        ITEM_MODELS_TO_REGISTER.forEach(RegistryItems::registryItemModel);
+        ITEM_MODELS_TO_REGISTER.clear();
     }
 
     public static <T extends Item> T registerItem(T item) {
-        ITEM_MODEL_TO_REGISTER.add(item);
+        ITEM_MODELS_TO_REGISTER.add(item);
         GenericRegistryPrimer.INSTANCE.register(item);
         if (item instanceof ItemDynamicColor) {
             pendingDynamicColorItems.add((ItemDynamicColor) item);
@@ -66,5 +70,7 @@ public class RegistryItems {
             list.forEach(stack -> ModelLoader.setCustomModelResourceLocation(
                     item, stack.getItemDamage(), new ModelResourceLocation(registryName, "inventory")));
         }
+
+        NovaEngineeringCore.log.debug("REGISTERED ITEM MODEL: " + registryName);
     }
 }

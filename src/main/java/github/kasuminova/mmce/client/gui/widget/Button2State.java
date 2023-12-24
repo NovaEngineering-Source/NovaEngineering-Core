@@ -5,6 +5,7 @@ import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import net.minecraft.client.gui.inventory.GuiContainer;
 
+@SuppressWarnings("unused")
 public class Button2State extends Button {
 
     protected int clickedTextureX = 0;
@@ -43,7 +44,7 @@ public class Button2State extends Button {
         return super.onMouseClicked(mousePos, renderPos, mouseButton);
     }
 
-    public Button setClickedTextureXY(final int clickedTextureX, final int clickedTextureY) {
+    public Button2State setClickedTextureXY(final int clickedTextureX, final int clickedTextureY) {
         this.clickedTextureX = clickedTextureX;
         this.clickedTextureY = clickedTextureY;
         return this;

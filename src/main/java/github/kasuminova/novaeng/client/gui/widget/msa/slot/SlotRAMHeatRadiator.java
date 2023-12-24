@@ -50,7 +50,7 @@ public class SlotRAMHeatRadiator extends SlotAssemblyDecor<SlotRAMHeatRadiatorIt
 
     @Override
     protected SlotRAMHeatRadiatorItemHandler getSlot() {
-        SlotConditionItemHandler slot = slotManager.getSlot("cpu", slotID);
+        SlotConditionItemHandler slot = slotManager == null ? null : slotManager.getSlot("cpu", slotID);
         return slot instanceof SlotRAMHeatRadiatorItemHandler ? (SlotRAMHeatRadiatorItemHandler) slot : null;
     }
 }

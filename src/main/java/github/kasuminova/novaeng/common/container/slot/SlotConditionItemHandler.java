@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.common.container.slot;
 
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.SlotItemHandler;
@@ -25,6 +26,20 @@ public abstract class SlotConditionItemHandler extends SlotItemHandler {
         super(inventoryIn, index, 0, 0);
         this.displayID = displayID;
     }
+
+    // Overrides
+
+    @Override
+    public boolean canTakeStack(final EntityPlayer playerIn) {
+        for (final SlotConditionItemHandler dependent : dependents) {
+            if (dependent.isInstalled()) {
+                return false;
+            }
+        }
+        return super.canTakeStack(playerIn);
+    }
+
+    // Content
 
     public SlotConditionItemHandler dependsOn(SlotConditionItemHandler dependency) {
         if (this == dependency) {
@@ -63,7 +78,7 @@ public abstract class SlotConditionItemHandler extends SlotItemHandler {
     }
 
     public boolean isInstalled() {
-        return enabled && getHasStack();
+        return getHasStack() && isItemValid(getStack());
     }
 
     public boolean isAvailable() {

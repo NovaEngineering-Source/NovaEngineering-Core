@@ -204,6 +204,7 @@ dependencies {
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197"))
     implementation(rfg.deobf("curse.maven:applied-energistics-2-223794:2747063"))
+    implementation(rfg.deobf("curse.maven:tx-loader-706505:4515357"))
 
     compileOnly(rfg.deobf("curse.maven:zenutil-401178:4394263"))
     compileOnly(rfg.deobf("curse.maven:libvulpes-236541:3801015"))

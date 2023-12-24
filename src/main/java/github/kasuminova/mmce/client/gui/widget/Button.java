@@ -7,8 +7,11 @@ import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 
+import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
+@SuppressWarnings("unused")
 public class Button extends DynamicWidget {
 
     protected ResourceLocation textureLocation = null;
@@ -20,6 +23,7 @@ public class Button extends DynamicWidget {
     protected int hoveredTextureY = 0;
 
     protected Consumer<Button> onClickedListener = null;
+    protected Function<Button, List<String>> tooltipFunction = null;
 
     @Override
     public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
@@ -47,6 +51,16 @@ public class Button extends DynamicWidget {
             return true;
         }
         return false;
+    }
+
+    // Tooltips
+
+    @Override
+    public List<String> getHoverTooltips(final MousePos mousePos) {
+        if (tooltipFunction != null) {
+            return tooltipFunction.apply(this);
+        }
+        return super.getHoverTooltips(mousePos);
     }
 
     // Getter Setter
@@ -117,4 +131,12 @@ public class Button extends DynamicWidget {
         return this;
     }
 
+    public Function<Button, List<String>> getTooltipFunction() {
+        return tooltipFunction;
+    }
+
+    public Button setTooltipFunction(final Function<Button, List<String>> tooltipFunction) {
+        this.tooltipFunction = tooltipFunction;
+        return this;
+    }
 }

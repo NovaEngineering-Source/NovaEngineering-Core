@@ -50,7 +50,7 @@ public class SlotRAM extends SlotAssemblyDecor<SlotRAMItemHandler> {
 
     @Override
     protected SlotRAMItemHandler getSlot() {
-        SlotConditionItemHandler slot = slotManager.getSlot("cpu", slotID);
+        SlotConditionItemHandler slot = slotManager == null ? null : slotManager.getSlot("cpu", slotID);
         return slot instanceof SlotRAMItemHandler ? (SlotRAMItemHandler) slot : null;
     }
 }

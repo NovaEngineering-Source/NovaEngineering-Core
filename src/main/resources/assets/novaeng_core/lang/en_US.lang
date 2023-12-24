@@ -69,10 +69,22 @@ tile.novaeng_core.modular_server_assembler.name=模块服务器组装台
 novaeng.hypernet.computation_point_required.tip=§9计算：§b%s
 novaeng.hypernet.computation_point_required.tip.parallelized=§9计算 (受并行影响)：§b%s
 
-novaeng.hypernet.calculate.type.intricate=%s 次复杂运算/t
-novaeng.hypernet.calculate.type.logic=%s 次逻辑运算/t
-novaeng.hypernet.calculate.type.neuron=%s 次神经模拟/t
-novaeng.hypernet.calculate.type.qbit=%s 量子位/t
+novaeng.hypernet.calculable.tip.base_ratio=§b基础效率系数：§a%s
+novaeng.hypernet.calculable.tip.energy_consume_ratio=§b设计最大能耗：§c%s RF/t
+novaeng.hypernet.calculable.tip.hardware_bandwidth=§b硬件带宽占用：§a%s
+novaeng.hypernet.calculable.supported=此模块可提供计算功能。
+
+novaeng.hypernet.calculate.tip.efficiency=%s：%s（效率：%s%%）
+
+novaeng.hypernet.calculate.type_name.intricate=§b复杂运算§f
+novaeng.hypernet.calculate.type_name.logic=§9密集运算§f
+novaeng.hypernet.calculate.type_name.neuron=§c神经网络§f
+novaeng.hypernet.calculate.type_name.qbit=§e量子位§f
+
+novaeng.hypernet.calculate.type.intricate=§a%s §b次复杂运算/t§f
+novaeng.hypernet.calculate.type.logic=§a%s §9次密集运算/t§f
+novaeng.hypernet.calculate.type.neuron=§a%s §c神经网络规模§f
+novaeng.hypernet.calculate.type.qbit=§a%s §e量子位§f
 
 novaeng.hypernet.research_required.tip=§6需要研究认知：§f%s
 

@@ -26,7 +26,7 @@ public class SlotCPUExtension extends SlotAssembly<SlotCPUExtItemHandler> {
 
     @Override
     protected SlotCPUExtItemHandler getSlot() {
-        SlotConditionItemHandler slot = slotManager.getSlot("cpu", slotID);
+        SlotConditionItemHandler slot = slotManager == null ? null : slotManager.getSlot("cpu", slotID);
         return slot instanceof SlotCPUExtItemHandler ? (SlotCPUExtItemHandler) slot : null;
     }
 }

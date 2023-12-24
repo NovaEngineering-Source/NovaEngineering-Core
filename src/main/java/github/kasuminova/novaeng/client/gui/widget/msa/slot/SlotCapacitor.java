@@ -26,7 +26,7 @@ public class SlotCapacitor extends SlotAssembly<SlotCapacitorItemHandler> {
 
     @Override
     protected SlotCapacitorItemHandler getSlot() {
-        SlotConditionItemHandler slot = slotManager.getSlot("power", slotID);
+        SlotConditionItemHandler slot = slotManager == null ? null : slotManager.getSlot("power", slotID);
         return slot instanceof SlotCapacitorItemHandler ? (SlotCapacitorItemHandler) slot : null;
     }
 }

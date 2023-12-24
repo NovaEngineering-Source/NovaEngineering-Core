@@ -65,6 +65,8 @@ public abstract class AssemblyInv extends Row {
         }
     }
 
+    // openInv / closeInv
+
     @Override
     public void onGUIClosed(final GuiContainer gui) {
         closeInv();
