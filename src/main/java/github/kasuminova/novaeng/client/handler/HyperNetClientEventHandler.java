@@ -5,6 +5,7 @@ import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModule
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -31,7 +32,7 @@ public class HyperNetClientEventHandler {
     @SideOnly(Side.CLIENT)
     public void onItemTooltip(ItemTooltipEvent event) {
         Item matches = RegistryHyperNet.getHyperNetConnectCard();
-        if (matches == null) {
+        if (matches == Items.AIR) {
             return;
         }
 

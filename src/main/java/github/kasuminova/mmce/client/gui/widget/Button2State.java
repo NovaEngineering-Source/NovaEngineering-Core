@@ -5,6 +5,9 @@ import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import net.minecraft.client.gui.inventory.GuiContainer;
 
+import java.util.Collections;
+import java.util.List;
+
 @SuppressWarnings("unused")
 public class Button2State extends Button {
 
@@ -42,6 +45,14 @@ public class Button2State extends Button {
             clicked = !clicked;
         }
         return super.onMouseClicked(mousePos, renderPos, mouseButton);
+    }
+
+    @Override
+    public List<String> getHoverTooltips(final MousePos mousePos) {
+        if (clicked) {
+            return Collections.emptyList();
+        }
+        return super.getHoverTooltips(mousePos);
     }
 
     public Button2State setClickedTextureXY(final int clickedTextureX, final int clickedTextureY) {

@@ -41,42 +41,65 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
             return;
         }
 
-        for (final SlotConditionItemHandler dependency : slot.getDependencies()) {
-            if (dependency.isHovered()) {
-                GlStateManager.colorMask(true, true, true, false);
+        if (isAvailable() && slot.isInvalid()) {
+            Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
+                    renderPos.posX() + 17, renderPos.posY() + 17,
+                    0x80FF9696
+            );
+            return;
+        }
 
+        for (final SlotConditionItemHandler dependency : slot.getDependencies()) {
+            if (renderDependiceColorOverlay(renderPos, dependency)) return;
+        }
+        for (final SlotConditionItemHandler dependent : slot.getDependents()) {
+            if (renderDependencyColorOverlay(renderPos, dependent)) return;
+        }
+        for (final SlotConditionItemHandler dependency : slot.getSoftDependencies()) {
+            if (renderDependiceColorOverlay(renderPos, dependency)) return;
+        }
+        for (final SlotConditionItemHandler dependent : slot.getSoftDependents()) {
+            if (renderDependencyColorOverlay(renderPos, dependent)) return;
+        }
+    }
+
+    private boolean renderDependencyColorOverlay(final RenderPos renderPos, final SlotConditionItemHandler dependent) {
+        if (dependent.isHovered()) {
+            GlStateManager.colorMask(true, true, true, false);
+
+            if (isInstalled()) {
                 Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
                         renderPos.posX() + 17, renderPos.posY() + 17,
-                        0x8096FF96
+                        0x80FFFF96
                 );
-                GlStateManager.color(1F, 1F, 1F, 1F);
-
-                GlStateManager.colorMask(true, true, true, true);
-                return;
+            } else {
+                Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
+                        renderPos.posX() + 17, renderPos.posY() + 17,
+                        0x80FF9696
+                );
             }
+            GlStateManager.color(1F, 1F, 1F, 1F);
+
+            GlStateManager.colorMask(true, true, true, true);
+            return true;
         }
+        return false;
+    }
 
-        for (final SlotConditionItemHandler dependent : slot.getDependents()) {
-            if (dependent.isHovered()) {
-                GlStateManager.colorMask(true, true, true, false);
+    private static boolean renderDependiceColorOverlay(final RenderPos renderPos, final SlotConditionItemHandler dependency) {
+        if (dependency.isHovered()) {
+            GlStateManager.colorMask(true, true, true, false);
 
-                if (isInstalled()) {
-                    Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
-                            renderPos.posX() + 17, renderPos.posY() + 17,
-                            0x80FFFF96
-                    );
-                } else {
-                    Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
-                            renderPos.posX() + 17, renderPos.posY() + 17,
-                            0x80FF9696
-                    );
-                }
-                GlStateManager.color(1F, 1F, 1F, 1F);
+            Gui.drawRect(renderPos.posX() + 1, renderPos.posY() + 1,
+                    renderPos.posX() + 17, renderPos.posY() + 17,
+                    0x8096FF96
+            );
+            GlStateManager.color(1F, 1F, 1F, 1F);
 
-                GlStateManager.colorMask(true, true, true, true);
-                return;
-            }
+            GlStateManager.colorMask(true, true, true, true);
+            return true;
         }
+        return false;
     }
 
     @Override

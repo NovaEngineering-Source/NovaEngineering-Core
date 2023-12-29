@@ -4,15 +4,21 @@ import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
 import hellfirepvp.modularmachinery.client.gui.GuiContainerBase;
 import hellfirepvp.modularmachinery.common.container.ContainerBase;
+import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GuiContainerDynamic<T extends ContainerBase<?>> extends GuiContainerBase<T> {
 
     protected final WidgetController widgetController = new WidgetController(this);
+    protected Slot hoveredSlot = null;
 
     public GuiContainerDynamic(final T container) {
         super(container);
@@ -49,7 +55,24 @@ public abstract class GuiContainerDynamic<T extends ContainerBase<?>> extends Gu
     protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
         super.drawGuiContainerForegroundLayer(mouseX, mouseY);
         widgetController.postRender(new MousePos(mouseX, mouseY));
-        widgetController.renderTooltip(new MousePos(mouseX, mouseY));
+    }
+
+    @Override
+    protected void renderHoveredToolTip(final int mouseX, final int mouseY) {
+        updateHoveredSlot(mouseX, mouseY);
+
+        ItemStack stackInSlot = hoveredSlot == null ? ItemStack.EMPTY : hoveredSlot.getStack();
+        List<String> hoverTooltips = widgetController.getHoverTooltips(new MousePos(mouseX, mouseY));
+        if (stackInSlot.isEmpty() && hoverTooltips.isEmpty()) {
+            return;
+        }
+        List<String> itemTooltip = stackInSlot.isEmpty() ? new ArrayList<>() : this.getItemToolTip(stackInSlot);
+        itemTooltip.addAll(hoverTooltips);
+
+        FontRenderer font = stackInSlot.getItem().getFontRenderer(stackInSlot);
+        GuiUtils.preItemToolTip(stackInSlot);
+        this.drawHoveringText(itemTooltip, mouseX, mouseY, (font == null ? fontRenderer : font));
+        GuiUtils.postItemToolTip();
     }
 
     @Override
@@ -89,6 +112,17 @@ public abstract class GuiContainerDynamic<T extends ContainerBase<?>> extends Gu
     @Override
     public void drawHoveringText(@Nonnull final List<String> textLines, final int x, final int y) {
         super.drawHoveringText(textLines, x, y);
+    }
+
+    protected void updateHoveredSlot(final int mouseX, final int mouseY) {
+        hoveredSlot = this.inventorySlots.inventorySlots.stream()
+                .filter(slot -> this.isMouseOverSlot(slot, mouseX, mouseY) && slot.isEnabled())
+                .findFirst()
+                .orElse(null);
+    }
+
+    protected boolean isMouseOverSlot(Slot slotIn, int mouseX, int mouseY) {
+        return this.isPointInRegion(slotIn.xPos, slotIn.yPos, 16, 16, mouseX, mouseY);
     }
 
 }

@@ -198,7 +198,14 @@ gui.modular_server_assembler.assembly.extension_ext.name=扩展卡总线槽位 #
 gui.modular_server_assembler.assembly.psu.name=PSU 电源槽位 #%s
 gui.modular_server_assembler.assembly.capacitor.name=电容槽位 #%s
 
-gui.modular_server_assembler.assembly.dependencies=依赖以下插槽：
+gui.modular_server_assembler.assembly.invalid=§4插槽内物品无效，请移除。
+gui.modular_server_assembler.assembly.dependencies=以下插槽必须安装后才可使用本插槽：
 gui.modular_server_assembler.assembly.dependencies.installed=（§a已安装§f）
 gui.modular_server_assembler.assembly.dependencies.uninstalled=（§c缺失§f）
-gui.modular_server_assembler.assembly.dependents=以下插槽依赖于此插槽：
+gui.modular_server_assembler.assembly.dependents=此插槽必须安装后才可使用以下插槽：
+
+gui.modular_server_assembler.assembly.soft_dependencies=此插槽安装后还需要以下插槽安装后才可完全工作：
+gui.modular_server_assembler.assembly.soft_dependents=以下插槽需要此插槽安装后才可完全工作：
+
+gui.modular_server_assembler.assembly.inv.change.main=点击切换至组件插槽窗口。
+gui.modular_server_assembler.assembly.inv.change.heat=点击切换至散热器插槽窗口。

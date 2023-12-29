@@ -10,18 +10,13 @@ public class NovaEngineeringCoreMixinLoader implements ILateMixinLoader {
 
     @Override
     public List<String> getMixinConfigs() {
-        return Arrays.asList("mixins.novaeng_core.json", "mixins.novaeng_cleanroom_compatibility.json");
+        return Arrays.asList("mixins.novaeng_core.json");
     }
 
     @Override
     public boolean shouldMixinConfigQueue(final String mixinConfig) {
-        switch (mixinConfig) {
-            case "mixins.novaeng_core.json" -> {
-                return Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("appliedenergistics2");
-            }
-            case "mixins.novaeng_cleanroom_compatibility.json" -> {
-                return isCleanroomLoader() && Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("touhoulittlemaid");
-            }
+        if (mixinConfig.equals("mixins.novaeng_core.json")) {
+            return Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("appliedenergistics2");
         }
         return false;
     }
