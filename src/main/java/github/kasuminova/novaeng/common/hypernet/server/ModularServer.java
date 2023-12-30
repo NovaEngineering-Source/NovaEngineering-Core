@@ -131,6 +131,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     protected void resetState() {
         modules.clear();
         extensions.clear();
+        calculables.clear();
         calculableTypeSet.clear();
         typeModulesCache.clear();
         baseModulesCache.clear();
@@ -219,7 +220,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
             request.modifiers().computeIfAbsent(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, v -> new CalculateModifier()).multiply(0);
             return;
         }
-        float efficiency = Math.max(Math.min((float) usedHardwareBandwidth / totalHardwareBandwidth, 1.0F), 0.5F);
+        float efficiency = Math.max(Math.min((float) totalHardwareBandwidth / usedHardwareBandwidth, 1.0F), 0.5F);
         if (efficiency < 1.0F) {
             request.modifiers().computeIfAbsent(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, v -> new CalculateModifier()).multiply(efficiency);
         }

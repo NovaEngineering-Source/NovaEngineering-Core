@@ -6,19 +6,22 @@ import zone.rong.mixinbooter.ILateMixinLoader;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class NovaEngineeringCoreMixinLoader implements ILateMixinLoader {
 
     @Override
     public List<String> getMixinConfigs() {
-        return Arrays.asList("mixins.novaeng_core.json");
+        return Arrays.asList("mixins.novaeng_core.json", "mixins.novaeng_core.rgb_chat.json");
     }
 
     @Override
     public boolean shouldMixinConfigQueue(final String mixinConfig) {
-        if (mixinConfig.equals("mixins.novaeng_core.json")) {
-            return Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("appliedenergistics2");
-        }
-        return false;
+        return switch (mixinConfig) {
+            case "mixins.novaeng_core.json" ->
+                    Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("appliedenergistics2");
+            case "mixins.novaeng_core.rgb_chat.json" -> Loader.isModLoaded("jianghun");
+            default -> false;
+        };
     }
 
     public static boolean isCleanroomLoader() {
