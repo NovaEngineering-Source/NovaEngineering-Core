@@ -18,7 +18,7 @@ public class ScrollingColumn extends Column {
 
     @Override
     protected void doRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos, final RenderFunction renderFunction) {
-        int width = renderSize.width();
+        int width = renderSize.width() - (scrollbar.getMarginLeft() + scrollbar.getWidth() + scrollbar.getMarginRight());
         int height = renderSize.height();
 
         int y = getTotalHeight() > height ? -scrollbar.getCurrentScroll() : 0;
@@ -34,7 +34,7 @@ public class ScrollingColumn extends Column {
             int offsetY = widgetRenderPos.posY();
             if (offsetY + widget.getHeight() >= 0) {
                 RenderPos absRenderPos = widgetRenderPos.add(renderPos);
-                renderFunction.doRender(widget, gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
+                renderFunction.doRender(widget, gui, new RenderSize(widget.getWidth(), widget.getHeight()).smaller(renderSize), absRenderPos, mousePos.relativeTo(widgetRenderPos));
             }
 
             y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
@@ -42,6 +42,21 @@ public class ScrollingColumn extends Column {
                 break;
             }
         }
+
+        RenderPos scrollbarRenderPos = new RenderPos(
+                width + (scrollbar.getMarginLeft()),
+                scrollbar.getMarginUp());
+        renderFunction.doRender(scrollbar, gui,
+                new RenderSize(scrollbar.getWidth(), scrollbar.getHeight()).smaller(renderSize),
+                renderPos.add(scrollbarRenderPos),
+                mousePos.relativeTo(scrollbarRenderPos)
+        );
+    }
+
+    @Override
+    public void initWidget(final GuiContainer gui) {
+        super.initWidget(gui);
+        scrollbar.setMargin(0, 1, 1, 1);
     }
 
     @Override
@@ -61,7 +76,9 @@ public class ScrollingColumn extends Column {
     @Override
     public void update(final GuiContainer gui) {
         super.update(gui);
-        scrollbar.setRange(0, Math.max(getTotalHeight() - height, 0)).setHeight(height);
+        scrollbar.setRange(0, Math.max(getTotalHeight() - height, 0));
+        scrollbar.setScrollUnit(scrollbar.getRange() / 20);
+        scrollbar.update(gui);
     }
 
     @Override
@@ -127,7 +144,10 @@ public class ScrollingColumn extends Column {
             y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
         }
 
-        return false;
+        RenderPos scrollbarRenderPos = new RenderPos(
+                width - (scrollbar.getMarginLeft() + scrollbar.getWidth() + scrollbar.getMarginRight()),
+                height - (scrollbar.getMarginUp() + scrollbar.getHeight() + scrollbar.getMarginDown()));
+        return scrollbar.onMouseReleased(mousePos.relativeTo(scrollbarRenderPos), renderPos.add(scrollbarRenderPos));
     }
 
     @Override
@@ -152,11 +172,11 @@ public class ScrollingColumn extends Column {
             y += widget.getMarginUp() + widget.getHeight() + widget.getMarginDown();
         }
 
-        RenderPos scrollbarRenderPos = new RenderPos(
-                width - (scrollbar.getMarginLeft() + scrollbar.getWidth() + scrollbar.getMarginRight()),
-                height - (scrollbar.getMarginUp() + scrollbar.getHeight() + scrollbar.getMarginDown()));
-        MousePos scrollbarRelativeMousePos = mousePos.relativeTo(scrollbarRenderPos);
-        if (scrollbar.isMouseOver(scrollbarRelativeMousePos)) {
+        if (isMouseOver(mousePos)) {
+            RenderPos scrollbarRenderPos = new RenderPos(
+                    width - (scrollbar.getMarginLeft() + scrollbar.getWidth() + scrollbar.getMarginRight()),
+                    height - (scrollbar.getMarginUp() + scrollbar.getHeight() + scrollbar.getMarginDown()));
+            MousePos scrollbarRelativeMousePos = mousePos.relativeTo(scrollbarRenderPos);
             return scrollbar.onMouseDWheel(scrollbarRelativeMousePos, renderPos.add(scrollbarRenderPos), wheel);
         }
 
@@ -238,30 +258,6 @@ public class ScrollingColumn extends Column {
         return super.onGuiEvent(event);
     }
 
-    // Utils
-
-    @Override
-    public RenderPos getWidgetRenderOffset(DynamicWidget widget, int width, int y) {
-        int xOffset;
-        int yOffset;
-
-        if (isCenterAligned()) {
-            xOffset = (width - (widget.getMarginLeft() + widget.getWidth() + widget.getMarginRight())) / 2;
-            yOffset = y + widget.getMarginUp();
-        } else if (leftAligned) {
-            xOffset = widget.getMarginLeft();
-            yOffset = y + widget.getMarginUp();
-        } else if (rightAligned) {
-            xOffset = width - widget.getWidth() - widget.getMarginRight();
-            yOffset = y + widget.getMarginUp();
-        } else {
-            // Where does it align?
-            return null;
-        }
-
-        return new RenderPos(xOffset, yOffset);
-    }
-
     // X/Y Size
 
     @Override
@@ -270,7 +266,7 @@ public class ScrollingColumn extends Column {
     }
 
     @Override
-    public DynamicWidget setWidth(final int width) {
+    public ScrollingColumn setWidth(final int width) {
         this.width = width;
         return this;
     }
@@ -281,8 +277,9 @@ public class ScrollingColumn extends Column {
     }
 
     @Override
-    public DynamicWidget setHeight(final int height) {
+    public ScrollingColumn setHeight(final int height) {
         this.height = height;
+        scrollbar.setHeight(height - 2);
         return this;
     }
 

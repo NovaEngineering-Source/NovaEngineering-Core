@@ -57,8 +57,12 @@ public class TileModularServerAssembler extends TileCustomController {
             }
             server.setOnServerInvChangedListener(this::onServerInternalInventoryUpdate);
             openedContainer.forEach(ContainerModularServerAssembler::reInitSlots);
-            notifyClientGUIUpdate();
         }
+        if (server != null) {
+            server.initModules();
+        }
+
+        notifyClientGUIUpdate();
     }
 
     public void notifyClientGUIUpdate() {

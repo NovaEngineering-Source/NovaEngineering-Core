@@ -1,9 +1,6 @@
 package github.kasuminova.novaeng.client.gui;
 
 import github.kasuminova.mmce.client.gui.GuiContainerDynamic;
-import github.kasuminova.mmce.client.gui.widget.DragBar;
-import github.kasuminova.mmce.client.gui.widget.container.Column;
-import github.kasuminova.mmce.common.util.DataReference;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.widget.msa.*;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.ModularServerUpdateEvent;
@@ -25,7 +22,7 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
     public static final int MAIN_GUI_HEIGHT = 206;
 
     protected final TileModularServerAssembler assembler;
-    protected AssemblyInvManager assemblyInvManager = new AssemblyInvManager(container.getSlotManager());
+    protected final AssemblyInvManager assemblyInvManager = new AssemblyInvManager(container.getSlotManager());
 
     public GuiModularServerAssembler(final TileModularServerAssembler assembler, final EntityPlayer opening) {
         super(new ContainerModularServerAssembler(assembler, opening));
@@ -41,14 +38,37 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
 
         this.widgetController.addWidgetContainer(assemblyInvManager);
 
-        Column column = new Column();
-        column.addWidget(new DragBar(new DataReference<>(0D), new DataReference<>(0D), new DataReference<>(5D)));
+        ServerInfoColumn serverInfoColumn = new ServerInfoColumn(assembler.getServer());
+        serverInfoColumn.setAbsX(7).setAbsY(7).setWidth(121).setHeight(192);
+
+//        for (int i = 0; i < 10; i++) {
+//            List<String> list = new ArrayList<>();
+//            for (int i1 = 0; i1 < 25; i1++) {
+//                StringJoiner joiner = new StringJoiner("", "测试_test_", "");
+//                for (int i2 = 0; i2 < i1; i2++) {
+//                    String s = String.valueOf(i2);
+//                    joiner.add(s);
+//                }
+//                list.add(joiner.toString());
+//            }
+//
+//            MultiLineLabel multiLineLabel = new MultiLineLabel(list);
+//            multiLineLabel.setWidth(111);
+//            multiLineLabel.setScale(0.75F);
+//            tipColumn.addWidget(multiLineLabel);
+//            tipColumn.addWidget(new HorizontalSeparator().setWidth(109).setHeight(i + 1).setMarginLeft(2));
+//        }
+
+        this.widgetController.addWidgetContainer(serverInfoColumn);
+
+//        Column column = new Column();
+//        column.addWidget(new DragBar(new DataReference<>(0D), new DataReference<>(0D), new DataReference<>(5D)));
 //        column.setAbsY(-20);
-        this.widgetController.addWidgetContainer(column);
+//        this.widgetController.addWidgetContainer(column);
     }
 
     public void onServerInventoryUpdate() {
-        this.assemblyInvManager.onGuiEvent(new ModularServerUpdateEvent(this, assembler.getServer()));
+        this.widgetController.postGuiEvent(new ModularServerUpdateEvent(this, assembler.getServer()));
     }
 
     @Override

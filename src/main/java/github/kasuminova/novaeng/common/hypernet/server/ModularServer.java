@@ -81,7 +81,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
 
     @Override
     public CalculateReply calculate(final CalculateRequest request) {
-        if (!started) {
+        if (!started && !request.simulate()) {
             return new CalculateReply(0);
         }
         TreeSet<Calculable> calculableSet = calculableTypeSet.get(request.type());
@@ -399,8 +399,59 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         this.onServerInvChangedListener = onServerInvChangedListener;
     }
 
+    // Utils
+
+    public double getCalculateAvgEfficiency(final CalculateType type) {
+        TreeSet<Calculable> calculables = calculableTypeSet.get(type);
+        if (calculables == null || calculables.isEmpty()) {
+            return 0D;
+        }
+
+        int allCalculables = 0;
+        for (final TreeSet<Calculable> value : calculableTypeSet.values()) {
+            allCalculables += value.size();
+        }
+
+        double efficiency = 0;
+        for (final Calculable calculable : calculables) {
+            efficiency += calculable.getCalculateTypeEfficiency(type);
+        }
+
+        return efficiency / allCalculables;
+    }
+
+    // Getters
+
+    public TileEntitySynchronized getOwner() {
+        return owner;
+    }
+
     public AssemblySlotManager getSlotManager() {
         return slotManager;
+    }
+
+    public List<ServerModule> getModules() {
+        return modules;
+    }
+
+    public Map<CalculateType, TreeSet<Calculable>> getCalculableTypeSet() {
+        return Collections.unmodifiableMap(calculableTypeSet);
+    }
+
+    public boolean isStarted() {
+        return started;
+    }
+
+    public long getMaxEnergyCap() {
+        return maxEnergyCap;
+    }
+
+    public long getMaxEnergyConsumption() {
+        return maxEnergyConsumption;
+    }
+
+    public long getMaxEnergyProvision() {
+        return maxEnergyProvision;
     }
 
     public static class Properties {

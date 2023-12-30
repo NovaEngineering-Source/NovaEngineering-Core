@@ -13,17 +13,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MultiLineLabel extends DynamicWidget {
     public static final int DEFAULT_FONT_HEIGHT = 12;
 
+    protected final List<String> contents = new ArrayList<>();
     protected boolean leftAligned = false;
     protected boolean rightAligned = false;
-
     protected float scale = 1.0F;
-
-    protected final List<String> contents = new ArrayList<>();
 
     public MultiLineLabel(List<String> contents) {
         this.contents.addAll(contents);
@@ -34,30 +31,42 @@ public class MultiLineLabel extends DynamicWidget {
 
     @Override
     public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
-        GlStateManager.scale(scale, scale, scale);
-
-        int maxWidth;
-        if (renderSize.isWidthLimited()) {
-            maxWidth = Math.round((float) renderSize.width() / scale);
-        } else {
-            maxWidth = -1;
+        final float scale = this.scale;
+        if (scale != 1F) {
+            GlStateManager.pushMatrix();
+            GlStateManager.scale(scale, scale, scale);
         }
 
-        int offsetX = Math.round((float) renderPos.posX() / scale);
-        int offsetY = Math.round((float) renderPos.posY() / scale);
+        int maxWidth = renderSize.isWidthLimited() ? Math.round((float) renderSize.width() / scale) : -1;
+        int maxHeight = renderSize.isHeightLimited() ? Math.round((float) renderSize.height() / scale) : Math.round(height / scale);
+        int posX = Math.round((float) renderPos.posX() / scale);
+        int posY = Math.round((float) renderPos.posY() / scale);
 
         FontRenderer fr = gui.mc.fontRenderer;
 
-        List<String> toRender = maxWidth == -1 ? contents : contents.stream()
-                .flatMap(s -> fr.listFormattedStringToWidth(s, maxWidth).stream())
-                .collect(Collectors.toCollection(LinkedList::new));
-
-        for (final String s : toRender) {
-            fr.drawStringWithShadow(s, offsetX, offsetY, 0xFFFFFF);
-            offsetX += Math.round((float) DEFAULT_FONT_HEIGHT * scale);
+        List<String> toRender;
+        if (maxWidth == -1) {
+            toRender = contents;
+        } else {
+            toRender = new LinkedList<>();
+            contents.stream().map(s -> fr.listFormattedStringToWidth(s, maxWidth)).forEach(toRender::addAll);
         }
 
-        GlStateManager.scale(1.0F, 1.0F, 1.0F);
+        int offsetY = 0;
+        int fontHeight = Math.round((float) DEFAULT_FONT_HEIGHT * scale);
+        for (final String s : toRender) {
+            fr.drawStringWithShadow(s, posX, posY + offsetY, 0xFFFFFF);
+            offsetY += fontHeight;
+            if (offsetY > maxHeight + fontHeight) {
+                break;
+            }
+        }
+
+        if (scale != 1F) {
+            GlStateManager.popMatrix();
+        }
+
+        GlStateManager.color(1.0F, 1.0F, 1.0F);
     }
 
     // Utils
@@ -77,7 +86,19 @@ public class MultiLineLabel extends DynamicWidget {
     }
 
     public int getTotalHeight() {
-        return Math.round((float) (contents.size() * DEFAULT_FONT_HEIGHT) * scale);
+        return getTotalHeight(contents);
+    }
+
+    public int getTotalHeight(List<String> contents) {
+        FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+
+        int height = 0;
+        for (final String content : contents) {
+            List<String> listed = fr.listFormattedStringToWidth(content, Math.round((float) width / scale));
+            height += Math.round((float) DEFAULT_FONT_HEIGHT * scale * listed.size());
+        }
+
+        return Math.round(height * scale);
     }
 
     // Getters / Setters
@@ -86,8 +107,17 @@ public class MultiLineLabel extends DynamicWidget {
         return scale;
     }
 
-    public void setScale(final float scale) {
+    public MultiLineLabel setScale(final float scale) {
         this.scale = scale;
+        this.height = getTotalHeight();
+        return this;
+    }
+
+    @Override
+    public MultiLineLabel setWidth(final int width) {
+        super.setWidth(width);
+        this.height = getTotalHeight();
+        return this;
     }
 
     public List<String> getContents() {

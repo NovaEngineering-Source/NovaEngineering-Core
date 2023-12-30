@@ -49,7 +49,7 @@ public class Row extends WidgetContainer {
                 continue;
             }
             RenderPos absRenderPos = widgetRenderPos.add(renderPos);
-            renderFunction.doRender(widget, gui, new RenderSize(widget.getWidth(), widget.getHeight()), absRenderPos, mousePos.relativeTo(widgetRenderPos));
+            renderFunction.doRender(widget, gui, new RenderSize(widget.getWidth(), widget.getHeight()).smaller(renderSize), absRenderPos, mousePos.relativeTo(widgetRenderPos));
             x += widget.getMarginLeft() + widget.getWidth() + widget.getMarginRight();
         }
     }

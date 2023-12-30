@@ -17,4 +17,8 @@ public record RenderSize(int width, int height) {
         return height != -1;
     }
 
+    public RenderSize smaller(final RenderSize another) {
+        return new RenderSize(Math.min(width, another.width), Math.min(height, another.height));
+    }
+
 }

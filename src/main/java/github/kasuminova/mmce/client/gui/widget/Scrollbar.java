@@ -41,6 +41,8 @@ public class Scrollbar extends DynamicWidget {
 
     protected int scrollUnit = DEFAULT_SCROLL_UNIT;
 
+    protected boolean mouseDown = false;
+
     public Scrollbar() {
         this.width = scrollWidth;
         this.height = scrollHeight * 2;
@@ -48,9 +50,14 @@ public class Scrollbar extends DynamicWidget {
 
     @Override
     public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        if (mouseDown) {
+            handleMouseDragMove(mousePos);
+        }
+
         gui.mc.getTextureManager().bindTexture(textureLocation);
         int offsetX = renderPos.posX();
         int offsetY = renderPos.posY();
+        int height = renderSize.isHeightLimited() ? renderSize.height() : this.height;
 
         if (this.getRange() == 0) {
             gui.drawTexturedModalRect(offsetX, offsetY,
@@ -59,7 +66,7 @@ public class Scrollbar extends DynamicWidget {
                     this.scrollWidth, this.scrollHeight
             );
         } else {
-            offsetY += (this.currentScroll - this.minScroll) * (this.height - this.scrollHeight) / this.getRange();
+            offsetY += (this.currentScroll - this.minScroll) * (height - this.scrollHeight) / this.getRange();
             gui.drawTexturedModalRect(offsetX, offsetY, this.textureX, this.textureY, this.scrollWidth, this.scrollHeight);
         }
     }
@@ -69,12 +76,20 @@ public class Scrollbar extends DynamicWidget {
         if (this.getRange() == 0) {
             return false;
         }
+        mouseDown = true;
+        return true;
+    }
 
-        float clickedPercent = (float) mousePos.mouseY() / this.height;
+    protected void handleMouseDragMove(final MousePos mousePos) {
+        float clickedPercent = Math.min(Math.max((float) mousePos.mouseY() / this.height, 0), 1F);
         int scroll = Math.round((float) getRange() * clickedPercent);
         setCurrentScroll(scroll + this.minScroll);
+    }
 
-        return true;
+    @Override
+    public boolean onMouseReleased(final MousePos mousePos, final RenderPos renderPos) {
+        mouseDown = false;
+        return false;
     }
 
     @Override
@@ -178,4 +193,14 @@ public class Scrollbar extends DynamicWidget {
         return this;
     }
 
+    // Scroll Unit
+
+    public int getScrollUnit() {
+        return scrollUnit;
+    }
+
+    public Scrollbar setScrollUnit(final int scrollUnit) {
+        this.scrollUnit = Math.max(scrollUnit, 1);
+        return this;
+    }
 }

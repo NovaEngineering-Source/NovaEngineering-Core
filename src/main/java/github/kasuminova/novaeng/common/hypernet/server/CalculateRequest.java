@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.common.hypernet.server;
 
 import com.github.bsideup.jabel.Desugar;
 import github.kasuminova.novaeng.common.hypernet.server.modifier.CalculateModifier;
-import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
+import net.minecraft.tileentity.TileEntity;
 
 import java.util.Map;
 
@@ -12,7 +12,7 @@ public record CalculateRequest(
         boolean simulate,
         CalculateType type,
         CalculateStage stage,
-        TileMultiblockMachineController requester,
+        TileEntity requester,
         Map<String, CalculateModifier> modifiers,
         Map<String, Object> extraParameters) {
 
