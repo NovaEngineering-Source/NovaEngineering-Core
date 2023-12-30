@@ -226,6 +226,8 @@ gui.modular_server_assembler.info.total_hardware_bandwidth=§9硬件带宽（总
 gui.modular_server_assembler.info.used_hardware_bandwidth=§9硬件带宽（已使用）：§e%s§f（§6%s§f）
 
 gui.modular_server_assembler.calculate.expected=§b预期计算能力：
+gui.modular_server_assembler.calculate.name=%s：
+gui.modular_server_assembler.calculate.value=%s（效率：%s%%）
 
 gui.modular_server_assembler.info.can_start=§b是否可启动：%s
 gui.modular_server_assembler.info.can_start.true=§a可用
@@ -240,7 +242,7 @@ gui.modular_server_assembler.error.require_cpu=§c至少需要安装一个 CPU �
 gui.modular_server_assembler.error.require_ram=§c至少需要安装一个 RAM 模块。
 gui.modular_server_assembler.error.require_psu=§c至少需要安装一个 PSU 电源。
 gui.modular_server_assembler.error.require_capacitor=§c至少需要安装一个电容器。
-gui.modular_server_assembler.error.hardware_bandwidth=§c使用的硬件带宽过高（最高 150%）。
+gui.modular_server_assembler.error.hardware_bandwidth=§c使用的硬件带宽过高（最高 150%%）。
 
 gui.modular_server_assembler.error.invalid_slot.0=§c有槽位安装了错误的模块。
 gui.modular_server_assembler.error.invalid_slot.1=§c以下槽位中的模块是有问题的：

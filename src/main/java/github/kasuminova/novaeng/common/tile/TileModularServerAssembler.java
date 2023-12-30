@@ -44,7 +44,7 @@ public class TileModularServerAssembler extends TileCustomController {
         if (stackInSlot.isEmpty()) {
             server = null;
             openedContainer.forEach(ContainerModularServerAssembler::reInitSlots);
-            notifyClientGUIUpdate();
+            notifyClientGUIInventoryUpdate();
             return;
         }
 
@@ -62,10 +62,10 @@ public class TileModularServerAssembler extends TileCustomController {
             server.initModules();
         }
 
-        notifyClientGUIUpdate();
+        notifyClientGUIInventoryUpdate();
     }
 
-    public void notifyClientGUIUpdate() {
+    protected void notifyClientGUIInventoryUpdate() {
         if (world != null && world.isRemote) {
             GuiScreen currentScreen = Minecraft.getMinecraft().currentScreen;
             if (currentScreen instanceof GuiModularServerAssembler assembler) {

@@ -4,7 +4,7 @@ import github.kasuminova.mmce.client.gui.widget.HorizontalSeparator;
 import github.kasuminova.mmce.client.gui.widget.MultiLineLabel;
 import github.kasuminova.mmce.client.gui.widget.container.ScrollingColumn;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
-import github.kasuminova.novaeng.client.gui.widget.msa.event.ModularServerUpdateEvent;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateEvent;
 import github.kasuminova.novaeng.common.container.slot.*;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.server.*;
@@ -60,27 +60,6 @@ public class ServerInfoColumn extends ScrollingColumn {
             errorTips.add(I18n.format("gui.modular_server_assembler.error.dependencies.1"));
             errorTips.addAll(uninstalledDependenciesTip);
         }
-    }
-
-    protected void addErrorTips(final int installedCPUModules, final List<String> errorTips, final int installedRAMModules, final int installedPSUModules, final int installedCapacitorModules, final ServerModuleInv cpu, final AssemblySlotManager slotManager, final ServerModuleInv calculateCard, final ServerModuleInv extension, final ServerModuleInv power) {
-        if (installedCPUModules <= 0) {
-            errorTips.add(I18n.format("gui.modular_server_assembler.error.require_cpu"));
-        }
-        if (installedRAMModules <= 0) {
-            errorTips.add(I18n.format("gui.modular_server_assembler.error.require_ram"));
-        }
-        if (installedPSUModules <= 0) {
-            errorTips.add(I18n.format("gui.modular_server_assembler.error.require_psu"));
-        }
-        if (installedCapacitorModules <= 0) {
-            errorTips.add(I18n.format("gui.modular_server_assembler.error.require_capacitor"));
-        }
-        int totalHardwareBandwidth = server.getTotalHardwareBandwidth();
-        int usedHardwareBandwidth = server.getUsedHardwareBandwidth();
-        if (totalHardwareBandwidth * 1.5 > usedHardwareBandwidth) {
-            errorTips.add(I18n.format("gui.modular_server_assembler.error.hardware_bandwidth"));
-        }
-        addUninstalledDependenciesTip(cpu, slotManager, calculateCard, extension, power, errorTips);
     }
 
     @Override
@@ -155,21 +134,45 @@ public class ServerInfoColumn extends ScrollingColumn {
 
     protected void addPropertiesTips() {
         List<String> propertiesTips = new ArrayList<>();
-        propertiesTips.add(I18n.format("gui.modular_server_assembler.info.max_energy_cap", server.getMaxEnergyCap()));
-        propertiesTips.add(I18n.format("gui.modular_server_assembler.info.max_energy_consumption", server.getMaxEnergyConsumption()));
-        propertiesTips.add(I18n.format("gui.modular_server_assembler.info.max_energy_provision", server.getMaxEnergyProvision()));
+        propertiesTips.add(I18n.format("gui.modular_server_assembler.info.max_energy_cap", NovaEngUtils.formatNumber(server.getMaxEnergyCap())));
+        propertiesTips.add(I18n.format("gui.modular_server_assembler.info.max_energy_consumption", NovaEngUtils.formatNumber(server.getMaxEnergyConsumption())));
+        propertiesTips.add(I18n.format("gui.modular_server_assembler.info.max_energy_provision", NovaEngUtils.formatNumber(server.getMaxEnergyProvision())));
         addWidget(createLabel(propertiesTips));
         addWidget(createSeparator());
     }
 
+    protected void addErrorTips(final int installedCPUModules, final List<String> errorTips, final int installedRAMModules, final int installedPSUModules, final int installedCapacitorModules, final ServerModuleInv cpu, final AssemblySlotManager slotManager, final ServerModuleInv calculateCard, final ServerModuleInv extension, final ServerModuleInv power) {
+        if (installedCPUModules <= 0) {
+            errorTips.add(I18n.format("gui.modular_server_assembler.error.require_cpu"));
+        }
+        if (installedRAMModules <= 0) {
+            errorTips.add(I18n.format("gui.modular_server_assembler.error.require_ram"));
+        }
+        if (installedPSUModules <= 0) {
+            errorTips.add(I18n.format("gui.modular_server_assembler.error.require_psu"));
+        }
+        if (installedCapacitorModules <= 0) {
+            errorTips.add(I18n.format("gui.modular_server_assembler.error.require_capacitor"));
+        }
+        int totalHardwareBandwidth = server.getTotalHardwareBandwidth();
+        int usedHardwareBandwidth = server.getUsedHardwareBandwidth();
+        if (totalHardwareBandwidth * 1.5 < usedHardwareBandwidth) {
+            errorTips.add(I18n.format("gui.modular_server_assembler.error.hardware_bandwidth"));
+        }
+        addUninstalledDependenciesTip(cpu, slotManager, calculateCard, extension, power, errorTips);
+    }
+
     protected void addExpectedCalculateTip() {
         List<String> tip = new ArrayList<>();
+        tip.add(I18n.format("gui.modular_server_assembler.calculate.expected"));
 
         for (final CalculateType type : CalculateTypes.getAvailableTypes().values()) {
-            tip.add(I18n.format("novaeng.hypernet.calculate.tip.efficiency",
-                    type.getFormattedTypeName(),
+            tip.add(I18n.format("gui.modular_server_assembler.calculate.name",
+                    type.getFormattedTypeName()
+            ));
+            tip.add(I18n.format("gui.modular_server_assembler.calculate.value",
                     type.format(server.calculate(
-                                    new CalculateRequest(Double.MAX_VALUE, true, type, CalculateStage.START, server.getOwner(), new HashMap<>(), new HashMap<>()))
+                            new CalculateRequest(Double.MAX_VALUE, true, type, CalculateStage.START, server.getOwner(), new HashMap<>(), new HashMap<>()))
                             .generated()
                     ),
                     Calculable.formatEfficiency(server.getCalculateAvgEfficiency(type))
@@ -190,7 +193,7 @@ public class ServerInfoColumn extends ScrollingColumn {
 
     @Override
     public boolean onGuiEvent(final GuiEvent event) {
-        if (event instanceof ModularServerUpdateEvent serverUpdateEvent) {
+        if (event instanceof AssemblerInvUpdateEvent serverUpdateEvent) {
             this.server = serverUpdateEvent.getServer();
             updateTips();
         }

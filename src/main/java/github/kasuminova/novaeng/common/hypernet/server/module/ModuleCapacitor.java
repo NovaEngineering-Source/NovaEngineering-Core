@@ -27,7 +27,7 @@ public class ModuleCapacitor extends ServerModule {
         return module instanceof ModuleCapacitor ? (ModuleCapacitor) module : null;
     }
 
-    public long getMaxEnergyCapProvide() {
+    public long getMaxEnergyCapProvision() {
         return maxEnergyCapProvide;
     }
 
@@ -35,7 +35,7 @@ public class ModuleCapacitor extends ServerModule {
         this.maxEnergyCapProvide = maxEnergyCapProvide;
     }
 
-    public long getMaxEnergyConsumptionProvide() {
+    public long getMaxEnergyConsumptionProvision() {
         return maxEnergyConsumptionProvide;
     }
 

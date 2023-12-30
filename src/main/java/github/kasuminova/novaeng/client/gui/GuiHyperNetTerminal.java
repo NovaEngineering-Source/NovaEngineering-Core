@@ -140,7 +140,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         GlStateManager.scale(FONT_SCALE, FONT_SCALE, FONT_SCALE);
         fr.drawStringWithShadow(subLevelText,
-                (333F - subLevelTextWidth) / FONT_SCALE, 48.3F / FONT_SCALE, 0xFFFFFF);
+                (332F - subLevelTextWidth) / FONT_SCALE, 48F / FONT_SCALE, 0xFFFFFF);
     }
 
     @Override

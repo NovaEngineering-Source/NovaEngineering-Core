@@ -6,6 +6,7 @@ import github.kasuminova.novaeng.common.hypernet.server.CalculateRequest;
 import github.kasuminova.novaeng.common.hypernet.server.HardwareBandwidthConsumer;
 import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.server.exception.ModularServerException;
+import github.kasuminova.novaeng.common.hypernet.server.modifier.CalculateModifier;
 import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
 import stanhebben.zenscript.annotations.ZenClass;
 
@@ -26,7 +27,7 @@ public abstract class ModuleCalculable extends ServerModule implements Calculabl
     @Override
     public double calculate(final CalculateRequest request) throws ModularServerException {
         double efficiency = getCalculateTypeEfficiency(request.type());
-        double maxCanGenerated = request.modifiers().get(request.type().getModifierKey())
+        double maxCanGenerated = request.modifiers().computeIfAbsent(request.type().getModifierKey(), v -> new CalculateModifier())
                 .apply(baseGeneration * efficiency);
 
         double generated = Math.min(maxCanGenerated, request.maxRequired());

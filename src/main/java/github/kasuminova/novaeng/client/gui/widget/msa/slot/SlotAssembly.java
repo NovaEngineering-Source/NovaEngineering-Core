@@ -4,9 +4,9 @@ import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvCloseEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvOpenEvent;
-import github.kasuminova.novaeng.client.gui.widget.msa.event.ModularServerUpdateEvent;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
 import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
 import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
@@ -104,7 +104,7 @@ public abstract class SlotAssembly<T extends SlotConditionItemHandler> extends S
 
     @Override
     public boolean onGuiEvent(final GuiEvent event) {
-        if (event instanceof ModularServerUpdateEvent serverUpdateEvent) {
+        if (event instanceof AssemblerInvUpdateEvent serverUpdateEvent) {
             ModularServer server = serverUpdateEvent.getServer();
             this.slotManager = server == null ? null : server.getSlotManager();
         } else if (slot != null) {

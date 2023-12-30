@@ -10,6 +10,8 @@ import github.kasuminova.novaeng.common.hypernet.server.exception.EnergyOverload
 import github.kasuminova.novaeng.common.hypernet.server.exception.ModularServerException;
 import github.kasuminova.novaeng.common.hypernet.server.modifier.CalculateModifier;
 import github.kasuminova.novaeng.common.hypernet.server.modifier.ModifierKeys;
+import github.kasuminova.novaeng.common.hypernet.server.module.ModuleCapacitor;
+import github.kasuminova.novaeng.common.hypernet.server.module.ModulePSU;
 import github.kasuminova.novaeng.common.hypernet.server.module.ServerModule;
 import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
@@ -34,9 +36,10 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     protected final List<ServerModule> modules = new ArrayList<>();
     protected final List<Extension> extensions = new LinkedList<>();
 
-    protected final Map<CalculateType, TreeSet<Calculable>> calculableTypeSet = new HashMap<>();
+    protected final List<Calculable> calculables = new ArrayList<>();
+    protected final Map<CalculateType, PriorityQueue<Calculable>> calculableTypeSet = new HashMap<>();
 
-    protected final Map<Class<?>, List<ServerModule>> typeModulesCache = new HashMap<>();
+    protected final Map<Class<?>, List<Object>> typeModulesCache = new HashMap<>();
     protected final Map<ServerModuleBase<?>, List<ServerModule>> baseModulesCache = new HashMap<>();
 
     protected Consumer<ModularServer> onServerInvChangedListener = null;
@@ -84,7 +87,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         if (!started && !request.simulate()) {
             return new CalculateReply(0);
         }
-        TreeSet<Calculable> calculableSet = calculableTypeSet.get(request.type());
+        PriorityQueue<Calculable> calculableSet = calculableTypeSet.get(request.type());
         if (calculableSet == null) {
             return new CalculateReply(0);
         }
@@ -114,11 +117,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     // Modules
 
     public void initModules() {
-        modules.clear();
-        extensions.clear();
-        calculableTypeSet.clear();
-        typeModulesCache.clear();
-        baseModulesCache.clear();
+        resetState();
 
         scanInvModules(assemblyCPUInv);
         scanInvModules(assemblyCalculateCardInv);
@@ -126,6 +125,20 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         scanInvModules(assemblyPowerInv);
 
         recalculateHardwareBandwidth();
+        recalculateEnergySystem();
+    }
+
+    protected void resetState() {
+        modules.clear();
+        extensions.clear();
+        calculableTypeSet.clear();
+        typeModulesCache.clear();
+        baseModulesCache.clear();
+        energyCap = 0;
+        maxEnergyCap = 0;
+        energyConsumed = 0;
+        maxEnergyConsumption = 0;
+        maxEnergyProvision = 0;
     }
 
     protected void scanInvModules(ServerModuleInv moduleInv) {
@@ -160,11 +173,12 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void addCalculable(@Nonnull final Calculable calculable) {
+        calculables.add(calculable);
         for (CalculateType calculateType : CalculateTypes.getAvailableTypes().values()) {
             if (calculable.getCalculateTypeEfficiency(calculateType) <= 0D) {
                 continue;
             }
-            calculableTypeSet.computeIfAbsent(calculateType, v -> new TreeSet<>((o1, o2) -> {
+            calculableTypeSet.computeIfAbsent(calculateType, v -> new PriorityQueue<>((o1, o2) -> {
                 double efficiencyLeft = o1.getCalculateTypeEfficiency(calculateType);
                 double efficiencyRight = o2.getCalculateTypeEfficiency(calculateType);
                 if (efficiencyLeft == efficiencyRight) {
@@ -181,17 +195,13 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         int totalProvided = 0;
         int totalConsumed = 0;
 
-        for (final ServerModule module : modules) {
-            if (module instanceof HardwareBandwidthProvider provider) {
-                totalProvided += provider.getHardwareBandwidthProvision();
-            }
+        for (final HardwareBandwidthProvider provider : getModulesByType(HardwareBandwidthProvider.class)) {
+            totalProvided += provider.getHardwareBandwidthProvision();
         }
         totalHardwareBandwidth = totalProvided;
 
-        for (final ServerModule module : modules) {
-            if (module instanceof HardwareBandwidthConsumer consumer) {
-                totalConsumed += consumer.getHardwareBandwidth();
-            }
+        for (final HardwareBandwidthConsumer consumer : getModulesByType(HardwareBandwidthConsumer.class)) {
+            totalConsumed += consumer.getHardwareBandwidth();
         }
         usedHardwareBandwidth = totalConsumed;
     }
@@ -205,13 +215,34 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     protected void calculateHardwareBandwidthEfficiency(final CalculateRequest request) {
-        float efficiency = Math.max(Math.min((float) totalHardwareBandwidth / usedHardwareBandwidth, 1.0F), 0.5F);
+        if (totalHardwareBandwidth <= 0) {
+            request.modifiers().computeIfAbsent(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, v -> new CalculateModifier()).multiply(0);
+            return;
+        }
+        float efficiency = Math.max(Math.min((float) usedHardwareBandwidth / totalHardwareBandwidth, 1.0F), 0.5F);
         if (efficiency < 1.0F) {
             request.modifiers().computeIfAbsent(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, v -> new CalculateModifier()).multiply(efficiency);
         }
     }
 
     // Energy System
+
+    public void recalculateEnergySystem() {
+        long maxEnergyProvision = 0;
+        for (final ModulePSU modulePSU : getModulesByType(ModulePSU.class)) {
+            maxEnergyProvision += modulePSU.getMaxEnergyProvision();
+        }
+        this.maxEnergyProvision = maxEnergyProvision;
+
+        long maxEnergyCap = 0;
+        long maxEnergyConsumption = 0;
+        for (final ModuleCapacitor capacitor : getModulesByType(ModuleCapacitor.class)) {
+            maxEnergyCap += capacitor.getMaxEnergyCapProvision();
+            maxEnergyConsumption += capacitor.getMaxEnergyConsumptionProvision();
+        }
+        this.maxEnergyCap = maxEnergyCap;
+        this.maxEnergyConsumption = maxEnergyConsumption;
+    }
 
     public long provideEnergy(long amount) {
         long maxCanProvide = Math.min(Math.min(maxEnergyCap - energyCap, maxEnergyProvision), amount);
@@ -254,20 +285,21 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
 
     // typeModules
 
-    public List<ServerModule> getModulesByType(Class<? extends ServerModule> type) {
-        List<ServerModule> cache = typeModulesCache.get(type);
+    @SuppressWarnings("unchecked")
+    public <T> List<T> getModulesByType(Class<T> type) {
+        List<Object> cache = typeModulesCache.get(type);
         if (cache != null) {
-            return cache;
+            return (List<T>) cache;
         }
 
-        List<ServerModule> matched = new ArrayList<>();
+        List<T> matched = new ArrayList<>();
         for (final ServerModule module : modules) {
-            if (module.getClass().isAssignableFrom(type)) {
-                matched.add(module);
+            if (type.isAssignableFrom(module.getClass())) {
+                matched.add((T) module);
             }
         }
 
-        typeModulesCache.put(type, matched);
+        typeModulesCache.put(type, (List<Object>) matched);
         return matched;
     }
 
@@ -390,6 +422,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
 
         modules.clear();
         extensions.clear();
+        calculables.clear();
         calculableTypeSet.clear();
         typeModulesCache.clear();
         baseModulesCache.clear();
@@ -402,14 +435,9 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     // Utils
 
     public double getCalculateAvgEfficiency(final CalculateType type) {
-        TreeSet<Calculable> calculables = calculableTypeSet.get(type);
+        PriorityQueue<Calculable> calculables = calculableTypeSet.get(type);
         if (calculables == null || calculables.isEmpty()) {
             return 0D;
-        }
-
-        int allCalculables = 0;
-        for (final TreeSet<Calculable> value : calculableTypeSet.values()) {
-            allCalculables += value.size();
         }
 
         double efficiency = 0;
@@ -417,7 +445,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
             efficiency += calculable.getCalculateTypeEfficiency(type);
         }
 
-        return efficiency / allCalculables;
+        return efficiency / this.calculables.size();
     }
 
     // Getters
@@ -434,7 +462,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         return modules;
     }
 
-    public Map<CalculateType, TreeSet<Calculable>> getCalculableTypeSet() {
+    public Map<CalculateType, PriorityQueue<Calculable>> getCalculableTypeSet() {
         return Collections.unmodifiableMap(calculableTypeSet);
     }
 

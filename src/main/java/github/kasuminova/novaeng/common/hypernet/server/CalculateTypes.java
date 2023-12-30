@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public final class CalculateTypes {
@@ -15,7 +15,7 @@ public final class CalculateTypes {
     public static final CalculateTypeNeuron NEURON = new CalculateTypeNeuron();
     public static final CalculateTypeQbit QBIT = new CalculateTypeQbit();
 
-    private static final Map<String, CalculateType> AVAILABLE_TYPES = new HashMap<>();
+    private static final Map<String, CalculateType> AVAILABLE_TYPES = new LinkedHashMap<>();
 
     static {
         registerType(INTRICATE);

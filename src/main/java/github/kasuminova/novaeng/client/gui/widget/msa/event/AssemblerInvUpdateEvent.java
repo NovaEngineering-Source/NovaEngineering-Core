@@ -4,11 +4,11 @@ import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
 import net.minecraft.client.gui.inventory.GuiContainer;
 
-public class ModularServerUpdateEvent extends GuiEvent {
+public class AssemblerInvUpdateEvent extends GuiEvent {
 
     protected final ModularServer server;
 
-    public ModularServerUpdateEvent(final GuiContainer gui, ModularServer server) {
+    public AssemblerInvUpdateEvent(final GuiContainer gui, ModularServer server) {
         super(gui);
         this.server = server;
     }

@@ -3,7 +3,7 @@ package github.kasuminova.novaeng.client.gui;
 import github.kasuminova.mmce.client.gui.GuiContainerDynamic;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.widget.msa.*;
-import github.kasuminova.novaeng.client.gui.widget.msa.event.ModularServerUpdateEvent;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateEvent;
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import net.minecraft.client.gui.Gui;
@@ -68,7 +68,7 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
     }
 
     public void onServerInventoryUpdate() {
-        this.widgetController.postGuiEvent(new ModularServerUpdateEvent(this, assembler.getServer()));
+        this.widgetController.postGuiEvent(new AssemblerInvUpdateEvent(this, assembler.getServer()));
     }
 
     @Override

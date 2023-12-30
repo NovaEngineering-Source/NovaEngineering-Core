@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.client.gui.widget.msa;
 
 import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
-import github.kasuminova.novaeng.client.gui.widget.msa.event.ModularServerUpdateEvent;
+import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateEvent;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
 import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
 
@@ -16,7 +16,7 @@ public class AssemblyInvManager extends Column {
 
     @Override
     public boolean onGuiEvent(final GuiEvent event) {
-        if (event instanceof ModularServerUpdateEvent serverUpdateEvent) {
+        if (event instanceof AssemblerInvUpdateEvent serverUpdateEvent) {
             ModularServer server = serverUpdateEvent.getServer();
             this.slotManager = server == null ? null : server.getSlotManager();
         }
