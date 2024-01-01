@@ -5,7 +5,6 @@ import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
 import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
 import hellfirepvp.modularmachinery.ModularMachinery;
-import hellfirepvp.modularmachinery.common.crafting.helper.CraftingStatus;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import hellfirepvp.modularmachinery.common.util.IOInventory;
 import hellfirepvp.modularmachinery.common.util.MiscUtils;
@@ -39,7 +38,7 @@ public class TileModularServerAssembler extends TileCustomController {
 
     }
 
-    public void onServerInventoryUpdate(final int changedSlot) {
+    protected void onServerInventoryUpdate(final int changedSlot) {
         ItemStack stackInSlot = serverInventory.getStackInSlot(changedSlot);
         if (stackInSlot.isEmpty()) {
             server = null;
@@ -49,12 +48,17 @@ public class TileModularServerAssembler extends TileCustomController {
         }
 
         if (server == null || server.requiresUpdate(stackInSlot)) {
+            if (server != null) {
+                server.invalidate();
+            }
+
             server = new ModularServer(this, stackInSlot);
             if (stackInSlot.getTagCompound() != null) {
                 server.readFullInvNBT(stackInSlot.getTagCompound().getCompoundTag("server"));
             } else {
                 server.initInv();
             }
+
             server.setOnServerInvChangedListener(this::onServerInternalInventoryUpdate);
             openedContainer.forEach(ContainerModularServerAssembler::reInitSlots);
         }
@@ -74,7 +78,7 @@ public class TileModularServerAssembler extends TileCustomController {
         }
     }
 
-    public void onServerInternalInventoryUpdate(final ModularServer server) {
+    protected void onServerInternalInventoryUpdate(final ModularServer server) {
         ItemStack stackInSlot = serverInventory.getStackInSlot(0);
         if (stackInSlot.isEmpty() || server.requiresUpdate(stackInSlot)) {
             NovaEngineeringCore.log.warn("Server stack is not equals the cachedStack or it's empty! Assembler world: " + getWorld() + ", pos: " + MiscUtils.posToString(getPos()));
@@ -123,9 +127,6 @@ public class TileModularServerAssembler extends TileCustomController {
             serverInventory.setListener(this::onServerInventoryUpdate);
             onServerInventoryUpdate(0);
         }
-        if (compound.hasKey("controllerStatus")) {
-            controllerStatus = CraftingStatus.deserialize(compound.getCompoundTag("controllerStatus"));
-        }
     }
 
     @Override
@@ -133,7 +134,6 @@ public class TileModularServerAssembler extends TileCustomController {
         super.writeCustomNBT(compound);
 
         compound.setTag("serverInv", serverInventory.writeNBT());
-        compound.setTag("controllerStatus", controllerStatus.serialize());
     }
 
     @Override

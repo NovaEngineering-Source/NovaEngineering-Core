@@ -26,7 +26,7 @@ public class ResearchCognitionData {
 
     private final float techLevel;
     private final double requiredPoints;
-    private final float minComputationPointPerTick;
+    private final double minComputationPointPerTick;
 
     private boolean hideByDefault = false;
 
@@ -44,7 +44,7 @@ public class ResearchCognitionData {
                                  final ItemStack previewStack,
                                  final float techLevel,
                                  final double requiredPoints,
-                                 final float minComputationPointPerTick,
+                                 final double minComputationPointPerTick,
                                  final List<String> descriptions,
                                  final List<String> unlockedDescriptions,
                                  final List<ResearchCognitionData> dependencies)
@@ -73,7 +73,7 @@ public class ResearchCognitionData {
                                  final ItemStack previewStack,
                                  final float techLevel,
                                  final double requiredPoints,
-                                 final float minComputationPointPerTick,
+                                 final double minComputationPointPerTick,
                                  final List<String> descriptions,
                                  final List<String> unlockedDescriptions,
                                  final List<ResearchCognitionData> dependencies,
@@ -105,7 +105,7 @@ public class ResearchCognitionData {
                                                final IItemStack previewStackCT,
                                                final float techLevel,
                                                final double requiredPoints,
-                                               final float minComputationPointPerTick,
+                                               final double minComputationPointPerTick,
                                                final String[] descriptions,
                                                final String[] unlockedDescriptions,
                                                final String[] dependenciesArr)
@@ -133,7 +133,7 @@ public class ResearchCognitionData {
                                                     final IItemStack previewStackCT,
                                                     final float techLevel,
                                                     final double requiredPoints,
-                                                    final float minComputationPointPerTick,
+                                                    final double minComputationPointPerTick,
                                                     final String[] descriptions,
                                                     final String[] unlockedDescriptions,
                                                     final String[] dependenciesArr,
@@ -202,7 +202,7 @@ public class ResearchCognitionData {
     }
 
     @ZenGetter("minComputationPointPerTick")
-    public float getMinComputationPointPerTick() {
+    public double getMinComputationPointPerTick() {
         return minComputationPointPerTick;
     }
 

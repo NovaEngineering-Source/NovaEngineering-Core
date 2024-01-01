@@ -12,12 +12,12 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenRegister
 @ZenClass("novaeng.hypernet.upgrade.type.ProcessorModuleCPUType")
 public class ProcessorModuleCPUType extends ProcessorModuleType {
-    protected final float computationPointGeneration;
+    protected final double computationPointGeneration;
 
     public ProcessorModuleCPUType(final int minDurability,
                                   final int maxDurability,
                                   final int energyConsumption,
-                                  final float computationPointGeneration)
+                                  final double computationPointGeneration)
     {
         super(minDurability, maxDurability, energyConsumption);
         this.computationPointGeneration = computationPointGeneration;
@@ -27,7 +27,7 @@ public class ProcessorModuleCPUType extends ProcessorModuleType {
     public static ProcessorModuleCPUType create(final int minDurability,
                                                 final int maxDurability,
                                                 final int energyConsumption,
-                                                final float computationPointGeneration)
+                                                final double computationPointGeneration)
     {
         return new ProcessorModuleCPUType(minDurability, maxDurability, energyConsumption, computationPointGeneration);
     }
@@ -42,7 +42,7 @@ public class ProcessorModuleCPUType extends ProcessorModuleType {
     }
 
     @ZenGetter("computationPointGeneration")
-    public float getComputationPointGeneration() {
+    public double getComputationPointGeneration() {
         return computationPointGeneration;
     }
 }

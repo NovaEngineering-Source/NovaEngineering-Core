@@ -10,7 +10,7 @@ public class SimpleResearchData implements Serializable {
 
     private final float techLevel;
     private final double requiredPoints;
-    private final float minComputationPointPerTick;
+    private final double minComputationPointPerTick;
 
     private final List<String> descriptions;
     private final List<String> unlockedDescriptions;
@@ -19,7 +19,7 @@ public class SimpleResearchData implements Serializable {
     public SimpleResearchData(final String researchName,
                               final float techLevel,
                               final double requiredPoints,
-                              final float minComputationPointPerTick,
+                              final double minComputationPointPerTick,
                               final List<String> descriptions,
                               final List<String> unlockedDescriptions,
                               final List<String> dependencies)
@@ -63,7 +63,7 @@ public class SimpleResearchData implements Serializable {
         return requiredPoints;
     }
 
-    public float getMinComputationPointPerTick() {
+    public double getMinComputationPointPerTick() {
         return minComputationPointPerTick;
     }
 

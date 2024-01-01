@@ -9,8 +9,8 @@ import stanhebben.zenscript.annotations.ZenMethod;
 public class ComputationCenterCache {
     private static volatile ComputationCenterType type = null;
     private static volatile int totalConnected = 0;
-    private static volatile float computationPointGeneration = 0;
-    private static volatile float computationPointConsumption = 0;
+    private static volatile double computationPointGeneration = 0;
+    private static volatile double computationPointConsumption = 0;
 
     @ZenMethod
     public static ComputationCenterType getType() {
@@ -31,20 +31,20 @@ public class ComputationCenterCache {
     }
 
     @ZenMethod
-    public static float getComputationPointGeneration() {
+    public static double getComputationPointGeneration() {
         return computationPointGeneration;
     }
 
-    public static void setComputationPointGeneration(final float computationPointGeneration) {
+    public static void setComputationPointGeneration(final double computationPointGeneration) {
         ComputationCenterCache.computationPointGeneration = computationPointGeneration;
     }
 
     @ZenMethod
-    public static float getComputationPointConsumption() {
+    public static double getComputationPointConsumption() {
         return computationPointConsumption;
     }
 
-    public static void setComputationPointConsumption(final float computationPointConsumption) {
+    public static void setComputationPointConsumption(final double computationPointConsumption) {
         ComputationCenterCache.computationPointConsumption = computationPointConsumption;
     }
 }

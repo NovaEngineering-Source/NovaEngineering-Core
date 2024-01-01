@@ -27,7 +27,7 @@ public class ResearchStation extends NetNode {
     private final ResearchStationType type;
     private ResearchCognitionData currentResearching = null;
     private double completedPoints = 0;
-    private float consumption = 0;
+    private double consumption = 0;
 
     public ResearchStation(final TileMultiblockMachineController owner) {
         super(owner);
@@ -54,7 +54,7 @@ public class ResearchStation extends NetNode {
             return;
         }
 
-        float required = (float) Math.min(getComputationLeft(), currentResearching.getMinComputationPointPerTick());
+        double required = Math.min(getComputationLeft(), currentResearching.getMinComputationPointPerTick());
         if (center.getComputationPointGeneration() < required) {
             event.setFailed("算力不足！预期：" + NovaEngUtils.formatFLOPS(required) + "，当前：" + NovaEngUtils.formatFLOPS(center.getComputationPointGeneration()));
             return;
@@ -93,8 +93,8 @@ public class ResearchStation extends NetNode {
             return;
         }
 
-        float required = (float) Math.min(getComputationLeft(), currentResearching.getMinComputationPointPerTick());
-        float consumed = center.consumeComputationPoint(required);
+        double required = Math.min(getComputationLeft(), currentResearching.getMinComputationPointPerTick());
+        double consumed = center.consumeComputationPoint(required);
         if (consumed < required) {
             event.preventProgressing("算力不足！预期："
                     + NovaEngUtils.formatFLOPS(required) + "，当前："
@@ -121,29 +121,29 @@ public class ResearchStation extends NetNode {
         return currentResearching.getRequiredPoints() - completedPoints;
     }
 
-    protected void doResearch(final FactoryRecipeTickEvent event, final float consumed) {
+    protected void doResearch(final FactoryRecipeTickEvent event, final double consumed) {
         if (checkCompleted(event)) {
             return;
         }
 
         completedPoints += consumed;
-        float baseConsumption = currentResearching.getMinComputationPointPerTick();
-        consumption = (float) Math.min(baseConsumption, getComputationLeft());
+        double baseConsumption = currentResearching.getMinComputationPointPerTick();
+        consumption = Math.min(baseConsumption, getComputationLeft());
 
         ActiveMachineRecipe activeRecipe = event.getActiveRecipe();
         int totalTick = activeRecipe.getTotalTick();
         activeRecipe.setTick(Math.max((int) (getProgressPercent() * totalTick) - 1, 0));
         event.getRecipeThread().setStatus(CraftingStatus.SUCCESS).setStatusInfo("研究中...");
 
-        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> doExtraResearch((float) Math.min(
+        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> doExtraResearch(Math.min(
                 center.getComputationPointGeneration() - center.getComputationPointConsumption(),
                 Math.min(baseConsumption * 4, getComputationLeft())))
         );
     }
 
-    protected void doExtraResearch(final float maxConsumption) {
+    protected void doExtraResearch(final double maxConsumption) {
         if (center != null) {
-            float consumed = center.consumeComputationPoint(maxConsumption);
+            double consumed = center.consumeComputationPoint(maxConsumption);
             completedPoints += consumed;
             consumption += consumed;
         }
@@ -248,7 +248,7 @@ public class ResearchStation extends NetNode {
     @Override
     public void readNBT(final NBTTagCompound customData) {
         super.readNBT(customData);
-        this.consumption = customData.getFloat("consumption");
+        this.consumption = customData.getDouble("consumption");
         this.currentResearching = RegistryHyperNet.getResearchCognitionData(customData.getString("researching"));
         this.completedPoints = customData.getDouble("completedPoints");
     }
@@ -258,7 +258,7 @@ public class ResearchStation extends NetNode {
         super.writeNBT();
         NBTTagCompound tag = owner.getCustomDataTag();
 
-        tag.setFloat("consumption", consumption);
+        tag.setDouble("consumption", consumption);
         if (currentResearching != null) {
             tag.setString("researching", currentResearching.getResearchName());
             tag.setDouble("completedPoints", completedPoints);
@@ -271,7 +271,7 @@ public class ResearchStation extends NetNode {
     }
 
     @Override
-    public float getComputationPointConsumption() {
+    public double getComputationPointConsumption() {
         return consumption;
     }
 

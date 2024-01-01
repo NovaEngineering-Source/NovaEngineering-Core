@@ -107,8 +107,8 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
     }
 
     private static void processNetNodeTOPDefault(final NetNode node, final IProbeInfo probeInfo) {
-        float consumption = node.getComputationPointConsumption();
-        float provision = node.getComputationPointProvision(0xFFFFFF);
+        double consumption = node.getComputationPointConsumption();
+        double provision = node.getComputationPointProvision(0xFFFFFF);
         if (consumption <= 0 && provision <= 0) {
             return;
         }
@@ -131,8 +131,8 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
                                                 final IProbeInfo leftInfo,
                                                 final IProbeInfo rightInfo)
     {
-        float maxGeneration = processor.getMaxGeneration();
-        float load = Math.min(processor.getComputationalLoad(), maxGeneration);
+        double maxGeneration = processor.getMaxGeneration();
+        double load = Math.min(processor.getComputationalLoad(), maxGeneration);
         float efficiency = processor.getEfficiency();
         int storedHU = processor.getStoredHU();
         float heatPercent = processor.getOverHeatPercent();
@@ -167,7 +167,7 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
             return;
         }
 
-        float consumption = station.getComputationPointConsumption();
+        double consumption = station.getComputationPointConsumption();
 
         leftInfo.text("{*top.hypernet.computation_point_consumption*}");
         rightInfo.text(TextFormatting.AQUA + NovaEngUtils.formatFLOPS(consumption));
@@ -236,8 +236,8 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
         rightInfo.text(TextFormatting.AQUA +
                 String.valueOf(connections) + " / " + TextFormatting.YELLOW + maxConnections);
 
-        float consumption = center.getComputationPointConsumption();
-        float generation = center.getComputationPointGeneration();
+        double consumption = center.getComputationPointConsumption();
+        double generation = center.getComputationPointGeneration();
         leftInfo.text("{*top.hypernet.computation_point.total*}");
         rightInfo.text(TextFormatting.AQUA +
                 NovaEngUtils.formatFLOPS(consumption) + " / " + NovaEngUtils.formatFLOPS(generation));

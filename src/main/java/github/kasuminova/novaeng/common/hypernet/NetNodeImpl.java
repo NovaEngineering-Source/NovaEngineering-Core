@@ -6,7 +6,8 @@ import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
 import hellfirepvp.modularmachinery.common.machine.RecipeThread;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
-import it.unimi.dsi.fastutil.objects.Object2FloatOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleMap;
+import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
@@ -16,8 +17,8 @@ import java.util.Collection;
 @ZenRegister
 @ZenClass("novaeng.hypernet.NetNodeImpl")
 public class NetNodeImpl extends NetNode {
-    protected final Object2FloatOpenHashMap<RecipeThread> recipeConsumers = new Object2FloatOpenHashMap<>();
-    protected float computationPointConsumption = 0;
+    protected final Object2DoubleMap<RecipeThread> recipeConsumers = new Object2DoubleOpenHashMap<>();
+    protected double computationPointConsumption = 0;
 
     public NetNodeImpl(final TileMultiblockMachineController owner) {
         super(owner);
@@ -28,8 +29,8 @@ public class NetNodeImpl extends NetNode {
         super.onMachineTick();
         if (isWorking()) {
             if (owner.getTicksExisted() % 10 == 0) {
-                float total = 0;
-                for (final float value : recipeConsumers.values()) {
+                double total = 0;
+                for (final double value : recipeConsumers.values()) {
                     total += value;
                 }
                 computationPointConsumption = total;
@@ -42,7 +43,7 @@ public class NetNodeImpl extends NetNode {
 
     @ZenMethod
     public void checkComputationPoint(final RecipeCheckEvent event,
-                                      final float pointRequired,
+                                      final double pointRequired,
                                       final ResearchCognitionData... researchRequired)
     {
         if (centerPos == null || center == null) {
@@ -50,7 +51,7 @@ public class NetNodeImpl extends NetNode {
             return;
         }
 
-        float generation = center.getComputationPointGeneration();
+        double generation = center.getComputationPointGeneration();
         if (generation < pointRequired) {
             event.setFailed("算力不足！预期："
                     + NovaEngUtils.formatFLOPS(pointRequired) + "，当前："
@@ -88,15 +89,15 @@ public class NetNodeImpl extends NetNode {
         }
     }
 
-    public void onRecipeStart(final RecipeStartEvent event, final float computation) {
+    public void onRecipeStart(final RecipeStartEvent event, final double computation) {
         recipeConsumers.put(event.getRecipeThread(), computation * event.getActiveRecipe().getParallelism());
     }
 
-    public void onRecipeStart(final FactoryRecipeStartEvent event, final float computation) {
+    public void onRecipeStart(final FactoryRecipeStartEvent event, final double computation) {
         recipeConsumers.put(event.getRecipeThread(), computation * event.getActiveRecipe().getParallelism());
     }
 
-    public void onRecipePreTick(final RecipeTickEvent event, final float computation, final boolean triggerFailure) {
+    public void onRecipePreTick(final RecipeTickEvent event, final double computation, final boolean triggerFailure) {
         if (centerPos == null) {
             event.setFailed(true, "未连接至计算网络！");
             return;
@@ -105,10 +106,10 @@ public class NetNodeImpl extends NetNode {
             event.preventProgressing("未连接至计算网络！");
             return;
         }
-        float required = computation * event.getActiveRecipe().getParallelism();
+        double required = computation * event.getActiveRecipe().getParallelism();
         recipeConsumers.put(event.getRecipeThread(), required);
 
-        float consumed = center.consumeComputationPoint(required);
+        double consumed = center.consumeComputationPoint(required);
         if (consumed < required) {
             String failureMessage = String.format("算力不足！预期：%s，当前：%s",
                     NovaEngUtils.formatFLOPS(required), NovaEngUtils.formatFLOPS(consumed));
@@ -121,7 +122,7 @@ public class NetNodeImpl extends NetNode {
         }
     }
 
-    public void onRecipePreTick(final FactoryRecipeTickEvent event, final float computation, final boolean triggerFailure) {
+    public void onRecipePreTick(final FactoryRecipeTickEvent event, final double computation, final boolean triggerFailure) {
         if (centerPos == null) {
             event.setFailed(true, "未连接至计算网络！");
             return;
@@ -130,10 +131,10 @@ public class NetNodeImpl extends NetNode {
             event.preventProgressing("未连接至计算网络！");
             return;
         }
-        float required = computation * event.getActiveRecipe().getParallelism();
+        double required = computation * event.getActiveRecipe().getParallelism();
         recipeConsumers.put(event.getRecipeThread(), required);
 
-        float consumed = center.consumeComputationPoint(required);
+        double consumed = center.consumeComputationPoint(required);
         if (consumed < required) {
             String failureMessage = String.format("算力不足！预期：%s，当前：%s",
                     NovaEngUtils.formatFLOPS(required), NovaEngUtils.formatFLOPS(consumed));
@@ -147,24 +148,24 @@ public class NetNodeImpl extends NetNode {
     }
 
     public void onRecipeFinished(final RecipeThread thread) {
-        recipeConsumers.removeFloat(thread);
+        recipeConsumers.removeDouble(thread);
     }
 
     @Override
     public void readNBT(final NBTTagCompound customData) {
         super.readNBT(customData);
-        this.computationPointConsumption = customData.getFloat("c");
+        this.computationPointConsumption = customData.getDouble("c");
     }
 
     @Override
     public void writeNBT() {
         super.writeNBT();
         NBTTagCompound tag = owner.getCustomDataTag();
-        tag.setFloat("c", computationPointConsumption);
+        tag.setDouble("c", computationPointConsumption);
     }
 
     @Override
-    public float getComputationPointConsumption() {
+    public double getComputationPointConsumption() {
         return computationPointConsumption;
     }
 }

@@ -61,11 +61,11 @@ public class NovaEngUtils {
     }
 
     @ZenMethod
-    public static String formatFLOPS(float value) {
+    public static String formatFLOPS(double value) {
         if (value < 1000.0F) {
-            return formatFloat(value, 1) + "T FloPS";
+            return formatDouble(value, 1) + "T FloPS";
         }
-        return formatFloat(value / 1000.0F, 1) + "P FloPS";
+        return formatDouble(value / 1000.0D, 1) + "P FloPS";
     }
 
 }

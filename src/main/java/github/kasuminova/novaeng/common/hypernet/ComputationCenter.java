@@ -36,7 +36,7 @@ public class ComputationCenter {
     private final ComputationCenterType type;
 
     // 计算点计数器，计算当前 Tick 总共消耗了多少算力。
-    private final AtomicReference<Float> computationPointCounter = new AtomicReference<>(0F);
+    private final AtomicReference<Double> computationPointCounter = new AtomicReference<>(0D);
 
     private UUID networkOwner = null;
 
@@ -98,8 +98,8 @@ public class ComputationCenter {
             return;
         }
         float consumeChance =
-                (float) getConnectedMachineryCount() / type.getMaxConnections() +
-                        getComputationPointGeneration() / type.getMaxComputationPointCarrying();
+                (float) ((double) getConnectedMachineryCount() / type.getMaxConnections() +
+                                        getComputationPointGeneration() / type.getMaxComputationPointCarrying());
         if (!(RandomUtils.nextFloat() <= Math.max(type.getCircuitConsumeChance() * consumeChance, 0.01F))) {
             return;
         }
@@ -186,12 +186,12 @@ public class ComputationCenter {
     /**
      * 消耗计算点，返回已消耗的数量。
      */
-    public float consumeComputationPoint(final float required) {
+    public double consumeComputationPoint(final double required) {
         if (!isWorking() || type.getMaxComputationPointCarrying() < required || computationPointCounter.get() < required) {
             return 0;
         }
 
-        final float[] polledCounter = {0};
+        final double[] polledCounter = {0};
         computationPointCounter.updateAndGet(counter -> {
             if (counter < required) {
                 return counter;
@@ -203,12 +203,12 @@ public class ComputationCenter {
             return 0;
         }
 
-        float totalGenerated = 0F;
+        double totalGenerated = 0F;
 
         calculate:
         for (Map<BlockPos, NetNode> nodes : nodes.values()) {
             for (NetNode node : nodes.values()) {
-                float generated = node.requireComputationPoint(required - totalGenerated, true);
+                double generated = node.requireComputationPoint(required - totalGenerated, true);
                 totalGenerated += generated;
                 if (totalGenerated >= required) {
                     break calculate;
@@ -216,12 +216,12 @@ public class ComputationCenter {
             }
         }
 
-        final float finalTotalGenerated = totalGenerated;
+        final double finalTotalGenerated = totalGenerated;
         computationPointCounter.updateAndGet(counter -> counter + (polledCounter[0] - finalTotalGenerated));
 
         if (required > totalGenerated) {
             // 修复精度有概率不准确的问题
-            if (totalGenerated + 0.1F > required) {
+            if (totalGenerated + 0.1D > required) {
                 return required;
             }
         }
@@ -301,12 +301,12 @@ public class ComputationCenter {
     }
 
     @ZenGetter("computationPointGeneration")
-    public float getComputationPointGeneration() {
-        float maxCarry = type.getMaxComputationPointCarrying();
-        float totalGeneration = 0F;
+    public double getComputationPointGeneration() {
+        double maxCarry = type.getMaxComputationPointCarrying();
+        double totalGeneration = 0F;
         for (Map<BlockPos, NetNode> nodes : nodes.values()) {
             for (NetNode node : nodes.values()) {
-                float generation = node.getComputationPointProvision(maxCarry);
+                double generation = node.getComputationPointProvision(maxCarry);
                 maxCarry -= generation;
                 totalGeneration += generation;
             }
@@ -315,8 +315,8 @@ public class ComputationCenter {
     }
 
     @ZenGetter("computationPointConsumption")
-    public float getComputationPointConsumption() {
-        float sum = 0F;
+    public double getComputationPointConsumption() {
+        double sum = 0F;
         for (Map<BlockPos, NetNode> map : nodes.values()) {
             for (NetNode node : map.values()) {
                 sum += node.getComputationPointConsumption();

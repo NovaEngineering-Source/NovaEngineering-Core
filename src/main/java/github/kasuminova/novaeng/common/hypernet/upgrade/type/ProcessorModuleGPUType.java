@@ -14,7 +14,7 @@ public class ProcessorModuleGPUType extends ProcessorModuleCPUType {
     public ProcessorModuleGPUType(final int minDurability,
                                   final int maxDurability,
                                   final int energyConsumption,
-                                  final float computationPointGeneration)
+                                  final double computationPointGeneration)
     {
         super(minDurability, maxDurability, energyConsumption, computationPointGeneration);
     }
@@ -23,7 +23,7 @@ public class ProcessorModuleGPUType extends ProcessorModuleCPUType {
     public static ProcessorModuleGPUType createGPUType(final int minDurability,
                                                 final int maxDurability,
                                                 final int energyConsumption,
-                                                final float computationPointGeneration)
+                                                final double computationPointGeneration)
     {
         return new ProcessorModuleGPUType(minDurability, maxDurability, energyConsumption, computationPointGeneration);
     }

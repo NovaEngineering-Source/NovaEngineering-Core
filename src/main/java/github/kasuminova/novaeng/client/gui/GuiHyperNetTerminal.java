@@ -140,7 +140,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         GlStateManager.scale(FONT_SCALE, FONT_SCALE, FONT_SCALE);
         fr.drawStringWithShadow(subLevelText,
-                (332F - subLevelTextWidth) / FONT_SCALE, 48F / FONT_SCALE, 0xFFFFFF);
+                (332F - subLevelTextWidth) / FONT_SCALE, 47.9F / FONT_SCALE, 0xFFFFFF);
     }
 
     @Override
@@ -243,8 +243,8 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
         ResearchCognitionData data = current.getData();
         ResearchStationType stationType = PktTerminalGuiData.getResearchStationType();
-        float consumption = ComputationCenterCache.getComputationPointConsumption();
-        float generation = ComputationCenterCache.getComputationPointGeneration();
+        double consumption = ComputationCenterCache.getComputationPointConsumption();
+        double generation = ComputationCenterCache.getComputationPointGeneration();
 
         if (stationType == null || stationType.getMaxTechLevel() < data.getTechLevel()) {
             errorTip.add(I18n.format("gui.terminal_controller.screen.info.start.error.tech_level"));
@@ -758,7 +758,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
             return false;
         }
 
-        float generation = ComputationCenterCache.getComputationPointGeneration();
+        double generation = ComputationCenterCache.getComputationPointGeneration();
         if (generation < data.getMinComputationPointPerTick()) {
             return false;
         }

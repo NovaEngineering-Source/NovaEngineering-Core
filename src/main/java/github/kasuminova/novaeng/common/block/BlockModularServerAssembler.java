@@ -14,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -29,6 +30,11 @@ public class BlockModularServerAssembler extends BlockController {
     private BlockModularServerAssembler() {
         setRegistryName(new ResourceLocation(NovaEngineeringCore.MOD_ID, "modular_server_assembler"));
         setTranslationKey(NovaEngineeringCore.MOD_ID + '.' + "modular_server_assembler");
+    }
+
+    @Override
+    public AxisAlignedBB getBoundingBox(final IBlockState state, final IBlockAccess source, final BlockPos pos) {
+        return super.getBoundingBox(state, source, pos);
     }
 
     public DynamicMachine getParentMachine() {

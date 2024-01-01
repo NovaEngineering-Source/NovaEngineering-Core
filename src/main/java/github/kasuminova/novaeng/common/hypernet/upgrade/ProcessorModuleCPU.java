@@ -43,14 +43,14 @@ public class ProcessorModuleCPU extends DataProcessorModule {
         return list;
     }
 
-    public float calculate(final boolean doCalculate, float maxGeneration) {
+    public double calculate(final boolean doCalculate, double maxGeneration) {
         if (durability <= 0 && maxDurability != 0) {
             return 0.0F;
         }
 
         float efficiency = getEfficiency();
-        float generationBase = efficiency * getComputationPointGeneration();
-        float left = Math.min((generationBase - maxGeneration), generationBase);
+        double generationBase = efficiency * getComputationPointGeneration();
+        double left = Math.min((generationBase - maxGeneration), generationBase);
 
         if (left <= 0) {
             if (doCalculate && RandomUtils.nextFloat() <= 0.005F) {
@@ -59,7 +59,7 @@ public class ProcessorModuleCPU extends DataProcessorModule {
             }
             return generationBase;
         } else {
-            float trueGenerated = generationBase - left;
+            double trueGenerated = generationBase - left;
             if (doCalculate && RandomUtils.nextFloat() <= 0.005F * (trueGenerated / generationBase)) {
                 durability--;
                 writeNBTToItem();
@@ -96,7 +96,7 @@ public class ProcessorModuleCPU extends DataProcessorModule {
     }
 
     @ZenGetter("computationalPointGeneration")
-    public float getComputationPointGeneration() {
+    public double getComputationPointGeneration() {
         return moduleType.getComputationPointGeneration();
     }
 

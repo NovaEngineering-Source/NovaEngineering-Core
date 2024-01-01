@@ -128,20 +128,6 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         recalculateEnergySystem();
     }
 
-    protected void resetState() {
-        modules.clear();
-        extensions.clear();
-        calculables.clear();
-        calculableTypeSet.clear();
-        typeModulesCache.clear();
-        baseModulesCache.clear();
-        energyCap = 0;
-        maxEnergyCap = 0;
-        energyConsumed = 0;
-        maxEnergyConsumption = 0;
-        maxEnergyProvision = 0;
-    }
-
     protected void scanInvModules(ServerModuleInv moduleInv) {
         moduleInv.getAvailableSlotsStream().forEach(slot -> {
             if (!slotManager.getSlot(moduleInv.getInvName(), slot).isAvailable()) {
@@ -415,18 +401,26 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         };
     }
 
-    public void invalidate() {
-        assemblyCPUInv.clear();
-        assemblyCalculateCardInv.clear();
-        assemblyExtensionInv.clear();
-        assemblyPowerInv.clear();
-
+    protected void resetState() {
         modules.clear();
         extensions.clear();
         calculables.clear();
         calculableTypeSet.clear();
         typeModulesCache.clear();
         baseModulesCache.clear();
+        energyCap = 0;
+        maxEnergyCap = 0;
+        energyConsumed = 0;
+        maxEnergyConsumption = 0;
+        maxEnergyProvision = 0;
+    }
+
+    public void invalidate() {
+        resetState();
+        assemblyCPUInv.clear();
+        assemblyCalculateCardInv.clear();
+        assemblyExtensionInv.clear();
+        assemblyPowerInv.clear();
     }
 
     public void setOnServerInvChangedListener(final Consumer<ModularServer> onServerInvChangedListener) {

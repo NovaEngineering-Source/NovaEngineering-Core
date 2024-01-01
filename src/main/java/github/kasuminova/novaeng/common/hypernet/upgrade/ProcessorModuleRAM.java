@@ -42,14 +42,14 @@ public class ProcessorModuleRAM extends DataProcessorModule {
         return list;
     }
 
-    public float calculate(final boolean doCalculate, float maxGeneration) {
+    public double calculate(final boolean doCalculate, double maxGeneration) {
         if (durability <= 0 && maxDurability != 0) {
             return 0.0F;
         }
 
         float efficiency = getEfficiency();
-        float generationBase = efficiency * getComputationPointGenerationLimit();
-        float left = Math.min((generationBase - maxGeneration), generationBase);
+        double generationBase = efficiency * getComputationPointGenerationLimit();
+        double left = Math.min((generationBase - maxGeneration), generationBase);
 
         if (left <= 0) {
             if (doCalculate && RandomUtils.nextFloat() <= 0.005F) {
@@ -58,7 +58,7 @@ public class ProcessorModuleRAM extends DataProcessorModule {
             }
             return generationBase;
         } else {
-            float trueGenerated = generationBase - left;
+            double trueGenerated = generationBase - left;
             if (doCalculate && RandomUtils.nextFloat() <= 0.005F * (trueGenerated / generationBase)) {
                 durability--;
                 writeNBTToItem();
@@ -95,7 +95,7 @@ public class ProcessorModuleRAM extends DataProcessorModule {
     }
 
     @ZenGetter("computationPointGenerationLimit")
-    public float getComputationPointGenerationLimit() {
+    public double getComputationPointGenerationLimit() {
         return moduleType.getComputationPointGenerationLimit();
     }
 

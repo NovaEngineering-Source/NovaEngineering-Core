@@ -96,17 +96,17 @@ public abstract class NetNode {
         return owner.isWorking();
     }
 
-    public float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {
+    public double requireComputationPoint(final double maxGeneration, final boolean doCalculate) {
         return 0;
     }
 
     @ZenMethod
-    public float getComputationPointProvision(final float maxGeneration) {
+    public double getComputationPointProvision(final double maxGeneration) {
         return 0;
     }
 
     @ZenGetter("computationPointConsumption")
-    public float getComputationPointConsumption() {
+    public double getComputationPointConsumption() {
         return 0;
     }
 

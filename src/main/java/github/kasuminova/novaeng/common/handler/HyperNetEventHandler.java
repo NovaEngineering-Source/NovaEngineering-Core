@@ -38,9 +38,14 @@ public class HyperNetEventHandler {
     public static final HyperNetEventHandler INSTANCE = new HyperNetEventHandler();
 
     private static final MpscLinkedAtomicQueue<Action> TICK_START_ACTIONS = new MpscLinkedAtomicQueue<>();
+    private static final MpscLinkedAtomicQueue<Action> TICK_END_ACTIONS = new MpscLinkedAtomicQueue<>();
 
     public static void addTickStartAction(final Action action) {
         TICK_START_ACTIONS.offer(action);
+    }
+
+    public static void addTickEndAction(final Action action) {
+        TICK_END_ACTIONS.offer(action);
     }
 
     private HyperNetEventHandler() {
@@ -94,17 +99,31 @@ public class HyperNetEventHandler {
     }
 
     @SubscribeEvent
-    public void onServerTickStart(final TickEvent.ServerTickEvent event) {
-        if (event.side.isClient() || event.phase != TickEvent.Phase.START) {
+    public void onServerTick(final TickEvent.ServerTickEvent event) {
+        if (event.side.isClient()) {
             return;
         }
 
-        Action action;
-        while ((action = TICK_START_ACTIONS.poll()) != null) {
-            try {
-                action.doAction();
-            } catch (Exception e) {
-                NovaEngineeringCore.log.warn(e);
+        switch (event.phase) {
+            case START -> {
+                Action action;
+                while ((action = TICK_START_ACTIONS.poll()) != null) {
+                    try {
+                        action.doAction();
+                    } catch (Exception e) {
+                        NovaEngineeringCore.log.warn(e);
+                    }
+                }
+            }
+            case END -> {
+                Action action;
+                while ((action = TICK_END_ACTIONS.poll()) != null) {
+                    try {
+                        action.doAction();
+                    } catch (Exception e) {
+                        NovaEngineeringCore.log.warn(e);
+                    }
+                }
             }
         }
     }

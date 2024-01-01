@@ -21,7 +21,7 @@ public class ComputationCenterType extends NetNodeTypeRepairable {
     public static final String CENTER_WORKING_THREAD_NAME = "novaeng.hypernet.data_forwarding_processor";
 
     private final int maxConnections;
-    private final float maxComputationPointCarrying;
+    private final double maxComputationPointCarrying;
     private final int circuitDurability;
     private final int minCircuitConsumeAmount;
     private final int maxCircuitConsumeAmount;
@@ -111,7 +111,7 @@ public class ComputationCenterType extends NetNodeTypeRepairable {
     }
 
     @ZenGetter("maxComputationPointCarrying")
-    public float getMaxComputationPointCarrying() {
+    public double getMaxComputationPointCarrying() {
         return maxComputationPointCarrying;
     }
 

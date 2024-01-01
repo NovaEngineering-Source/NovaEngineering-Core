@@ -35,23 +35,23 @@ public class DataProcessor extends NetNode {
     private final Lock lock = new ReentrantLock();
 
     private final MpscLinkedAtomicQueue<Long> recentEnergyUsage = new MpscLinkedAtomicQueue<>();
-    private final MpscLinkedAtomicQueue<Float> recentCalculation = new MpscLinkedAtomicQueue<>();
+    private final MpscLinkedAtomicQueue<Double> recentCalculation = new MpscLinkedAtomicQueue<>();
 
     private final DataProcessorType type;
-    private final LinkedList<Float> computationalLoadHistory = new LinkedList<>();
+    private final LinkedList<Double> computationalLoadHistory = new LinkedList<>();
 
     private final List<ProcessorModuleCPU> moduleCPUS = new CopyOnWriteArrayList<>();
     private final List<ProcessorModuleRAM> moduleRAMS = new CopyOnWriteArrayList<>();
 
     private volatile int dynamicPatternSize = 0;
 
-    private volatile float maxGeneration = 0;
-    private final AtomicReference<Float> generated = new AtomicReference<>(0F);
+    private volatile double maxGeneration = 0;
+    private final AtomicReference<Double> generated = new AtomicReference<>(0D);
 
     private int storedHU = 0;
     private boolean overheat = false;
-    private float computationalLoadHistoryCache = 0;
-    private float computationalLoad = 0;
+    private double computationalLoadHistoryCache = 0;
+    private double computationalLoad = 0;
 
     public DataProcessor(final TileMultiblockMachineController owner) {
         super(owner);
@@ -160,13 +160,13 @@ public class DataProcessor extends NetNode {
         super.onMachineTick();
 
         if (!isWorking()) {
-            generated.set(0F);
+            generated.set(0D);
             computationalLoad = 0F;
             computationalLoadHistoryCache = 0F;
             computationalLoadHistory.clear();
         } else {
-            float totalCalculation = 0F;
-            Float calculation;
+            double totalCalculation = 0F;
+            Double calculation;
             while ((calculation = recentCalculation.poll()) != null) {
                 totalCalculation += calculation;
             }
@@ -236,16 +236,16 @@ public class DataProcessor extends NetNode {
     }
 
     @Override
-    public float requireComputationPoint(final float maxGeneration, final boolean doCalculate) {
+    public double requireComputationPoint(final double maxGeneration, final boolean doCalculate) {
         if (!isConnected() || center == null || !isWorking()) {
             return 0F;
         }
 
-        float[] polledCounter = {0};
+        double[] polledCounter = {0};
         this.generated.updateAndGet(generated -> {
             if (generated < maxGeneration) {
                 polledCounter[0] = generated;
-                return 0F;
+                return 0D;
             }
 
             polledCounter[0] = maxGeneration;
@@ -256,8 +256,8 @@ public class DataProcessor extends NetNode {
             return 0F;
         }
 
-        float maxCanGenerated = polledCounter[0];
-        float generated = calculateComputationPointProvision(maxCanGenerated, doCalculate);
+        double maxCanGenerated = polledCounter[0];
+        double generated = calculateComputationPointProvision(maxCanGenerated, doCalculate);
 
         if (doCalculate) {
             doHeatGeneration(generated);
@@ -279,7 +279,7 @@ public class DataProcessor extends NetNode {
     }
 
     @ZenGetter("maxGeneration")
-    public float getMaxGeneration() {
+    public double getMaxGeneration() {
         return maxGeneration;
     }
 
@@ -293,14 +293,14 @@ public class DataProcessor extends NetNode {
         return overheat ? 1F : (float) storedHU / type.getOverheatThreshold();
     }
 
-    public void doHeatGeneration(float computationPointGeneration) {
+    public void doHeatGeneration(double computationPointGeneration) {
         storedHU += (int) (computationPointGeneration * 2);
         if (storedHU >= type.getOverheatThreshold()) {
             overheat = true;
         }
     }
 
-    public float calculateComputationPointProvision(float maxGeneration, boolean doCalculate) {
+    public double calculateComputationPointProvision(double maxGeneration, boolean doCalculate) {
         if (overheat || !isWorking()) {
             return 0;
         }
@@ -318,23 +318,23 @@ public class DataProcessor extends NetNode {
         }
 
         long totalEnergyConsumption = 0;
-        float maxGen = maxGeneration * getEfficiency();
+        double maxGen = maxGeneration * getEfficiency();
 
-        float generationLimit = 0F;
-        float totalGenerated = 0F;
+        double generationLimit = 0F;
+        double totalGenerated = 0F;
 
         for (ProcessorModuleRAM ram : moduleRAMS) {
-            float generated = ram.calculate(doCalculate, maxGen - generationLimit);
+            double generated = ram.calculate(doCalculate, maxGen - generationLimit);
             generationLimit += generated;
             if (doCalculate) {
-                totalEnergyConsumption += (long) ((double) (generated / ram.getComputationPointGenerationLimit()) * ram.getEnergyConsumption());
+                totalEnergyConsumption += (long) ((generated / ram.getComputationPointGenerationLimit()) * ram.getEnergyConsumption());
             }
         }
         for (final ProcessorModuleCPU cpu : moduleCPUS) {
-            float generated = cpu.calculate(doCalculate, generationLimit - totalGenerated);
+            double generated = cpu.calculate(doCalculate, generationLimit - totalGenerated);
             totalGenerated += generated;
             if (doCalculate) {
-                totalEnergyConsumption += (long) ((double) (generated / cpu.getComputationPointGeneration()) * cpu.getEnergyConsumption());
+                totalEnergyConsumption += (long) ((generated / cpu.getComputationPointGeneration()) * cpu.getEnergyConsumption());
             }
 
             if (totalGenerated >= generationLimit) {
@@ -368,17 +368,17 @@ public class DataProcessor extends NetNode {
         NBTTagCompound tag = owner.getCustomDataTag();
         tag.setInteger("storedHU", storedHU);
         tag.setBoolean("overheat", overheat);
-        tag.setFloat("computationalLoad", computationalLoad);
-        tag.setFloat("maxGeneration", maxGeneration);
+        tag.setDouble("computationalLoad", computationalLoad);
+        tag.setDouble("maxGeneration", maxGeneration);
     }
 
     @Override
-    public float getComputationPointProvision(final float maxGeneration) {
+    public double getComputationPointProvision(final double maxGeneration) {
         return calculateComputationPointProvision(maxGeneration, false);
     }
 
     @ZenGetter("computationalLoad")
-    public float getComputationalLoad() {
+    public double getComputationalLoad() {
         return computationalLoad;
     }
 

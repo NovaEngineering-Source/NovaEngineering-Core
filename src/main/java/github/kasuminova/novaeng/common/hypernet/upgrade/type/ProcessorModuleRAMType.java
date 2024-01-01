@@ -12,12 +12,12 @@ import stanhebben.zenscript.annotations.ZenMethod;
 @ZenRegister
 @ZenClass("novaeng.hypernet.upgrade.type.ProcessorModuleRAMType")
 public class ProcessorModuleRAMType extends ProcessorModuleType {
-    private final float computationPointGenerationLimit;
+    private final double computationPointGenerationLimit;
 
     public ProcessorModuleRAMType(final int minDurability,
                                   final int maxDurability,
                                   final int energyConsumption,
-                                  final float computationPointGenerationLimit)
+                                  final double computationPointGenerationLimit)
     {
         super(minDurability, maxDurability, energyConsumption);
         this.computationPointGenerationLimit = computationPointGenerationLimit;
@@ -27,7 +27,7 @@ public class ProcessorModuleRAMType extends ProcessorModuleType {
     public static ProcessorModuleRAMType create(final int minDurability,
                                                 final int maxDurability,
                                                 final int energyConsumption,
-                                                final float computationPointGenerationLimit)
+                                                final double computationPointGenerationLimit)
     {
         return new ProcessorModuleRAMType(minDurability, maxDurability, energyConsumption, computationPointGenerationLimit);
     }
@@ -42,7 +42,7 @@ public class ProcessorModuleRAMType extends ProcessorModuleType {
     }
 
     @ZenGetter("computationPointGenerationLimit")
-    public float getComputationPointGenerationLimit() {
+    public double getComputationPointGenerationLimit() {
         return computationPointGenerationLimit;
     }
 }

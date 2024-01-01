@@ -199,7 +199,7 @@ dependencies {
 
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
-    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4961183"))
+    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4991928"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4506796"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197"))
@@ -219,7 +219,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:touhou-little-maid-355044:3576415"))
     compileOnly(rfg.deobf("curse.maven:ingame-info-xml-225604:2489566"))
     compileOnly(rfg.deobf("curse.maven:lunatriuscore-225605:2489549"))
-    implementation(rfg.deobf("curse.maven:rgb-chat-702720:4092100"))
+    compileOnly(rfg.deobf("curse.maven:rgb-chat-702720:4092100"))
 }
 
 // Publishing to a Maven repository
