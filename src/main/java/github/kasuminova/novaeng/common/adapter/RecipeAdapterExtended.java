@@ -11,6 +11,7 @@ public class RecipeAdapterExtended {
         RegistriesMM.ADAPTER_REGISTRY.register(new AdapterNCOPressurizer());
         RegistriesMM.ADAPTER_REGISTRY.register(new AdapterNCOElectrolyzer());
         RegistriesMM.ADAPTER_REGISTRY.register(new AdapterMCFurnaceWithExp());
+        RegistriesMM.ADAPTER_REGISTRY.register(new AdapterShredder());
     }
 
 }

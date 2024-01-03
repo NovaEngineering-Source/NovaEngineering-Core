@@ -202,10 +202,17 @@ dependencies {
     implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4991928"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4506796"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
-    implementation(rfg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197"))
     implementation(rfg.deobf("curse.maven:applied-energistics-2-223794:2747063"))
     implementation(rfg.deobf("curse.maven:tx-loader-706505:4515357"))
-    implementation(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
+    implementation(rfg.deobf("curse.maven:CodeChickenLib-242818:2779848"))
+    implementation(rfg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197"))
+    implementation(rfg.deobf("curse.maven:industrialcraft-2-242638:3078604"))
+    implementation(rfg.deobf("curse.maven:mekanism-unofficial-edition-v10-edition-840735:4464199"))
+    implementation(rfg.deobf("curse.maven:RedstoneFlux-270789:2920436"))
+    implementation(rfg.deobf("curse.maven:cofh-core-69162:2920433"))
+    implementation(rfg.deobf("curse.maven:cofh-world-271384:2920434"))
+    implementation(rfg.deobf("curse.maven:thermal-foundation-222880:2926428"))
+    implementation(rfg.deobf("curse.maven:thermal-expansion-69163:2926431"))
 
     compileOnly(rfg.deobf("curse.maven:zenutil-401178:4394263"))
     compileOnly(rfg.deobf("curse.maven:libvulpes-236541:3801015"))
@@ -220,6 +227,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:ingame-info-xml-225604:2489566"))
     compileOnly(rfg.deobf("curse.maven:lunatriuscore-225605:2489549"))
     compileOnly(rfg.deobf("curse.maven:rgb-chat-702720:4092100"))
+    compileOnly(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
 }
 
 // Publishing to a Maven repository

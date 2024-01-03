@@ -4,7 +4,6 @@ import crafttweaker.util.IEventHandler;
 import github.kasuminova.mmce.common.event.recipe.RecipeEvent;
 import github.kasuminova.mmce.common.itemtype.ChancedIngredientStack;
 import hellfirepvp.modularmachinery.common.crafting.MachineRecipe;
-import hellfirepvp.modularmachinery.common.crafting.adapter.RecipeAdapter;
 import hellfirepvp.modularmachinery.common.crafting.adapter.nco.AdapterNCOMachine;
 import hellfirepvp.modularmachinery.common.crafting.helper.ComponentRequirement;
 import hellfirepvp.modularmachinery.common.crafting.requirement.RequirementEnergy;
@@ -53,8 +52,6 @@ public class AdapterNCOPressurizer extends AdapterNCOMachine {
                     incId, false
             );
 
-            RecipeAdapter.addAdditionalRequirements(recipe, additionalRequirements, eventHandlers, recipeTooltips);
-
             for (IItemIngredient iItemIngredient : basicRecipe.getItemIngredients()) {
                 ItemStack stack = iItemIngredient.getStack();
 
@@ -63,8 +60,7 @@ public class AdapterNCOPressurizer extends AdapterNCOMachine {
                     continue;
                 }
 
-                if (iItemIngredient instanceof OreIngredient) {
-                    OreIngredient oreIngredient = (OreIngredient) iItemIngredient;
+                if (iItemIngredient instanceof final OreIngredient oreIngredient) {
                     recipe.addRequirement(new RequirementItem(IOType.INPUT, oreIngredient.oreName, inAmount));
                     continue;
                 }

@@ -3,6 +3,7 @@ package github.kasuminova.novaeng.common.adapter.mc;
 import crafttweaker.util.IEventHandler;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
 import github.kasuminova.mmce.common.event.recipe.RecipeEvent;
+import github.kasuminova.novaeng.common.adapter.util.HashedItemStack;
 import hellfirepvp.modularmachinery.common.crafting.ActiveMachineRecipe;
 import hellfirepvp.modularmachinery.common.crafting.MachineRecipe;
 import hellfirepvp.modularmachinery.common.crafting.adapter.RecipeAdapter;
@@ -48,7 +49,7 @@ public class AdapterMCFurnaceWithExp extends RecipeAdapter {
             float experience = furnaceRecipes.getSmeltingExperience(output);
 
             MachineRecipe recipe = createRecipeShell(
-                    new ResourceLocation("minecraft",  "smelting_with_exp_" + incId + "_" + input + "_" + output),
+                    new ResourceLocation("minecraft",  "smelting_with_exp_" + incId + "_" + HashedItemStack.stackToString(input) + "_" + HashedItemStack.stackToString(output)),
                     owningMachineName,
                     tickTime, 0, false);
 
