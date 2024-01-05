@@ -5,10 +5,12 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "appeng.MixinStackSizeRenderer",
     "nco.MixinRadiationCapabilityHandler"
   ],
   "client": [
-    "minecraft.MixinNettyPacketDecoder"
+    "appeng.MixinStackSizeRenderer",
+    "forge.MixinGuiIngameForge",
+    "minecraft.MixinNettyPacketDecoder",
+    "mmce.MixinIngredientItemStackRenderer"
   ]
 }

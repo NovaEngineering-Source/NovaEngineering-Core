@@ -2,8 +2,6 @@ package github.kasuminova.novaeng.client.gui.font;
 
 import com.fred.jianghun.truergb.IColor;
 import com.fred.jianghun.truergb.RGBSettings;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -15,21 +13,12 @@ import net.minecraft.util.Tuple;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.TimeUnit;
+import java.util.*;
 
 public class CachedRGBFontRenderer extends FontRenderer {
-    private static final Cache<TextRenderInfo, List<TextRenderFunction>> TEXT_RENDER_CACHE = CacheBuilder.newBuilder()
-            .maximumSize(100)
-            .expireAfterAccess(5, TimeUnit.SECONDS)
-            .build();
-    private static final Cache<TextWrapInfo, List<String>> LISTED_CACHE = CacheBuilder.newBuilder()
-            .maximumSize(100)
-            .expireAfterAccess(5, TimeUnit.SECONDS)
-            .build();
+    private static final Map<TextRenderInfo, List<TextRenderFunction>> TEXT_RENDER_CACHE = new WeakHashMap<>();
+    private static final Map<TextWrapInfo, List<String>> LISTED_CACHE = new WeakHashMap<>();
 
     CachedRGBFontRenderer(final GameSettings gameSettingsIn, final ResourceLocation location, final TextureManager textureManagerIn, final boolean unicode) {
         super(gameSettingsIn, location, textureManagerIn, unicode);
@@ -103,7 +92,7 @@ public class CachedRGBFontRenderer extends FontRenderer {
         }
         TextRenderInfo textRenderInfo = new TextRenderInfo(text, color);
 
-        List<TextRenderFunction> cachedRenderFunction = TEXT_RENDER_CACHE.getIfPresent(textRenderInfo);
+        List<TextRenderFunction> cachedRenderFunction = TEXT_RENDER_CACHE.get(textRenderInfo);
         if (cachedRenderFunction != null) {
             return fastDrawString(x, y, dropShadow, cachedRenderFunction);
         }
@@ -173,7 +162,7 @@ public class CachedRGBFontRenderer extends FontRenderer {
     @Override
     public List<String> listFormattedStringToWidth(@Nonnull final String content, final int wrapWidth) {
         TextWrapInfo wrapInfo = new TextWrapInfo(content, wrapWidth);
-        List<String> cachedListed = LISTED_CACHE.getIfPresent(wrapInfo);
+        List<String> cachedListed = LISTED_CACHE.get(wrapInfo);
         if (cachedListed != null) {
             return cachedListed;
         }

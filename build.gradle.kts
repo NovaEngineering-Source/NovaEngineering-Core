@@ -200,7 +200,7 @@ dependencies {
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
     implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4991928"))
-    implementation(rfg.deobf("curse.maven:had-enough-items-557549:4506796"))
+    implementation(rfg.deobf("curse.maven:had-enough-items-557549:4810661"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:applied-energistics-2-223794:2747063"))
     implementation(rfg.deobf("curse.maven:tx-loader-706505:4515357"))

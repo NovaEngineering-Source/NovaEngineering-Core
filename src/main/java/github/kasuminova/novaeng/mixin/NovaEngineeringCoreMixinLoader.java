@@ -11,7 +11,7 @@ public class NovaEngineeringCoreMixinLoader implements ILateMixinLoader {
 
     @Override
     public List<String> getMixinConfigs() {
-        return Arrays.asList("mixins.novaeng_core.json", "mixins.novaeng_core.rgb_chat.json");
+        return Arrays.asList("mixins.novaeng_core.json", "mixins.novaeng_core.rgb_chat.json", "mixins.novaeng_core_igi.json");
     }
 
     @Override
@@ -20,6 +20,7 @@ public class NovaEngineeringCoreMixinLoader implements ILateMixinLoader {
             case "mixins.novaeng_core.json" ->
                     Loader.isModLoaded("nuclearcraft") && Loader.isModLoaded("appliedenergistics2");
             case "mixins.novaeng_core.rgb_chat.json" -> Loader.isModLoaded("jianghun");
+            case "mixins.novaeng_core_igi.json" -> Loader.isModLoaded("ingameinfoxml");
             default -> false;
         };
     }
