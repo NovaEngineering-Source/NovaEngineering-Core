@@ -94,12 +94,14 @@ tasks.javadoc.configure {
     actions = Collections.emptyList()
 }
 
-//tasks.jar.configure {
-//    manifest {
-//        val attributes = manifest.attributes
-//        attributes["FMLAT"] = "novaeng_core_at.cfg"
-//    }
-//}
+
+tasks.jar.configure {
+    manifest {
+        val attributes = manifest.attributes
+        attributes["FMLCorePlugin"] = "github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader"
+        attributes["FMLCorePluginContainsFMLMod"] = true
+    }
+}
 
 // Create a new dependency type for runtime-only dependencies that don't get included in the maven publication
 val runtimeOnlyNonPublishable: Configuration by configurations.creating {
