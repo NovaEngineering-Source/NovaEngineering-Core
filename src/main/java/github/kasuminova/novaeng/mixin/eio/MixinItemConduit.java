@@ -10,7 +10,7 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import zone.rong.mixinextras.injector.ModifyReturnValue;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(ItemConduit.class)
 public abstract class MixinItemConduit implements CachedItemConduit {
@@ -41,12 +41,11 @@ public abstract class MixinItemConduit implements CachedItemConduit {
         }
     }
 
-    @ModifyReturnValue(method = "getDrops", at = @At("RETURN"))
-    public NNList<ItemStack> getDrops(NNList<ItemStack> res) {
+    @Inject(method = "getDrops", at = @At("RETURN"), remap = false)
+    public void onGetDrops(final CallbackInfoReturnable<NNList<ItemStack>> cir) {
         if (!novaeng$cachedStack.isEmpty()) {
-            res.add(novaeng$cachedStack);
+            cir.getReturnValue().add(novaeng$cachedStack);
         }
-        return res;
     }
 
     @Override

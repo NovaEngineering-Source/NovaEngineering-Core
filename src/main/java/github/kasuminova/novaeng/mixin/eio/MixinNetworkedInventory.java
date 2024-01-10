@@ -34,18 +34,26 @@ public abstract class MixinNetworkedInventory {
         if (!(con instanceof CachedItemConduit cachedItemConduit)) {
             return;
         }
+        if (!cachedItemConduit.getCachedStack().isEmpty()) {
+            cir.setReturnValue(false);
+            return;
+        }
 
         ItemStack extracted = inventory.extractItem(slot, extractedItem.getCount(), EXECUTE);
         int inserted = insertIntoTargets(extracted.copy());
         int notInserted = extracted.getCount() - inserted;
 
-        ItemStack notInsertedStack = extracted.copy();
-        notInsertedStack.setCount(notInserted);
-        cachedItemConduit.setCachedStack(notInsertedStack);
+        if (notInserted > 0) {
+            ItemStack notInsertedStack = extracted.copy();
+            notInsertedStack.setCount(notInserted);
+            cachedItemConduit.setCachedStack(notInsertedStack);
+        } else {
+            cachedItemConduit.setCachedStack(ItemStack.EMPTY);
+        }
 
         onItemExtracted(slot, inserted);
 
-        cir.setReturnValue(notInserted > 0);
+        cir.setReturnValue(inserted > 0);
     }
 
     @Inject(
