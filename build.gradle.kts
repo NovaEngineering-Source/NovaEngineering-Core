@@ -230,6 +230,8 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:lunatriuscore-225605:2489549"))
     compileOnly(rfg.deobf("curse.maven:rgb-chat-702720:4092100"))
     compileOnly(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
+    compileOnly(rfg.deobf("curse.maven:endercore-231868:4671384"))
+    compileOnly(rfg.deobf("curse.maven:ender-io-64578:4674244"))
 }
 
 // Publishing to a Maven repository

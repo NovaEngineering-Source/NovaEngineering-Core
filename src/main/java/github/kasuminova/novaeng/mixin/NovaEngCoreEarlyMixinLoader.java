@@ -13,10 +13,12 @@ public class NovaEngCoreEarlyMixinLoader implements IFMLLoadingPlugin, IEarlyMix
 
     @Override
     public List<String> getMixinConfigs() {
-        return Arrays.asList("mixins.novaeng_core_vanilla.json");
+        return Arrays.asList(
+                "mixins.novaeng_core_vanilla.json"
+        );
     }
 
-    // Noop
+// Noop
 
     @Override
     public String[] getASMTransformerClass() {

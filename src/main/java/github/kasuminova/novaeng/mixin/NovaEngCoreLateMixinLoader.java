@@ -11,13 +11,20 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
 
     @Override
     public List<String> getMixinConfigs() {
-        return Arrays.asList("mixins.novaeng_core.json","mixins.novaeng_core_ae.json","mixins.novaeng_core_igi.json", "mixins.novaeng_core_nco.json", "mixins.novaeng_core_rgb_chat.json");
+        return Arrays.asList(
+                "mixins.novaeng_core_ae.json",
+                "mixins.novaeng_core_eio.json",
+                "mixins.novaeng_core_igi.json",
+                "mixins.novaeng_core_nco.json",
+                "mixins.novaeng_core_rgb_chat.json"
+        );
     }
 
     @Override
     public boolean shouldMixinConfigQueue(final String mixinConfig) {
         return switch (mixinConfig) {
             case "mixins.novaeng_core_ae.json" -> Loader.isModLoaded("appliedenergistics2");
+            case "mixins.novaeng_core_eio.json" -> Loader.isModLoaded("enderioconduits");
             case "mixins.novaeng_core_igi.json" -> Loader.isModLoaded("ingameinfoxml");
             case "mixins.novaeng_core_nco.json" -> Loader.isModLoaded("nuclearcraft");
             case "mixins.novaeng_core_rgb_chat.json" -> Loader.isModLoaded("jianghun");

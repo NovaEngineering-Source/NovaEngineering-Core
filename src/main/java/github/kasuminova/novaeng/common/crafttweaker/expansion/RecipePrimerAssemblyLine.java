@@ -61,7 +61,7 @@ public class RecipePrimerAssemblyLine {
 
         List<ComponentRequirement<?, ?>> components = newPrimer.getComponents();
         for (final ComponentRequirement<?, ?> component : primer.getComponents()) {
-            ComponentRequirement<?, ?> copied = component.deepCopy();
+            ComponentRequirement<?, ?> copied = component.deepCopy().postDeepCopy(component);
             copied.setTag(null);
             components.add(copied);
         }

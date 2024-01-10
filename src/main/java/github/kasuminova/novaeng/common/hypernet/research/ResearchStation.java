@@ -4,6 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.FactoryRecipeTickEvent;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
+import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.hypernet.Database;
 import github.kasuminova.novaeng.common.hypernet.NetNode;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
@@ -135,7 +136,7 @@ public class ResearchStation extends NetNode {
         activeRecipe.setTick(Math.max((int) (getProgressPercent() * totalTick) - 1, 0));
         event.getRecipeThread().setStatus(CraftingStatus.SUCCESS).setStatusInfo("研究中...");
 
-        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> doExtraResearch(Math.min(
+        HyperNetEventHandler.addTickEndAction(() -> doExtraResearch(Math.min(
                 center.getComputationPointGeneration() - center.getComputationPointConsumption(),
                 Math.min(baseConsumption * 4, getComputationLeft())))
         );

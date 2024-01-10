@@ -23,8 +23,10 @@ public abstract class MixinInGameInfoCore {
     private boolean novaEngineering_Core$refreshBuffer = true;
     @Unique
     private int novaEngineering_Core$tickCounter = 0;
-    private int displayWidth = 0;
-    private int displayHeight = 0;
+    @Unique
+    private int novaEngineering_Core$displayWidth = 0;
+    @Unique
+    private int novaEngineering_Core$displayHeight = 0;
 
     @Shadow(remap = false)
     public abstract void onTickRender();
@@ -46,18 +48,18 @@ public abstract class MixinInGameInfoCore {
         Minecraft minecraft = Minecraft.getMinecraft();
 
         if (novaEngineering_Core$framebuffer == null) {
-            displayWidth = minecraft.displayWidth;
-            displayHeight = minecraft.displayHeight;
-            novaEngineering_Core$framebuffer = new Framebuffer(displayWidth, displayHeight, false);
+            novaEngineering_Core$displayWidth = minecraft.displayWidth;
+            novaEngineering_Core$displayHeight = minecraft.displayHeight;
+            novaEngineering_Core$framebuffer = new Framebuffer(novaEngineering_Core$displayWidth, novaEngineering_Core$displayHeight, false);
             novaEngineering_Core$framebuffer.framebufferColor[0] = 0.0F;
             novaEngineering_Core$framebuffer.framebufferColor[1] = 0.0F;
             novaEngineering_Core$framebuffer.framebufferColor[2] = 0.0F;
         }
         if (novaEngineering_Core$refreshBuffer) {
-            if (displayWidth != minecraft.displayWidth || displayHeight != minecraft.displayHeight) {
-                displayWidth = minecraft.displayWidth;
-                displayHeight = minecraft.displayHeight;
-                novaEngineering_Core$framebuffer.createBindFramebuffer(displayWidth, displayHeight);
+            if (novaEngineering_Core$displayWidth != minecraft.displayWidth || novaEngineering_Core$displayHeight != minecraft.displayHeight) {
+                novaEngineering_Core$displayWidth = minecraft.displayWidth;
+                novaEngineering_Core$displayHeight = minecraft.displayHeight;
+                novaEngineering_Core$framebuffer.createBindFramebuffer(novaEngineering_Core$displayWidth, novaEngineering_Core$displayHeight);
             } else {
                 novaEngineering_Core$framebuffer.framebufferClear();
             }
