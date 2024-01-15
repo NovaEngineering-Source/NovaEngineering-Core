@@ -176,7 +176,7 @@ public class CachedRGBFontRenderer extends FontRenderer {
             rgbSettingList.add(strSettings.getFirst());
             String str = strSettings.getSecond();
             sb.append(str);
-            strList.add(str);
+            strList.add(str.replace("\n", ""));
         }
 
         cachedListed = mapListedString(super.listFormattedStringToWidth(sb.toString(), wrapWidth), strList, rgbSettingList);
