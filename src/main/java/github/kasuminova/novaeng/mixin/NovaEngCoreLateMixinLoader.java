@@ -16,6 +16,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
                 "mixins.novaeng_core_eio.json",
                 "mixins.novaeng_core_igi.json",
                 "mixins.novaeng_core_nco.json",
+                "mixins.novaeng_core_oreexcavation.json",
                 "mixins.novaeng_core_rgb_chat.json"
         );
     }
@@ -27,6 +28,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
             case "mixins.novaeng_core_eio.json" -> Loader.isModLoaded("enderioconduits");
             case "mixins.novaeng_core_igi.json" -> Loader.isModLoaded("ingameinfoxml");
             case "mixins.novaeng_core_nco.json" -> Loader.isModLoaded("nuclearcraft");
+            case "mixins.novaeng_core_oreexcavation.json" -> Loader.isModLoaded("oreexcavation");
             case "mixins.novaeng_core_rgb_chat.json" -> Loader.isModLoaded("jianghun");
             default -> true;
         };

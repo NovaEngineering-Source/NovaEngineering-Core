@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.8.0"
+version = "1.8.1"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -232,6 +232,8 @@ dependencies {
     compileOnly(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
     compileOnly(rfg.deobf("curse.maven:endercore-231868:4671384"))
     compileOnly(rfg.deobf("curse.maven:ender-io-64578:4674244"))
+    compileOnly(rfg.deobf("curse.maven:tinkers-evolution-384589:4941753"))
+    compileOnly(rfg.deobf("curse.maven:ore-excavation-250898:2897369"))
 }
 
 // Publishing to a Maven repository

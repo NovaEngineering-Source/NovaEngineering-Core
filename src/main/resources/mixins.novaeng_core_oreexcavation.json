@@ -1,14 +1,10 @@
 {
-  "package": "github.kasuminova.novaeng.mixin.minecraft",
+  "package": "github.kasuminova.novaeng.mixin.oreexcavation",
   "refmap": "mixins.novaeng_core.refmap.json",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "MixinWorld",
-    "forge.MixinForgeHooks"
-  ],
   "client": [
-    "MixinNettyPacketDecoder"
+    "MixinMiningAgent"
   ]
 }
