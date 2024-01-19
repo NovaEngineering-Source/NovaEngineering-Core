@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.8.1"
+version = "1.8.2"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -223,7 +223,8 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:valkyrielib-245480:2691542"))
     compileOnly(rfg.deobf("curse.maven:environmental-tech-245453:2691536"))
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
-    compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
+    implementation(rfg.deobf("curse.maven:baubles-227083:2518667"))
+    implementation(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
     compileOnly(rfg.deobf("curse.maven:artisan-worktables-284351:3205284"))
     compileOnly(rfg.deobf("curse.maven:touhou-little-maid-355044:3576415"))
     compileOnly(rfg.deobf("curse.maven:ingame-info-xml-225604:2489566"))
@@ -234,6 +235,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:ender-io-64578:4674244"))
     compileOnly(rfg.deobf("curse.maven:tinkers-evolution-384589:4941753"))
     compileOnly(rfg.deobf("curse.maven:ore-excavation-250898:2897369"))
+    compileOnly(rfg.deobf("curse.maven:techguns-244201:2958103"))
 }
 
 // Publishing to a Maven repository

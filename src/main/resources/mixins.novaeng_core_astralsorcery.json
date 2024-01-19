@@ -1,0 +1,11 @@
+{
+  "package": "github.kasuminova.novaeng.mixin.astralsorcery",
+  "refmap": "mixins.novaeng_core.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "InvokerPerkEffectHelper",
+    "MixinPlayerProgress"
+  ]
+}

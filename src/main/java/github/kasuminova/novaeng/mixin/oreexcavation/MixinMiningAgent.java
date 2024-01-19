@@ -14,7 +14,7 @@ import java.util.ArrayList;
 @Mixin(MiningAgent.class)
 public class MixinMiningAgent {
 
-    @Shadow @Final public EntityPlayerMP player;
+    @Shadow(remap = false) @Final public EntityPlayerMP player;
 
     @SuppressWarnings("rawtypes")
     @Redirect(method = "tickMiner",
