@@ -11,9 +11,12 @@ import techguns.recipes.AmmoSumRecipeFactory;
 public class MixinAmmoSumRecipe {
 
     @SuppressWarnings("MethodMayBeStatic")
-    @Redirect(method = "getCraftingResult", at = @At(
-            value = "INVOKE",
-            target = "Lnet/minecraft/item/ItemStack;getTagCompound()Lnet/minecraft/nbt/NBTTagCompound;")
+    @Redirect(method = "getCraftingResult",
+            at = @At(
+                    value = "INVOKE",
+                    target = "Lnet/minecraft/item/ItemStack;getTagCompound()Lnet/minecraft/nbt/NBTTagCompound;",
+                    remap = true),
+            remap = true
     )
     private NBTTagCompound onGetCraftingResult(final ItemStack instance) {
         NBTTagCompound tag = instance.getTagCompound();
