@@ -47,6 +47,7 @@ public class NovaEngineeringCore {
 
         NET_CHANNEL.registerMessage(PktHyperNetStatus.class, PktHyperNetStatus.class, 0, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktTerminalGuiData.class, PktTerminalGuiData.class, 1, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktResearchTaskComplete.class, PktResearchTaskComplete.class, 2, Side.CLIENT);
 
         NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, 100, Side.SERVER);
         NET_CHANNEL.registerMessage(PktResearchTaskReset.class, PktResearchTaskReset.class, 101, Side.SERVER);

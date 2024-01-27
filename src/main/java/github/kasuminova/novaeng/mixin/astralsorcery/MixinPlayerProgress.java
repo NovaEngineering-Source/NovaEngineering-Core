@@ -81,6 +81,7 @@ public class MixinPlayerProgress {
                 playerUUID = entry.getKey();
             }
         }
+        //noinspection ConstantValue
         if (playerUUID == null) {
             return null;
         }

@@ -86,6 +86,7 @@ public class PktResearchTaskProvideCreative implements IMessage, IMessageHandler
 
         Collection<ResearchStation> stations = center.getNode(ResearchStation.class);
         Optional<ResearchStation> first = stations.stream().findFirst();
+        //noinspection SimplifyOptionalCallChains
         if (!first.isPresent()) {
             return null;
         }
@@ -93,7 +94,7 @@ public class PktResearchTaskProvideCreative implements IMessage, IMessageHandler
         ResearchStation researchStation = first.get();
 
         ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> {
-            researchStation.provideTask(researchTask);
+            researchStation.provideTask(researchTask, ctx.getServerHandler().player);
             researchStation.setCompletedPoints(researchTask.getRequiredPoints());
         });
         return null;

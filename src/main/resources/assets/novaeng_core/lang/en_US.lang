@@ -137,6 +137,8 @@ novaeng.hypernet.tech_level.14=§414§4.
 
 novaeng.adapter.mc.furnace.exp=完成时，添加 §a%s §f点经验。
 
+gui.toast.research.complete=HyperNet 研究已完成！
+
 gui.terminal_controller.title.nxc=nxc 的虚空终端
 gui.terminal_controller.search=§7§o搜索研究...
 gui.terminal_controller.status=§b状态：

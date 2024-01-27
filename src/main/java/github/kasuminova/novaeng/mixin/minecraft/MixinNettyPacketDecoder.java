@@ -31,19 +31,18 @@ public class MixinNettyPacketDecoder {
 
             if (packet == null) {
                 throw new IOException("Bad packet id " + i);
-            } else {
-                // 记录先前下标
-                final int currentIndex = packetbuffer.readerIndex();
-                // 读取网络包
-                packet.readPacketData(packetbuffer);
-                // 记录读取后下标
-                PacketProfiler.onPacketReceived(packet, packetbuffer.readerIndex() - currentIndex);
+            }
+            // 记录先前下标
+            final int currentIndex = packetbuffer.readerIndex();
+            // 读取网络包
+            packet.readPacketData(packetbuffer);
+            // 记录读取后下标
+            PacketProfiler.onPacketReceived(packet, packetbuffer.readerIndex() - currentIndex);
 
-                if (packetbuffer.readableBytes() > 0) {
-                    throw new IOException("Packet " + p_decode_1_.channel().attr(NetworkManager.PROTOCOL_ATTRIBUTE_KEY).get().getId() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + packetbuffer.readableBytes() + " bytes extra whilst reading packet " + i);
-                } else {
-                    p_decode_3_.add(packet);
-                }
+            if (packetbuffer.readableBytes() > 0) {
+                throw new IOException("Packet " + p_decode_1_.channel().attr(NetworkManager.PROTOCOL_ATTRIBUTE_KEY).get().getId() + "/" + i + " (" + packet.getClass().getSimpleName() + ") was larger than I expected, found " + packetbuffer.readableBytes() + " bytes extra whilst reading packet " + i);
+            } else {
+                p_decode_3_.add(packet);
             }
         }
 

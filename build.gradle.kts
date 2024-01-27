@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.8.2"
+version = "1.8.4"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -187,7 +187,7 @@ dependencies {
     testCompileOnly("me.eigenraven.java8unsupported:java-8-unsupported-shim:1.0.0")
 
     // Mixins
-    implementation("zone.rong:mixinbooter:7.1")
+    implementation("zone.rong:mixinbooter:8.9")
     val mixin : String = modUtils.enableMixins("org.spongepowered:mixin:0.8.+", "mixins.novaeng_core.refmap.json").toString()
     api (mixin) {
         isTransitive = false
@@ -215,7 +215,6 @@ dependencies {
     implementation(rfg.deobf("curse.maven:cofh-world-271384:2920434"))
     implementation(rfg.deobf("curse.maven:thermal-foundation-222880:2926428"))
     implementation(rfg.deobf("curse.maven:thermal-expansion-69163:2926431"))
-
     compileOnly(rfg.deobf("curse.maven:zenutil-401178:4394263"))
     compileOnly(rfg.deobf("curse.maven:libvulpes-236541:3801015"))
     compileOnly(rfg.deobf("curse.maven:advanced-rocketry-236542:4671856"))
@@ -223,8 +222,8 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:valkyrielib-245480:2691542"))
     compileOnly(rfg.deobf("curse.maven:environmental-tech-245453:2691536"))
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
-    implementation(rfg.deobf("curse.maven:baubles-227083:2518667"))
-    implementation(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
+    compileOnly(rfg.deobf("curse.maven:baubles-227083:2518667"))
+    compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
     compileOnly(rfg.deobf("curse.maven:artisan-worktables-284351:3205284"))
     compileOnly(rfg.deobf("curse.maven:touhou-little-maid-355044:3576415"))
     compileOnly(rfg.deobf("curse.maven:ingame-info-xml-225604:2489566"))
@@ -236,6 +235,13 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:tinkers-evolution-384589:4941753"))
     compileOnly(rfg.deobf("curse.maven:ore-excavation-250898:2897369"))
     compileOnly(rfg.deobf("curse.maven:techguns-244201:2958103"))
+    compileOnly(rfg.deobf("curse.maven:biomes-o-plenty-220318:3558882"))
+    compileOnly(rfg.deobf("curse.maven:more-electric-tools-366298:3491973"))
+    compileOnly(rfg.deobf("curse.maven:brandonscore-231382:3051539"))
+    compileOnly(rfg.deobf("curse.maven:draconicevolution-223565:3051542"))
+    compileOnly(rfg.deobf("curse.maven:tinkers-construct-74072:2902483"))
+    compileOnly(rfg.deobf("curse.maven:thermal-dynamics-227443:2920505"))
+    compileOnly(rfg.deobf("curse.maven:armourers-workshop-229523:3101995"))
 }
 
 // Publishing to a Maven repository

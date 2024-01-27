@@ -3,10 +3,12 @@ package github.kasuminova.novaeng.common.hypernet.research;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.FactoryRecipeTickEvent;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
+import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.hypernet.Database;
 import github.kasuminova.novaeng.common.hypernet.NetNode;
+import github.kasuminova.novaeng.common.network.PktResearchTaskComplete;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.crafting.ActiveMachineRecipe;
@@ -14,19 +16,27 @@ import hellfirepvp.modularmachinery.common.crafting.helper.CraftingStatus;
 import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
 import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.MinecraftServer;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
 import stanhebben.zenscript.annotations.ZenMethod;
 
 import java.util.Collection;
 import java.util.Objects;
+import java.util.UUID;
 
+/**
+ * TODO: 硬编码喵
+ */
 @ZenRegister
 @ZenClass("novaeng.hypernet.ResearchStation")
 public class ResearchStation extends NetNode {
     private final ResearchStationType type;
     private ResearchCognitionData currentResearching = null;
+    private UUID taskProvider = null;
     private double completedPoints = 0;
     private double consumption = 0;
 
@@ -109,6 +119,7 @@ public class ResearchStation extends NetNode {
         double left = getComputationLeft();
         if (left <= 0) {
             completeRecipe(event.getFactoryRecipeThread());
+            sendCompleteToastToPlayer();
             writeNBT();
             return true;
         }
@@ -178,6 +189,22 @@ public class ResearchStation extends NetNode {
         });
     }
 
+    public void sendCompleteToastToPlayer() {
+        if (taskProvider == null) {
+            return;
+        }
+        MinecraftServer server = owner.getWorld().getMinecraftServer();
+        if (server == null) {
+            return;
+        }
+        EntityPlayerMP player = server.getPlayerList().getPlayerByUUID(taskProvider);
+        //noinspection ConstantValue
+        if (player == null) {
+            return;
+        }
+        NovaEngineeringCore.NET_CHANNEL.sendTo(new PktResearchTaskComplete(currentResearching), player);
+    }
+
     public void writeResearchProgressToDatabase() {
         if (currentResearching == null) {
             return;
@@ -206,15 +233,18 @@ public class ResearchStation extends NetNode {
         }
     }
 
-    public void provideTask(ResearchCognitionData data) {
-        currentResearching = data;
+    public void provideTask(ResearchCognitionData data, EntityPlayer taskProvider) {
+        this.currentResearching = data;
+
         if (data == null) {
-            completedPoints = 0;
+            this.completedPoints = 0;
+            this.taskProvider = null;
             writeNBT();
             return;
         }
 
-        consumption = data.getMinComputationPointPerTick();
+        this.taskProvider = taskProvider.getUniqueID();
+        this.consumption = data.getMinComputationPointPerTick();
         double progress = center.getNode(Database.class)
                 .stream()
                 .map(database -> database.getResearchingData(data))
@@ -231,7 +261,7 @@ public class ResearchStation extends NetNode {
             progress = 0D;
         }
 
-        completedPoints = progress;
+        this.completedPoints = progress;
         writeNBT();
     }
 
@@ -252,6 +282,9 @@ public class ResearchStation extends NetNode {
         this.consumption = customData.getDouble("consumption");
         this.currentResearching = RegistryHyperNet.getResearchCognitionData(customData.getString("researching"));
         this.completedPoints = customData.getDouble("completedPoints");
+        if (customData.hasKey("taskProvider")) {
+            this.taskProvider = UUID.fromString(customData.getString("taskProvider"));
+        }
     }
 
     @Override
@@ -263,6 +296,9 @@ public class ResearchStation extends NetNode {
         if (currentResearching != null) {
             tag.setString("researching", currentResearching.getResearchName());
             tag.setDouble("completedPoints", completedPoints);
+        }
+        if (taskProvider != null) {
+            tag.setString("taskProvider", taskProvider.toString());
         }
     }
 

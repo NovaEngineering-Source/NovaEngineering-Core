@@ -87,7 +87,8 @@ public class PktResearchTaskProvide implements IMessage, IMessageHandler<PktRese
             return null;
         }
 
-        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> first.get().provideTask(researchTask));
+        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() ->
+                first.get().provideTask(researchTask, ctx.getServerHandler().player));
         return null;
     }
 }

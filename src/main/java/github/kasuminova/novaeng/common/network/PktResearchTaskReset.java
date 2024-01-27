@@ -45,7 +45,7 @@ public class PktResearchTaskReset implements IMessage, IMessageHandler<PktResear
         }
 
         for (final ResearchStation station : center.getNode(ResearchStation.class)) {
-            ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> station.provideTask(null));
+            ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> station.provideTask(null, null));
         }
         return null;
     }
