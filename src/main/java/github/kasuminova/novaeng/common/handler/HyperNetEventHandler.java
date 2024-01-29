@@ -236,7 +236,7 @@ public class HyperNetEventHandler {
         }
 
         World world = player.getEntityWorld();
-        if (world.getWorldTime() % 15 != 0) {
+        if (world.getTotalWorldTime() % 15 != 0) {
             return;
         }
 
