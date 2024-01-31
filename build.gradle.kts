@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.8.4"
+version = "1.8.5"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -242,6 +242,10 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:tinkers-construct-74072:2902483"))
     compileOnly(rfg.deobf("curse.maven:thermal-dynamics-227443:2920505"))
     compileOnly(rfg.deobf("curse.maven:armourers-workshop-229523:3101995"))
+    compileOnly(rfg.deobf("curse.maven:avaritia-1-10-261348:3143349"))
+    compileOnly(rfg.deobf("curse.maven:blood-magic-224791:2822288"))
+    compileOnly(rfg.deobf("curse.maven:legendary-tooltips-532127:4499615"))
+    compileOnly(rfg.deobf("curse.maven:chisel-235279:2915375"))
 }
 
 // Publishing to a Maven repository

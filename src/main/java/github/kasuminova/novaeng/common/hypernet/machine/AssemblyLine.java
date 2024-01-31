@@ -201,6 +201,7 @@ public class AssemblyLine extends NetNodeImpl {
         }
 
         public void clean() {
+            chipThreadUsing.clear();
             threadChipUsing.clear();
         }
     }

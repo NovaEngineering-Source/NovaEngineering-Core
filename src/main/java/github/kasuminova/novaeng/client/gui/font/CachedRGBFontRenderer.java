@@ -110,22 +110,23 @@ public class CachedRGBFontRenderer extends FontRenderer {
 
             // 如果RGB设置中指定了固定颜色，使用该颜色绘制整个字符串
             if (set.isFixedColor()) {
-                currentColorHex = Optional.ofNullable(set.getColorAt(0)).map(IColor::toInt).orElse(currentColorHex);
+                currentColorHex = Optional.ofNullable(set.getColorAt(0)).map(IColor::toInt).orElse(color);
 
                 Color currentColor = new Color(currentColorHex);
                 final int finalCurrentColor = new Color(currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue(), color >> 24 & 255).getRGB();
                 final String toRender = set.getFormatString() + s;
                 cachedRenderFunction.add((_y, _dropShadow) -> super.drawString(toRender, this.posX, _y, finalCurrentColor, _dropShadow));
-            } else {
-                // 如果RGB设置中没有指定固定颜色，为每个字符分别指定颜色并绘制
-                for (int i = 0; i < s.length(); ++i) {
-                    currentColorHex = Optional.ofNullable(set.getColorAt(i)).map(IColor::toInt).orElse(currentColorHex);
+                continue;
+            }
 
-                    Color currentColor = new Color(currentColorHex);
-                    final int finalCurrentColor = new Color(currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue(), color >> 24 & 255).getRGB();
-                    final String toRender = set.getFormatString() + s.charAt(i);
-                    cachedRenderFunction.add((_y, _dropShadow) -> super.drawString(toRender, this.posX, _y, finalCurrentColor, _dropShadow));
-                }
+            // 如果RGB设置中没有指定固定颜色，为每个字符分别指定颜色并绘制
+            for (int i = 0; i < s.length(); ++i) {
+                currentColorHex = Optional.ofNullable(set.getColorAt(i)).map(IColor::toInt).orElse(color);
+
+                Color currentColor = new Color(currentColorHex);
+                final int finalCurrentColor = new Color(currentColor.getRed(), currentColor.getGreen(), currentColor.getBlue(), color >> 24 & 255).getRGB();
+                final String toRender = set.getFormatString() + s.charAt(i);
+                cachedRenderFunction.add((_y, _dropShadow) -> super.drawString(toRender, this.posX, _y, finalCurrentColor, _dropShadow));
             }
         }
 

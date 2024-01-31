@@ -10,10 +10,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
 public class PacketProfiler {
     public static final ConcurrentHashMap<Class<?>, Tuple<Long, Long>> PACKET_TOTAL_SIZE = new ConcurrentHashMap<>();
+    public static final AtomicLong TOTAL_RECEIVED_DATA_SIZE = new AtomicLong(0);
 
     public static boolean enabled = false;
 
@@ -38,12 +40,18 @@ public class PacketProfiler {
         }
     }
 
+    public static void onPacketDecoded(final int length) {
+        if (!enabled) {
+            return;
+        }
+
+        TOTAL_RECEIVED_DATA_SIZE.addAndGet(length);
+    }
+
     public static List<String> getProfilerMessages(final int limit) {
         List<String> messages = new LinkedList<>();
 
-        long totalPacketSize = PacketProfiler.PACKET_TOTAL_SIZE.values().stream()
-                .mapToLong(Tuple::getSecond)
-                .sum();
+        long totalPacketSize = TOTAL_RECEIVED_DATA_SIZE.get();
 
         long profileTimeExisted = enabled ? System.currentTimeMillis() - profilerStartTime : profilerStopTime - profilerStartTime;
         double networkBandwidthPerSec = profileTimeExisted <= 0 ? 0 : (totalPacketSize / ((double) profileTimeExisted / 1000D));

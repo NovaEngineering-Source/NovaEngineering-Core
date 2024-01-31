@@ -19,11 +19,11 @@ public class MixinSimpleIndexedCodec {
             remap = false
     )
     private void onDecodePre(final IMessage message, final ByteBuf byteBuf) {
-        final int currentIndex = byteBuf.readerIndex();
+        final int prevIndex = byteBuf.readerIndex();
 
         message.fromBytes(byteBuf);
 
-        PacketProfiler.onPacketReceived(message, byteBuf.readerIndex() - currentIndex);
+        PacketProfiler.onPacketReceived(message, byteBuf.readerIndex() - prevIndex);
     }
 
 }

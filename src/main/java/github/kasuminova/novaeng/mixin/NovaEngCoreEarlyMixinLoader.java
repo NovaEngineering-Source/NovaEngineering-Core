@@ -18,7 +18,7 @@ public class NovaEngCoreEarlyMixinLoader implements IFMLLoadingPlugin, IEarlyMix
         );
     }
 
-// Noop
+    // Noop
 
     @Override
     public String[] getASMTransformerClass() {

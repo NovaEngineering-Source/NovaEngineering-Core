@@ -84,12 +84,14 @@ public class CommandPacketProfiler extends CommandBase {
         switch (args[0]) {
             case "reset" -> {
                 PacketProfiler.PACKET_TOTAL_SIZE.clear();
+                PacketProfiler.TOTAL_RECEIVED_DATA_SIZE.set(0);
                 PacketProfiler.profilerStartTime = System.currentTimeMillis();
                 TEUpdatePacketProfiler.TE_UPDATE_PACKET_TOTAL_SIZE.clear();
                 sender.sendMessage(new TextComponentString("Cleared packet profiler data."));
             }
             case "start" -> {
                 PacketProfiler.enabled = true;
+                PacketProfiler.profilerStartTime += System.currentTimeMillis() - PacketProfiler.profilerStopTime;
                 sender.sendMessage(new TextComponentString("Packet profiler is started."));
             }
             case "stop" -> {

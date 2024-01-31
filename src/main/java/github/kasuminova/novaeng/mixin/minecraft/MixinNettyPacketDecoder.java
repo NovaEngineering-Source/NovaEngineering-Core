@@ -17,12 +17,12 @@ public class MixinNettyPacketDecoder {
                     value = "INVOKE",
                     target = "Lnet/minecraft/network/Packet;readPacketData(Lnet/minecraft/network/PacketBuffer;)V")
     )
-    private void onDecodePre(final Packet<?> packet, final PacketBuffer packetBuffer) throws Exception {
-        final int currentIndex = packetBuffer.readerIndex();
+    private void onDecode(final Packet<?> packet, final PacketBuffer packetBuffer) throws Exception {
+        final int prevIndex = packetBuffer.readerIndex();
 
         packet.readPacketData(packetBuffer);
 
-        PacketProfiler.onPacketReceived(packet, packetBuffer.readerIndex() - currentIndex);
+        PacketProfiler.onPacketReceived(packet, packetBuffer.readerIndex() - prevIndex);
     }
 
 }

@@ -13,10 +13,14 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
     public List<String> getMixinConfigs() {
         return Arrays.asList(
                 "mixins.novaeng_core_ae.json",
+                "mixins.novaeng_core_armourers_workshop.json",
                 "mixins.novaeng_core_astralsorcery.json",
+                "mixins.novaeng_core_avaritia.json",
                 "mixins.novaeng_core_biomesoplenty.json",
+                "mixins.novaeng_core_bloodmagic.json",
                 "mixins.novaeng_core_eio.json",
                 "mixins.novaeng_core_igi.json",
+                "mixins.novaeng_core_legendarytooltips.json",
                 "mixins.novaeng_core_mekanism.json",
                 "mixins.novaeng_core_nco.json",
                 "mixins.novaeng_core_oreexcavation.json",
@@ -31,10 +35,14 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
     public boolean shouldMixinConfigQueue(final String mixinConfig) {
         return switch (mixinConfig) {
             case "mixins.novaeng_core_ae.json" -> Loader.isModLoaded("appliedenergistics2");
+            case "mixins.novaeng_core_armourers_workshop.json" -> Loader.isModLoaded("armourers_workshop");
             case "mixins.novaeng_core_astralsorcery.json" -> Loader.isModLoaded("astralsorcery");
+            case "mixins.novaeng_core_avaritia.json" -> Loader.isModLoaded("avaritia");
             case "mixins.novaeng_core_biomesoplenty.json" -> Loader.isModLoaded("biomesoplenty");
+            case "mixins.novaeng_core_bloodmagic.json" -> Loader.isModLoaded("bloodmagic");
             case "mixins.novaeng_core_eio.json" -> Loader.isModLoaded("enderioconduits");
             case "mixins.novaeng_core_igi.json" -> Loader.isModLoaded("ingameinfoxml");
+            case "mixins.novaeng_core_legendarytooltips.json" -> Loader.isModLoaded("legendarytooltips");
             case "mixins.novaeng_core_mekanism.json" -> Loader.isModLoaded("mekanism");
             case "mixins.novaeng_core_nco.json" -> Loader.isModLoaded("nuclearcraft");
             case "mixins.novaeng_core_oreexcavation.json" -> Loader.isModLoaded("oreexcavation");

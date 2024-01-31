@@ -10,6 +10,7 @@
   ],
   "client": [
     "MixinFontRenderer",
+    "MixinNettyCompressionDecoder",
     "MixinNettyPacketDecoder",
     "forge.MixinSimpleIndexedCodec"
   ]
