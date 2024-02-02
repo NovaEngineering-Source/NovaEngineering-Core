@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.8.5"
+version = "1.8.6"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -187,14 +187,14 @@ dependencies {
     testCompileOnly("me.eigenraven.java8unsupported:java-8-unsupported-shim:1.0.0")
 
     // Mixins
-    implementation("zone.rong:mixinbooter:8.9")
-    val mixin : String = modUtils.enableMixins("org.spongepowered:mixin:0.8.+", "mixins.novaeng_core.refmap.json").toString()
+//    implementation("zone.rong:mixinbooter:7.1")
+    val mixin : String = modUtils.enableMixins("zone.rong:mixinbooter:8.9", "mixins.novaeng_core.refmap.json").toString()
     api (mixin) {
         isTransitive = false
     }
     annotationProcessor("org.ow2.asm:asm-debug-all:5.2")
-    annotationProcessor("com.google.guava:guava:24.1.1-jre")
-    annotationProcessor("com.google.code.gson:gson:2.8.6")
+    annotationProcessor("com.google.guava:guava:30.0-jre")
+    annotationProcessor("com.google.code.gson:gson:2.8.9")
     annotationProcessor (mixin) {
         isTransitive = false
     }
@@ -245,7 +245,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:avaritia-1-10-261348:3143349"))
     compileOnly(rfg.deobf("curse.maven:blood-magic-224791:2822288"))
     compileOnly(rfg.deobf("curse.maven:legendary-tooltips-532127:4499615"))
-    compileOnly(rfg.deobf("curse.maven:chisel-235279:2915375"))
+    implementation(rfg.deobf("curse.maven:flux-networks-248020:3178199"))
 }
 
 // Publishing to a Maven repository

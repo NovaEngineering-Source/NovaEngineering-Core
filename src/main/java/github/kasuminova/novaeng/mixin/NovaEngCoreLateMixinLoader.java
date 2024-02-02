@@ -19,8 +19,10 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
                 "mixins.novaeng_core_biomesoplenty.json",
                 "mixins.novaeng_core_bloodmagic.json",
                 "mixins.novaeng_core_eio.json",
+                "mixins.novaeng_core_fluxnetworks.json",
                 "mixins.novaeng_core_igi.json",
                 "mixins.novaeng_core_legendarytooltips.json",
+                "mixins.novaeng_core_mek_top.json",
                 "mixins.novaeng_core_mekanism.json",
                 "mixins.novaeng_core_nco.json",
                 "mixins.novaeng_core_oreexcavation.json",
@@ -41,8 +43,10 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
             case "mixins.novaeng_core_biomesoplenty.json" -> Loader.isModLoaded("biomesoplenty");
             case "mixins.novaeng_core_bloodmagic.json" -> Loader.isModLoaded("bloodmagic");
             case "mixins.novaeng_core_eio.json" -> Loader.isModLoaded("enderioconduits");
+            case "mixins.novaeng_core_fluxnetworks.json" -> Loader.isModLoaded("fluxnetworks");
             case "mixins.novaeng_core_igi.json" -> Loader.isModLoaded("ingameinfoxml");
             case "mixins.novaeng_core_legendarytooltips.json" -> Loader.isModLoaded("legendarytooltips");
+            case "mixins.novaeng_core_mek_top.json" -> Loader.isModLoaded("mekanism") && Loader.isModLoaded("theoneprobe");
             case "mixins.novaeng_core_mekanism.json" -> Loader.isModLoaded("mekanism");
             case "mixins.novaeng_core_nco.json" -> Loader.isModLoaded("nuclearcraft");
             case "mixins.novaeng_core_oreexcavation.json" -> Loader.isModLoaded("oreexcavation");
