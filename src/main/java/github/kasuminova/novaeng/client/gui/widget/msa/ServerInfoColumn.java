@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.client.gui.widget.msa;
 
 import github.kasuminova.mmce.client.gui.widget.HorizontalSeparator;
 import github.kasuminova.mmce.client.gui.widget.MultiLineLabel;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.mmce.client.gui.widget.container.ScrollingColumn;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateEvent;
@@ -9,7 +10,6 @@ import github.kasuminova.novaeng.common.container.slot.*;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.server.*;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 
 import java.util.*;
@@ -63,7 +63,7 @@ public class ServerInfoColumn extends ScrollingColumn {
     }
 
     @Override
-    public void initWidget(final GuiContainer gui) {
+    public void initWidget(final WidgetGui gui) {
         super.initWidget(gui);
         updateTips();
     }

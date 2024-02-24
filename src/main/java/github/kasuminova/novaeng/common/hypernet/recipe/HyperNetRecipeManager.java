@@ -9,10 +9,10 @@ import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 public class HyperNetRecipeManager {
 
     public static void registerRecipes() {
-        registerComputationCenterRecipes();
+        registerHyperNetRecipes();
     }
 
-    private static void registerComputationCenterRecipes() {
+    private static void registerHyperNetRecipes() {
         RegistryHyperNet.getAllComputationsCenterTypes().forEach(ComputationCenterType::registerRecipesAndThreads);
         RegistryHyperNet.getAllDataProcessorTypes().forEach(DataProcessorType::registerRecipesAndThreads);
         RegistryHyperNet.getAllDatabaseTypes().forEach(DatabaseType::registerRecipesAndThreads);

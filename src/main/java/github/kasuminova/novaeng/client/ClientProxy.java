@@ -3,6 +3,7 @@ package github.kasuminova.novaeng.client;
 
 import github.kasuminova.novaeng.client.gui.GuiHyperNetTerminal;
 import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
+import github.kasuminova.novaeng.client.handler.BlockAngelRendererHandler;
 import github.kasuminova.novaeng.client.handler.ClientEventHandler;
 import github.kasuminova.novaeng.client.handler.HyperNetClientEventHandler;
 import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
@@ -53,6 +54,7 @@ public class ClientProxy extends CommonProxy {
         super.preInit();
         MinecraftForge.EVENT_BUS.register(HyperNetClientEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(BlockAngelRendererHandler.INSTANCE);
 
         TitleUtils.setRandomTitle("*PreInit*");
     }

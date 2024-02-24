@@ -18,24 +18,24 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class MixinInGameInfoCore {
 
     @Unique
-    private Framebuffer novaEngineering_Core$framebuffer = null;
+    private Framebuffer novaeng$framebuffer = null;
     @Unique
-    private boolean novaEngineering_Core$refreshBuffer = true;
+    private boolean novaeng$refreshBuffer = true;
     @Unique
-    private int novaEngineering_Core$tickCounter = 0;
+    private int novaeng$tickCounter = 0;
     @Unique
-    private int novaEngineering_Core$displayWidth = 0;
+    private int novaeng$displayWidth = 0;
     @Unique
-    private int novaEngineering_Core$displayHeight = 0;
+    private int novaeng$displayHeight = 0;
 
     @Shadow(remap = false)
     public abstract void onTickRender();
 
     @Inject(method = "onTickClient", at = @At("HEAD"), remap = false)
     private void onTickClient(final CallbackInfo ci) {
-        novaEngineering_Core$tickCounter++;
-        if (novaEngineering_Core$tickCounter % 2 == 0) {
-            novaEngineering_Core$refreshBuffer = true;
+        novaeng$tickCounter++;
+        if (novaeng$tickCounter % 2 == 0) {
+            novaeng$refreshBuffer = true;
         }
     }
 
@@ -47,28 +47,28 @@ public abstract class MixinInGameInfoCore {
 
         Minecraft minecraft = Minecraft.getMinecraft();
 
-        if (novaEngineering_Core$framebuffer == null) {
-            novaEngineering_Core$displayWidth = minecraft.displayWidth;
-            novaEngineering_Core$displayHeight = minecraft.displayHeight;
-            novaEngineering_Core$framebuffer = new Framebuffer(novaEngineering_Core$displayWidth, novaEngineering_Core$displayHeight, false);
-            novaEngineering_Core$framebuffer.framebufferColor[0] = 0.0F;
-            novaEngineering_Core$framebuffer.framebufferColor[1] = 0.0F;
-            novaEngineering_Core$framebuffer.framebufferColor[2] = 0.0F;
+        if (novaeng$framebuffer == null) {
+            novaeng$displayWidth = minecraft.displayWidth;
+            novaeng$displayHeight = minecraft.displayHeight;
+            novaeng$framebuffer = new Framebuffer(novaeng$displayWidth, novaeng$displayHeight, false);
+            novaeng$framebuffer.framebufferColor[0] = 0.0F;
+            novaeng$framebuffer.framebufferColor[1] = 0.0F;
+            novaeng$framebuffer.framebufferColor[2] = 0.0F;
         }
-        if (novaEngineering_Core$refreshBuffer) {
-            if (novaEngineering_Core$displayWidth != minecraft.displayWidth || novaEngineering_Core$displayHeight != minecraft.displayHeight) {
-                novaEngineering_Core$displayWidth = minecraft.displayWidth;
-                novaEngineering_Core$displayHeight = minecraft.displayHeight;
-                novaEngineering_Core$framebuffer.createBindFramebuffer(novaEngineering_Core$displayWidth, novaEngineering_Core$displayHeight);
+        if (novaeng$refreshBuffer) {
+            if (novaeng$displayWidth != minecraft.displayWidth || novaeng$displayHeight != minecraft.displayHeight) {
+                novaeng$displayWidth = minecraft.displayWidth;
+                novaeng$displayHeight = minecraft.displayHeight;
+                novaeng$framebuffer.createBindFramebuffer(novaeng$displayWidth, novaeng$displayHeight);
             } else {
-                novaEngineering_Core$framebuffer.framebufferClear();
+                novaeng$framebuffer.framebufferClear();
             }
-            novaEngineering_Core$framebuffer.bindFramebuffer(false);
+            novaeng$framebuffer.bindFramebuffer(false);
             GlStateManager.disableBlend();
             GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ONE, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         } else {
-            RenderUtils.renderFramebuffer(minecraft, novaEngineering_Core$framebuffer);
+            RenderUtils.renderFramebuffer(minecraft, novaeng$framebuffer);
             ci.cancel();
         }
     }
@@ -78,8 +78,8 @@ public abstract class MixinInGameInfoCore {
         if (!OpenGlHelper.framebufferSupported) {
             return;
         }
-        if (novaEngineering_Core$refreshBuffer) {
-            novaEngineering_Core$refreshBuffer = false;
+        if (novaeng$refreshBuffer) {
+            novaeng$refreshBuffer = false;
             Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
             onTickRender();
         }

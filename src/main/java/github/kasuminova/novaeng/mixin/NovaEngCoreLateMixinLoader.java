@@ -27,6 +27,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
                 "mixins.novaeng_core_nco.json",
                 "mixins.novaeng_core_oreexcavation.json",
                 "mixins.novaeng_core_rgb_chat.json",
+                "mixins.novaeng_core_scalingguis.json",
                 "mixins.novaeng_core_techguns.json",
                 "mixins.novaeng_core_theoneprobe.json",
                 "mixins.novaeng_core_thermaldynamics.json"
@@ -51,6 +52,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
             case "mixins.novaeng_core_nco.json" -> Loader.isModLoaded("nuclearcraft");
             case "mixins.novaeng_core_oreexcavation.json" -> Loader.isModLoaded("oreexcavation");
             case "mixins.novaeng_core_rgb_chat.json" -> Loader.isModLoaded("jianghun");
+            case "mixins.novaeng_core_scalingguis.json" -> Loader.isModLoaded("scalingguis");
             case "mixins.novaeng_core_techguns.json" -> Loader.isModLoaded("techguns");
             case "mixins.novaeng_core_theoneprobe.json" -> Loader.isModLoaded("theoneprobe");
             case "mixins.novaeng_core_thermaldynamics.json" -> Loader.isModLoaded("thermaldynamics");

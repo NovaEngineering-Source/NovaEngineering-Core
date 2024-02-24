@@ -5,11 +5,12 @@ import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.Button;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.mmce.client.gui.widget.container.Row;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvCloseEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvOpenEvent;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class AssemblyInv extends Row {
@@ -43,9 +44,9 @@ public abstract class AssemblyInv extends Row {
     }
 
     @Override
-    protected void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
-        super.preRenderInternal(gui, renderSize, renderPos, mousePos);
-
+    protected void preRenderInternal(final WidgetGui widgetGui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        super.preRenderInternal(widgetGui, renderSize, renderPos, mousePos);
+        GuiScreen gui = widgetGui.getGui();
         if (this.open.isEnabled()) {
             if (closedBgTexLocation != null) {
                 gui.mc.getTextureManager().bindTexture(closedBgTexLocation);
@@ -68,7 +69,7 @@ public abstract class AssemblyInv extends Row {
     // openInv / closeInv
 
     @Override
-    public void onGUIClosed(final GuiContainer gui) {
+    public void onGUIClosed(final WidgetGui gui) {
         closeInv();
     }
 

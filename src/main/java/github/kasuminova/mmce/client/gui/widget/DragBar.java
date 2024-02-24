@@ -4,10 +4,11 @@ import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.mmce.common.util.DataReference;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import net.minecraft.client.gui.inventory.GuiContainer;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
 
@@ -78,17 +79,17 @@ public class DragBar extends DynamicWidget {
     }
 
     @Override
-    public void initWidget(final GuiContainer gui) {
+    public void initWidget(final WidgetGui gui) {
         dragBarButton.initWidget(gui);
     }
 
     @Override
-    public void update(final GuiContainer gui) {
+    public void update(final WidgetGui gui) {
         dragBarButton.update(gui);
     }
 
     @Override
-    public void preRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void preRender(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         if (!dragBarButton.isMouseDown()) {
             return;
         }
@@ -111,7 +112,8 @@ public class DragBar extends DynamicWidget {
     }
 
     @Override
-    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void render(final WidgetGui widgetGui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        GuiScreen gui = widgetGui.getGui();
         gui.mc.getTextureManager().bindTexture(texLocation);
 
         int width = getWidth() - (paddingHorizontal * 2);
@@ -168,11 +170,11 @@ public class DragBar extends DynamicWidget {
         int dragBarButtonWidth = dragBarButton.getWidth();
         int dragBarButtonHeight = dragBarButton.getHeight();
         RenderPos dragBarButtonRenderOffset = new RenderPos(toFillFinal - (dragBarButtonWidth / 2) + paddingHorizontal, (height - dragBarButtonHeight) / 2);
-        dragBarButton.render(gui, renderSize, renderPos.add(dragBarButtonRenderOffset), mousePos.relativeTo(dragBarButtonRenderOffset));
+        dragBarButton.render(widgetGui, renderSize, renderPos.add(dragBarButtonRenderOffset), mousePos.relativeTo(dragBarButtonRenderOffset));
     }
 
     @Override
-    public boolean onMouseClicked(final MousePos mousePos, final RenderPos renderPos, final int mouseButton) {
+    public boolean onMouseClick(final MousePos mousePos, final RenderPos renderPos, final int mouseButton) {
         int width = getWidth() - (paddingHorizontal * 2);
 
         double max = this.max.getValue();
@@ -185,7 +187,7 @@ public class DragBar extends DynamicWidget {
         RenderPos dragBarButtonRenderOffset = new RenderPos(toFill - (dragBarButtonWidth / 2) + paddingHorizontal, (height - dragBarButtonHeight) / 2);
         MousePos relativeMousePos = mousePos.relativeTo(dragBarButtonRenderOffset);
         if (dragBarButton.isMouseOver(relativeMousePos)) {
-            return dragBarButton.onMouseClicked(relativeMousePos, renderPos.add(dragBarButtonRenderOffset), mouseButton);
+            return dragBarButton.onMouseClick(relativeMousePos, renderPos.add(dragBarButtonRenderOffset), mouseButton);
         }
 
         return false;
@@ -443,7 +445,7 @@ public class DragBar extends DynamicWidget {
         }
 
         @Override
-        public void initWidget(final GuiContainer gui) {
+        public void initWidget(final WidgetGui gui) {
             this.cachedValue = value.getValue();
 
             this.expandedWidth = getContentWidth(gui);
@@ -452,14 +454,14 @@ public class DragBar extends DynamicWidget {
         }
 
         @Override
-        public void update(final GuiContainer gui) {
+        public void update(final WidgetGui gui) {
             super.update(gui);
 
             updateExpandAnimation(gui);
             updateColorAnimation();
         }
 
-        protected void updateExpandAnimation(final GuiContainer gui) {
+        protected void updateExpandAnimation(final WidgetGui gui) {
             Double currentValue = value.getValue();
             if (cachedValue != currentValue) {
                 cachedValue = currentValue;
@@ -514,7 +516,9 @@ public class DragBar extends DynamicWidget {
         }
 
         @Override
-        public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        public void render(final WidgetGui widgetGui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+            GuiScreen gui = widgetGui.getGui();
+
             if (mouseOver) {
                 if (!isMouseOver(mousePos)) {
                     mouseOver = false;
@@ -529,7 +533,7 @@ public class DragBar extends DynamicWidget {
 
             gui.mc.getTextureManager().bindTexture(texLocation);
 
-            int contentWidth = getContentWidth(gui);
+            int contentWidth = getContentWidth(widgetGui);
 
             float width = this.width;
             float height = this.height;
@@ -581,7 +585,7 @@ public class DragBar extends DynamicWidget {
         }
 
         @Override
-        public boolean onMouseClicked(final MousePos mousePos, final RenderPos renderPos, final int mouseButton) {
+        public boolean onMouseClick(final MousePos mousePos, final RenderPos renderPos, final int mouseButton) {
             mouseDown = true;
             lastColorUpdateTime = System.currentTimeMillis();
             return true;
@@ -594,9 +598,9 @@ public class DragBar extends DynamicWidget {
             return false;
         }
 
-        protected int getContentWidth(final GuiContainer gui) {
+        protected int getContentWidth(final WidgetGui widgetGui) {
             String formattedValue = NovaEngUtils.formatDouble(cachedValue, 2);
-            return gui.mc.fontRenderer.getStringWidth(formattedValue);
+            return widgetGui.getGui().mc.fontRenderer.getStringWidth(formattedValue);
         }
 
         public ResourceLocation getTexLocation() {

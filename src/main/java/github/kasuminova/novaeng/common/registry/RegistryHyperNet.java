@@ -63,6 +63,10 @@ public class RegistryHyperNet {
         return SUPPORTED_MACHINERY.contains(registryName);
     }
 
+    public static Set<ResourceLocation> getAllHyperNetSupportedMachinery() {
+        return Collections.unmodifiableSet(SUPPORTED_MACHINERY);
+    }
+
     public static void addHyperNetSupportedMachinery(@Nonnull final ResourceLocation registryName) {
         SUPPORTED_MACHINERY.add(registryName);
     }

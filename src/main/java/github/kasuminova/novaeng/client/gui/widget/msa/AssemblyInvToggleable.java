@@ -3,13 +3,13 @@ package github.kasuminova.novaeng.client.gui.widget.msa;
 import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
-import github.kasuminova.mmce.client.gui.widget.Button2State;
+import github.kasuminova.mmce.client.gui.widget.Button5State;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvCloseEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvOpenEvent;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
@@ -17,8 +17,8 @@ import java.util.Collections;
 
 public abstract class AssemblyInvToggleable extends AssemblyInv {
     protected final Column toggleButtonColumn = new Column();
-    protected final Button2State toggleFirst = new Button2State();
-    protected final Button2State toggleSecond = new Button2State();
+    protected final Button5State toggleFirst = new Button5State();
+    protected final Button5State toggleSecond = new Button5State();
 
     protected final Column secondSlotColumn = new Column();
 
@@ -38,7 +38,7 @@ public abstract class AssemblyInvToggleable extends AssemblyInv {
 
         this.toggleFirst.setOnClickedListener(button -> {
             if (this.currentColumn == this.slotColumn) {
-                ((Button2State) button).setClicked(true);
+                ((Button5State) button).setClicked(true);
                 return;
             }
             toggleColumn(this.slotColumn);
@@ -49,7 +49,7 @@ public abstract class AssemblyInvToggleable extends AssemblyInv {
 
         this.toggleSecond.setOnClickedListener(button -> {
             if (this.currentColumn == this.secondSlotColumn) {
-                ((Button2State) button).setClicked(true);
+                ((Button5State) button).setClicked(true);
                 return;
             }
             toggleColumn(this.secondSlotColumn);
@@ -82,13 +82,13 @@ public abstract class AssemblyInvToggleable extends AssemblyInv {
     }
 
     @Override
-    protected void preRenderInternal(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    protected void preRenderInternal(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         doRender(gui, renderSize, renderPos, mousePos, DynamicWidget::preRender);
 
         if (this.open.isEnabled()) {
             if (closedBgTexLocation != null) {
-                gui.mc.getTextureManager().bindTexture(closedBgTexLocation);
-                gui.drawTexturedModalRect(renderPos.posX(), renderPos.posY(),
+                gui.getGui().mc.getTextureManager().bindTexture(closedBgTexLocation);
+                gui.getGui().drawTexturedModalRect(renderPos.posX(), renderPos.posY(),
                         closedInvBgTexOffsetX, closedInvBgTexOffsetY,
                         closedInvBgTexWidth, closedInvBgTexHeight
                 );
@@ -117,8 +117,8 @@ public abstract class AssemblyInvToggleable extends AssemblyInv {
             }
 
             if (openedBgTexLocation != null) {
-                gui.mc.getTextureManager().bindTexture(openedBgTexLocation);
-                gui.drawTexturedModalRect(renderPos.posX(), renderPos.posY(),
+                gui.getGui().mc.getTextureManager().bindTexture(openedBgTexLocation);
+                gui.getGui().drawTexturedModalRect(renderPos.posX(), renderPos.posY(),
                         openedInvBgTexOffsetX, openedInvBgTexOffsetY,
                         openedInvBgTexWidth, openedInvBgTexHeight
                 );

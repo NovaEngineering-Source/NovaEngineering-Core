@@ -68,7 +68,7 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
     }
 
     public void onServerInventoryUpdate() {
-        this.widgetController.postGuiEvent(new AssemblerInvUpdateEvent(this, assembler.getServer()));
+        this.widgetController.postGuiEvent(new AssemblerInvUpdateEvent(widgetController.getGui(), assembler.getServer()));
     }
 
     @Override

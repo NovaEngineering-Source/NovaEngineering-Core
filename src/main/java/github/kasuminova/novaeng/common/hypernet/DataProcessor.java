@@ -252,7 +252,7 @@ public class DataProcessor extends NetNode {
             return generated - maxGeneration;
         });
 
-        if (polledCounter[0] < 0) {
+        if (polledCounter[0] <= 0) {
             return 0F;
         }
 

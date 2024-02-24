@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng.common.integration;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.machine.AssemblyLine;
 import github.kasuminova.novaeng.common.hypernet.recipe.HyperNetRecipeManager;
@@ -42,7 +43,8 @@ public class IntegrationCRT {
                 HyperNetTerminal.class
         );
 
-        HyperNetRecipeManager.registerRecipes();
         AssemblyLine.registerNetNode();
+        HyperNetMachineEventHandler.registerHandler();
+        HyperNetRecipeManager.registerRecipes();
     }
 }

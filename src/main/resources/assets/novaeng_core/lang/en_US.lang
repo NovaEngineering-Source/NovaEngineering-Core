@@ -65,6 +65,11 @@ top.hypernet.processor.heat=§9内部热量：
 
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 tile.novaeng_core.modular_server_assembler.name=模块服务器组装台（未实装）
+tile.novaeng_core.angel_block.name=天使方块+
+tile.novaeng_core.angel_block.tip.0=天使方块，但是更加智能！
+tile.novaeng_core.angel_block.tip.1=允许你在没有任何方块的情况下虚空放置方块。
+tile.novaeng_core.angel_block.tip.2=手持此物品时可在世界预览即将放置的位置。
+tile.novaeng_core.angel_block.tip.3=按住 Shift 时，则固定在脚下放置此方块。
 
 novaeng.hypernet.computation_point_required.tip=§9计算：§b%s
 novaeng.hypernet.computation_point_required.tip.parallelized=§9计算 (受并行影响)：§b%s

@@ -3,10 +3,10 @@ package github.kasuminova.novaeng.client.gui.widget.msa.slot;
 import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
 import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
 import net.minecraft.client.gui.Gui;
-import net.minecraft.client.gui.inventory.GuiContainer;
 
 @SuppressWarnings("unused")
 public abstract class SlotAssemblyDecor<T extends SlotConditionItemHandler> extends SlotAssembly<T> {
@@ -25,10 +25,9 @@ public abstract class SlotAssemblyDecor<T extends SlotConditionItemHandler> exte
     }
 
     @Override
-    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
-        super.render(gui, renderSize, renderPos, mousePos);
+    public void render(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         if (isVisible() && texLocation != null && isAvailable()) {
-            gui.mc.getTextureManager().bindTexture(texLocation);
+            gui.getGui().mc.getTextureManager().bindTexture(texLocation);
 
             int renderPosX = renderPos.posX();
             int renderPosY = renderPos.posY();

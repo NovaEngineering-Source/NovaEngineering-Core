@@ -132,7 +132,7 @@ public class AssemblyInvExtension extends AssemblyInvToggleable {
         secondSlotColumn.addWidgets(new Row().addWidgets(ext_c_heat_radiator_3_0, ext_c_heat_radiator_3_1, ext_c_heat_radiator_3_2, ext_c_heat_radiator_3_3));
 
         Column slotExtensionCardOverlayCol = new Column();
-        slotExtensionCardOverlayCol.setAbsX(260).setAbsY(21).addWidgets(
+        slotExtensionCardOverlayCol.addWidgets(
                 new Row().addWidgets(
                         new OverlayExtensionCard(ext_c_0_0).setMarginRight(2),
                         new OverlayExtensionCard(ext_c_0_1).setMarginRight(2),
@@ -161,7 +161,7 @@ public class AssemblyInvExtension extends AssemblyInvToggleable {
                         new OverlayExtensionCard(ext_c_3_3).setMarginRight(4),
                         new OverlayExtensionCardExtension(ext_3_0).setMarginUp(1)
                 )
-        );
+        ).setAbsX(260).setAbsY(21);
         widgetController.addWidgetContainer(slotExtensionCardOverlayCol);
     }
 

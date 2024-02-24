@@ -33,6 +33,7 @@ public abstract class NetNode {
         }
 
         if (isConnected()) {
+            disconnect();
             connectToCenter();
         }
     }

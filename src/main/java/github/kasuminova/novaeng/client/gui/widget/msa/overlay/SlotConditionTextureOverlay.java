@@ -4,9 +4,9 @@ import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.TextureOverlay;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.novaeng.client.gui.widget.msa.slot.SlotAssembly;
 import hellfirepvp.modularmachinery.client.ClientScheduler;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 
 public class SlotConditionTextureOverlay extends TextureOverlay {
@@ -17,7 +17,7 @@ public class SlotConditionTextureOverlay extends TextureOverlay {
     }
 
     @Override
-    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void render(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         float partialTickTime = ClientScheduler.getClientTick();
 
         if (isVisible() && texLocation != null) {
@@ -34,8 +34,8 @@ public class SlotConditionTextureOverlay extends TextureOverlay {
 
             GlStateManager.color(1F, 1F, 1F, alpha);
 
-            gui.mc.getTextureManager().bindTexture(texLocation);
-            gui.drawTexturedModalRect(renderPos.posX(), renderPos.posY(), textureX, textureY, width, height);
+            gui.getGui().mc.getTextureManager().bindTexture(texLocation);
+            gui.getGui().drawTexturedModalRect(renderPos.posX(), renderPos.posY(), textureX, textureY, width, height);
 
             GlStateManager.color(1F, 1F, 1F, 1F);
         }

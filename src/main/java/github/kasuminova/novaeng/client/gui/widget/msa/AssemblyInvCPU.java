@@ -70,11 +70,13 @@ public class AssemblyInvCPU extends AssemblyInvToggleable {
         this.toggleFirst.setWidth(TOGGLE_BUTTON_WIDTH).setHeight(TOGGLE_BUTTON_HEIGHT);
         this.toggleFirst.setTextureXY(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_TEX_Y);
         this.toggleFirst.setHoveredTextureXY(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_HOVERED_TEX_Y);
+        this.toggleFirst.setMouseDownTextureXY(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_HOVERED_TEX_Y);
         this.toggleFirst.setClickedTextureXY(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_CLICKED_TEX_Y);
         this.toggleSecond.setTextureLocation(WIDGET_TEX_LOCATION);
         this.toggleSecond.setWidth(TOGGLE_BUTTON_WIDTH).setHeight(TOGGLE_BUTTON_HEIGHT);
         this.toggleSecond.setTextureXY(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_TEX_Y);
         this.toggleSecond.setHoveredTextureXY(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_HOVERED_TEX_Y);
+        this.toggleSecond.setMouseDownTextureXY(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_HOVERED_TEX_Y);
         this.toggleSecond.setClickedTextureXY(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_CLICKED_TEX_Y);
 
         AssemblySlotManager slotManager = assemblyInvManager.slotManager;
@@ -140,7 +142,7 @@ public class AssemblyInvCPU extends AssemblyInvToggleable {
         secondSlotColumn.addWidgets(new Row().addWidgets(cpu_heat_radiator_3_0, ram_heat_radiator_3_0, ram_heat_radiator_3_1, ram_heat_radiator_3_2, ram_heat_radiator_3_3));
 
         Column cpuOverlayCol = new Column();
-        cpuOverlayCol.setAbsX(203).setAbsY(28).addWidgets(
+        cpuOverlayCol.addWidgets(
                 new OverlayRAM(ram_0_0).setMarginDown(1),
                 new OverlayRAM(ram_0_1).setMarginDown(4),
 
@@ -155,7 +157,7 @@ public class AssemblyInvCPU extends AssemblyInvToggleable {
 
                 new OverlayRAM(ram_1_2).setMarginDown(1),
                 new OverlayRAM(ram_1_3)
-        );
+        ).setAbsX(203).setAbsY(28);
         widgetController.addWidgetContainer(cpuOverlayCol);
     }
 

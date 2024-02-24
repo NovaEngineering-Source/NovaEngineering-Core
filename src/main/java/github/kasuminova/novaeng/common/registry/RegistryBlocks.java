@@ -1,8 +1,10 @@
 package github.kasuminova.novaeng.common.registry;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.block.BlockAngel;
 import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
 import github.kasuminova.novaeng.common.block.BlockModularServerAssembler;
+import github.kasuminova.novaeng.common.item.ItemBlockAngel;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import hellfirepvp.modularmachinery.common.block.BlockCustomName;
@@ -46,6 +48,7 @@ public class RegistryBlocks {
     public static void registerBlocks() {
         prepareItemBlockRegister(registerBlock(BlockHyperNetTerminal.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockModularServerAssembler.INSTANCE));
+        prepareItemBlockRegister(new ItemBlockAngel(registerBlock(BlockAngel.INSTANCE)));
     }
 
     public static void registerTileEntities() {

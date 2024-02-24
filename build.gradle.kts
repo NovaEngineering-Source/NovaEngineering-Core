@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.8.6"
+version = "1.9.0"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -201,7 +201,8 @@ dependencies {
 
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
-    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4991928"))
+    implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
+//    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4991928"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4810661"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:applied-energistics-2-223794:2747063"))
@@ -215,6 +216,7 @@ dependencies {
     implementation(rfg.deobf("curse.maven:cofh-world-271384:2920434"))
     implementation(rfg.deobf("curse.maven:thermal-foundation-222880:2926428"))
     implementation(rfg.deobf("curse.maven:thermal-expansion-69163:2926431"))
+    implementation(rfg.deobf("curse.maven:matter-overdrive-community-edition-557428:4592069"))
     compileOnly(rfg.deobf("curse.maven:zenutil-401178:4394263"))
     compileOnly(rfg.deobf("curse.maven:libvulpes-236541:3801015"))
     compileOnly(rfg.deobf("curse.maven:advanced-rocketry-236542:4671856"))
@@ -245,7 +247,9 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:avaritia-1-10-261348:3143349"))
     compileOnly(rfg.deobf("curse.maven:blood-magic-224791:2822288"))
     compileOnly(rfg.deobf("curse.maven:legendary-tooltips-532127:4499615"))
-    implementation(rfg.deobf("curse.maven:flux-networks-248020:3178199"))
+    compileOnly(rfg.deobf("curse.maven:ftb-quests-forge-289412:3156637"))
+    compileOnly(rfg.deobf("curse.maven:flux-networks-248020:3178199"))
+    compileOnly(rfg.deobf("curse.maven:scalingguis-319656:2716334"))
 }
 
 // Publishing to a Maven repository

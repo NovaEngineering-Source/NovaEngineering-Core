@@ -49,8 +49,6 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(IntegrationCRT.INSTANCE);
         MinecraftForge.EVENT_BUS.register(HyperNetEventHandler.INSTANCE);
 
-        ModularMachinery.EVENT_BUS.register(HyperNetMachineEventHandler.INSTANCE);
-
         if (Loader.isModLoaded("fluxnetworks")) {
             IntegrationsFluxNetworks.preInit();
         }
@@ -64,13 +62,12 @@ public class CommonProxy implements IGuiHandler {
 
         IntegrationTOP.registerProvider();
         RecipeAdapterExtended.registerAdapter();
-        HyperNetRecipeManager.registerRecipes();
-
         AssemblyLine.registerNetNode();
+        HyperNetRecipeManager.registerRecipes();
     }
 
     public void postInit() {
-
+        HyperNetMachineEventHandler.registerHandler();
     }
 
     public void loadComplete() {

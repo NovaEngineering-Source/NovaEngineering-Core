@@ -45,7 +45,7 @@ public class MixinPlayerProgress {
         NovaEngineeringCore.log.info("Try to removing old perk data for player " + player.getGameProfile().getName() + ".");
         try {
             ((InvokerPerkEffectHelper) PerkEffectHelper.EVENT_INSTANCE).invokeHandlePerkModification(player, Side.SERVER, true);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             NovaEngineeringCore.log.warn("Remove failed!", e);
         }
     }
@@ -60,7 +60,7 @@ public class MixinPlayerProgress {
         NovaEngineeringCore.log.info("Try to restoring new perk data for player " + player.getGameProfile().getName() + ".");
         try {
             ((InvokerPerkEffectHelper) PerkEffectHelper.EVENT_INSTANCE).invokeHandlePerkModification(player, Side.SERVER, false);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             NovaEngineeringCore.log.warn("Restore failed!", e);
         }
     }

@@ -4,10 +4,10 @@ import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateEvent;
 import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.util.ResourceLocation;
 
 public abstract class SlotDynamic<T extends SlotConditionItemHandler> extends DynamicWidget {
@@ -31,12 +31,12 @@ public abstract class SlotDynamic<T extends SlotConditionItemHandler> extends Dy
     }
 
     @Override
-    public void initWidget(final GuiContainer gui) {
+    public void initWidget(final WidgetGui gui) {
         this.slot = getSlot();
     }
 
     @Override
-    public void preRender(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void preRender(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         if (slot != null) {
             if (isAvailable() && slot.isEnabled()) {
                 slot.xPos = renderPos.posX() + 1;
@@ -46,7 +46,7 @@ public abstract class SlotDynamic<T extends SlotConditionItemHandler> extends Dy
     }
 
     @Override
-    public void render(final GuiContainer gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+    public void render(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         if (isVisible() && unavailableTexLocation != null && texLocation != null) {
             if (slot != null) {
                 slot.setHovered(isMouseOver(mousePos));
@@ -57,14 +57,14 @@ public abstract class SlotDynamic<T extends SlotConditionItemHandler> extends Dy
             if (isAvailable()) {
                 texX = textureX;
                 texY = textureY;
-                gui.mc.getTextureManager().bindTexture(texLocation);
+                gui.getGui().mc.getTextureManager().bindTexture(texLocation);
             } else {
                 texX = unavailableTextureX;
                 texY = unavailableTextureY;
-                gui.mc.getTextureManager().bindTexture(unavailableTexLocation);
+                gui.getGui().mc.getTextureManager().bindTexture(unavailableTexLocation);
             }
 
-            gui.drawTexturedModalRect(renderPos.posX(), renderPos.posY(), texX, texY, width, height);
+            gui.getGui().drawTexturedModalRect(renderPos.posX(), renderPos.posY(), texX, texY, width, height);
         }
     }
 
