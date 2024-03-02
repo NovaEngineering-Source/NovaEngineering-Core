@@ -29,7 +29,7 @@ public class RecipePrimerAssemblyLine {
             return primer;
         }
 
-        return primer.addCheckHandler(event -> {
+        return primer.addPostCheckHandler(event -> {
             if (AssemblyLine.isNotAssemblyLine(event.getController())) return;
             AssemblyLine assemblyLine = NetNodeCache.getCache(event.getController(), AssemblyLine.class);
             if (assemblyLine != null) assemblyLine.onAssemblyLineRecipeCheck(event);

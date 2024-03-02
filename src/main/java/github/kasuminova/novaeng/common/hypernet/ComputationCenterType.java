@@ -70,7 +70,7 @@ public class ComputationCenterType extends NetNodeTypeRepairable {
 
         RecipeBuilder.newBuilder(name + "_working", name, 20, 100, false)
                 .addEnergyPerTickInput(energyUsage)
-                .addCheckHandler(event ->
+                .addPostCheckHandler(event ->
                         ComputationCenter.from(event.getController()).onRecipeCheck(event))
                 .addFactoryPreTickHandler(event ->
                         ComputationCenter.from(event.getController()).onWorkingTick())
@@ -86,7 +86,7 @@ public class ComputationCenterType extends NetNodeTypeRepairable {
             RecipeBuilder.newBuilder(name + "_fix_" + counter, name, 100, 101 + counter, false)
                     .addEnergyPerTickInput(energyUsage / 2)
                     .addInputs(input.toArray(new IIngredient[0]))
-                    .addCheckHandler(event ->
+                    .addPostCheckHandler(event ->
                             ComputationCenter.from(event.getController()).onDurabilityFixRecipeCheck(event, durability))
                     .addFactoryFinishHandler(event ->
                             ComputationCenter.from(event.getController()).fixCircuit(durability))

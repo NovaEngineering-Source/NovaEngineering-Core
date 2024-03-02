@@ -15,6 +15,7 @@ import stanhebben.zenscript.annotations.ZenGetter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.regex.Pattern;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.upgrade.ProcessorModuleRAM")
@@ -46,6 +47,8 @@ public class ProcessorModuleRAM extends DataProcessorModule {
         if (durability <= 0 && maxDurability != 0) {
             return 0.0F;
         }
+
+        Pattern p = Pattern.compile("[^\\x00-\\x7F\\u4E00-\\u9FFF]+");
 
         float efficiency = getEfficiency();
         double generationBase = efficiency * getComputationPointGenerationLimit();

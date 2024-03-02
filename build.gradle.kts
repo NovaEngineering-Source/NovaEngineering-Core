@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.9.0"
+version = "1.9.1"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -250,6 +250,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:ftb-quests-forge-289412:3156637"))
     compileOnly(rfg.deobf("curse.maven:flux-networks-248020:3178199"))
     compileOnly(rfg.deobf("curse.maven:scalingguis-319656:2716334"))
+    compileOnly(rfg.deobf("curse.maven:chisel-235279:2915375"))
 }
 
 // Publishing to a Maven repository

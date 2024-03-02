@@ -53,9 +53,18 @@ public class ComputationCenter {
     @ZenMethod
     public static ComputationCenter from(final IMachineController machine) {
         TileMultiblockMachineController ctrl = machine.getController();
-        return CACHED_COMPUTATION_CENTER.computeIfAbsent(ctrl, v ->
-                new ComputationCenter(ctrl, ctrl.getCustomDataTag()));
+        ComputationCenter computationCenter = CACHED_COMPUTATION_CENTER.get(ctrl);
+        if (computationCenter == null) {
+            synchronized (CACHED_COMPUTATION_CENTER) {
+                computationCenter = CACHED_COMPUTATION_CENTER.get(ctrl);
+                if (computationCenter == null) {
+                    CACHED_COMPUTATION_CENTER.put(ctrl, computationCenter = new ComputationCenter(ctrl, ctrl.getCustomDataTag()));
+                }
+            }
+        }
+        return computationCenter;
     }
+
 
     public static void clearCache() {
         CACHED_COMPUTATION_CENTER.clear();

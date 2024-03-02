@@ -52,7 +52,7 @@ public class RecipePrimerHyperNet {
             );
         }
 
-        return primer.addCheckHandler(event -> {
+        return primer.addPostCheckHandler(event -> {
             TileMultiblockMachineController ctrl = event.getController();
             NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
             if (node != null) {
@@ -128,7 +128,7 @@ public class RecipePrimerHyperNet {
             primer.addRecipeTooltip(I18n.format("novaeng.hypernet.research_required.tip", researchTip).intern());
         }
 
-        return primer.addCheckHandler(event -> {
+        return primer.addPostCheckHandler(event -> {
             NetNodeImpl cache = NetNodeCache.getCache(event.getController(), NetNodeImpl.class);
             if (cache != null) {
                 cache.checkResearch(event, researchRequired);

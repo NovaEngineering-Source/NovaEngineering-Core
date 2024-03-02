@@ -1,13 +1,10 @@
 {
-  "package": "github.kasuminova.novaeng.mixin.mmce",
+  "package": "github.kasuminova.novaeng.mixin.chisel",
   "refmap": "mixins.novaeng_core.refmap.json",
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
-  "client": [
-    "MixinIngredientItemStackRenderer"
-  ],
   "mixins": [
-    "MixinTileMultiblockMachineController"
+    "MixinTileAutoChisel"
   ]
 }

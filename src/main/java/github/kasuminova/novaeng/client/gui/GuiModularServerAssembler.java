@@ -1,6 +1,8 @@
 package github.kasuminova.novaeng.client.gui;
 
 import github.kasuminova.mmce.client.gui.GuiContainerDynamic;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
+import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.widget.msa.*;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateEvent;
@@ -36,6 +38,7 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
         this.assemblyInvManager.addInv(new AssemblyInvPower(assemblyInvManager, widgetController));
         this.assemblyInvManager.setAbsX(MAIN_GUI_WIDTH);
 
+        this.widgetController = new WidgetController(WidgetGui.of(this));
         this.widgetController.addWidgetContainer(assemblyInvManager);
 
         ServerInfoColumn serverInfoColumn = new ServerInfoColumn(assembler.getServer());

@@ -43,7 +43,7 @@ public class AssemblyLine extends NetNodeImpl {
     public static void registerNetNode() {
         ResourceLocation registryName = new ResourceLocation(ModularMachinery.MODID, MACHINE_NAME);
         RegistryHyperNet.registerHyperNetNode(registryName, AssemblyLine.class);
-        MMEvents.WAIT_FOR_REGISTER_LIST.add(() -> {
+        MMEvents.WAIT_FOR_MODIFY.add(() -> {
             DynamicMachine machine = MachineRegistry.getRegistry().getMachine(registryName);
             if (machine != null) {
                 HyperNetHelper.addControllerGUIHyperNetInfo(machine, AssemblyLine.class);

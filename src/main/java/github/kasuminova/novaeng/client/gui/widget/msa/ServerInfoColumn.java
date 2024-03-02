@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.client.gui.widget.msa;
 
-import github.kasuminova.mmce.client.gui.widget.HorizontalSeparator;
+import github.kasuminova.mmce.client.gui.widget.HorizontalLine;
 import github.kasuminova.mmce.client.gui.widget.MultiLineLabel;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.mmce.client.gui.widget.container.ScrollingColumn;
@@ -183,8 +183,8 @@ public class ServerInfoColumn extends ScrollingColumn {
         addWidget(createSeparator());
     }
 
-    protected HorizontalSeparator createSeparator() {
-        return (HorizontalSeparator) new HorizontalSeparator().setWidth(width - 8 - 4).setHeight(1).setMarginLeft(2);
+    protected HorizontalLine createSeparator() {
+        return (HorizontalLine) new HorizontalLine().setWidth(width - 8 - 4).setHeight(1).setMarginLeft(2);
     }
 
     protected MultiLineLabel createLabel(final List<String> contents) {

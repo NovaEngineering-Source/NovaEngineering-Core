@@ -12,12 +12,14 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
     @Override
     public List<String> getMixinConfigs() {
         return Arrays.asList(
+                "mixins.novaeng_core.json",
                 "mixins.novaeng_core_ae.json",
                 "mixins.novaeng_core_armourers_workshop.json",
                 "mixins.novaeng_core_astralsorcery.json",
                 "mixins.novaeng_core_avaritia.json",
                 "mixins.novaeng_core_biomesoplenty.json",
                 "mixins.novaeng_core_bloodmagic.json",
+                "mixins.novaeng_core_chisel.json",
                 "mixins.novaeng_core_eio.json",
                 "mixins.novaeng_core_fluxnetworks.json",
                 "mixins.novaeng_core_igi.json",
@@ -43,6 +45,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
             case "mixins.novaeng_core_avaritia.json" -> Loader.isModLoaded("avaritia");
             case "mixins.novaeng_core_biomesoplenty.json" -> Loader.isModLoaded("biomesoplenty");
             case "mixins.novaeng_core_bloodmagic.json" -> Loader.isModLoaded("bloodmagic");
+            case "mixins.novaeng_core_chisel.json" -> Loader.isModLoaded("chisel");
             case "mixins.novaeng_core_eio.json" -> Loader.isModLoaded("enderioconduits");
             case "mixins.novaeng_core_fluxnetworks.json" -> Loader.isModLoaded("fluxnetworks");
             case "mixins.novaeng_core_igi.json" -> Loader.isModLoaded("ingameinfoxml");

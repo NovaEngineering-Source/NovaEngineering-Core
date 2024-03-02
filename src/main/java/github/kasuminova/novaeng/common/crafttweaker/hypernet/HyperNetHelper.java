@@ -42,7 +42,7 @@ public class HyperNetHelper {
      */
     @ZenMethod
     public static void proxyMachineForHyperNet(String machineName) {
-        MMEvents.WAIT_FOR_REGISTER_LIST.add(() -> {
+        MMEvents.WAIT_FOR_MODIFY.add(() -> {
             DynamicMachine machine = MachineRegistry.getRegistry().getMachine(new ResourceLocation(ModularMachinery.MODID, machineName));
             if (machine != null) {
                 proxyMachineForHyperNet(machine);

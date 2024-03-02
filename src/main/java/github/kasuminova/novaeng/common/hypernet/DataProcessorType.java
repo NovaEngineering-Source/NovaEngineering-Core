@@ -68,7 +68,7 @@ public class DataProcessorType extends NetNodeType {
 
         RecipeBuilder.newBuilder(name + "_working", name, 20, 100, false)
                 .addEnergyPerTickInput(energyUsage)
-                .addCheckHandler(event -> {
+                .addPostCheckHandler(event -> {
                     DataProcessor processor = NetNodeCache.getCache(event.getController(), DataProcessor.class);
                     if (processor != null) processor.onRecipeCheck(event);
                 })
@@ -94,7 +94,7 @@ public class DataProcessorType extends NetNodeType {
                     .addEnergyPerTickInput(energyUsage / 2)
                     .addInputs(input)
                     .addOutputs(output)
-                    .addCheckHandler(event -> {
+                    .addPostCheckHandler(event -> {
                         DataProcessor processor = NetNodeCache.getCache(event.getController(), DataProcessor.class);
                         if (processor == null) {
                             event.setFailed("?");

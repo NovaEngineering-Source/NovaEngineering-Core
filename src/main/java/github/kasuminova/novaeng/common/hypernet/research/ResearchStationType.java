@@ -39,7 +39,7 @@ public class ResearchStationType extends NetNodeType {
 
         RecipeBuilder.newBuilder(name + "_working", name, 100, 100, false)
                 .addEnergyPerTickInput(energyUsage)
-                .addCheckHandler(event -> {
+                .addPostCheckHandler(event -> {
                     ResearchStation station = NetNodeCache.getCache(event.getController(), ResearchStation.class);
                     if (station != null) {
                         station.onRecipeCheck(event);
