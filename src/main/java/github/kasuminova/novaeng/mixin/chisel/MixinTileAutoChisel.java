@@ -23,7 +23,7 @@ public class MixinTileAutoChisel {
 
     @Inject(method = "mergeOutput", at = @At("HEAD"), remap = false)
     private void injectMergeOutput(final ItemStack stack, final CallbackInfo ci) {
-        novaeng_core$interval = Math.min(novaeng_core$interval + 5, 100);
+        novaeng_core$interval = Math.max(novaeng_core$interval - 5, 20);
     }
 
     @Inject(method = "setSourceSlot", at = @At("HEAD"), remap = false)
