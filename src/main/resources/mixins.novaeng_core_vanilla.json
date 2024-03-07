@@ -12,6 +12,7 @@
     "MixinFontRenderer",
     "MixinNettyCompressionDecoder",
     "MixinNettyPacketDecoder",
-    "forge.MixinSimpleIndexedCodec"
+    "forge.MixinSimpleIndexedCodec",
+    "forge.MixinSplashProgress"
   ]
 }

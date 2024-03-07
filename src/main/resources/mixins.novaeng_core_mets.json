@@ -1,0 +1,14 @@
+{
+  "package": "github.kasuminova.novaeng.mixin.mets",
+  "refmap": "mixins.novaeng_core.refmap.json",
+  "target": "@env(DEFAULT)",
+  "minVersion": "0.8",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [
+    "MixinEnchantmentManager",
+    "MixinFirstAidLifeSupport",
+    "MixinForceFieldGenerator",
+    "MixinLifeSupportRing",
+    "MixinNutritionSupply"
+  ]
+}

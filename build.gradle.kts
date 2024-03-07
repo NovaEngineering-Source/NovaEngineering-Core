@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.9.1"
+version = "1.9.2"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -216,7 +216,7 @@ dependencies {
     implementation(rfg.deobf("curse.maven:cofh-world-271384:2920434"))
     implementation(rfg.deobf("curse.maven:thermal-foundation-222880:2926428"))
     implementation(rfg.deobf("curse.maven:thermal-expansion-69163:2926431"))
-    implementation(rfg.deobf("curse.maven:matter-overdrive-community-edition-557428:4592069"))
+    compileOnly(rfg.deobf("curse.maven:matter-overdrive-community-edition-557428:4592069"))
     compileOnly(rfg.deobf("curse.maven:zenutil-401178:4394263"))
     compileOnly(rfg.deobf("curse.maven:libvulpes-236541:3801015"))
     compileOnly(rfg.deobf("curse.maven:advanced-rocketry-236542:4671856"))
@@ -226,6 +226,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
     compileOnly(rfg.deobf("curse.maven:baubles-227083:2518667"))
     compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
+    compileOnly(rfg.deobf("curse.maven:athenaeum-284350:4633750"))
     compileOnly(rfg.deobf("curse.maven:artisan-worktables-284351:3205284"))
     compileOnly(rfg.deobf("curse.maven:touhou-little-maid-355044:3576415"))
     compileOnly(rfg.deobf("curse.maven:ingame-info-xml-225604:2489566"))
@@ -251,6 +252,9 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:flux-networks-248020:3178199"))
     compileOnly(rfg.deobf("curse.maven:scalingguis-319656:2716334"))
     compileOnly(rfg.deobf("curse.maven:chisel-235279:2915375"))
+    compileOnly(rfg.deobf("curse.maven:extrabotany-299086:3112313"))
+    compileOnly(rfg.deobf("curse.maven:better-loading-screen-229302:3769828"))
+    compileOnly(rfg.deobf("curse.maven:better-chat-363860:3048407"))
 }
 
 // Publishing to a Maven repository
