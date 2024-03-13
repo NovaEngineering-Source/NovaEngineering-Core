@@ -49,11 +49,15 @@ public abstract class MixinGuiBetterChat {
         ITextComponent textComponent = split.get(split.size() - 1);
         for (int i = 0; i < drawnChatLines.size(); i++) {
             ChatLine chatLine = drawnChatLines.get(i);
-            if (!universalTweaks$isMessageEqual(chatLine.getChatComponent().createCopy(), textComponent.createCopy())) {
+            ITextComponent lineComponent = chatLine.getChatComponent();
+            if (lineComponent.getFormattedText().trim().isEmpty()) {
                 continue;
             }
-            if (!chatLine.getChatComponent().getSiblings().isEmpty()) {
-                for (ITextComponent sibling : chatLine.getChatComponent().getSiblings()) {
+            if (!universalTweaks$isMessageEqual(lineComponent.createCopy(), textComponent.createCopy())) {
+                continue;
+            }
+            if (!lineComponent.getSiblings().isEmpty()) {
+                for (ITextComponent sibling : lineComponent.getSiblings()) {
                     if (universalTweaks$pattern.matcher(sibling.getUnformattedComponentText()).matches()) {
                         count += Integer.parseInt(sibling.getUnformattedComponentText().replaceAll("(?:§7)?\\D?", ""));
                         break;

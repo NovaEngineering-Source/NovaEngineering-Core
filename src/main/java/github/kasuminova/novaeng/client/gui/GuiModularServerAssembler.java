@@ -31,14 +31,13 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
         this.assembler = assembler;
         this.xSize = MAIN_GUI_WIDTH + 138;
         this.ySize = 206;
+        this.widgetController = new WidgetController(WidgetGui.of(this));
 
         this.assemblyInvManager.addInv(new AssemblyInvCPU(assemblyInvManager, widgetController));
         this.assemblyInvManager.addInv(new AssemblyInvCalculateCard(assemblyInvManager, widgetController));
         this.assemblyInvManager.addInv(new AssemblyInvExtension(assemblyInvManager, widgetController));
         this.assemblyInvManager.addInv(new AssemblyInvPower(assemblyInvManager, widgetController));
         this.assemblyInvManager.setAbsX(MAIN_GUI_WIDTH);
-
-        this.widgetController = new WidgetController(WidgetGui.of(this));
         this.widgetController.addWidgetContainer(assemblyInvManager);
 
         ServerInfoColumn serverInfoColumn = new ServerInfoColumn(assembler.getServer());

@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.9.2"
+version = "1.10.0"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -216,6 +216,9 @@ dependencies {
     implementation(rfg.deobf("curse.maven:cofh-world-271384:2920434"))
     implementation(rfg.deobf("curse.maven:thermal-foundation-222880:2926428"))
     implementation(rfg.deobf("curse.maven:thermal-expansion-69163:2926431"))
+    implementation(rfg.deobf("curse.maven:botania-225643:3330934"))
+    implementation(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
+    implementation(rfg.deobf("curse.maven:baubles-227083:2518667"))
     compileOnly(rfg.deobf("curse.maven:matter-overdrive-community-edition-557428:4592069"))
     compileOnly(rfg.deobf("curse.maven:zenutil-401178:4394263"))
     compileOnly(rfg.deobf("curse.maven:libvulpes-236541:3801015"))
@@ -224,14 +227,12 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:valkyrielib-245480:2691542"))
     compileOnly(rfg.deobf("curse.maven:environmental-tech-245453:2691536"))
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
-    compileOnly(rfg.deobf("curse.maven:baubles-227083:2518667"))
-    compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
     compileOnly(rfg.deobf("curse.maven:athenaeum-284350:4633750"))
     compileOnly(rfg.deobf("curse.maven:artisan-worktables-284351:3205284"))
     compileOnly(rfg.deobf("curse.maven:touhou-little-maid-355044:3576415"))
     compileOnly(rfg.deobf("curse.maven:ingame-info-xml-225604:2489566"))
     compileOnly(rfg.deobf("curse.maven:lunatriuscore-225605:2489549"))
-    compileOnly(rfg.deobf("curse.maven:rgb-chat-702720:4092100"))
+    implementation(rfg.deobf("curse.maven:rgb-chat-702720:4092100"))
     compileOnly(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
     compileOnly(rfg.deobf("curse.maven:endercore-231868:4671384"))
     compileOnly(rfg.deobf("curse.maven:ender-io-64578:4674244"))
@@ -255,6 +256,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:extrabotany-299086:3112313"))
     compileOnly(rfg.deobf("curse.maven:better-loading-screen-229302:3769828"))
     compileOnly(rfg.deobf("curse.maven:better-chat-363860:3048407"))
+    compileOnly(rfg.deobf("curse.maven:mrcrayfish-furniture-mod-55438:3865259"))
 }
 
 // Publishing to a Maven repository

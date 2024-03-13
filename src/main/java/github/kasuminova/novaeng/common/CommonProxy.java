@@ -12,12 +12,16 @@ import github.kasuminova.novaeng.common.hypernet.recipe.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.integration.IntegrationCRT;
 import github.kasuminova.novaeng.common.integration.fluxnetworks.IntegrationsFluxNetworks;
 import github.kasuminova.novaeng.common.integration.theoneprobe.IntegrationTOP;
+import github.kasuminova.novaeng.common.machine.IllumPool;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
+import github.kasuminova.novaeng.common.registry.RegistryMachineSpecial;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import hellfirepvp.modularmachinery.ModularMachinery;
+import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
+import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -64,10 +68,23 @@ public class CommonProxy implements IGuiHandler {
         RecipeAdapterExtended.registerAdapter();
         AssemblyLine.registerNetNode();
         HyperNetRecipeManager.registerRecipes();
+        RegistryMachineSpecial.registrySpecialMachine(IllumPool.ILLUM_POOL);
+        RegistryMachineSpecial.getSpecialMachineRegistry().forEach((registryName, machineSpecial) -> {
+            DynamicMachine machine = MachineRegistry.getRegistry().getMachine(registryName);
+            if (machine != null) {
+                machineSpecial.preInit(machine);
+            }
+        });
     }
 
     public void postInit() {
         HyperNetMachineEventHandler.registerHandler();
+        RegistryMachineSpecial.getSpecialMachineRegistry().forEach((registryName, machineSpecial) -> {
+            DynamicMachine machine = MachineRegistry.getRegistry().getMachine(registryName);
+            if (machine != null) {
+                machineSpecial.init(machine);
+            }
+        });
     }
 
     public void loadComplete() {

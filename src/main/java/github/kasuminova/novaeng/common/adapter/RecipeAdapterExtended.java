@@ -1,5 +1,7 @@
 package github.kasuminova.novaeng.common.adapter;
 
+import github.kasuminova.novaeng.common.adapter.astralsorcery.AdapterStarlightInfuser;
+import github.kasuminova.novaeng.common.adapter.botania.AdapterBotaniaManaPool;
 import github.kasuminova.novaeng.common.adapter.mc.AdapterMCFurnaceWithExp;
 import github.kasuminova.novaeng.common.adapter.nco.AdapterNCOElectrolyzer;
 import github.kasuminova.novaeng.common.adapter.nco.AdapterNCOPressurizer;
@@ -12,6 +14,8 @@ public class RecipeAdapterExtended {
         RegistriesMM.ADAPTER_REGISTRY.register(new AdapterNCOElectrolyzer());
         RegistriesMM.ADAPTER_REGISTRY.register(new AdapterMCFurnaceWithExp());
         RegistriesMM.ADAPTER_REGISTRY.register(new AdapterShredder());
+        RegistriesMM.ADAPTER_REGISTRY.register(new AdapterBotaniaManaPool());
+        RegistriesMM.ADAPTER_REGISTRY.register(new AdapterStarlightInfuser());
     }
 
 }

@@ -8,6 +8,7 @@ import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
+import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = NovaEngineeringCore.MOD_ID, name = NovaEngineeringCore.MOD_NAME, version = NovaEngineeringCore.VERSION,
@@ -33,7 +34,7 @@ public class NovaEngineeringCore {
     public static NovaEngineeringCore instance = null;
     @SidedProxy(clientSide = CLIENT_PROXY, serverSide = COMMON_PROXY)
     public static CommonProxy proxy = null;
-    public static Logger log = null;
+    public static Logger log = LogManager.getLogger(MOD_ID);
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
@@ -43,7 +44,6 @@ public class NovaEngineeringCore {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         event.getModMetadata().version = VERSION;
-        log = event.getModLog();
 
         NET_CHANNEL.registerMessage(PktHyperNetStatus.class, PktHyperNetStatus.class, 0, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktTerminalGuiData.class, PktTerminalGuiData.class, 1, Side.CLIENT);

@@ -6,7 +6,10 @@ import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.machine.AssemblyLine;
 import github.kasuminova.novaeng.common.hypernet.recipe.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
+import github.kasuminova.novaeng.common.registry.RegistryMachineSpecial;
 import hellfirepvp.modularmachinery.ModularMachinery;
+import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
+import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Optional;
@@ -44,7 +47,23 @@ public class IntegrationCRT {
         );
 
         AssemblyLine.registerNetNode();
-        HyperNetMachineEventHandler.registerHandler();
+
+        // pre
         HyperNetRecipeManager.registerRecipes();
+        RegistryMachineSpecial.getSpecialMachineRegistry().forEach((registryName, machineSpecial) -> {
+            DynamicMachine machine = MachineRegistry.getRegistry().getMachine(registryName);
+            if (machine != null) {
+                machineSpecial.preInit(machine);
+            }
+        });
+
+        // post
+        HyperNetMachineEventHandler.registerHandler();
+        RegistryMachineSpecial.getSpecialMachineRegistry().forEach((registryName, machineSpecial) -> {
+            DynamicMachine machine = MachineRegistry.getRegistry().getMachine(registryName);
+            if (machine != null) {
+                machineSpecial.init(machine);
+            }
+        });
     }
 }
