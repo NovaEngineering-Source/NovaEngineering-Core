@@ -6,6 +6,8 @@
   "compatibilityLevel": "JAVA_8",
   "mixins": [
     "MixinGradualRecipe",
-    "MixinItemUpgradeModule"
+    "MixinItemUpgradeModule",
+    "MixinTileEntityMatter",
+    "MixinTileEntityReplicator"
   ]
 }

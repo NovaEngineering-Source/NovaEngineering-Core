@@ -1,4 +1,4 @@
-package github.kasuminova.novaeng.mixin.eio;
+package github.kasuminova.novaeng.mixin.eioconduit;
 
 import com.enderio.core.common.util.NNList;
 import crazypants.enderio.conduits.conduit.item.ItemConduit;

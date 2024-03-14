@@ -63,11 +63,20 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public void onServerConnected(FMLNetworkEvent.ClientConnectedToServerEvent event) {
+        PacketProfiler.enabled = true;
+        PacketProfiler.PACKET_TOTAL_SIZE.clear();
+        PacketProfiler.TOTAL_RECEIVED_DATA_SIZE.set(0);
+        PacketProfiler.profilerStartTime = System.currentTimeMillis();
+        TEUpdatePacketProfiler.TE_UPDATE_PACKET_TOTAL_SIZE.clear();
+
         TitleUtils.setRandomTitleSync(String.format("*%s*", event.getManager().getRemoteAddress()));
     }
 
     @SubscribeEvent
     public void onServerDisconnected(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
+        PacketProfiler.enabled = false;
+        PacketProfiler.profilerStopTime = System.currentTimeMillis();
+
         TitleUtils.setRandomTitleSync();
     }
 }

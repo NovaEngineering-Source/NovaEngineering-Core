@@ -14,8 +14,7 @@ import java.util.LinkedList;
 @Mixin(World.class)
 public class MixinWorld implements BlockSnapShotProvider {
 
-    @Unique
-    public LinkedList<BlockSnapshot> novaeng$capturedBlockSnapshots = new LinkedList<>();
+    @Unique public LinkedList<BlockSnapshot> novaeng$capturedBlockSnapshots = new LinkedList<>();
 
     @SuppressWarnings("rawtypes")
     @Redirect(method = "setBlockState(Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/block/state/IBlockState;I)Z",

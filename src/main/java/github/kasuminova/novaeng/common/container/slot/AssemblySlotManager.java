@@ -7,7 +7,8 @@ import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvCalc
 import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvExtensionConst;
 import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvPowerConst;
 import github.kasuminova.novaeng.common.util.ServerModuleInv;
-import io.netty.util.collection.IntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -16,7 +17,7 @@ import java.util.Map;
 public class AssemblySlotManager {
     private final ModularServer modularServer;
 
-    private final Map<String, IntObjectHashMap<SlotConditionItemHandler>> inventorySlots = new HashMap<>();
+    private final Map<String, Int2ObjectMap<SlotConditionItemHandler>> inventorySlots = new HashMap<>();
 
     public AssemblySlotManager(final ModularServer modularServer) {
         this.modularServer = modularServer;
@@ -111,18 +112,18 @@ public class AssemblySlotManager {
     public <SLOT extends SlotConditionItemHandler> SLOT addSlot(@Nonnull final SLOT slot) {
         ServerModuleInv inv = slot.getItemHandler();
         int slotID = slot.getSlotIndex();
-        inventorySlots.computeIfAbsent(inv.getInvName(), v -> new IntObjectHashMap<>()).put(slotID, slot);
+        inventorySlots.computeIfAbsent(inv.getInvName(), v -> new Int2ObjectOpenHashMap<>()).put(slotID, slot);
         return slot;
     }
 
     public void addSlot(@Nonnull final SlotConditionItemHandler slot, @Nonnull final ServerModuleInv serverModuleInv, @Nonnull final String invName, final int slotId) {
         if (serverModuleInv.isSlotAvailable(slotId)) {
-            inventorySlots.computeIfAbsent(invName, v -> new IntObjectHashMap<>()).put(slotId, slot);
+            inventorySlots.computeIfAbsent(invName, v -> new Int2ObjectOpenHashMap<>()).put(slotId, slot);
         }
     }
 
     public void addAllSlotToContainer(final ContainerModularServerAssembler container) {
-        for (final IntObjectHashMap<SlotConditionItemHandler> invSlots : inventorySlots.values()) {
+        for (final Int2ObjectMap<SlotConditionItemHandler> invSlots : inventorySlots.values()) {
             for (final SlotConditionItemHandler slot : invSlots.values()) {
                 container.addSlotToContainer(slot);
             }
@@ -130,7 +131,7 @@ public class AssemblySlotManager {
     }
 
     public SlotConditionItemHandler getSlot(@Nonnull final String invName, final int slotId) {
-        IntObjectHashMap<SlotConditionItemHandler> invSlots = inventorySlots.get(invName);
+        Int2ObjectMap<SlotConditionItemHandler> invSlots = inventorySlots.get(invName);
         if (invSlots != null) {
             SlotConditionItemHandler slot = invSlots.get(slotId);
             if (slot.getItemHandler().isSlotAvailable(slotId)) {

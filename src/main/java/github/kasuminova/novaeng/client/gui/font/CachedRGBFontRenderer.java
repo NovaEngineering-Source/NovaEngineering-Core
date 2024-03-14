@@ -2,14 +2,11 @@ package github.kasuminova.novaeng.client.gui.font;
 
 import com.fred.jianghun.truergb.IColor;
 import com.fred.jianghun.truergb.RGBSettings;
-import com.google.common.cache.Cache;
-import com.google.common.cache.CacheBuilder;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.client.settings.GameSettings;
-import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Tuple;
 
@@ -18,14 +15,10 @@ import javax.annotation.Nullable;
 import java.awt.*;
 import java.util.List;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 public class CachedRGBFontRenderer extends FontRenderer {
     private static final Map<TextRenderInfo, List<TextRenderFunction>> TEXT_RENDER_CACHE = new WeakHashMap<>();
     private static final Map<TextWrapInfo, List<String>> LISTED_CACHE = new WeakHashMap<>();
-    private static final Cache<TextRenderInfo, Framebuffer> TEXT_RENDER_FBO_CACHE = CacheBuilder.newBuilder()
-            .expireAfterAccess(10L, TimeUnit.SECONDS)
-            .build();
 
     CachedRGBFontRenderer(final GameSettings gameSettingsIn, final ResourceLocation location, final TextureManager textureManagerIn, final boolean unicode) {
         super(gameSettingsIn, location, textureManagerIn, unicode);
@@ -63,24 +56,25 @@ public class CachedRGBFontRenderer extends FontRenderer {
                     continue;
                 }
 
-                if (strFirst.contentEquals(mapping)) {
-                    String color = colors.pollFirst();
-                    sb.insert(lastMappedStrIndex, color);
+                if (!strFirst.contentEquals(mapping)) {
                     sb.append(ch);
-
-                    if (lastMappedLineIndex + 1 == i) {
-                        StringBuilder lastMappedStrSb = new StringBuilder(mapped.get(lastMappedLineIndex));
-                        lastMappedStrSb.insert(lastMappedLineStrIndex, color);
-                        mapped.set(lastMappedLineIndex, lastMappedStrSb.toString());
-                    }
-
-                    lastMappedLineIndex = i;
-                    lastMappedStrIndex = sb.length();
-                    strList.pollFirst();
-                    mapping.setLength(0);
-                } else {
-                    sb.append(ch);
+                    continue;
                 }
+
+                String color = colors.pollFirst();
+                sb.insert(lastMappedStrIndex, color);
+                sb.append(ch);
+
+                if (lastMappedLineIndex + 1 == i) {
+                    StringBuilder lastMappedStrSb = new StringBuilder(mapped.get(lastMappedLineIndex));
+                    lastMappedStrSb.insert(lastMappedLineStrIndex, color);
+                    mapped.set(lastMappedLineIndex, lastMappedStrSb.toString());
+                }
+
+                lastMappedLineIndex = i;
+                lastMappedStrIndex = sb.length();
+                strList.pollFirst();
+                mapping.setLength(0);
             }
 
             lastMappedLineStrIndex = lastMappedStrIndex;

@@ -1,4 +1,4 @@
-package github.kasuminova.novaeng.mixin.eio;
+package github.kasuminova.novaeng.mixin.eioconduit;
 
 import crazypants.enderio.base.capability.ItemTools;
 import crazypants.enderio.base.filter.item.IItemFilter;
@@ -18,48 +18,23 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.lang.reflect.Field;
 
 @Mixin(NetworkedInventory.class)
 public abstract class MixinNetworkedInventory {
-    @Unique
-    private static Field target$stickyInput = null;
-    @Unique
-    private static Field target$inv = null;
-
-    static {
-        Class<?> target = null;
-        for (final Class<?> declaredClass : NetworkedInventory.class.getDeclaredClasses()) {
-            if (!declaredClass.getSimpleName().equals("Target")) {
-                continue;
-            }
-            target = declaredClass;
-            break;
-        }
-
-        if (target != null) {
-            try {
-                target$stickyInput = target.getDeclaredField("stickyInput");
-                target$stickyInput.setAccessible(true);
-                target$inv = target.getDeclaredField("inv");
-                target$inv.setAccessible(true);
-            } catch (NoSuchFieldException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
-
     @Nonnull
     @Shadow(remap = false) @Final private IItemConduit con;
 
     @SuppressWarnings({"StaticVariableMayNotBeInitialized", "NonConstantFieldWithUpperCaseName"})
     @Shadow(remap = false) @Final private static boolean EXECUTE;
 
-    @Shadow(remap = false) protected abstract int insertIntoTargets(@Nonnull final ItemStack toInsert);
+    @Shadow(remap = false)
+    protected abstract int insertIntoTargets(@Nonnull final ItemStack toInsert);
 
-    @Shadow(remap = false) protected abstract void onItemExtracted(final int slot, final int numInserted);
+    @Shadow(remap = false)
+    protected abstract void onItemExtracted(final int slot, final int numInserted);
 
-    @Shadow(remap = false) protected abstract Iterable<Object> getTargetIterator();
+    @Shadow(remap = false)
+    protected abstract Iterable<Object> getTargetIterator();
 
     @Shadow(remap = false)
     private static IItemFilter valid(final IItemFilter filter) {
@@ -113,24 +88,6 @@ public abstract class MixinNetworkedInventory {
         return startSize - res.getCount();
     }
 
-    @Unique
-    private static boolean novaeng$getTargetStickyInput(Object obj) {
-        try {
-            return target$stickyInput.getBoolean(obj);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    @Unique
-    private static NetworkedInventory novaeng$getTargetInv(Object obj) {
-        try {
-            return (NetworkedInventory) target$inv.get(obj);
-        } catch (IllegalAccessException e) {
-            throw new RuntimeException(e);
-        }
-    }
-
     @Inject(method = "doTransfer", at = @At("HEAD"), cancellable = true, remap = false)
     public void doTransfer(final IItemHandler inventory,
                            final ItemStack extractedItem,
@@ -157,8 +114,6 @@ public abstract class MixinNetworkedInventory {
             ItemStack notInsertedStack = extracted.copy();
             notInsertedStack.setCount(notInserted);
             cachedItemConduit.setCachedStack(notInsertedStack);
-        } else {
-            cachedItemConduit.setCachedStack(ItemStack.EMPTY);
         }
 
         onItemExtracted(slot, inserted);
@@ -208,18 +163,22 @@ public abstract class MixinNetworkedInventory {
         // list, so all sticky outputs are queried before any non-sticky one.
         boolean matchedStickyOutput = false;
 
-        for (Object target : getTargetIterator()) {
-            final IItemFilter filter = valid(novaeng$getTargetInv(target).getCon().getOutputFilter(novaeng$getTargetInv(target).getConDir()));
-            if (novaeng$getTargetStickyInput(target) && !matchedStickyOutput && filter != null) {
-                matchedStickyOutput = filter.doesItemPassFilter(novaeng$getTargetInv(target).getInventory(), toInsert);
+        for (Object targetObj : getTargetIterator()) {
+            AccessorTarget target = (AccessorTarget) targetObj;
+            NetworkedInventory inv = target.getInv();
+            final IItemFilter filter = valid(inv.getCon().getOutputFilter(inv.getConDir()));
+            if (target.getStickyInput() && !matchedStickyOutput && filter != null) {
+                matchedStickyOutput = filter.doesItemPassFilter(inv.getInventory(), toInsert);
             }
-            if (novaeng$getTargetStickyInput(target) || !matchedStickyOutput) {
-                toInsert.shrink(positive(novaeng$insertItemSimulate(novaeng$getTargetInv(target), toInsert, filter)));
+            if (target.getStickyInput() || !matchedStickyOutput) {
+                toInsert.shrink(positive(novaeng$insertItemSimulate(inv, toInsert, filter)));
                 if (Prep.isInvalid(toInsert)) {
                     // everything has been inserted. we're done.
                     break;
                 }
-            } else if (!novaeng$getTargetStickyInput(target)) {
+                continue;
+            }
+            if (!target.getStickyInput()) {
                 // item has been claimed by a sticky output but there are no sticky outputs left in targets, so we can stop checking
                 break;
             }

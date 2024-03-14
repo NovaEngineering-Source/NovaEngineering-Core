@@ -24,7 +24,8 @@ import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import hellfirepvp.modularmachinery.common.machine.RecipeThread;
 import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
-import io.netty.util.collection.IntObjectHashMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.util.ResourceLocation;
 
@@ -142,7 +143,7 @@ public class AssemblyLine extends NetNodeImpl {
      * 装配线片管理器。
      */
     public static class ChipManager {
-        private final IntObjectHashMap<RecipeThread> threadChipUsing = new IntObjectHashMap<>();
+        private final Int2ObjectMap<RecipeThread> threadChipUsing = new Int2ObjectOpenHashMap<>();
         private final Object2IntOpenHashMap<RecipeThread> chipThreadUsing = new Object2IntOpenHashMap<>();
 
         public ChipManager() {

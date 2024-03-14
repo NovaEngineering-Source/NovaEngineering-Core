@@ -1,4 +1,4 @@
-package github.kasuminova.novaeng.mixin.eio;
+package github.kasuminova.novaeng.mixin.eioconduit;
 
 import crazypants.enderio.conduits.conduit.item.NetworkedInventory;
 import net.minecraftforge.items.IItemHandler;

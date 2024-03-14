@@ -1,11 +1,14 @@
 package github.kasuminova.novaeng.mixin;
 
-import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
 import net.minecraftforge.fml.common.Loader;
 import zone.rong.mixinbooter.ILateMixinLoader;
 
 import java.util.*;
 import java.util.function.BooleanSupplier;
+
+import static github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader.LOG;
+import static github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader.LOG_PREFIX;
 
 @SuppressWarnings({"unused", "SameParameterValue"})
 public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
@@ -25,7 +28,8 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
         addModdedMixinCFG("mixins.novaeng_core_botania.json",              "botania");
         addModdedMixinCFG("mixins.novaeng_core_cfm.json",                  "cfm");
         addModdedMixinCFG("mixins.novaeng_core_chisel.json",               "chisel");
-        addModdedMixinCFG("mixins.novaeng_core_eio.json",                  "enderioconduits");
+        addModdedMixinCFG("mixins.novaeng_core_eio.json",                  "enderio");
+        addModdedMixinCFG("mixins.novaeng_core_eio_conduit.json",          "enderio", "enderioconduits");
         addModdedMixinCFG("mixins.novaeng_core_extrabotany.json",          "extrabotany");
         addModdedMixinCFG("mixins.novaeng_core_fluxnetworks.json",         "fluxnetworks");
         addModdedMixinCFG("mixins.novaeng_core_ic2.json",                  "ic2");
@@ -42,6 +46,14 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
         addModdedMixinCFG("mixins.novaeng_core_techguns.json",             "techguns");
         addModdedMixinCFG("mixins.novaeng_core_theoneprobe.json",          "theoneprobe");
         addModdedMixinCFG("mixins.novaeng_core_thermaldynamics.json",      "thermaldynamics");
+        new Thread(() -> {
+            Thread.currentThread().setName("NovaEng Core Hitokoto Initializer");
+            String hitokoto = HitokotoAPI.getRandomHitokoto();
+            if (hitokoto == null || hitokoto.isEmpty()) {
+                return;
+            }
+            LOG.info(LOG_PREFIX + hitokoto);
+        }).start();
     }
 
     @Override
@@ -53,7 +65,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
     public boolean shouldMixinConfigQueue(final String mixinConfig) {
         BooleanSupplier supplier = MIXIN_CONFIGS.get(mixinConfig);
         if (supplier == null) {
-            NovaEngineeringCore.log.warn("Mixin config {} is not found in config map! It will never be loaded.", mixinConfig);
+            LOG.warn(LOG_PREFIX + "Mixin config {} is not found in config map! It will never be loaded.", mixinConfig);
             return false;
         }
         return supplier.getAsBoolean();

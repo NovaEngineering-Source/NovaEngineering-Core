@@ -5,11 +5,11 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinChunk",
     "MixinWorld",
     "forge.MixinForgeHooks"
   ],
   "client": [
-    "IFontRenderer",
     "MixinFontRenderer",
     "MixinNettyCompressionDecoder",
     "MixinNettyPacketDecoder",
