@@ -201,8 +201,9 @@ dependencies {
 
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
-    implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
+//    implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
 //    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4991928"))
+    implementation(rfg.deobf(files("libs/ModularMachinery-CE-2.0.0-pre3.jar")))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4810661"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:applied-energistics-2-223794:2747063"))
