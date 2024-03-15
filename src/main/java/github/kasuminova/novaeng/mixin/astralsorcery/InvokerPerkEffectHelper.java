@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.mixin.astralsorcery;
 
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.fml.relauncher.Side;
@@ -11,5 +12,8 @@ public interface InvokerPerkEffectHelper {
 
     @Invoker(remap = false)
     void invokeHandlePerkModification(EntityPlayer player, Side side, boolean remove);
+
+    @Invoker(remap = false)
+    void invokeHandlePerkRemoval(AbstractPerk perk, EntityPlayer player, Side side);
 
 }

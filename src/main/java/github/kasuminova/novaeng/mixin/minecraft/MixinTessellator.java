@@ -21,6 +21,7 @@ public class MixinTessellator {
             @Override
             public void begin(final int glMode, @Nonnull final VertexFormat format) {
                 if (thread != null && thread != Thread.currentThread()) {
+                    thread = null;
                     throw new IllegalStateException("Using Tessellator buffer in another thread.");
                 }
                 thread = Thread.currentThread();
@@ -30,6 +31,7 @@ public class MixinTessellator {
             @Override
             public void finishDrawing() {
                 if (thread != null && thread != Thread.currentThread()) {
+                    thread = null;
                     throw new IllegalStateException("Using Tessellator buffer in another thread.");
                 }
                 thread = null;
@@ -37,6 +39,5 @@ public class MixinTessellator {
             }
         };
     }
-
 
 }

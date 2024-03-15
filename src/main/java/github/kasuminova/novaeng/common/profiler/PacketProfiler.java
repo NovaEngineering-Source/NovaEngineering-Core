@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.common.profiler;
 
+import github.kasuminova.novaeng.common.util.ClassUtils;
 import hellfirepvp.modularmachinery.common.util.MiscUtils;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -76,7 +77,7 @@ public class PacketProfiler {
             long packetTotalAmount = entry.getValue().getFirst();
             long packetTotalSize = entry.getValue().getSecond();
 
-            if (pClass.isAssignableFrom(Packet.class)) {
+            if (ClassUtils.getAllInterfaces(pClass).contains(Packet.class)) {
                 messages.add(
                         String.format("Pkt Class: %s",
                                 TextFormatting.BLUE + pClass.getSimpleName() + TextFormatting.WHITE

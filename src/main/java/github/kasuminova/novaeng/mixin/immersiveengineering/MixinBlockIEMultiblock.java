@@ -1,7 +1,6 @@
 package github.kasuminova.novaeng.mixin.immersiveengineering;
 
 import blusunrize.immersiveengineering.common.blocks.BlockIEMultiblock;
-import blusunrize.immersiveengineering.common.blocks.TileEntityMultiblockPart;
 import blusunrize.immersiveengineering.common.util.inventory.IIEInventory;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.item.ItemStack;
@@ -22,14 +21,12 @@ public class MixinBlockIEMultiblock {
             at = @At(value = "INVOKE", target = "Ljava/util/Iterator;hasNext()Z", remap = false)
     )
     @SuppressWarnings("rawtypes")
-    private boolean onBreakBlock(final Iterator instance, @Local(name = "master") TileEntityMultiblockPart master) {
+    private boolean onBreakBlock(final Iterator instance, @Local(name = "master") IIEInventory master) {
         if (instance.hasNext()) {
             return true;
         }
-        if (master instanceof IIEInventory ieInv) {
-            NonNullList<ItemStack> inventory = ieInv.getInventory();
-            Collections.fill(inventory, ItemStack.EMPTY);
-        }
+        NonNullList<ItemStack> inventory = master.getInventory();
+        Collections.fill(inventory, ItemStack.EMPTY);
         return false;
     }
 

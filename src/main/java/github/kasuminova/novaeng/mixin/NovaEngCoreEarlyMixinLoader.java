@@ -1,8 +1,10 @@
 package github.kasuminova.novaeng.mixin;
 
+import github.kasuminova.novaeng.client.util.TitleUtils;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.lwjgl.opengl.Display;
 import zone.rong.mixinbooter.IEarlyMixinLoader;
 
 import javax.annotation.Nullable;
@@ -27,6 +29,7 @@ public class NovaEngCoreEarlyMixinLoader implements IFMLLoadingPlugin, IEarlyMix
         if (isCleanroomLoader()) {
             LOG.info(LOG_PREFIX + "CleanroomLoader detected.");
             checkLauncher();
+            Display.setTitle(TitleUtils.DEFAULT_TITLE);
         }
     }
 

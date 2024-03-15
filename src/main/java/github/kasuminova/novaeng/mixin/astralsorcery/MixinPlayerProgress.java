@@ -1,20 +1,23 @@
 package github.kasuminova.novaeng.mixin.astralsorcery;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import hellfirepvp.astralsorcery.common.constellation.perk.AbstractPerk;
 import hellfirepvp.astralsorcery.common.constellation.perk.PerkEffectHelper;
 import hellfirepvp.astralsorcery.common.data.research.PlayerProgress;
-import hellfirepvp.astralsorcery.common.data.research.ResearchManager;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.lang.reflect.Field;
+import javax.annotation.Nullable;
+import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -22,18 +25,10 @@ import java.util.UUID;
  * 尝试兼容 PlayerDataSQL 的申必还原机制导致服务器崩溃的问题。
  */
 @Mixin(PlayerProgress.class)
-public class MixinPlayerProgress {
-    @Unique
-    private static Field novaeng$playerProgressServer = null;
+public abstract class MixinPlayerProgress {
+    @Shadow(remap = false) public abstract Collection<AbstractPerk> getAppliedPerks();
 
-    static {
-        try {
-            novaeng$playerProgressServer = ResearchManager.class.getDeclaredField("playerProgressServer");
-            novaeng$playerProgressServer.setAccessible(true);
-        } catch (Exception e) {
-            NovaEngineeringCore.log.warn("Failed to get ResearchManager#playerProgressServer!", e);
-        }
-    }
+    @Shadow(remap = false) public abstract List<AbstractPerk> getSealedPerks();
 
     @Inject(method = "load", at = @At("HEAD"), remap = false)
     private void onLoadPre(final NBTTagCompound compound, final CallbackInfo ci) {
@@ -42,9 +37,14 @@ public class MixinPlayerProgress {
             return;
         }
 
-        NovaEngineeringCore.log.info("Try to removing old perk data for player " + player.getGameProfile().getName() + ".");
+        NovaEngineeringCore.log.info("Try to removing all perk data for player " + player.getGameProfile().getName() + ".");
         try {
-            ((InvokerPerkEffectHelper) PerkEffectHelper.EVENT_INSTANCE).invokeHandlePerkModification(player, Side.SERVER, true);
+            for (final AbstractPerk perk : getAppliedPerks()) {
+                ((InvokerPerkEffectHelper) PerkEffectHelper.EVENT_INSTANCE).invokeHandlePerkRemoval(perk, player, Side.SERVER);
+            }
+            for (final AbstractPerk perk : getSealedPerks()) {
+                ((InvokerPerkEffectHelper) PerkEffectHelper.EVENT_INSTANCE).invokeHandlePerkRemoval(perk, player, Side.SERVER);
+            }
         } catch (Throwable e) {
             NovaEngineeringCore.log.warn("Remove failed!", e);
         }
@@ -66,14 +66,12 @@ public class MixinPlayerProgress {
     }
 
     @Unique
-    @SuppressWarnings("unchecked")
+    @Nullable
     private EntityPlayerMP novaeng$getCurrentPlayer() {
-        Map<UUID, PlayerProgress> playerProgress = null;
-        try {
-            playerProgress = (Map<UUID, PlayerProgress>) novaeng$playerProgressServer.get(null);
-        } catch (IllegalAccessException e) {
+        if (FMLCommonHandler.instance().getSide().isClient()) {
             return null;
         }
+        Map<UUID, PlayerProgress> playerProgress = AccessorResearchManager.getPlayerProgressServer();
 
         UUID playerUUID = null;
         for (final Map.Entry<UUID, PlayerProgress> entry : playerProgress.entrySet()) {

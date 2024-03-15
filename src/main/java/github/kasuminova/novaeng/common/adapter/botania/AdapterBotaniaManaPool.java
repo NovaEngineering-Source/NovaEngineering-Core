@@ -97,7 +97,7 @@ public class AdapterBotaniaManaPool extends RecipeAdapter {
                         event.setFailed("辉光魔力池模式不匹配或缺少物品输入！");
                     }
                 });
-                recipe.addTooltip("辉光魔力池模式：§e炼造");
+                recipe.addTooltip("辉光魔力池模式：§d炼造");
             } else if (catalyst.equals(RecipeManaInfusion.alchemyState)) {
                 recipe.addRecipeEventHandler(RecipeCheckEvent.class, (IEventHandler<RecipeCheckEvent>) event -> {
                     if (event.phase != Phase.START) return;
@@ -106,7 +106,7 @@ public class AdapterBotaniaManaPool extends RecipeAdapter {
                         event.setFailed("辉光魔力池模式不匹配或缺少物品输入！");
                     }
                 });
-                recipe.addTooltip("辉光魔力池模式：§d炼金");
+                recipe.addTooltip("辉光魔力池模式：§e炼金");
             } else if (catalyst.equals(ExtraBotanyAPI.dimensionState)) {
                 recipe.addRecipeEventHandler(RecipeCheckEvent.class, (IEventHandler<RecipeCheckEvent>) event -> {
                     if (event.phase != Phase.START) return;

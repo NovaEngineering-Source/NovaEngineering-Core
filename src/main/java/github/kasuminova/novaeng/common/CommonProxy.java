@@ -20,6 +20,7 @@ import github.kasuminova.novaeng.common.registry.RegistryMachineSpecial;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import hellfirepvp.modularmachinery.ModularMachinery;
+import hellfirepvp.modularmachinery.common.base.Mods;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import net.minecraft.entity.player.EntityPlayer;
@@ -68,7 +69,9 @@ public class CommonProxy implements IGuiHandler {
         RecipeAdapterExtended.registerAdapter();
         AssemblyLine.registerNetNode();
         HyperNetRecipeManager.registerRecipes();
-        RegistryMachineSpecial.registrySpecialMachine(IllumPool.ILLUM_POOL);
+        if (Mods.ASTRAL_SORCERY.isPresent() && Mods.BOTANIA.isPresent()) {
+            RegistryMachineSpecial.registrySpecialMachine(IllumPool.ILLUM_POOL);
+        }
         RegistryMachineSpecial.getSpecialMachineRegistry().forEach((registryName, machineSpecial) -> {
             DynamicMachine machine = MachineRegistry.getRegistry().getMachine(registryName);
             if (machine != null) {
