@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.common.container.slot;
 
 import github.kasuminova.novaeng.common.hypernet.server.module.base.ModuleExtensionCardExtBase;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
-import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import github.kasuminova.novaeng.common.util.TileItemHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
@@ -10,7 +10,7 @@ import javax.annotation.Nonnull;
 
 public class SlotExtensionCardExtItemHandler extends SlotConditionItemHandler {
 
-    public SlotExtensionCardExtItemHandler(final int displayID, final int index, final ServerModuleInv inventoryIn) {
+    public SlotExtensionCardExtItemHandler(final int displayID, final int index, final TileItemHandler inventoryIn) {
         super(inventoryIn, index, displayID);
     }
 

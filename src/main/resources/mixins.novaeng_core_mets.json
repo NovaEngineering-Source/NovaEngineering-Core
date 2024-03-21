@@ -5,11 +5,6 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinEnchantmentManager",
-    "MixinEntityTachyonBullet",
-    "MixinFirstAidLifeSupport",
-    "MixinForceFieldGenerator",
-    "MixinLifeSupportRing",
-    "MixinNutritionSupply"
+    "MixinEntityTachyonBullet"
   ]
 }

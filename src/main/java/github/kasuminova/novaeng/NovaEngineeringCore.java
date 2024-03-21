@@ -14,8 +14,7 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = NovaEngineeringCore.MOD_ID, name = NovaEngineeringCore.MOD_NAME, version = NovaEngineeringCore.VERSION,
         dependencies = "required-after:forge@[14.23.5.2847,);" +
                 "required-after:modularmachinery@[1.11.1,);" +
-                "required-after:theoneprobe@[1.12-1.4.28,);" +
-                "after:jianghun@[1.0,);",
+                "required-after:theoneprobe@[1.12-1.4.28,);",
         acceptedMinecraftVersions = "[1.12, 1.13)"
 )
 @SuppressWarnings("MethodMayBeStatic")
@@ -29,6 +28,8 @@ public class NovaEngineeringCore {
     public static final String COMMON_PROXY = "github.kasuminova.novaeng.common.CommonProxy";
 
     public static final SimpleNetworkWrapper NET_CHANNEL = NetworkRegistry.INSTANCE.newSimpleChannel(MOD_ID);
+
+    public static final ParallelNetworkManager PARALLEL_NETWORK_MANAGER = new ParallelNetworkManager();
 
     @Mod.Instance(MOD_ID)
     public static NovaEngineeringCore instance = null;

@@ -2,16 +2,16 @@ package github.kasuminova.novaeng.common.registry;
 
 import com.google.common.base.Preconditions;
 import github.kasuminova.novaeng.common.machine.MachineSpecial;
+import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import net.minecraft.util.ResourceLocation;
 
 import javax.annotation.Nullable;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 
 public class RegistryMachineSpecial {
 
-    private static final Map<ResourceLocation, MachineSpecial> MACHINE_SPECIAL_REGISTRY = new HashMap<>();
+    private static final Map<ResourceLocation, MachineSpecial> MACHINE_SPECIAL_REGISTRY = new Object2ObjectOpenHashMap<>();
 
     public static void registrySpecialMachine(final MachineSpecial machineSpecial) {
         Preconditions.checkNotNull(machineSpecial);

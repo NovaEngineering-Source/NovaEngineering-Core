@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.common.container.slot;
 
 import github.kasuminova.novaeng.common.hypernet.server.module.base.ModuleRAMBase;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
-import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import github.kasuminova.novaeng.common.util.TileItemHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
@@ -12,7 +12,7 @@ import javax.annotation.Nonnull;
 
 public class SlotRAMItemHandler extends SlotConditionItemHandler {
 
-    public SlotRAMItemHandler(final int displayID, final int index, final ServerModuleInv inventoryIn) {
+    public SlotRAMItemHandler(final int displayID, final int index, final TileItemHandler inventoryIn) {
         super(inventoryIn, index, displayID);
     }
 

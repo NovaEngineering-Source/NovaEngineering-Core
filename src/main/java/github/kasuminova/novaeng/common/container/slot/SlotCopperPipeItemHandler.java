@@ -2,14 +2,14 @@ package github.kasuminova.novaeng.common.container.slot;
 
 import github.kasuminova.novaeng.common.hypernet.server.module.base.ModuleCopperPipeBase;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
-import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import github.kasuminova.novaeng.common.util.TileItemHandler;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
 public class SlotCopperPipeItemHandler extends SlotConditionItemHandler {
 
-    public SlotCopperPipeItemHandler(final int index, final ServerModuleInv inventoryIn) {
+    public SlotCopperPipeItemHandler(final int index, final TileItemHandler inventoryIn) {
         super(inventoryIn, index, -1);
     }
 

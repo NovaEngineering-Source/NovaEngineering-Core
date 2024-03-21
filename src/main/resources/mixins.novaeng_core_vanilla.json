@@ -5,16 +5,16 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "MixinChunk",
-    "MixinWorld",
-    "forge.MixinForgeHooks"
   ],
   "client": [
     "MixinFontRenderer",
     "MixinNettyCompressionDecoder",
     "MixinNettyPacketDecoder",
     "MixinTessellator",
-    "forge.MixinSimpleIndexedCodec",
-    "forge.MixinSplashProgress"
+    "forge.MixinSimpleIndexedCodec"
+  ],
+  "server": [
+    "forge.MixinFMLEventChannel",
+    "forge.MixinSimpleNetworkWrapper"
   ]
 }

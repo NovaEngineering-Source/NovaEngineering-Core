@@ -9,7 +9,7 @@ import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateE
 import github.kasuminova.novaeng.common.container.slot.*;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.server.*;
-import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import github.kasuminova.novaeng.common.util.TileItemHandler;
 import net.minecraft.client.resources.I18n;
 
 import java.util.*;
@@ -23,7 +23,7 @@ public class ServerInfoColumn extends ScrollingColumn {
         this.server = server;
     }
 
-    protected static int getInstalledSlots(final ServerModuleInv inv, final AssemblySlotManager slotManager, final String invName, Predicate<SlotConditionItemHandler> slotFilter) {
+    protected static int getInstalledSlots(final TileItemHandler inv, final AssemblySlotManager slotManager, final String invName, Predicate<SlotConditionItemHandler> slotFilter) {
         int[] installedSlots = {0};
         inv.getAvailableSlotsStream()
                 .mapToObj(slotID -> slotManager.getSlot(invName, slotID))
@@ -33,7 +33,7 @@ public class ServerInfoColumn extends ScrollingColumn {
         return installedSlots[0];
     }
 
-    protected static void addUninstalledDependenciesTip(final ServerModuleInv inv, final AssemblySlotManager slotManager, final String invName, List<String> tip) {
+    protected static void addUninstalledDependenciesTip(final TileItemHandler inv, final AssemblySlotManager slotManager, final String invName, List<String> tip) {
         inv.getAvailableSlotsStream()
                 .mapToObj(slotID -> slotManager.getSlot(invName, slotID))
                 .filter(SlotConditionItemHandler::isInstalled)
@@ -49,7 +49,7 @@ public class ServerInfoColumn extends ScrollingColumn {
                 });
     }
 
-    protected static void addUninstalledDependenciesTip(final ServerModuleInv cpu, final AssemblySlotManager slotManager, final ServerModuleInv calculateCard, final ServerModuleInv extension, final ServerModuleInv power, final List<String> errorTips) {
+    protected static void addUninstalledDependenciesTip(final TileItemHandler cpu, final AssemblySlotManager slotManager, final TileItemHandler calculateCard, final TileItemHandler extension, final TileItemHandler power, final List<String> errorTips) {
         List<String> uninstalledDependenciesTip = new ArrayList<>();
         addUninstalledDependenciesTip(cpu, slotManager, "cpu", uninstalledDependenciesTip);
         addUninstalledDependenciesTip(calculateCard, slotManager, "calculate_card", uninstalledDependenciesTip);
@@ -77,10 +77,10 @@ public class ServerInfoColumn extends ScrollingColumn {
         }
 
         AssemblySlotManager slotManager = server.getSlotManager();
-        ServerModuleInv cpu = server.getInvByName("cpu");
-        ServerModuleInv calculateCard = server.getInvByName("calculate_card");
-        ServerModuleInv extension = server.getInvByName("extension");
-        ServerModuleInv power = server.getInvByName("power");
+        TileItemHandler cpu = server.getInvByName("cpu");
+        TileItemHandler calculateCard = server.getInvByName("calculate_card");
+        TileItemHandler extension = server.getInvByName("extension");
+        TileItemHandler power = server.getInvByName("power");
 
         int installedCPUModules = getInstalledSlots(cpu, slotManager, "cpu", SlotCPUItemHandler.class::isInstance);
         int installedRAMModules = getInstalledSlots(cpu, slotManager, "cpu", SlotRAMItemHandler.class::isInstance);
@@ -141,7 +141,7 @@ public class ServerInfoColumn extends ScrollingColumn {
         addWidget(createSeparator());
     }
 
-    protected void addErrorTips(final int installedCPUModules, final List<String> errorTips, final int installedRAMModules, final int installedPSUModules, final int installedCapacitorModules, final ServerModuleInv cpu, final AssemblySlotManager slotManager, final ServerModuleInv calculateCard, final ServerModuleInv extension, final ServerModuleInv power) {
+    protected void addErrorTips(final int installedCPUModules, final List<String> errorTips, final int installedRAMModules, final int installedPSUModules, final int installedCapacitorModules, final TileItemHandler cpu, final AssemblySlotManager slotManager, final TileItemHandler calculateCard, final TileItemHandler extension, final TileItemHandler power) {
         if (installedCPUModules <= 0) {
             errorTips.add(I18n.format("gui.modular_server_assembler.error.require_cpu"));
         }

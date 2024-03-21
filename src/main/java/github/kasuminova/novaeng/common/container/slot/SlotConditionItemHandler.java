@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.container.slot;
 
-import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import github.kasuminova.novaeng.common.util.TileItemHandler;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -22,7 +22,7 @@ public abstract class SlotConditionItemHandler extends SlotItemHandler {
     protected final List<SlotConditionItemHandler> softDependents = new LinkedList<>();
     protected final List<SlotConditionItemHandler> softDependencies = new LinkedList<>();
 
-    public SlotConditionItemHandler(final ServerModuleInv inventoryIn, final int index, final int displayID) {
+    public SlotConditionItemHandler(final TileItemHandler inventoryIn, final int index, final int displayID) {
         super(inventoryIn, index, 0, 0);
         this.displayID = displayID;
     }
@@ -156,8 +156,8 @@ public abstract class SlotConditionItemHandler extends SlotItemHandler {
     }
 
     @Override
-    public ServerModuleInv getItemHandler() {
-        return (ServerModuleInv) super.getItemHandler();
+    public TileItemHandler getItemHandler() {
+        return (TileItemHandler) super.getItemHandler();
     }
 
     public boolean isInvalid() {

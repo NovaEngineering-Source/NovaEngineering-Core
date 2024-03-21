@@ -17,35 +17,11 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
 
     static {
         addMixinCFG("mixins.novaeng_core.json");
-        addModdedMixinCFG("mixins.novaeng_core_ae.json",                   "appliedenergistics2");
-        addModdedMixinCFG("mixins.novaeng_core_armourers_workshop.json",   "armourers_workshop");
-        addModdedMixinCFG("mixins.novaeng_core_astralsorcery.json",        "astralsorcery");
-        addModdedMixinCFG("mixins.novaeng_core_athenaeum.json",            "athenaeum");
-        addModdedMixinCFG("mixins.novaeng_core_avaritia.json",             "avaritia");
-        addModdedMixinCFG("mixins.novaeng_core_betterchat.json",           "betterchat");
-        addModdedMixinCFG("mixins.novaeng_core_biomesoplenty.json",        "biomesoplenty");
-        addModdedMixinCFG("mixins.novaeng_core_bloodmagic.json",           "bloodmagic");
-        addModdedMixinCFG("mixins.novaeng_core_botania.json",              "botania");
-        addModdedMixinCFG("mixins.novaeng_core_cfm.json",                  "cfm");
-        addModdedMixinCFG("mixins.novaeng_core_chisel.json",               "chisel");
-        addModdedMixinCFG("mixins.novaeng_core_eio.json",                  "enderio");
-        addModdedMixinCFG("mixins.novaeng_core_eio_conduit.json",          "enderio", "enderioconduits");
-        addModdedMixinCFG("mixins.novaeng_core_extrabotany.json",          "extrabotany");
-        addModdedMixinCFG("mixins.novaeng_core_fluxnetworks.json",         "fluxnetworks");
-        addModdedMixinCFG("mixins.novaeng_core_ic2.json",                  "ic2");
-        addModdedMixinCFG("mixins.novaeng_core_igi.json",                  "ingameinfoxml");
-        addModdedMixinCFG("mixins.novaeng_core_immersiveengineering.json", "immersiveengineering");
-        addModdedMixinCFG("mixins.novaeng_core_legendarytooltips.json",    "legendarytooltips");
-        addModdedMixinCFG("mixins.novaeng_core_mek_top.json",              "mekanism", "theoneprobe");
-        addModdedMixinCFG("mixins.novaeng_core_mekanism.json",             "mekanism");
-        addModdedMixinCFG("mixins.novaeng_core_mets.json",                 "mets");
-        addModdedMixinCFG("mixins.novaeng_core_nco.json",                  "nuclearcraft");
-        addModdedMixinCFG("mixins.novaeng_core_oreexcavation.json",        "oreexcavation");
-        addModdedMixinCFG("mixins.novaeng_core_rgb_chat.json",             "jianghun");
-        addModdedMixinCFG("mixins.novaeng_core_scalingguis.json",          "scalingguis");
-        addModdedMixinCFG("mixins.novaeng_core_techguns.json",             "techguns");
-        addModdedMixinCFG("mixins.novaeng_core_theoneprobe.json",          "theoneprobe");
-        addModdedMixinCFG("mixins.novaeng_core_thermaldynamics.json",      "thermaldynamics");
+        addModdedMixinCFG("mixins.novaeng_core_astralsorcery.json", "astralsorcery");
+        addModdedMixinCFG("mixins.novaeng_core_athenaeum.json",     "athenaeum");
+        addModdedMixinCFG("mixins.novaeng_core_cofhcore.json",      "cofhcore");
+        addModdedMixinCFG("mixins.novaeng_core_ic2.json",           "ic2");
+        addModdedMixinCFG("mixins.novaeng_core_mets.json",          "mets");
         new Thread(() -> {
             Thread.currentThread().setName("NovaEng Core Hitokoto Initializer");
             String hitokoto = HitokotoAPI.getRandomHitokoto();

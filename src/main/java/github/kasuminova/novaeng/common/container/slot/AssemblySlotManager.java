@@ -6,7 +6,7 @@ import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvCPUC
 import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvCalculateCardConst;
 import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvExtensionConst;
 import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvPowerConst;
-import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import github.kasuminova.novaeng.common.util.TileItemHandler;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
 
@@ -31,7 +31,7 @@ public class AssemblySlotManager {
     }
 
     protected void addCPUSlots() {
-        ServerModuleInv invCPU = modularServer.getInvByName("cpu");
+        TileItemHandler invCPU = modularServer.getInvByName("cpu");
 
         SlotCPUExtItemHandler ext_2 = addSlot(new SlotCPUExtItemHandler(AssemblyInvCPUConst.CPU_EXTENSION_SLOT_ID, invCPU));
 
@@ -63,7 +63,7 @@ public class AssemblySlotManager {
     }
 
     protected void addCalculateCardSlots() {
-        ServerModuleInv invCalculateCard = modularServer.getInvByName("calculate_card");
+        TileItemHandler invCalculateCard = modularServer.getInvByName("calculate_card");
 
         for (int extSlotID = 0; extSlotID < AssemblyInvCalculateCardConst.LINES; extSlotID++) {
             SlotCalculateCardExtItemHandler calculateCardExt = addSlot(new SlotCalculateCardExtItemHandler(
@@ -81,7 +81,7 @@ public class AssemblySlotManager {
     }
 
     protected void addExtensionCardSlots() {
-        ServerModuleInv invExtensionCard = modularServer.getInvByName("extension");
+        TileItemHandler invExtensionCard = modularServer.getInvByName("extension");
 
         for (int extSlotID = 0; extSlotID < AssemblyInvExtensionConst.LINES; extSlotID++) {
             SlotExtensionCardExtItemHandler calculateCardExt = addSlot(new SlotExtensionCardExtItemHandler(
@@ -99,7 +99,7 @@ public class AssemblySlotManager {
     }
 
     protected void addPowerSlots() {
-        ServerModuleInv invPower = modularServer.getInvByName("power");
+        TileItemHandler invPower = modularServer.getInvByName("power");
 
         for (int slotID = 0; slotID < 4; slotID++) {
             addSlot(new SlotPSUItemHandler(slotID, slotID, invPower));
@@ -110,14 +110,14 @@ public class AssemblySlotManager {
     }
 
     public <SLOT extends SlotConditionItemHandler> SLOT addSlot(@Nonnull final SLOT slot) {
-        ServerModuleInv inv = slot.getItemHandler();
+        TileItemHandler inv = slot.getItemHandler();
         int slotID = slot.getSlotIndex();
         inventorySlots.computeIfAbsent(inv.getInvName(), v -> new Int2ObjectOpenHashMap<>()).put(slotID, slot);
         return slot;
     }
 
-    public void addSlot(@Nonnull final SlotConditionItemHandler slot, @Nonnull final ServerModuleInv serverModuleInv, @Nonnull final String invName, final int slotId) {
-        if (serverModuleInv.isSlotAvailable(slotId)) {
+    public void addSlot(@Nonnull final SlotConditionItemHandler slot, @Nonnull final TileItemHandler tileItemHandler, @Nonnull final String invName, final int slotId) {
+        if (tileItemHandler.isSlotAvailable(slotId)) {
             inventorySlots.computeIfAbsent(invName, v -> new Int2ObjectOpenHashMap<>()).put(slotId, slot);
         }
     }

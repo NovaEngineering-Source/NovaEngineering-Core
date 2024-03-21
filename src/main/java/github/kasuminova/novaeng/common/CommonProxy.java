@@ -10,7 +10,8 @@ import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.machine.AssemblyLine;
 import github.kasuminova.novaeng.common.hypernet.recipe.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.integration.IntegrationCRT;
-import github.kasuminova.novaeng.common.integration.fluxnetworks.IntegrationsFluxNetworks;
+import github.kasuminova.novaeng.common.integration.fluxnetworks.IntegrationFluxNetworks;
+import github.kasuminova.novaeng.common.integration.ic2.IntegrationIC2;
 import github.kasuminova.novaeng.common.integration.theoneprobe.IntegrationTOP;
 import github.kasuminova.novaeng.common.machine.IllumPool;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
@@ -55,7 +56,10 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(HyperNetEventHandler.INSTANCE);
 
         if (Loader.isModLoaded("fluxnetworks")) {
-            IntegrationsFluxNetworks.preInit();
+            IntegrationFluxNetworks.preInit();
+        }
+        if (Loader.isModLoaded("ic2")) {
+            IntegrationIC2.preInit();
         }
     }
 

@@ -61,8 +61,9 @@ public abstract class NetNode {
     }
 
     public void disconnect() {
-        if (center != null) {
-            center.onDisconnect(owner, this);
+        if (this.center != null) {
+            this.center.onDisconnect(owner, this);
+            this.center = null;
         }
     }
 

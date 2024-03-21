@@ -1,0 +1,20 @@
+{
+  "variants": {
+    "facing=north,storage_type=empty,storage_level=empty,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives"
+    },
+    "facing=south,storage_type=empty,storage_level=empty,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives",
+      "y": 180
+    },
+    "facing=west,storage_type=empty,storage_level=empty,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives",
+      "y": 270
+    },
+    "facing=east,storage_type=empty,storage_level=empty,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives",
+      "y": 90
+    }
+    
+  }
+}

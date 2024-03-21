@@ -1,9 +1,9 @@
 package github.kasuminova.novaeng.common.hypernet.server;
 
-import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import github.kasuminova.novaeng.common.util.TileItemHandler;
 
 public interface ServerInvProvider {
 
-    ServerModuleInv getInvByName(final String invName);
+    TileItemHandler getInvByName(final String invName);
 
 }

@@ -15,7 +15,7 @@ import github.kasuminova.novaeng.common.hypernet.server.module.ModulePSU;
 import github.kasuminova.novaeng.common.hypernet.server.module.ServerModule;
 import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
-import github.kasuminova.novaeng.common.util.ServerModuleInv;
+import github.kasuminova.novaeng.common.util.TileItemHandler;
 import hellfirepvp.modularmachinery.common.tiles.base.TileEntitySynchronized;
 import hellfirepvp.modularmachinery.common.util.ItemUtils;
 import net.minecraft.item.ItemStack;
@@ -60,10 +60,10 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
 
     protected ItemStack cachedStack;
 
-    protected ServerModuleInv assemblyCPUInv = null;
-    protected ServerModuleInv assemblyCalculateCardInv = null;
-    protected ServerModuleInv assemblyExtensionInv = null;
-    protected ServerModuleInv assemblyPowerInv = null;
+    protected TileItemHandler assemblyCPUInv = null;
+    protected TileItemHandler assemblyCalculateCardInv = null;
+    protected TileItemHandler assemblyExtensionInv = null;
+    protected TileItemHandler assemblyPowerInv = null;
 
     public ModularServer(final TileEntitySynchronized owner, final ItemStack stack) {
         this.owner = owner;
@@ -128,7 +128,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         recalculateEnergySystem();
     }
 
-    protected void scanInvModules(ServerModuleInv moduleInv) {
+    protected void scanInvModules(TileItemHandler moduleInv) {
         moduleInv.getAvailableSlotsStream().forEach(slot -> {
             if (!slotManager.getSlot(moduleInv.getInvName(), slot).isAvailable()) {
                 return;
@@ -332,7 +332,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
         slotManager.initSlots();
     }
 
-    public void onAssemblyInvUpdate(final ServerModuleInv changedInv) {
+    public void onAssemblyInvUpdate(final int changedSlot) {
         if (onServerInvChangedListener != null) {
             onServerInvChangedListener.accept(this);
         }
@@ -347,7 +347,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyCPUInv() {
-        assemblyCPUInv = ServerModuleInv.create(owner, AssemblyInvCPUConst.INV_SIZE, "cpu")
+        assemblyCPUInv = TileItemHandler.create(owner, AssemblyInvCPUConst.INV_SIZE, "cpu")
                 .setOnChangedListener(this::onAssemblyInvUpdate);
     }
 
@@ -360,7 +360,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyCalculateCardInv() {
-        assemblyCalculateCardInv = ServerModuleInv.create(owner, AssemblyInvCalculateCardConst.INV_SIZE, "calculate_card")
+        assemblyCalculateCardInv = TileItemHandler.create(owner, AssemblyInvCalculateCardConst.INV_SIZE, "calculate_card")
                 .setOnChangedListener(this::onAssemblyInvUpdate);
     }
 
@@ -373,7 +373,7 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyExtensionInv() {
-        assemblyExtensionInv = ServerModuleInv.create(owner, AssemblyInvExtensionConst.INV_SIZE, "extension")
+        assemblyExtensionInv = TileItemHandler.create(owner, AssemblyInvExtensionConst.INV_SIZE, "extension")
                 .setOnChangedListener(this::onAssemblyInvUpdate);
     }
 
@@ -386,12 +386,12 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
     }
 
     public void createDefaultAssemblyPowerInv() {
-        assemblyPowerInv = ServerModuleInv.create(owner, AssemblyInvPowerConst.INV_SIZE, "power")
+        assemblyPowerInv = TileItemHandler.create(owner, AssemblyInvPowerConst.INV_SIZE, "power")
                 .setOnChangedListener(this::onAssemblyInvUpdate);
     }
 
     @Override
-    public ServerModuleInv getInvByName(final String name) {
+    public TileItemHandler getInvByName(final String name) {
         return switch (name) {
             case "cpu" -> assemblyCPUInv;
             case "calculate_card" -> assemblyCalculateCardInv;
