@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 
-public class PacketProfiler {
+public class CPacketProfiler {
     public static final ConcurrentHashMap<Class<?>, Tuple<Long, Long>> PACKET_TOTAL_SIZE = new ConcurrentHashMap<>();
     public static final AtomicLong TOTAL_RECEIVED_DATA_SIZE = new AtomicLong(0);
 
@@ -67,7 +67,7 @@ public class PacketProfiler {
         }
 
         @SuppressWarnings("SimplifyStreamApiCallChains")
-        List<Map.Entry<Class<?>, Tuple<Long, Long>>> sorted = PacketProfiler.PACKET_TOTAL_SIZE.entrySet().stream()
+        List<Map.Entry<Class<?>, Tuple<Long, Long>>> sorted = CPacketProfiler.PACKET_TOTAL_SIZE.entrySet().stream()
                 .sorted((o1, o2) -> Long.compare(o2.getValue().getSecond(), o1.getValue().getSecond()))
                 .limit(limit)
                 .collect(Collectors.toList());

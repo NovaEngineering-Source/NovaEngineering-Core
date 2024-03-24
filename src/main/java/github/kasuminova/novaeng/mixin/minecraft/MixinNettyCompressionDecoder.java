@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.mixin.minecraft;
 
-import github.kasuminova.novaeng.common.profiler.PacketProfiler;
+import github.kasuminova.novaeng.common.profiler.CPacketProfiler;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.network.NettyCompressionDecoder;
 import net.minecraft.network.PacketBuffer;
@@ -22,7 +22,7 @@ public class MixinNettyCompressionDecoder {
 
         ByteBuf decoded = packetBuffer.readBytes(len);
 
-        PacketProfiler.onPacketDecoded(packetBuffer.readerIndex() - prevIndex);
+        CPacketProfiler.onPacketDecoded(packetBuffer.readerIndex() - prevIndex);
         return decoded;
     }
 
@@ -36,7 +36,7 @@ public class MixinNettyCompressionDecoder {
 
         ByteBuf decoded = packetBuffer.readBytes(data);
 
-        PacketProfiler.onPacketDecoded(packetBuffer.readerIndex() - prevIndex);
+        CPacketProfiler.onPacketDecoded(packetBuffer.readerIndex() - prevIndex);
         return decoded;
     }
 }

@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng;
 
 import github.kasuminova.novaeng.common.CommonProxy;
+import github.kasuminova.novaeng.common.command.CommandSPacketProfiler;
 import github.kasuminova.novaeng.common.network.*;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
@@ -14,7 +15,8 @@ import org.apache.logging.log4j.Logger;
 @Mod(modid = NovaEngineeringCore.MOD_ID, name = NovaEngineeringCore.MOD_NAME, version = NovaEngineeringCore.VERSION,
         dependencies = "required-after:forge@[14.23.5.2847,);" +
                 "required-after:modularmachinery@[1.11.1,);" +
-                "required-after:theoneprobe@[1.12-1.4.28,);",
+                "required-after:theoneprobe@[1.12-1.4.28,);" +
+                "required-after:appliedenergistics2@[v0.56.3,);",
         acceptedMinecraftVersions = "[1.12, 1.13)"
 )
 @SuppressWarnings("MethodMayBeStatic")
@@ -49,6 +51,7 @@ public class NovaEngineeringCore {
         NET_CHANNEL.registerMessage(PktHyperNetStatus.class, PktHyperNetStatus.class, 0, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktTerminalGuiData.class, PktTerminalGuiData.class, 1, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktResearchTaskComplete.class, PktResearchTaskComplete.class, 2, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktCellDriveStatusUpdate.class, PktCellDriveStatusUpdate.class, 3, Side.CLIENT);
 
         NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, 100, Side.SERVER);
         NET_CHANNEL.registerMessage(PktResearchTaskReset.class, PktResearchTaskReset.class, 101, Side.SERVER);
@@ -70,5 +73,10 @@ public class NovaEngineeringCore {
     @Mod.EventHandler
     public void loadComplete(FMLLoadCompleteEvent event) {
         proxy.loadComplete();
+    }
+
+    @Mod.EventHandler
+    public void onServerStart(FMLServerStartingEvent event) {
+        event.registerServerCommand(CommandSPacketProfiler.INSTANCE);
     }
 }

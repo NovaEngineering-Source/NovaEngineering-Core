@@ -1,7 +1,7 @@
 package github.kasuminova.novaeng.common.command;
 
 import github.kasuminova.novaeng.client.handler.ClientEventHandler;
-import github.kasuminova.novaeng.common.profiler.PacketProfiler;
+import github.kasuminova.novaeng.common.profiler.CPacketProfiler;
 import github.kasuminova.novaeng.common.profiler.TEUpdatePacketProfiler;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
@@ -61,7 +61,7 @@ public class CommandPacketProfiler extends CommandBase {
                         @Nonnull final ICommandSender sender,
                         @Nonnull final String[] args) {
         if (args.length == 0) {
-            for (final String message : PacketProfiler.getProfilerMessages(10)) {
+            for (final String message : CPacketProfiler.getProfilerMessages(10)) {
                 sender.sendMessage(new TextComponentString(message));
             }
             for (final String message : TEUpdatePacketProfiler.getProfilerMessages(10)) {
@@ -83,20 +83,20 @@ public class CommandPacketProfiler extends CommandBase {
 
         switch (args[0]) {
             case "reset" -> {
-                PacketProfiler.PACKET_TOTAL_SIZE.clear();
-                PacketProfiler.TOTAL_RECEIVED_DATA_SIZE.set(0);
-                PacketProfiler.profilerStartTime = System.currentTimeMillis();
+                CPacketProfiler.PACKET_TOTAL_SIZE.clear();
+                CPacketProfiler.TOTAL_RECEIVED_DATA_SIZE.set(0);
+                CPacketProfiler.profilerStartTime = System.currentTimeMillis();
                 TEUpdatePacketProfiler.TE_UPDATE_PACKET_TOTAL_SIZE.clear();
                 sender.sendMessage(new TextComponentString("Cleared packet profiler data."));
             }
             case "start" -> {
-                PacketProfiler.enabled = true;
-                PacketProfiler.profilerStartTime += System.currentTimeMillis() - PacketProfiler.profilerStopTime;
+                CPacketProfiler.enabled = true;
+                CPacketProfiler.profilerStartTime += System.currentTimeMillis() - CPacketProfiler.profilerStopTime;
                 sender.sendMessage(new TextComponentString("Packet profiler is started."));
             }
             case "stop" -> {
-                PacketProfiler.enabled = false;
-                PacketProfiler.profilerStopTime = System.currentTimeMillis();
+                CPacketProfiler.enabled = false;
+                CPacketProfiler.profilerStopTime = System.currentTimeMillis();
                 sender.sendMessage(new TextComponentString("Packet profiler is stopped."));
             }
         }

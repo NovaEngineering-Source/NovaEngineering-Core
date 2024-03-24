@@ -17,13 +17,32 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class BlockEStorageController extends BlockController {
+    public static final Map<ResourceLocation, BlockEStorageController> REGISTRY = new LinkedHashMap<>();
+    public static final BlockEStorageController L4;
+    public static final BlockEStorageController L6;
+    public static final BlockEStorageController L9;
+
+    static {
+        L4 = new BlockEStorageController("l4");
+        REGISTRY.put(L4.registryName, L4);
+        L6 = new BlockEStorageController("l6");
+        REGISTRY.put(L6.registryName, L6);
+        L9 = new BlockEStorageController("l9");
+        REGISTRY.put(L9.registryName, L9);
+    }
 
     protected final ResourceLocation registryName;
     protected final ResourceLocation machineRegistryName;
 
     public BlockEStorageController(final String level) {
+        this.setHardness(20.0F);
+        this.setResistance(2000.0F);
+        this.setHarvestLevel("pickaxe", 2);
+
         registryName = new ResourceLocation(NovaEngineeringCore.MOD_ID, "extendable_digital_storage_subsystem_" + level);
         machineRegistryName = new ResourceLocation(ModularMachinery.MODID, registryName.getPath());
         setRegistryName(registryName);

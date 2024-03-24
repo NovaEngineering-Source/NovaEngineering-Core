@@ -4,13 +4,15 @@ import appeng.api.AEApi;
 import appeng.api.storage.IStorageChannel;
 import appeng.api.storage.channels.IItemStorageChannel;
 import appeng.api.storage.data.IAEItemStack;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageCellDrive;
 import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class EItemStorageCell extends EStorageCell<IAEItemStack> {
-    public EItemStorageCell(final int miloBytes) {
-        super(miloBytes);
+public class EStorageCellItem extends EStorageCell<IAEItemStack> {
+
+    public EStorageCellItem(final BlockEStorageCellDrive.StorageLevel level, final int miloBytes, final int byteMultiplier) {
+        super(level, miloBytes, byteMultiplier);
     }
 
     @Override

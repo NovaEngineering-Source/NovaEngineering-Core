@@ -4,13 +4,13 @@ import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
+import github.kasuminova.novaeng.common.handler.EStorageDriveEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
 import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.machine.AssemblyLine;
 import github.kasuminova.novaeng.common.hypernet.recipe.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.integration.IntegrationCRT;
-import github.kasuminova.novaeng.common.integration.fluxnetworks.IntegrationFluxNetworks;
 import github.kasuminova.novaeng.common.integration.ic2.IntegrationIC2;
 import github.kasuminova.novaeng.common.integration.theoneprobe.IntegrationTOP;
 import github.kasuminova.novaeng.common.machine.IllumPool;
@@ -54,10 +54,8 @@ public class CommonProxy implements IGuiHandler {
 
         MinecraftForge.EVENT_BUS.register(IntegrationCRT.INSTANCE);
         MinecraftForge.EVENT_BUS.register(HyperNetEventHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(EStorageDriveEventHandler.INSTANCE);
 
-        if (Loader.isModLoaded("fluxnetworks")) {
-            IntegrationFluxNetworks.preInit();
-        }
         if (Loader.isModLoaded("ic2")) {
             IntegrationIC2.preInit();
         }
@@ -115,7 +113,8 @@ public class CommonProxy implements IGuiHandler {
 
         return switch (type) {
             case HYPERNET_TERMINAL -> new ContainerHyperNetTerminal((TileHyperNetTerminal) present, player);
-            case MODULAR_SERVER_ASSEMBLER -> new ContainerModularServerAssembler((TileModularServerAssembler) present, player);
+            case MODULAR_SERVER_ASSEMBLER ->
+                    new ContainerModularServerAssembler((TileModularServerAssembler) present, player);
         };
     }
 

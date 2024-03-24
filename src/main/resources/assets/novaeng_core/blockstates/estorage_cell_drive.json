@@ -14,7 +14,678 @@
     "facing=east,storage_type=empty,storage_level=empty,storage_capacity=empty,status=offline": {
       "model": "novaeng_core:storage_array_drives",
       "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=A,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_a0_it"
+    },
+    "facing=south,storage_type=item,storage_level=A,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_a0_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=A,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_a0_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=A,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_a0_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=B,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_b0_it"
+    },
+    "facing=south,storage_type=item,storage_level=B,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_b0_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=B,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_b0_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=B,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_b0_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=C,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_c0_it"
+    },
+    "facing=south,storage_type=item,storage_level=C,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_c0_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=C,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_c0_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=C,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_c0_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=A,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_a0_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=A,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_a0_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=A,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_a0_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=A,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_a0_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=B,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_b0_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=B,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_b0_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=B,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_b0_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=B,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_b0_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=C,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_c0_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=C,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_c0_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=C,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_c0_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=C,storage_capacity=empty,status=offline": {
+      "model": "novaeng_core:storage_array_drives_c0_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=A,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a1_idle_it"
+    },
+    "facing=south,storage_type=item,storage_level=A,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a1_idle_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=A,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a1_idle_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=A,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a1_idle_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=B,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b1_idle_it"
+    },
+    "facing=south,storage_type=item,storage_level=B,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b1_idle_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=B,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b1_idle_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=B,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b1_idle_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=C,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c1_idle_it"
+    },
+    "facing=south,storage_type=item,storage_level=C,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c1_idle_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=C,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c1_idle_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=C,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c1_idle_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=A,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a1_idle_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=A,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a1_idle_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=A,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a1_idle_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=A,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a1_idle_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=B,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b1_idle_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=B,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b1_idle_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=B,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b1_idle_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=B,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b1_idle_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=C,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c1_idle_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=C,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c1_idle_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=C,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c1_idle_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=C,storage_capacity=empty,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c1_idle_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=A,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_a1_run_it"
+    },
+    "facing=south,storage_type=item,storage_level=A,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_a1_run_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=A,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_a1_run_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=A,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_a1_run_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=B,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_b1_run_it"
+    },
+    "facing=south,storage_type=item,storage_level=B,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_b1_run_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=B,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_b1_run_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=B,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_b1_run_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=C,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_c1_run_it"
+    },
+    "facing=south,storage_type=item,storage_level=C,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_c1_run_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=C,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_c1_run_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=C,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_c1_run_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=A,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_a1_run_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=A,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_a1_run_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=A,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_a1_run_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=A,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_a1_run_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=B,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_b1_run_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=B,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_b1_run_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=B,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_b1_run_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=B,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_b1_run_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=C,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_c1_run_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=C,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_c1_run_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=C,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_c1_run_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=C,storage_capacity=empty,status=run": {
+      "model": "novaeng_core:storage_array_drives_c1_run_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=A,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a2_idle_it"
+    },
+    "facing=south,storage_type=item,storage_level=A,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a2_idle_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=A,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a2_idle_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=A,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a2_idle_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=B,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b2_idle_it"
+    },
+    "facing=south,storage_type=item,storage_level=B,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b2_idle_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=B,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b2_idle_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=B,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b2_idle_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=C,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c2_idle_it"
+    },
+    "facing=south,storage_type=item,storage_level=C,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c2_idle_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=C,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c2_idle_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=C,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c2_idle_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=A,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a2_idle_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=A,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a2_idle_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=A,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a2_idle_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=A,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a2_idle_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=B,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b2_idle_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=B,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b2_idle_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=B,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b2_idle_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=B,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b2_idle_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=C,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c2_idle_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=C,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c2_idle_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=C,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c2_idle_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=C,storage_capacity=type_max,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c2_idle_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=A,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_a2_run_it"
+    },
+    "facing=south,storage_type=item,storage_level=A,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_a2_run_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=A,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_a2_run_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=A,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_a2_run_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=B,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_b2_run_it"
+    },
+    "facing=south,storage_type=item,storage_level=B,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_b2_run_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=B,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_b2_run_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=B,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_b2_run_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=C,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_c2_run_it"
+    },
+    "facing=south,storage_type=item,storage_level=C,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_c2_run_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=C,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_c2_run_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=C,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_c2_run_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=A,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_a2_run_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=A,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_a2_run_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=A,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_a2_run_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=A,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_a2_run_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=B,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_b2_run_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=B,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_b2_run_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=B,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_b2_run_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=B,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_b2_run_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=C,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_c2_run_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=C,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_c2_run_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=C,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_c2_run_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=C,storage_capacity=type_max,status=run": {
+      "model": "novaeng_core:storage_array_drives_c2_run_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=A,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a3_idle_it"
+    },
+    "facing=south,storage_type=item,storage_level=A,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a3_idle_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=A,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a3_idle_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=A,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a3_idle_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=B,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b3_idle_it"
+    },
+    "facing=south,storage_type=item,storage_level=B,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b3_idle_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=B,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b3_idle_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=B,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b3_idle_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=C,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c3_idle_it"
+    },
+    "facing=south,storage_type=item,storage_level=C,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c3_idle_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=C,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c3_idle_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=C,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c3_idle_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=A,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a3_idle_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=A,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a3_idle_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=A,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a3_idle_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=A,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_a3_idle_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=B,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b3_idle_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=B,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b3_idle_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=B,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b3_idle_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=B,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_b3_idle_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=C,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c3_idle_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=C,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c3_idle_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=C,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c3_idle_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=C,storage_capacity=full,status=idle": {
+      "model": "novaeng_core:storage_array_drives_c3_idle_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=A,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_a3_run_it"
+    },
+    "facing=south,storage_type=item,storage_level=A,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_a3_run_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=A,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_a3_run_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=A,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_a3_run_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=B,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_b3_run_it"
+    },
+    "facing=south,storage_type=item,storage_level=B,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_b3_run_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=B,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_b3_run_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=B,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_b3_run_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=item,storage_level=C,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_c3_run_it"
+    },
+    "facing=south,storage_type=item,storage_level=C,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_c3_run_it",
+      "y": 180
+    },
+    "facing=west,storage_type=item,storage_level=C,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_c3_run_it",
+      "y": 270
+    },
+    "facing=east,storage_type=item,storage_level=C,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_c3_run_it",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=A,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_a3_run_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=A,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_a3_run_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=A,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_a3_run_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=A,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_a3_run_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=B,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_b3_run_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=B,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_b3_run_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=B,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_b3_run_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=B,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_b3_run_fl",
+      "y": 90
+    },
+
+    "facing=north,storage_type=fluid,storage_level=C,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_c3_run_fl"
+    },
+    "facing=south,storage_type=fluid,storage_level=C,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_c3_run_fl",
+      "y": 180
+    },
+    "facing=west,storage_type=fluid,storage_level=C,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_c3_run_fl",
+      "y": 270
+    },
+    "facing=east,storage_type=fluid,storage_level=C,storage_capacity=full,status=run": {
+      "model": "novaeng_core:storage_array_drives_c3_run_fl",
+      "y": 90
     }
-    
   }
 }

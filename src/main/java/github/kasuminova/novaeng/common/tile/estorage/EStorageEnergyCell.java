@@ -34,6 +34,14 @@ public class EStorageEnergyCell extends EStoragePart implements Comparable<EStor
         return maxCanExtract - toExtract;
     }
 
+    public double getEnergyStored() {
+        return energyStored;
+    }
+
+    public double getMaxEnergyStore() {
+        return maxEnergyStore;
+    }
+
     @Override
     public int compareTo(final EStorageEnergyCell o) {
         return Double.compare(o.energyStored, energyStored);

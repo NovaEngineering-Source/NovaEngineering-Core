@@ -7,17 +7,30 @@ import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
 import appeng.items.contents.CellUpgrades;
 import appeng.util.Platform;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageCellDrive;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 
 public abstract class EStorageCell<T extends IAEStack<T>> extends AEBaseItem implements IStorageCell<T> {
+    protected final BlockEStorageCellDrive.StorageLevel level;
     protected final int totalBytes;
+    protected final int byteMultiplier;
 
-    public EStorageCell(final int miloBytes) {
-        this.setMaxStackSize(1);
+    public EStorageCell(BlockEStorageCellDrive.StorageLevel level, final int miloBytes, final int byteMultiplier) {
+        this.level = level;
         this.totalBytes = miloBytes * 1024 * 1024;
+        this.byteMultiplier = byteMultiplier;
+        this.setMaxStackSize(1);
+    }
+
+    public BlockEStorageCellDrive.StorageLevel getLevel() {
+        return level;
+    }
+
+    public int getByteMultiplier() {
+        return byteMultiplier;
     }
 
     @Override

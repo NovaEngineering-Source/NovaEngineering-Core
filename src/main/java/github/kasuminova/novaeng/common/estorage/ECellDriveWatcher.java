@@ -41,6 +41,7 @@ public class ECellDriveWatcher<T extends IAEStack<T>> extends MEInventoryHandler
                     NovaEngineeringCore.log.warn(e);
                 }
             }
+            this.drive.onWriting();
         }
 
         return remainder;
@@ -61,6 +62,7 @@ public class ECellDriveWatcher<T extends IAEStack<T>> extends MEInventoryHandler
                     NovaEngineeringCore.log.warn(e);
                 }
             }
+            this.drive.onWriting();
         }
 
         return extractable;

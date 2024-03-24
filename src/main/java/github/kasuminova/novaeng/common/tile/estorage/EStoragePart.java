@@ -13,4 +13,10 @@ public abstract class EStoragePart extends TileEntitySynchronized {
         return storageController;
     }
 
+    public void onAssembled() {
+    }
+
+    public void onDisassembled() {
+    }
+
 }

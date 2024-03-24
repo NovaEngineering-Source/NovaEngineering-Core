@@ -26,12 +26,12 @@ public class ClassUtils {
         }
     }
 
-    public static Set<Class<?>> getAllInterfaces(Class<?> clazz, Set<Class<?>> interfaceList) {
-        interfaceList.addAll(Arrays.asList(clazz.getInterfaces()));
+    public static Set<Class<?>> getAllInterfaces(Class<?> clazz, Set<Class<?>> interfaceSet) {
+        interfaceSet.addAll(Arrays.asList(clazz.getInterfaces()));
         Class<?> superClass = clazz.getSuperclass();
         if (superClass != null) {
-            getAllInterfaces(superClass, interfaceList);
+            getAllInterfaces(superClass, interfaceSet);
         }
-        return interfaceList;
+        return interfaceSet;
     }
 }

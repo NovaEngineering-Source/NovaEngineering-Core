@@ -5,13 +5,13 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "MixinNettyPacketDecoder",
+    "forge.MixinSimpleIndexedCodec"
   ],
   "client": [
     "MixinFontRenderer",
     "MixinNettyCompressionDecoder",
-    "MixinNettyPacketDecoder",
-    "MixinTessellator",
-    "forge.MixinSimpleIndexedCodec"
+    "MixinTessellator"
   ],
   "server": [
     "forge.MixinFMLEventChannel",

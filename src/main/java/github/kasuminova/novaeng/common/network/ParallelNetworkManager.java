@@ -27,9 +27,11 @@ public class ParallelNetworkManager {
     public synchronized void execute() {
         for (final MpscLinkedAtomicQueue<Action> queue : groupQueues.values()) {
             ModularMachinery.EXECUTE_MANAGER.addTask(() -> {
-                Action action;
-                while ((action = queue.poll()) != null) {
-                    action.doAction();
+                synchronized (queue) {
+                    Action action;
+                    while ((action = queue.poll()) != null) {
+                        action.doAction();
+                    }
                 }
             });
         }

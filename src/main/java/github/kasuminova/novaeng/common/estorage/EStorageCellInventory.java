@@ -13,15 +13,18 @@ import appeng.core.AEConfig;
 import appeng.core.AELog;
 import appeng.me.storage.AbstractCellInventory;
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellInventory<T> {
+    private final EStorageCell<T> cellType;
     private final IStorageChannel<T> channel;
 
-    protected EStorageCellInventory(final IStorageCell<T> cellType, final ItemStack o, final ISaveProvider container) {
+    protected EStorageCellInventory(final EStorageCell<T> cellType, final ItemStack o, final ISaveProvider container) {
         super(cellType, o, container);
+        this.cellType = cellType;
         this.channel = cellType.getChannel();
     }
 
@@ -33,7 +36,7 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
             }
 
             final Item type = o.getItem();
-            if (!(type instanceof IStorageCell cellType)) {
+            if (!(type instanceof EStorageCell cellType)) {
                 throw new AppEngException("ItemStack was used as a cell, but was not a cell!");
             }
 
@@ -161,20 +164,20 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
 
         final long size = Math.min(Integer.MAX_VALUE, request.getStackSize());
 
-        T Results = null;
+        T results = null;
 
         final T l = this.getCellItems().findPrecise(request);
         if (l != null) {
-            Results = l.copy();
+            results = l.copy();
 
             if (l.getStackSize() <= size) {
-                Results.setStackSize(l.getStackSize());
+                results.setStackSize(l.getStackSize());
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(0);
                     this.saveChanges();
                 }
             } else {
-                Results.setStackSize(size);
+                results.setStackSize(size);
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() - size);
                     this.saveChanges();
@@ -182,7 +185,7 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
             }
         }
 
-        return Results;
+        return results;
     }
 
     @Override
@@ -220,25 +223,25 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
 
     @Override
     public long getUsedBytes() {
-        final long bytesForItemCount = (this.getStoredItemCount() + this.getUnusedItemCount()) / (this.itemsPerByte * 8L);
+        final long bytesForItemCount = (this.getStoredItemCount() + this.getUnusedItemCount()) / ((long) this.itemsPerByte * cellType.getByteMultiplier());
         return this.getStoredItemTypes() * this.getBytesPerType() + bytesForItemCount;
     }
 
     @Override
     public long getRemainingItemCount() {
-        final long remaining = this.getFreeBytes() * (this.itemsPerByte * 8L) + this.getUnusedItemCount();
+        final long remaining = this.getFreeBytes() * ((long) this.itemsPerByte * cellType.getByteMultiplier()) + this.getUnusedItemCount();
         return remaining > 0 ? remaining : 0;
     }
 
     @Override
     public int getUnusedItemCount() {
-        final int div = (int) (this.getStoredItemCount() % 8);
+        final int div = (int) (this.getStoredItemCount() % (8 * cellType.getByteMultiplier()));
 
         if (div == 0) {
             return 0;
         }
 
-        return (this.itemsPerByte * 8) - div;
+        return (this.itemsPerByte * cellType.getByteMultiplier()) - div;
     }
 
 }

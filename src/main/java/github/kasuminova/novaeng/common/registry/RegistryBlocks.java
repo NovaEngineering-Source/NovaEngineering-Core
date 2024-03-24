@@ -4,6 +4,9 @@ import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.BlockAngel;
 import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
 import github.kasuminova.novaeng.common.block.BlockModularServerAssembler;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageCellDrive;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageMEChannel;
 import github.kasuminova.novaeng.common.item.ItemBlockAngel;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
@@ -49,6 +52,11 @@ public class RegistryBlocks {
         prepareItemBlockRegister(registerBlock(BlockHyperNetTerminal.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockModularServerAssembler.INSTANCE));
         prepareItemBlockRegister(new ItemBlockAngel(registerBlock(BlockAngel.INSTANCE)));
+        prepareItemBlockRegister(registerBlock(BlockEStorageController.L4));
+        prepareItemBlockRegister(registerBlock(BlockEStorageController.L6));
+        prepareItemBlockRegister(registerBlock(BlockEStorageController.L9));
+        prepareItemBlockRegister(registerBlock(BlockEStorageCellDrive.INSTANCE));
+        prepareItemBlockRegister(registerBlock(BlockEStorageMEChannel.INSTANCE));
     }
 
     public static void registerTileEntities() {

@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.client.handler;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.util.TitleUtils;
-import github.kasuminova.novaeng.common.profiler.PacketProfiler;
+import github.kasuminova.novaeng.common.profiler.CPacketProfiler;
 import github.kasuminova.novaeng.common.profiler.TEUpdatePacketProfiler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.text.TextFormatting;
@@ -53,7 +53,7 @@ public class ClientEventHandler {
             debugMessageCache.clear();
             debugMessageCache.add("");
             debugMessageCache.add(TextFormatting.BLUE + "[NovaEngineering-Core] Ver: " + NovaEngineeringCore.VERSION);
-            debugMessageCache.addAll(PacketProfiler.getProfilerMessages(debugPacketProfilerMessageLimit));
+            debugMessageCache.addAll(CPacketProfiler.getProfilerMessages(debugPacketProfilerMessageLimit));
             debugMessageCache.addAll(TEUpdatePacketProfiler.getProfilerMessages(debugTEPacketProfilerMessageLimit));
         }
 
@@ -63,10 +63,10 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public void onServerConnected(FMLNetworkEvent.ClientConnectedToServerEvent event) {
-        PacketProfiler.enabled = true;
-        PacketProfiler.PACKET_TOTAL_SIZE.clear();
-        PacketProfiler.TOTAL_RECEIVED_DATA_SIZE.set(0);
-        PacketProfiler.profilerStartTime = System.currentTimeMillis();
+        CPacketProfiler.enabled = true;
+        CPacketProfiler.PACKET_TOTAL_SIZE.clear();
+        CPacketProfiler.TOTAL_RECEIVED_DATA_SIZE.set(0);
+        CPacketProfiler.profilerStartTime = System.currentTimeMillis();
         TEUpdatePacketProfiler.TE_UPDATE_PACKET_TOTAL_SIZE.clear();
 
         TitleUtils.setRandomTitleSync(String.format("*%s*", event.getManager().getRemoteAddress()));
@@ -74,8 +74,8 @@ public class ClientEventHandler {
 
     @SubscribeEvent
     public void onServerDisconnected(FMLNetworkEvent.ClientDisconnectionFromServerEvent event) {
-        PacketProfiler.enabled = false;
-        PacketProfiler.profilerStopTime = System.currentTimeMillis();
+        CPacketProfiler.enabled = false;
+        CPacketProfiler.profilerStopTime = System.currentTimeMillis();
 
         TitleUtils.setRandomTitleSync();
     }
