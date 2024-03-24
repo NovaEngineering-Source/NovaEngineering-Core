@@ -5,11 +5,11 @@ import net.minecraft.item.ItemStack;
 
 import javax.annotation.Nonnull;
 
-public class CreativeTabHyperNet extends CreativeTabs {
-    public static final CreativeTabHyperNet INSTANCE = new CreativeTabHyperNet();
+public class CreativeTabNovaEng extends CreativeTabs {
+    public static final CreativeTabNovaEng INSTANCE = new CreativeTabNovaEng();
 
-    private CreativeTabHyperNet() {
-        super("HyperNet");
+    private CreativeTabNovaEng() {
+        super("NovaEngineering - World");
     }
 
     @Nonnull

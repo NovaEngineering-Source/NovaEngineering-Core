@@ -1,0 +1,88 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "novaeng_core:estorage_energy_cell_empty"
+  },
+  "variants": {
+    "facing=north,status=empty": {
+      "model": "novaeng_core:estorage_energy_cell_empty"
+    },
+    "facing=south,status=empty": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 180
+    },
+    "facing=west,status=empty": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 270
+    },
+    "facing=east,status=empty": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 90
+    },
+    "facing=north,status=low": {
+      "model": "novaeng_core:estorage_energy_cell_empty"
+    },
+    "facing=south,status=low": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 180
+    },
+    "facing=west,status=low": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 270
+    },
+    "facing=east,status=low": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 90
+    },
+    "facing=north,status=mid": {
+      "model": "novaeng_core:estorage_energy_cell_empty"
+    },
+    "facing=south,status=mid": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 180
+    },
+    "facing=west,status=mid": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 270
+    },
+    "facing=east,status=mid": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 90
+    },
+    "facing=north,status=high": {
+      "model": "novaeng_core:estorage_energy_cell_empty"
+    },
+    "facing=south,status=high": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 180
+    },
+    "facing=west,status=high": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 270
+    },
+    "facing=east,status=high": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 90
+    },
+    "facing=north,status=full": {
+      "model": "novaeng_core:estorage_energy_cell_empty"
+    },
+    "facing=south,status=full": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 180
+    },
+    "facing=west,status=full": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 270
+    },
+    "facing=east,status=full": {
+      "model": "novaeng_core:estorage_energy_cell_empty",
+      "y": 90
+    },
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ]
+  }
+}

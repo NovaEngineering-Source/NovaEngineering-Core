@@ -1,7 +1,7 @@
 package github.kasuminova.novaeng.common.block;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.core.CreativeTabHyperNet;
+import github.kasuminova.novaeng.common.core.CreativeTabNovaEng;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -27,7 +27,7 @@ public class BlockAngel extends Block {
         super(Material.ROCK);
         this.setResistance(10.0F);
         this.setSoundType(SoundType.STONE);
-        this.setCreativeTab(CreativeTabHyperNet.INSTANCE);
+        this.setCreativeTab(CreativeTabNovaEng.INSTANCE);
         this.setDefaultState(this.blockState.getBaseState());
         this.setRegistryName(new ResourceLocation(NovaEngineeringCore.MOD_ID, "angel_block"));
         this.setTranslationKey(NovaEngineeringCore.MOD_ID + '.' + "angel_block");

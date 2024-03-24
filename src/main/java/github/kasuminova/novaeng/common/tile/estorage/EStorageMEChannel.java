@@ -6,10 +6,12 @@ import appeng.api.config.PowerMultiplier;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.energy.IAEPowerStorage;
+import appeng.api.networking.events.MENetworkCellArrayUpdate;
 import appeng.api.networking.events.MENetworkPowerStorage;
 import appeng.api.networking.security.IActionHost;
 import appeng.api.networking.security.IActionSource;
-import appeng.api.storage.ICellProvider;
+import appeng.api.storage.ICellContainer;
+import appeng.api.storage.ICellInventory;
 import appeng.api.storage.IMEInventoryHandler;
 import appeng.api.storage.IStorageChannel;
 import appeng.api.util.AECableType;
@@ -30,12 +32,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class EStorageMEChannel extends EStoragePart implements ICellProvider, IActionHost, IGridProxyable, IAEPowerStorage {
+public class EStorageMEChannel extends EStoragePart implements ICellContainer, IActionHost, IGridProxyable, IAEPowerStorage {
 
     protected final AENetworkProxy proxy = new AENetworkProxy(this, "channel", getVisualItemStack(), true);
     protected final IActionSource source = new MachineSource(this);
-
-    protected EStorageController storageController = null;
 
     protected int priority = 0;
 
@@ -195,7 +195,16 @@ public class EStorageMEChannel extends EStoragePart implements ICellProvider, IA
     @Override
     public void onAssembled() {
         super.onAssembled();
-        ModularMachinery.EXECUTE_MANAGER.addSyncTask(proxy::onReady);
+        ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> {
+            proxy.onReady();
+            List<EStorageCellDrive> cellDrives = storageController.getCellDrives();
+            if (!cellDrives.isEmpty()) {
+                try {
+                    proxy.getGrid().postEvent(new MENetworkCellArrayUpdate());
+                } catch (GridAccessException ignored) {
+                }
+            }
+        });
     }
 
     @Override
@@ -204,4 +213,13 @@ public class EStorageMEChannel extends EStoragePart implements ICellProvider, IA
         proxy.invalidate();
     }
 
+    // noop
+
+    @Override
+    public void blinkCell(final int slot) {
+    }
+
+    @Override
+    public void saveChanges(@Nullable final ICellInventory<?> cellInventory) {
+    }
 }

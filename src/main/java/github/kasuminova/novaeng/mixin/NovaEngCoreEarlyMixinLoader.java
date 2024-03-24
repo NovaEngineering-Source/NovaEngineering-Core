@@ -44,7 +44,7 @@ public class NovaEngCoreEarlyMixinLoader implements IFMLLoadingPlugin, IEarlyMix
         boolean detected = false;
         List<String> lines = new ArrayList<>();
         try {
-            String queryCmd = "tasklist.exe" + " /FO csv /FI \"STATUS eq RUNNING\" | findstr /R \"[Plain Craft Launcher 2]";
+            String queryCmd = "tasklist.exe" + " /FO csv /FI \"STATUS eq RUNNING\" | findstr /R /C:\"Plain Craft Launcher 2\"";
             String cmd = "cmd";
             Process pr = new ProcessBuilder(cmd, "/C", queryCmd).start();
             SequenceInputStream sis = new SequenceInputStream(pr.getInputStream(), pr.getErrorStream());

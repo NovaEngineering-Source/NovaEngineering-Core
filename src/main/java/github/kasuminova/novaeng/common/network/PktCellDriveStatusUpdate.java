@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.common.network;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageCellDrive;
+import github.kasuminova.novaeng.common.block.estorage.prop.DriveStatus;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -17,12 +18,12 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PktCellDriveStatusUpdate implements IMessage, IMessageHandler<PktCellDriveStatusUpdate, IMessage> {
 
     private BlockPos pos = null;
-    private BlockEStorageCellDrive.Status status = null;
+    private DriveStatus status = null;
 
     public PktCellDriveStatusUpdate() {
     }
 
-    public PktCellDriveStatusUpdate(final BlockPos pos, final BlockEStorageCellDrive.Status status) {
+    public PktCellDriveStatusUpdate(final BlockPos pos, final DriveStatus status) {
         this.pos = pos;
         this.status = status;
     }
@@ -31,7 +32,7 @@ public class PktCellDriveStatusUpdate implements IMessage, IMessageHandler<PktCe
     public void fromBytes(final ByteBuf buf) {
         try {
             pos = BlockPos.fromLong(buf.readLong());
-            status = BlockEStorageCellDrive.Status.values()[buf.readByte()];
+            status = DriveStatus.values()[buf.readByte()];
         } catch (Exception e) {
             NovaEngineeringCore.log.error("PktCellDriveStatusUpdate read failed.", e);
         }
@@ -55,7 +56,7 @@ public class PktCellDriveStatusUpdate implements IMessage, IMessageHandler<PktCe
     @SideOnly(Side.CLIENT)
     protected static void processPacket(final PktCellDriveStatusUpdate message) {
         BlockPos pos = message.pos;
-        BlockEStorageCellDrive.Status status = message.status;
+        DriveStatus status = message.status;
         if (pos == null || status == null) {
             return;
         }
@@ -68,7 +69,7 @@ public class PktCellDriveStatusUpdate implements IMessage, IMessageHandler<PktCe
         if (!(state.getBlock() instanceof BlockEStorageCellDrive)) {
             return;
         }
-        world.setBlockState(pos, state.withProperty(BlockEStorageCellDrive.STATUS, status));
+        world.setBlockState(pos, state.withProperty(DriveStatus.STATUS, status));
     }
 
 }

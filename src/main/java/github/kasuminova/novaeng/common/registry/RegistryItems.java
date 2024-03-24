@@ -1,6 +1,8 @@
 package github.kasuminova.novaeng.common.registry;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.item.estorage.EStorageCellFluid;
+import github.kasuminova.novaeng.common.item.estorage.EStorageCellItem;
 import hellfirepvp.modularmachinery.common.item.ItemDynamicColor;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -28,8 +30,14 @@ public class RegistryItems {
     public void registerItems(RegistryEvent.Register<Item> event) {
         GenericRegistryPrimer.INSTANCE.wipe(event.getGenericType());
 
+        ITEMS_TO_REGISTER.add(EStorageCellItem.LEVEL_A);
+        ITEMS_TO_REGISTER.add(EStorageCellItem.LEVEL_B);
+        ITEMS_TO_REGISTER.add(EStorageCellItem.LEVEL_C);
+        ITEMS_TO_REGISTER.add(EStorageCellFluid.LEVEL_A);
+        ITEMS_TO_REGISTER.add(EStorageCellFluid.LEVEL_B);
+        ITEMS_TO_REGISTER.add(EStorageCellFluid.LEVEL_C);
+
         registerItems();
-//        registerItemModels();
 
         GenericRegistryPrimer.INSTANCE.fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
     }

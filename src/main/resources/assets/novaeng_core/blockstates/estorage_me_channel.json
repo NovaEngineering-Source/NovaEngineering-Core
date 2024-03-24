@@ -1,0 +1,15 @@
+{
+  "defaults": {
+    "model": "novaeng_core:estorage_me_channel"
+  },
+  "variants": {
+    "normal": {
+      "model": "novaeng_core:estorage_me_channel"
+    },
+    "inventory": [
+      {
+        "transform": "forge:default-block"
+      }
+    ]
+  }
+}

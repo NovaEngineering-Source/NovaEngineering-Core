@@ -2,12 +2,19 @@ package github.kasuminova.novaeng.common.tile.estorage;
 
 import appeng.api.config.Actionable;
 import github.kasuminova.mmce.common.util.concurrent.ActionExecutor;
+import github.kasuminova.mmce.common.world.MMWorldEventListener;
+import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
+import github.kasuminova.novaeng.common.block.estorage.prop.FacingProp;
 import github.kasuminova.novaeng.common.tile.TileCustomController;
 import github.kasuminova.novaeng.common.tile.estorage.bus.EStorageBus;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
 import java.util.*;
 
@@ -26,10 +33,12 @@ public class EStorageController extends TileCustomController {
     protected double maxEnergyStore = 0;
 
     public EStorageController(final ResourceLocation machineRegistryName) {
+        this.workMode = WorkMode.SYNC;
         this.parentMachine = MachineRegistry.getRegistry().getMachine(machineRegistryName);
     }
 
     public EStorageController() {
+        this.workMode = WorkMode.SYNC;
     }
 
     @Override
@@ -52,6 +61,7 @@ public class EStorageController extends TileCustomController {
     @Override
     protected void updateComponents() {
         super.updateComponents();
+        clearParts();
         this.foundPattern.getTileBlocksArray().forEach((pos, info) -> {
             BlockPos realPos = getPos().add(pos);
             if (!this.getWorld().isBlockLoaded(realPos)) {
@@ -67,14 +77,29 @@ public class EStorageController extends TileCustomController {
                 storageBuses.add(bus);
             }
             if (part instanceof EStorageEnergyCell energyCell) {
-                this.energyStored = energyCell.getEnergyStored();
-                this.maxEnergyStore = energyCell.getMaxEnergyStore();
                 energyCells.add(energyCell);
             }
             if (part instanceof EStorageCellDrive drive) {
                 cellDrives.add(drive);
             }
+            if (part instanceof EStorageMEChannel channel) {
+                this.channel = channel;
+            }
         });
+    }
+
+    protected boolean canCheckStructure() {
+        if (lastStructureCheckTick == -1 || (isStructureFormed() && foundComponents.isEmpty())) {
+            return true;
+        }
+        if (isStructureFormed()) {
+            BlockPos pos = getPos();
+            Vec3i min = foundPattern.getMin();
+            Vec3i max = foundPattern.getMax();
+            return MMWorldEventListener.INSTANCE.isAreaChanged(getWorld(), pos.add(min), pos.add(max));
+        } else {
+            return ticksExisted % Math.min(structureCheckDelay + this.structureCheckCounter * 5, maxStructureCheckDelay) == 0;
+        }
     }
 
     protected void disassemble() {
@@ -82,7 +107,17 @@ public class EStorageController extends TileCustomController {
             return;
         }
         assembled = false;
-        this.storageParts.forEach(part -> part.setController(null));
+        this.storageParts.forEach(part -> {
+            part.onDisassembled();
+            part.setController(null);
+        });
+        clearParts();
+    }
+
+    protected void clearParts() {
+        this.storageParts.forEach(part -> {
+            part.setController(null);
+        });
         this.storageParts.clear();
         this.storageBuses.clear();
         this.cellDrives.clear();
@@ -97,6 +132,23 @@ public class EStorageController extends TileCustomController {
             return;
         }
         assembled = true;
+        this.storageParts.forEach(EStoragePart::onAssembled);
+        this.energyCells.forEach(energyCell -> {
+            this.energyStored += energyCell.getEnergyStored();
+            this.maxEnergyStore += energyCell.getMaxEnergyStore();
+        });
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        disassemble();
+    }
+
+    @Override
+    public void onChunkUnload() {
+        super.onChunkUnload();
+        disassemble();
     }
 
     public double injectPower(final double amt, final Actionable mode) {
@@ -151,6 +203,20 @@ public class EStorageController extends TileCustomController {
             energyStored += extracted;
         }
         return extracted;
+    }
+
+    @Override
+    protected void checkRotation() {
+        if (controllerRotation != null) {
+            return;
+        }
+        IBlockState state = getWorld().getBlockState(getPos());
+        if (state.getBlock() instanceof BlockEStorageController) {
+            controllerRotation = state.getValue(FacingProp.HORIZONTALS);
+        } else {
+            NovaEngineeringCore.log.warn("Invalid estorage controller block at " + getPos() + " !");
+            controllerRotation = EnumFacing.NORTH;
+        }
     }
 
     public double getEnergyStored() {

@@ -6,10 +6,15 @@ import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
 import github.kasuminova.novaeng.common.block.BlockModularServerAssembler;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageCellDrive;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageEnergyCell;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageMEChannel;
 import github.kasuminova.novaeng.common.item.ItemBlockAngel;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
+import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
+import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
+import github.kasuminova.novaeng.common.tile.estorage.EStorageEnergyCell;
+import github.kasuminova.novaeng.common.tile.estorage.EStorageMEChannel;
 import hellfirepvp.modularmachinery.common.block.BlockCustomName;
 import hellfirepvp.modularmachinery.common.block.BlockDynamicColor;
 import hellfirepvp.modularmachinery.common.block.BlockMachineComponent;
@@ -52,9 +57,13 @@ public class RegistryBlocks {
         prepareItemBlockRegister(registerBlock(BlockHyperNetTerminal.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockModularServerAssembler.INSTANCE));
         prepareItemBlockRegister(new ItemBlockAngel(registerBlock(BlockAngel.INSTANCE)));
+
         prepareItemBlockRegister(registerBlock(BlockEStorageController.L4));
         prepareItemBlockRegister(registerBlock(BlockEStorageController.L6));
         prepareItemBlockRegister(registerBlock(BlockEStorageController.L9));
+        prepareItemBlockRegister(registerBlock(BlockEStorageEnergyCell.L4));
+        prepareItemBlockRegister(registerBlock(BlockEStorageEnergyCell.L6));
+        prepareItemBlockRegister(registerBlock(BlockEStorageEnergyCell.L9));
         prepareItemBlockRegister(registerBlock(BlockEStorageCellDrive.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockEStorageMEChannel.INSTANCE));
     }
@@ -62,6 +71,11 @@ public class RegistryBlocks {
     public static void registerTileEntities() {
         registerTileEntity(TileHyperNetTerminal.class, "hypernet_terminal");
         registerTileEntity(TileModularServerAssembler.class, "modular_server_assembler");
+
+        registerTileEntity(EStorageController.class, "estorage_controller");
+        registerTileEntity(EStorageEnergyCell.class, "estorage_energy_cell");
+        registerTileEntity(EStorageCellDrive.class, "estorage_cell_drive");
+        registerTileEntity(EStorageMEChannel.class, "estorage_me_channel");
     }
 
     public static void registerBlockModels() {

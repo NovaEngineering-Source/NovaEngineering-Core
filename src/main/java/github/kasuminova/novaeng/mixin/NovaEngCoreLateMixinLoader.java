@@ -17,6 +17,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
 
     static {
         addMixinCFG("mixins.novaeng_core.json");
+        addModdedMixinCFG("mixins.novaeng_core_ae2.json",               "appliedenergistics2");
         addModdedMixinCFG("mixins.novaeng_core_astralsorcery.json",     "astralsorcery");
         addModdedMixinCFG("mixins.novaeng_core_athenaeum.json",         "athenaeum");
         addModdedMixinCFG("mixins.novaeng_core_cofhcore.json",          "cofhcore");

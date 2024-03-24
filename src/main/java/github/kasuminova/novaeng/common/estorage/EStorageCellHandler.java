@@ -2,8 +2,8 @@ package github.kasuminova.novaeng.common.estorage;
 
 import appeng.api.storage.*;
 import appeng.api.storage.data.IAEStack;
-import appeng.me.storage.BasicCellInventory;
 import appeng.me.storage.BasicCellInventoryHandler;
+import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import net.minecraft.item.ItemStack;
 
 public class EStorageCellHandler implements ICellHandler {
@@ -18,7 +18,7 @@ public class EStorageCellHandler implements ICellHandler {
 
     @Override
     public boolean isCell(final ItemStack is) {
-        return BasicCellInventory.isCell(is);
+        return is.getItem() instanceof EStorageCell<?>;
     }
 
     @Override

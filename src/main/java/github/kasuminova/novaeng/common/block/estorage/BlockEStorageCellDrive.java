@@ -5,21 +5,24 @@ import appeng.api.storage.ICellInventoryHandler;
 import appeng.api.storage.IStorageChannel;
 import appeng.api.storage.data.IAEStack;
 import appeng.tile.inventory.AppEngCellInventory;
-import github.kasuminova.novaeng.common.core.CreativeTabHyperNet;
+import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.block.estorage.prop.*;
+import github.kasuminova.novaeng.common.core.CreativeTabNovaEng;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.IStringSerializable;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -33,28 +36,22 @@ public class BlockEStorageCellDrive extends BlockContainer {
 
     public static final BlockEStorageCellDrive INSTANCE = new BlockEStorageCellDrive();
 
-    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
-
-    public static final PropertyEnum<StorageType> STORAGE_TYPE = PropertyEnum.create("storage_type", StorageType.class);
-    public static final PropertyEnum<StorageLevel> STORAGE_LEVEL = PropertyEnum.create("storage_level", StorageLevel.class);
-    public static final PropertyEnum<StorageCapacity> STORAGE_CAPACITY = PropertyEnum.create("storage_capacity", StorageCapacity.class);
-
-    public static final PropertyEnum<Status> STATUS = PropertyEnum.create("status", Status.class);
-
     protected BlockEStorageCellDrive() {
         super(Material.IRON);
         this.setHardness(20.0F);
         this.setResistance(2000.0F);
         this.setSoundType(SoundType.METAL);
         this.setHarvestLevel("pickaxe", 2);
-        this.setCreativeTab(CreativeTabHyperNet.INSTANCE);
+        this.setCreativeTab(CreativeTabNovaEng.INSTANCE);
         this.setDefaultState(this.blockState.getBaseState()
-                .withProperty(FACING, EnumFacing.NORTH)
-                .withProperty(STORAGE_TYPE, StorageType.EMPTY)
-                .withProperty(STORAGE_LEVEL, StorageLevel.EMPTY)
-                .withProperty(STORAGE_CAPACITY, StorageCapacity.EMPTY)
-                .withProperty(STATUS, Status.IDLE)
+                .withProperty(FacingProp.HORIZONTALS, EnumFacing.NORTH)
+                .withProperty(DriveStorageType.STORAGE_TYPE, DriveStorageType.EMPTY)
+                .withProperty(DriveStorageLevel.STORAGE_LEVEL, DriveStorageLevel.EMPTY)
+                .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, DriveStorageCapacity.EMPTY)
+                .withProperty(DriveStatus.STATUS, DriveStatus.IDLE)
         );
+        this.setRegistryName(new ResourceLocation(NovaEngineeringCore.MOD_ID, "estorage_cell_drive"));
+        this.setTranslationKey(NovaEngineeringCore.MOD_ID + '.' + "estorage_cell_drive");
     }
 
     @Nullable
@@ -72,6 +69,23 @@ public class BlockEStorageCellDrive extends BlockContainer {
     @Override
     public boolean hasTileEntity() {
         return true;
+    }
+
+    @Override
+    public void breakBlock(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof EStorageCellDrive drive) {
+            AppEngCellInventory inv = drive.getDriveInv();
+            for (int i = 0; i < inv.getSlots(); i++) {
+                ItemStack stack = inv.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    spawnAsEntity(worldIn, pos, stack);
+                    inv.setStackInSlot(i, ItemStack.EMPTY);
+                }
+            }
+        }
+
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Nonnull
@@ -94,8 +108,8 @@ public class BlockEStorageCellDrive extends BlockContainer {
         }
 
         EStorageCell<?> cell = (EStorageCell<?>) stack.getItem();
-        BlockEStorageCellDrive.StorageLevel level = cell.getLevel();
-        BlockEStorageCellDrive.StorageType type = EStorageCellDrive.getCellType(cell);
+        DriveStorageLevel level = cell.getLevel();
+        DriveStorageType type = EStorageCellDrive.getCellType(cell);
         if (type == null) {
             return state;
         }
@@ -113,105 +127,50 @@ public class BlockEStorageCellDrive extends BlockContainer {
             return state;
         }
 
-        return state.withProperty(BlockEStorageCellDrive.STORAGE_LEVEL, level)
-                .withProperty(BlockEStorageCellDrive.STORAGE_TYPE, type)
-                .withProperty(BlockEStorageCellDrive.STATUS, drive.isWriting() ? Status.RUN : Status.IDLE)
-                .withProperty(BlockEStorageCellDrive.STORAGE_CAPACITY, EStorageCellDrive.getCapacity(cellInventory));
+        return state.withProperty(DriveStorageLevel.STORAGE_LEVEL, level)
+                .withProperty(DriveStorageType.STORAGE_TYPE, type)
+                .withProperty(DriveStatus.STATUS, drive.isWriting() ? DriveStatus.RUN : DriveStatus.IDLE)
+                .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, EStorageCellDrive.getCapacity(cellInventory));
     }
 
     @Nonnull
     @Override
     public IBlockState getStateFromMeta(final int meta) {
-        return getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
+        return getDefaultState().withProperty(FacingProp.HORIZONTALS, EnumFacing.byHorizontalIndex(meta));
     }
 
     @Nonnull
     public IBlockState getStateForPlacement(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
+        return this.getDefaultState().withProperty(FacingProp.HORIZONTALS, placer.getHorizontalFacing().getOpposite());
+    }
+
+    @Nonnull
+    @Override
+    @SuppressWarnings("deprecation")
+    public IBlockState withRotation(IBlockState state, Rotation rot) {
+        return state.withProperty(FacingProp.HORIZONTALS, rot.rotate(state.getValue(FacingProp.HORIZONTALS)));
     }
 
     @Nonnull
     @Override
     protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING, STORAGE_TYPE, STORAGE_LEVEL, STORAGE_CAPACITY, STATUS);
+        return new BlockStateContainer(this,
+                FacingProp.HORIZONTALS,
+                DriveStorageType.STORAGE_TYPE,
+                DriveStorageLevel.STORAGE_LEVEL,
+                DriveStorageCapacity.STORAGE_CAPACITY,
+                DriveStatus.STATUS
+        );
+    }
+
+    @Nonnull
+    public EnumBlockRenderType getRenderType(@Nonnull IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
     @Override
     public int getMetaFromState(@Nonnull final IBlockState state) {
-        return state.getValue(FACING).ordinal();
+        return state.getValue(FacingProp.HORIZONTALS).ordinal();
     }
-
-    public enum StorageType implements IStringSerializable {
-        EMPTY("empty"),
-        ITEM("item"),
-        FLUID("fluid");
-
-        private final String name;
-
-        StorageType(String name) {
-            this.name = name;
-        }
-
-        @Nonnull
-        @Override
-        public String getName() {
-            return name;
-        }
-    }
-
-    public enum StorageLevel implements IStringSerializable {
-        EMPTY("empty"),
-        A("A"),
-        B("B"),
-        C("C");
-
-        private final String name;
-
-        StorageLevel(String name) {
-            this.name = name;
-        }
-
-        @Nonnull
-        @Override
-        public String getName() {
-            return name;
-        }
-    }
-
-    public enum Status implements IStringSerializable {
-        IDLE("idle"),
-        RUN("run");
-
-        private final String name;
-
-        Status(String name) {
-            this.name = name;
-        }
-
-        @Nonnull
-        @Override
-        public String getName() {
-            return name;
-        }
-    }
-
-    public enum StorageCapacity implements IStringSerializable {
-        EMPTY("empty"),
-        TYPE_MAX("type_max"),
-        FULL("full");
-
-        private final String name;
-
-        StorageCapacity(String name) {
-            this.name = name;
-        }
-
-        @Nonnull
-        @Override
-        public String getName() {
-            return name;
-        }
-    }
-
 
 }

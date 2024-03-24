@@ -20,8 +20,10 @@ public class MixinRegistryBlocks {
             method = "registerCustomControllers",
             at = @At(
                     value = "INVOKE",
-                    target = "Ljava/util/List;add(Ljava/lang/Object;)Z"
-            )
+                    target = "Ljava/util/List;add(Ljava/lang/Object;)Z",
+                    remap = false
+            ),
+            remap = false
     )
     private static boolean filterSpecialMachine(final List<Object> instance, final Object e) {
         DynamicMachine machine = (DynamicMachine) e;

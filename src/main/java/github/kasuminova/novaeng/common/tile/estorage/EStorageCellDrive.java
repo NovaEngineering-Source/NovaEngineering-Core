@@ -14,8 +14,13 @@ import appeng.tile.inventory.AppEngCellInventory;
 import appeng.util.helpers.ItemHandlerUtil;
 import appeng.util.inv.IAEAppEngInventory;
 import appeng.util.inv.InvOperation;
+import appeng.util.inv.filter.IAEItemFilter;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageCellDrive;
+import github.kasuminova.novaeng.common.block.estorage.prop.DriveStatus;
+import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageCapacity;
+import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
+import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.estorage.ECellDriveWatcher;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
@@ -32,6 +37,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
 import java.util.IdentityHashMap;
@@ -55,20 +61,35 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
     protected boolean writing = false;
 
     public EStorageCellDrive() {
+        this.driveInv.setFilter(CellInvFilter.INSTANCE);
     }
 
     public void updateWriteState() {
         long totalWorldTime = world.getTotalWorldTime();
-        if (totalWorldTime - lastWriteTick >= 20 && writing) {
-            writing = false;
-            BlockPos pos = getPos();
-            NovaEngineeringCore.NET_CHANNEL.sendToAllAround(
-                    new PktCellDriveStatusUpdate(),
-                    new NetworkRegistry.TargetPoint(
-                            world.provider.getDimension(),
-                            pos.getX(), pos.getY(), pos.getZ(),
-                            32)
-            );
+        if (totalWorldTime - lastWriteTick >= 20) {
+            if (writing) {
+                writing = false;
+                BlockPos pos = getPos();
+                NovaEngineeringCore.NET_CHANNEL.sendToAllAround(
+                        new PktCellDriveStatusUpdate(getPos(), DriveStatus.IDLE),
+                        new NetworkRegistry.TargetPoint(
+                                world.provider.getDimension(),
+                                pos.getX(), pos.getY(), pos.getZ(),
+                                32)
+                );
+            }
+        } else {
+            if (!writing) {
+                writing = true;
+                BlockPos pos = getPos();
+                NovaEngineeringCore.NET_CHANNEL.sendToAllAround(
+                        new PktCellDriveStatusUpdate(getPos(), DriveStatus.RUN),
+                        new NetworkRegistry.TargetPoint(
+                                world.provider.getDimension(),
+                                pos.getX(), pos.getY(), pos.getZ(),
+                                32)
+                );
+            }
         }
     }
 
@@ -96,8 +117,10 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
             }
             driveInv.setHandler(0, cellInventory);
             watcher = new ECellDriveWatcher<>(cellInventory, channel, this);
-            watcher.setPriority(storageController.channel.getPriority());
-            inventoryHandlers.put(channel, cellInventory);
+            if (storageController != null) {
+                watcher.setPriority(storageController.getChannel().getPriority());
+            }
+            inventoryHandlers.put(channel, watcher);
             break;
         }
 
@@ -108,55 +131,58 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
     }
 
     protected void updateDriveBlockState(final ItemStack stack, final ICellInventoryHandler cellInventory) {
+        if (world == null) {
+            return;
+        }
         IBlockState state = world.getBlockState(getPos());
         if (!(state.getBlock() instanceof BlockEStorageCellDrive)) {
             return;
         }
 
         EStorageCell<?> cell = (EStorageCell<?>) stack.getItem();
-        BlockEStorageCellDrive.StorageLevel level = cell.getLevel();
-        BlockEStorageCellDrive.StorageType type = getCellType(cell);
+        DriveStorageLevel level = cell.getLevel();
+        DriveStorageType type = getCellType(cell);
         if (type == null) {
             return;
         }
 
         world.setBlockState(getPos(), state
-                .withProperty(BlockEStorageCellDrive.STORAGE_LEVEL, level)
-                .withProperty(BlockEStorageCellDrive.STORAGE_TYPE, type)
-                .withProperty(BlockEStorageCellDrive.STATUS, BlockEStorageCellDrive.Status.IDLE)
-                .withProperty(BlockEStorageCellDrive.STORAGE_CAPACITY, getCapacity(cellInventory))
+                .withProperty(DriveStorageLevel.STORAGE_LEVEL, level)
+                .withProperty(DriveStorageType.STORAGE_TYPE, type)
+                .withProperty(DriveStatus.STATUS, DriveStatus.IDLE)
+                .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, getCapacity(cellInventory))
         );
     }
 
-    public static BlockEStorageCellDrive.StorageType getCellType(final EStorageCell<?> cell) {
-        BlockEStorageCellDrive.StorageType type;
+    public static DriveStorageType getCellType(final EStorageCell<?> cell) {
+        DriveStorageType type;
         if (cell instanceof EStorageCellItem) {
-            type = BlockEStorageCellDrive.StorageType.ITEM;
+            type = DriveStorageType.ITEM;
         } else if (cell instanceof EStorageCellFluid) {
-            type = BlockEStorageCellDrive.StorageType.FLUID;
+            type = DriveStorageType.FLUID;
         } else {
             return null;
         }
         return type;
     }
 
-    public static BlockEStorageCellDrive.StorageCapacity getCapacity(final ICellInventoryHandler cellInvHandler) {
+    public static DriveStorageCapacity getCapacity(final ICellInventoryHandler cellInvHandler) {
         ICellInventory cellInv = cellInvHandler.getCellInv();
         if (cellInv == null) {
-            return BlockEStorageCellDrive.StorageCapacity.EMPTY;
+            return DriveStorageCapacity.EMPTY;
         }
         long totalTypes = cellInv.getTotalItemTypes();
         long storedTypes = cellInv.getStoredItemTypes();
         if (storedTypes == 0) {
-            return BlockEStorageCellDrive.StorageCapacity.EMPTY;
+            return DriveStorageCapacity.EMPTY;
         }
         if (cellInv.getFreeBytes() <= 0) {
-            return BlockEStorageCellDrive.StorageCapacity.FULL;
+            return DriveStorageCapacity.FULL;
         }
         if (storedTypes >= totalTypes) {
-            return BlockEStorageCellDrive.StorageCapacity.TYPE_MAX;
+            return DriveStorageCapacity.TYPE_MAX;
         }
-        return BlockEStorageCellDrive.StorageCapacity.EMPTY;
+        return DriveStorageCapacity.EMPTY;
     }
 
     @SuppressWarnings("unchecked")
@@ -168,17 +194,16 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
 
     @Override
     public void onChangeInventory(final IItemHandler inv, final int slot, final InvOperation mc, final ItemStack removed, final ItemStack added) {
-        if (this.isCached) {
-            this.isCached = false; // recalculate the storage cell.
-            this.updateHandler(true);
-        }
+        this.isCached = false; // recalculate the storage cell.
+        this.updateHandler(true);
+        this.markNoUpdateSync();
 
-        EStorageMEChannel channel = getController().getChannel();
-        if (channel == null) {
-            this.markNoUpdateSync();
+        EStorageController controller = getController();
+        if (controller == null) {
             return;
         }
 
+        EStorageMEChannel channel = controller.getChannel();
         AENetworkProxy proxy = channel.getProxy();
         IActionSource source = channel.getSource();
 
@@ -191,18 +216,27 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         } catch (final GridAccessException ignored) {
         }
 
-        this.markNoUpdateSync();
+    }
+
+    @Override
+    public void onAssembled() {
+        super.onAssembled();
+        if (watcher != null) {
+            watcher.setPriority(storageController.getChannel().getPriority());
+        }
     }
 
     @Override
     public void onDisassembled() {
         super.onDisassembled();
-        EStorageMEChannel channel = getController().getChannel();
-        if (channel == null) {
-            this.markNoUpdateSync();
+        EStorageController controller = getController();
+        if (controller == null) {
             return;
         }
-
+        EStorageMEChannel channel = controller.getChannel();
+        if (channel == null) {
+            return;
+        }
         AENetworkProxy proxy = channel.getProxy();
         IActionSource source = channel.getSource();
 
@@ -219,6 +253,9 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
 
     @SuppressWarnings("unchecked")
     public void postChanges(final IStorageGrid gs, final ItemStack removed, final ItemStack added, final IActionSource src) {
+        if (cellHandler == null) {
+            return;
+        }
         for (final IStorageChannel<?> chan : AEApi.instance().storage().storageChannels()) {
             final IItemList<?> myChanges = chan.createList();
 
@@ -246,7 +283,6 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
     }
 
     public void onWriting() {
-        this.writing = true;
         this.lastWriteTick = world.getTotalWorldTime();
     }
 
@@ -256,7 +292,7 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
 
     @Nullable
     @Override
-    public <T> T getCapability(final Capability<T> capability, @Nullable final EnumFacing facing) {
+    public <T> T getCapability(@Nonnull final Capability<T> capability, @Nullable final EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
             return (T) driveInv;
         }
@@ -305,5 +341,21 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         if (this.world != null) {
             this.world.markChunkDirty(this.pos, this);
         }
+    }
+
+    private static class CellInvFilter implements IAEItemFilter {
+
+        private static final CellInvFilter INSTANCE = new CellInvFilter();
+
+        @Override
+        public boolean allowExtract(IItemHandler inv, int slot, int amount) {
+            return true;
+        }
+
+        @Override
+        public boolean allowInsert(IItemHandler inv, int slot, ItemStack stack) {
+            return !stack.isEmpty() && EStorageCellHandler.getHandler(stack) != null;
+        }
+
     }
 }

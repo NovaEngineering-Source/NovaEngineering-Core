@@ -1,17 +1,15 @@
 package github.kasuminova.novaeng.common.block.estorage;
 
+import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageMEChannel;
 import hellfirepvp.modularmachinery.common.CommonProxy;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
@@ -22,8 +20,6 @@ public class BlockEStorageMEChannel extends BlockContainer {
 
     public static final BlockEStorageMEChannel INSTANCE = new BlockEStorageMEChannel();
 
-    public static final PropertyEnum<EnumFacing> FACING = PropertyEnum.create("facing", EnumFacing.class, EnumFacing.HORIZONTALS);
-
     public BlockEStorageMEChannel() {
         super(Material.IRON);
         this.setHardness(5.0F);
@@ -31,7 +27,9 @@ public class BlockEStorageMEChannel extends BlockContainer {
         this.setSoundType(SoundType.METAL);
         this.setHarvestLevel("pickaxe", 1);
         this.setCreativeTab(CommonProxy.creativeTabModularMachinery);
-        this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
+        this.setDefaultState(this.blockState.getBaseState());
+        this.setRegistryName(new ResourceLocation(NovaEngineeringCore.MOD_ID, "estorage_me_channel"));
+        this.setTranslationKey(NovaEngineeringCore.MOD_ID + '.' + "estorage_me_channel");
     }
 
     @Nullable
@@ -52,23 +50,8 @@ public class BlockEStorageMEChannel extends BlockContainer {
     }
 
     @Nonnull
-    public IBlockState getStateForPlacement(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
-    }
-
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(FACING).getHorizontalIndex();
-    }
-
-    @Nonnull
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(FACING, EnumFacing.byHorizontalIndex(meta));
-    }
-
-    @Nonnull
-    @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, FACING);
+    public EnumBlockRenderType getRenderType(@Nonnull IBlockState state) {
+        return EnumBlockRenderType.MODEL;
     }
 
 }
