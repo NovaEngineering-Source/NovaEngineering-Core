@@ -24,6 +24,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
         addModdedMixinCFG("mixins.novaeng_core_draconicevolution.json", "draconicevolution");
         addModdedMixinCFG("mixins.novaeng_core_ic2.json",               "ic2");
         addModdedMixinCFG("mixins.novaeng_core_mets.json",              "mets");
+        addModdedMixinCFG("mixins.novaeng_core_nae2.json",              "nae2");
         new Thread(() -> {
             Thread.currentThread().setName("NovaEng Core Hitokoto Initializer");
             String hitokoto = HitokotoAPI.getRandomHitokoto();
