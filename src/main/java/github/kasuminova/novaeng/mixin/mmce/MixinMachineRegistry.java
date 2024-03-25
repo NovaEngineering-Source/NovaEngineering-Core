@@ -1,11 +1,11 @@
 package github.kasuminova.novaeng.mixin.mmce;
 
+import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
-import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.block.BlockController;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
-import hellfirepvp.modularmachinery.common.registry.RegistryBlocks;
+import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import net.minecraft.util.ResourceLocation;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -13,11 +13,11 @@ import org.spongepowered.asm.mixin.injection.Redirect;
 
 import java.util.List;
 
-@Mixin(RegistryBlocks.class)
-public class MixinRegistryBlocks {
+@Mixin(MachineRegistry.class)
+public class MixinMachineRegistry {
 
     @Redirect(
-            method = "registerCustomControllers",
+            method = "getWaitForLoadMachines",
             at = @At(
                     value = "INVOKE",
                     target = "Ljava/util/List;add(Ljava/lang/Object;)Z",
@@ -28,12 +28,13 @@ public class MixinRegistryBlocks {
     private static boolean filterSpecialMachine(final List<Object> instance, final Object e) {
         DynamicMachine machine = (DynamicMachine) e;
         ResourceLocation registryName = machine.getRegistryName();
-        if (registryName.equals(new ResourceLocation(ModularMachinery.MODID, "hypernet_terminal"))) {
+        if (registryName.getPath().equals("hypernet_terminal")) {
             BlockController.MACHINE_CONTROLLERS.put(machine, BlockHyperNetTerminal.INSTANCE);
             return true;
         }
-        if (BlockEStorageController.REGISTRY.containsKey(registryName)) {
-            BlockController.MACHINE_CONTROLLERS.put(machine, BlockEStorageController.REGISTRY.get(registryName));
+        ResourceLocation novaEngResLoc = new ResourceLocation(NovaEngineeringCore.MOD_ID, registryName.getPath());
+        if (BlockEStorageController.REGISTRY.containsKey(novaEngResLoc)) {
+            BlockController.MACHINE_CONTROLLERS.put(machine, BlockEStorageController.REGISTRY.get(novaEngResLoc));
             return true;
         }
         instance.add(e);

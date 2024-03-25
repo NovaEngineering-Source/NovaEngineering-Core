@@ -27,12 +27,14 @@ import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellFluid;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellItem;
 import github.kasuminova.novaeng.common.network.PktCellDriveStatusUpdate;
+import hellfirepvp.modularmachinery.client.ClientProxy;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -66,31 +68,27 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
 
     public void updateWriteState() {
         long totalWorldTime = world.getTotalWorldTime();
-        if (totalWorldTime - lastWriteTick >= 20) {
+        boolean changed = false;
+        if (totalWorldTime - lastWriteTick >= 40) {
             if (writing) {
                 writing = false;
-                BlockPos pos = getPos();
-                NovaEngineeringCore.NET_CHANNEL.sendToAllAround(
-                        new PktCellDriveStatusUpdate(getPos(), DriveStatus.IDLE),
-                        new NetworkRegistry.TargetPoint(
-                                world.provider.getDimension(),
-                                pos.getX(), pos.getY(), pos.getZ(),
-                                32)
-                );
+                changed = true;
             }
-        } else {
-            if (!writing) {
-                writing = true;
-                BlockPos pos = getPos();
-                NovaEngineeringCore.NET_CHANNEL.sendToAllAround(
-                        new PktCellDriveStatusUpdate(getPos(), DriveStatus.RUN),
-                        new NetworkRegistry.TargetPoint(
-                                world.provider.getDimension(),
-                                pos.getX(), pos.getY(), pos.getZ(),
-                                32)
-                );
-            }
+        } else if (!writing) {
+            writing = true;
+            changed = true;
         }
+        if (!changed) {
+            return;
+        }
+        BlockPos pos = getPos();
+        NovaEngineeringCore.NET_CHANNEL.sendToAllAround(
+                new PktCellDriveStatusUpdate(getPos(), writing),
+                new NetworkRegistry.TargetPoint(
+                        world.provider.getDimension(),
+                        pos.getX(), pos.getY(), pos.getZ(),
+                        32)
+        );
     }
 
     protected void updateHandler(final boolean refreshState) {
@@ -103,6 +101,7 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         isCached = true;
         ItemStack stack = driveInv.getStackInSlot(0);
         if (stack.isEmpty()) {
+            updateDriveBlockState();
             return;
         }
         if ((cellHandler = EStorageCellHandler.getHandler(stack)) == null) {
@@ -127,15 +126,27 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         if (cellInventory == null || !refreshState) {
             return;
         }
-        updateDriveBlockState(stack, cellInventory);
+        updateDriveBlockState();
     }
 
-    protected void updateDriveBlockState(final ItemStack stack, final ICellInventoryHandler cellInventory) {
+    public void updateDriveBlockState() {
         if (world == null) {
             return;
         }
+        ItemStack stack = driveInv.getStackInSlot(0);
+        ICellInventoryHandler cellInventory = watcher == null ? null : (ICellInventoryHandler) watcher.getInternal();
         IBlockState state = world.getBlockState(getPos());
         if (!(state.getBlock() instanceof BlockEStorageCellDrive)) {
+            return;
+        }
+
+        if (stack.isEmpty()) {
+            world.setBlockState(getPos(), state
+                    .withProperty(DriveStorageLevel.STORAGE_LEVEL, DriveStorageLevel.EMPTY)
+                    .withProperty(DriveStorageType.STORAGE_TYPE, DriveStorageType.EMPTY)
+                    .withProperty(DriveStatus.STATUS, writing ? DriveStatus.RUN : DriveStatus.IDLE)
+                    .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, DriveStorageCapacity.EMPTY)
+            );
             return;
         }
 
@@ -149,7 +160,7 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         world.setBlockState(getPos(), state
                 .withProperty(DriveStorageLevel.STORAGE_LEVEL, level)
                 .withProperty(DriveStorageType.STORAGE_TYPE, type)
-                .withProperty(DriveStatus.STATUS, DriveStatus.IDLE)
+                .withProperty(DriveStatus.STATUS, writing ? DriveStatus.RUN : DriveStatus.IDLE)
                 .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, getCapacity(cellInventory))
         );
     }
@@ -167,6 +178,9 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
     }
 
     public static DriveStorageCapacity getCapacity(final ICellInventoryHandler cellInvHandler) {
+        if (cellInvHandler == null) {
+            return DriveStorageCapacity.EMPTY;
+        }
         ICellInventory cellInv = cellInvHandler.getCellInv();
         if (cellInv == null) {
             return DriveStorageCapacity.EMPTY;
@@ -290,6 +304,18 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         return writing;
     }
 
+    public void setWriting(final boolean writing) {
+        this.writing = writing;
+    }
+
+    @Override
+    public boolean hasCapability(@Nonnull final Capability<?> capability, @Nullable final EnumFacing facing) {
+        if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
+            return true;
+        }
+        return super.hasCapability(capability, facing);
+    }
+
     @Nullable
     @Override
     public <T> T getCapability(@Nonnull final Capability<T> capability, @Nullable final EnumFacing facing) {
@@ -301,17 +327,27 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
 
     @Override
     public void readCustomNBT(final NBTTagCompound tag) {
+        super.readCustomNBT(tag);
+
         final NBTTagCompound opt = tag.getCompoundTag("driveInv");
         for (int x = 0; x < driveInv.getSlots(); x++) {
             final NBTTagCompound item = opt.getCompoundTag("item" + x);
             ItemHandlerUtil.setStackInSlot(driveInv, x, stackFromNBT(item));
         }
 
-        super.readCustomNBT(tag);
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            ClientProxy.clientScheduler.addRunnable(() -> {
+                if (loaded && world.isRemote) {
+                    updateHandler(true);
+                }
+            }, 0);
+        }
     }
 
     @Override
     public void writeCustomNBT(final NBTTagCompound tag) {
+        super.writeCustomNBT(tag);
+
         final NBTTagCompound opt = new NBTTagCompound();
         for (int x = 0; x < driveInv.getSlots(); x++) {
             final NBTTagCompound itemNBT = new NBTTagCompound();
@@ -322,8 +358,6 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
             opt.setTag("item" + x, itemNBT);
         }
         tag.setTag("driveInv", opt);
-
-        super.writeCustomNBT(tag);
     }
 
     @Override

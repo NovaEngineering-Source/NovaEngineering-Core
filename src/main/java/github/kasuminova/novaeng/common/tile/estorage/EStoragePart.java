@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 
 public abstract class EStoragePart extends TileEntitySynchronized {
     protected EStorageController storageController = null;
+    protected boolean loaded = false;
 
     public void setController(final EStorageController storageController) {
         this.storageController = storageController;
@@ -25,7 +26,14 @@ public abstract class EStoragePart extends TileEntitySynchronized {
     }
 
     @Override
+    public void onLoad() {
+        super.onLoad();
+        this.loaded = true;
+    }
+
+    @Override
     public void onChunkUnload() {
+        loaded = false;
         super.onChunkUnload();
         if (storageController != null) {
             storageController.disassemble();
@@ -34,6 +42,7 @@ public abstract class EStoragePart extends TileEntitySynchronized {
 
     @Override
     public void invalidate() {
+        loaded = false;
         super.invalidate();
         if (storageController != null) {
             storageController.disassemble();

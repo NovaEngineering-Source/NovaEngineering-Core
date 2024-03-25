@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng.common.block.estorage;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.block.BlockController;
@@ -51,7 +52,12 @@ public class BlockEStorageController extends BlockController {
 
     @Override
     public boolean onBlockActivated(final World worldIn, @Nonnull final BlockPos pos, @Nonnull final IBlockState state, @Nonnull final EntityPlayer playerIn, @Nonnull final EnumHand hand, @Nonnull final EnumFacing facing, final float hitX, final float hitY, final float hitZ) {
-
+        if (!worldIn.isRemote) {
+            TileEntity te = worldIn.getTileEntity(pos);
+            if (te instanceof EStorageController) {
+                playerIn.openGui(NovaEngineeringCore.MOD_ID, CommonProxy.GuiType.ESTORAGE_CONTROLLER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+            }
+        }
         return true;
     }
 

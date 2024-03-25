@@ -1,12 +1,11 @@
 package github.kasuminova.novaeng.common.network;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.block.estorage.BlockEStorageCellDrive;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStatus;
+import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -18,21 +17,21 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class PktCellDriveStatusUpdate implements IMessage, IMessageHandler<PktCellDriveStatusUpdate, IMessage> {
 
     private BlockPos pos = null;
-    private DriveStatus status = null;
+    private boolean writing = false;
 
     public PktCellDriveStatusUpdate() {
     }
 
-    public PktCellDriveStatusUpdate(final BlockPos pos, final DriveStatus status) {
+    public PktCellDriveStatusUpdate(final BlockPos pos, final boolean writing) {
         this.pos = pos;
-        this.status = status;
+        this.writing = writing;
     }
 
     @Override
     public void fromBytes(final ByteBuf buf) {
         try {
             pos = BlockPos.fromLong(buf.readLong());
-            status = DriveStatus.values()[buf.readByte()];
+            writing = buf.readBoolean();
         } catch (Exception e) {
             NovaEngineeringCore.log.error("PktCellDriveStatusUpdate read failed.", e);
         }
@@ -41,23 +40,22 @@ public class PktCellDriveStatusUpdate implements IMessage, IMessageHandler<PktCe
     @Override
     public void toBytes(final ByteBuf buf) {
         buf.writeLong(pos.toLong());
-        buf.writeByte(status.ordinal());
+        buf.writeBoolean(writing);
     }
 
     @Override
     public IMessage onMessage(final PktCellDriveStatusUpdate message, final MessageContext ctx) {
-        if (!FMLCommonHandler.instance().getSide().isClient()) {
-            return null;
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            processPacket(message);
         }
-        processPacket(message);
         return null;
     }
 
     @SideOnly(Side.CLIENT)
     protected static void processPacket(final PktCellDriveStatusUpdate message) {
         BlockPos pos = message.pos;
-        DriveStatus status = message.status;
-        if (pos == null || status == null) {
+        boolean writing = message.writing;
+        if (pos == null) {
             return;
         }
 
@@ -65,11 +63,12 @@ public class PktCellDriveStatusUpdate implements IMessage, IMessageHandler<PktCe
         if (world == null) {
             return;
         }
-        IBlockState state = world.getBlockState(pos);
-        if (!(state.getBlock() instanceof BlockEStorageCellDrive)) {
+        TileEntity te = world.getTileEntity(pos);
+        if (!(te instanceof EStorageCellDrive drive)) {
             return;
         }
-        world.setBlockState(pos, state.withProperty(DriveStatus.STATUS, status));
+        drive.setWriting(writing);
+        drive.updateDriveBlockState();
     }
 
 }

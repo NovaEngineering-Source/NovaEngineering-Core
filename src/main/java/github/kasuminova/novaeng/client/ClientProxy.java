@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng.client;
 
 
+import github.kasuminova.novaeng.client.gui.GuiEStorageController;
 import github.kasuminova.novaeng.client.gui.GuiHyperNetTerminal;
 import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
 import github.kasuminova.novaeng.client.handler.BlockAngelRendererHandler;
@@ -15,6 +16,7 @@ import github.kasuminova.novaeng.common.registry.RegistryBlocks;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
+import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -107,6 +109,7 @@ public class ClientProxy extends CommonProxy {
         return switch (type) {
             case HYPERNET_TERMINAL -> new GuiHyperNetTerminal((TileHyperNetTerminal) present, player);
             case MODULAR_SERVER_ASSEMBLER -> new GuiModularServerAssembler((TileModularServerAssembler) present, player);
+            case ESTORAGE_CONTROLLER -> new GuiEStorageController((EStorageController) present, player);
         };
     }
 }

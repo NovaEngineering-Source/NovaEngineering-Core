@@ -3,20 +3,17 @@ package github.kasuminova.novaeng.common.block.estorage;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageMEChannel;
 import hellfirepvp.modularmachinery.common.CommonProxy;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-@SuppressWarnings("deprecation")
-public class BlockEStorageMEChannel extends BlockContainer {
+public class BlockEStorageMEChannel extends BlockEStoragePart {
 
     public static final BlockEStorageMEChannel INSTANCE = new BlockEStorageMEChannel();
 
@@ -42,16 +39,6 @@ public class BlockEStorageMEChannel extends BlockContainer {
     @Override
     public TileEntity createNewTileEntity(@Nonnull final World world, final int meta) {
         return new EStorageMEChannel();
-    }
-
-    @Override
-    public boolean hasTileEntity() {
-        return true;
-    }
-
-    @Nonnull
-    public EnumBlockRenderType getRenderType(@Nonnull IBlockState state) {
-        return EnumBlockRenderType.MODEL;
     }
 
 }

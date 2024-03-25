@@ -31,7 +31,7 @@ public class EStorageDriveEventHandler {
         }
 
         EntityPlayer player = event.getEntityPlayer();
-        if (player.isSneaking()) {
+        if (!player.isSneaking()) {
             return;
         }
 

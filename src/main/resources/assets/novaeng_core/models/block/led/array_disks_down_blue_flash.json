@@ -1,0 +1,30 @@
+{
+	"credit": "Made with Blockbench",
+	"textures": {
+		"0": "novaeng_core:blocks/led_dynamic",
+		"particle": "novaeng_core:blocks/led_dynamic"
+	},
+	"elements": [
+		{
+			"from": [3, 11, 0.475],
+			"to": [4, 12, 1.475],
+			"faces": {
+				"north": {"uv": [0, 1, 1, 2], "texture": "#0"},
+				"east": {"uv": [0, 1, 1, 2], "texture": "#0"},
+				"south": {"uv": [1, 1, 0, 2], "texture": "#0"},
+				"west": {"uv": [0, 1, 1, 2], "texture": "#0"},
+				"up": {"uv": [1, 1, 0, 2], "texture": "#0"},
+				"down": {"uv": [1, 1, 0, 2], "texture": "#0"}
+			}
+		}
+	],
+	"groups": [
+		{
+			"name": "bone",
+			"origin": [0, 0, 0],
+			"color": 0,
+			"children": []
+		},
+		0
+	]
+}

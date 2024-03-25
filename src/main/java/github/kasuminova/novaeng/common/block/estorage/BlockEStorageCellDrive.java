@@ -1,17 +1,10 @@
 package github.kasuminova.novaeng.common.block.estorage;
 
-import appeng.api.AEApi;
-import appeng.api.storage.ICellInventoryHandler;
-import appeng.api.storage.IStorageChannel;
-import appeng.api.storage.data.IAEStack;
 import appeng.tile.inventory.AppEngCellInventory;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.estorage.prop.*;
 import github.kasuminova.novaeng.common.core.CreativeTabNovaEng;
-import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
-import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -19,20 +12,17 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Collection;
 
 @SuppressWarnings("deprecation")
-public class BlockEStorageCellDrive extends BlockContainer {
+public class BlockEStorageCellDrive extends BlockEStoragePart {
 
     public static final BlockEStorageCellDrive INSTANCE = new BlockEStorageCellDrive();
 
@@ -67,11 +57,6 @@ public class BlockEStorageCellDrive extends BlockContainer {
     }
 
     @Override
-    public boolean hasTileEntity() {
-        return true;
-    }
-
-    @Override
     public void breakBlock(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         TileEntity te = worldIn.getTileEntity(pos);
         if (te instanceof EStorageCellDrive drive) {
@@ -90,53 +75,13 @@ public class BlockEStorageCellDrive extends BlockContainer {
 
     @Nonnull
     @Override
-    @SuppressWarnings("rawtypes")
-    public IBlockState getActualState(@Nonnull final IBlockState state, @Nonnull final IBlockAccess world, @Nonnull final BlockPos pos) {
-        TileEntity te = world.getTileEntity(pos);
-        if (!(te instanceof EStorageCellDrive drive)) {
-            return state;
-        }
-        AppEngCellInventory driveInv = drive.getDriveInv();
-        ItemStack stack = driveInv.getStackInSlot(0);
-        if (stack.isEmpty()) {
-            return state;
-        }
-
-        EStorageCellHandler handler = EStorageCellHandler.getHandler(stack);
-        if (handler == null) {
-            return state;
-        }
-
-        EStorageCell<?> cell = (EStorageCell<?>) stack.getItem();
-        DriveStorageLevel level = cell.getLevel();
-        DriveStorageType type = EStorageCellDrive.getCellType(cell);
-        if (type == null) {
-            return state;
-        }
-
-        final Collection<IStorageChannel<? extends IAEStack<?>>> storageChannels = AEApi.instance().storage().storageChannels();
-        ICellInventoryHandler cellInventory = null;
-        for (final IStorageChannel<? extends IAEStack<?>> channel : storageChannels) {
-            cellInventory = handler.getCellInventory(stack, drive, channel);
-            if (cellInventory != null) {
-                break;
-            }
-        }
-
-        if (cellInventory == null) {
-            return state;
-        }
-
-        return state.withProperty(DriveStorageLevel.STORAGE_LEVEL, level)
-                .withProperty(DriveStorageType.STORAGE_TYPE, type)
-                .withProperty(DriveStatus.STATUS, drive.isWriting() ? DriveStatus.RUN : DriveStatus.IDLE)
-                .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, EStorageCellDrive.getCapacity(cellInventory));
-    }
-
-    @Nonnull
-    @Override
     public IBlockState getStateFromMeta(final int meta) {
         return getDefaultState().withProperty(FacingProp.HORIZONTALS, EnumFacing.byHorizontalIndex(meta));
+    }
+
+    @Override
+    public int getMetaFromState(@Nonnull final IBlockState state) {
+        return state.getValue(FacingProp.HORIZONTALS).getHorizontalIndex();
     }
 
     @Nonnull
@@ -161,16 +106,6 @@ public class BlockEStorageCellDrive extends BlockContainer {
                 DriveStorageCapacity.STORAGE_CAPACITY,
                 DriveStatus.STATUS
         );
-    }
-
-    @Nonnull
-    public EnumBlockRenderType getRenderType(@Nonnull IBlockState state) {
-        return EnumBlockRenderType.MODEL;
-    }
-
-    @Override
-    public int getMetaFromState(@Nonnull final IBlockState state) {
-        return state.getValue(FacingProp.HORIZONTALS).ordinal();
     }
 
 }

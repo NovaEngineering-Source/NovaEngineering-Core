@@ -8,7 +8,7 @@
     "MixinIngredientItemStackRenderer"
   ],
   "mixins": [
-    "MixinRegistryBlocks",
+    "MixinMachineRegistry",
     "MixinTaskExecutor",
     "MixinTileMultiblockMachineController"
   ]

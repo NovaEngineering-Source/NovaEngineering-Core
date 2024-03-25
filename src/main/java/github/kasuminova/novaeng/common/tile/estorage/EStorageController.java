@@ -2,7 +2,6 @@ package github.kasuminova.novaeng.common.tile.estorage;
 
 import appeng.api.config.Actionable;
 import github.kasuminova.mmce.common.util.concurrent.ActionExecutor;
-import github.kasuminova.mmce.common.world.MMWorldEventListener;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
 import github.kasuminova.novaeng.common.block.estorage.prop.FacingProp;
@@ -14,7 +13,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3i;
 
 import java.util.*;
 
@@ -23,14 +21,12 @@ public class EStorageController extends TileCustomController {
     protected final List<EStoragePart> storageParts = new ArrayList<>();
     protected final List<EStorageBus> storageBuses = new ArrayList<>();
     protected final List<EStorageCellDrive> cellDrives = new ArrayList<>();
-    protected final TreeSet<EStorageEnergyCell> energyCells = new TreeSet<>();
+    protected final Queue<EStorageEnergyCell> energyCellsMin = new PriorityQueue<>(Comparator.reverseOrder());
+    protected final Queue<EStorageEnergyCell> energyCellsMax = new PriorityQueue<>();
 
     protected EStorageMEChannel channel = null;
 
     protected boolean assembled = false;
-
-    protected double energyStored = 0;
-    protected double maxEnergyStore = 0;
 
     public EStorageController(final ResourceLocation machineRegistryName) {
         this.workMode = WorkMode.SYNC;
@@ -77,7 +73,8 @@ public class EStorageController extends TileCustomController {
                 storageBuses.add(bus);
             }
             if (part instanceof EStorageEnergyCell energyCell) {
-                energyCells.add(energyCell);
+                energyCellsMax.add(energyCell);
+                energyCellsMin.add(energyCell);
             }
             if (part instanceof EStorageCellDrive drive) {
                 cellDrives.add(drive);
@@ -88,15 +85,13 @@ public class EStorageController extends TileCustomController {
         });
     }
 
+    @Override
     protected boolean canCheckStructure() {
-        if (lastStructureCheckTick == -1 || (isStructureFormed() && foundComponents.isEmpty())) {
+        if (lastStructureCheckTick == -1 || (isStructureFormed() && !assembled)) {
             return true;
         }
-        if (isStructureFormed()) {
-            BlockPos pos = getPos();
-            Vec3i min = foundPattern.getMin();
-            Vec3i max = foundPattern.getMax();
-            return MMWorldEventListener.INSTANCE.isAreaChanged(getWorld(), pos.add(min), pos.add(max));
+        if (ticksExisted % 40 == 0) {
+            return true;
         } else {
             return ticksExisted % Math.min(structureCheckDelay + this.structureCheckCounter * 5, maxStructureCheckDelay) == 0;
         }
@@ -115,15 +110,12 @@ public class EStorageController extends TileCustomController {
     }
 
     protected void clearParts() {
-        this.storageParts.forEach(part -> {
-            part.setController(null);
-        });
+        this.storageParts.forEach(part -> part.setController(null));
         this.storageParts.clear();
         this.storageBuses.clear();
         this.cellDrives.clear();
-        this.energyCells.clear();
-        this.energyStored = 0;
-        this.maxEnergyStore = 0;
+        this.energyCellsMax.clear();
+        this.energyCellsMin.clear();
         this.channel = null;
     }
 
@@ -133,10 +125,6 @@ public class EStorageController extends TileCustomController {
         }
         assembled = true;
         this.storageParts.forEach(EStoragePart::onAssembled);
-        this.energyCells.forEach(energyCell -> {
-            this.energyStored += energyCell.getEnergyStored();
-            this.maxEnergyStore += energyCell.getMaxEnergyStore();
-        });
     }
 
     @Override
@@ -153,55 +141,65 @@ public class EStorageController extends TileCustomController {
 
     public double injectPower(final double amt, final Actionable mode) {
         double toInject = amt;
+        EStorageEnergyCell cell;
+
+        if (mode == Actionable.SIMULATE) {
+            while ((cell = energyCellsMin.peek()) != null) {
+                double prev = toInject;
+                toInject -= (toInject - cell.injectPower(toInject, mode));
+                if (toInject <= 0 || prev == toInject) {
+                    break;
+                }
+            }
+            return toInject;
+        }
 
         List<EStorageEnergyCell> toReInsert = new LinkedList<>();
-        Iterator<EStorageEnergyCell> it = energyCells.descendingIterator();
-        while (it.hasNext()) {
-            EStorageEnergyCell cell = it.next();
+        while ((cell = energyCellsMin.poll()) != null) {
             double prev = toInject;
-            toInject -= toInject - cell.injectPower(toInject, mode);
-            if (prev != toInject && mode == Actionable.MODULATE) {
-                it.remove();
-                toReInsert.add(cell);
-            }
-            if (toInject <= 0) {
+            toInject -= (toInject - cell.injectPower(toInject, mode));
+            toReInsert.add(cell);
+            if (toInject <= 0 || prev < toInject) {
                 break;
             }
         }
 
         if (!toReInsert.isEmpty()) {
-            energyCells.addAll(toReInsert);
+            energyCellsMin.addAll(toReInsert);
         }
-        if (mode == Actionable.MODULATE) {
-            energyStored += amt - toInject;
-        }
+
         return toInject;
     }
 
     public double extractPower(final double amt, final Actionable mode) {
         double extracted = 0;
+        EStorageEnergyCell cell;
+
+        if (mode == Actionable.SIMULATE) {
+            while ((cell = energyCellsMax.peek()) != null) {
+                double prev = extracted;
+                extracted += cell.extractPower(amt - extracted, mode);
+                if (extracted >= amt || prev >= extracted) {
+                    break;
+                }
+            }
+            return extracted;
+        }
 
         List<EStorageEnergyCell> toReInsert = new LinkedList<>();
-        Iterator<EStorageEnergyCell> it = energyCells.descendingIterator();
-        while (it.hasNext()) {
-            EStorageEnergyCell cell = it.next();
+        while ((cell = energyCellsMax.poll()) != null) {
             double prev = extracted;
             extracted += cell.extractPower(amt - extracted, mode);
-            if (prev != extracted && mode == Actionable.MODULATE) {
-                it.remove();
-                toReInsert.add(cell);
-            }
-            if (extracted >= amt) {
+            toReInsert.add(cell);
+            if (extracted >= amt || prev == extracted) {
                 break;
             }
         }
 
         if (!toReInsert.isEmpty()) {
-            energyCells.addAll(toReInsert);
+            energyCellsMax.addAll(toReInsert);
         }
-        if (mode == Actionable.MODULATE) {
-            energyStored += extracted;
-        }
+
         return extracted;
     }
 
@@ -220,10 +218,22 @@ public class EStorageController extends TileCustomController {
     }
 
     public double getEnergyStored() {
+        double energyStored = 0;
+        for (final EStorageEnergyCell cell : energyCellsMax) {
+            double stored = cell.getEnergyStored();
+            if (stored <= 0.000001) {
+                break;
+            }
+            energyStored += stored;
+        }
         return energyStored;
     }
 
     public double getMaxEnergyStore() {
+        double maxEnergyStore = 0;
+        for (final EStorageEnergyCell energyCell : energyCellsMax) {
+            maxEnergyStore += energyCell.getMaxEnergyStore();
+        }
         return maxEnergyStore;
     }
 
@@ -233,10 +243,6 @@ public class EStorageController extends TileCustomController {
 
     public List<EStorageCellDrive> getCellDrives() {
         return cellDrives;
-    }
-
-    public Set<EStorageEnergyCell> getEnergyCells() {
-        return energyCells;
     }
 
     public EStorageMEChannel getChannel() {
