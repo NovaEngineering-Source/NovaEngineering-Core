@@ -6,8 +6,7 @@ import appeng.api.config.PowerMultiplier;
 import appeng.api.networking.GridFlags;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.energy.IAEPowerStorage;
-import appeng.api.networking.events.MENetworkCellArrayUpdate;
-import appeng.api.networking.events.MENetworkPowerStorage;
+import appeng.api.networking.events.*;
 import appeng.api.networking.security.IActionHost;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.storage.ICellContainer;
@@ -21,7 +20,9 @@ import appeng.me.GridAccessException;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import appeng.me.helpers.MachineSource;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageMEChannel;
 import hellfirepvp.modularmachinery.ModularMachinery;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 
@@ -38,6 +39,7 @@ public class EStorageMEChannel extends EStoragePart implements ICellContainer, I
     protected final IActionSource source = new MachineSource(this);
 
     protected int priority = 0;
+    private boolean wasActive = false;
 
     public EStorageMEChannel() {
         this.proxy.setIdlePowerUsage(1.0D);
@@ -65,9 +67,29 @@ public class EStorageMEChannel extends EStoragePart implements ICellContainer, I
         return priority;
     }
 
-    public ItemStack getVisualItemStack() {
-        // TODO Change this.
-        return ItemStack.EMPTY;
+    public static ItemStack getVisualItemStack() {
+        return new ItemStack(Item.getItemFromBlock(BlockEStorageMEChannel.INSTANCE), 1, 0);
+    }
+
+    @MENetworkEventSubscribe
+    public void stateChange(final MENetworkPowerStatusChange c) {
+        postCellArrayUpdateEvent();
+    }
+
+    @MENetworkEventSubscribe
+    public void stateChange(final MENetworkChannelsChanged c) {
+        postCellArrayUpdateEvent();
+    }
+
+    protected void postCellArrayUpdateEvent() {
+        final boolean currentActive = this.proxy.isActive();
+        if (this.wasActive != currentActive) {
+            this.wasActive = currentActive;
+            try {
+                this.proxy.getGrid().postEvent(new MENetworkCellArrayUpdate());
+            } catch (final GridAccessException e) {
+            }
+        }
     }
 
     @Override

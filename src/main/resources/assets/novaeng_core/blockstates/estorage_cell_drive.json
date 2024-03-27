@@ -1,7 +1,4 @@
 {
-  "defaults": {
-    "model": "novaeng_core:storage_array_drives"
-  },
   "multipart": [
     {
       "when": {

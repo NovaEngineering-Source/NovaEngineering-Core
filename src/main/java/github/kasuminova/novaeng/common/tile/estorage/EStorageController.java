@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.common.tile.estorage;
 
 import appeng.api.config.Actionable;
 import github.kasuminova.mmce.common.util.concurrent.ActionExecutor;
+import github.kasuminova.mmce.common.world.MMWorldEventListener;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
 import github.kasuminova.novaeng.common.block.estorage.prop.FacingProp;
@@ -13,6 +14,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3i;
 
 import java.util.*;
 
@@ -93,6 +95,12 @@ public class EStorageController extends TileCustomController {
         if (ticksExisted % 40 == 0) {
             return true;
         } else {
+            if (isStructureFormed()) {
+                BlockPos pos = getPos();
+                Vec3i min = foundPattern.getMin();
+                Vec3i max = foundPattern.getMax();
+                return MMWorldEventListener.INSTANCE.isAreaChanged(getWorld(), pos.add(min), pos.add(max));
+            }
             return ticksExisted % Math.min(structureCheckDelay + this.structureCheckCounter * 5, maxStructureCheckDelay) == 0;
         }
     }

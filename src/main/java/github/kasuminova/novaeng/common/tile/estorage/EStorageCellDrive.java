@@ -144,7 +144,7 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
             world.setBlockState(getPos(), state
                     .withProperty(DriveStorageLevel.STORAGE_LEVEL, DriveStorageLevel.EMPTY)
                     .withProperty(DriveStorageType.STORAGE_TYPE, DriveStorageType.EMPTY)
-                    .withProperty(DriveStatus.STATUS, writing ? DriveStatus.RUN : DriveStatus.IDLE)
+                    .withProperty(DriveStatus.STATUS, DriveStatus.IDLE)
                     .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, DriveStorageCapacity.EMPTY)
             );
             return;

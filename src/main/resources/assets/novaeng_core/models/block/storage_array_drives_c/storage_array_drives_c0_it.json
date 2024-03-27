@@ -1,7 +1,8 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"6": "novaeng_core:blocks/storage_array_drives_c0_off_item"
+		"6": "novaeng_core:blocks/storage_array_drives_c0_off_item",
+		"particle": "novaeng_core:blocks/led_dynamic"
 	},
 	"elements": [
 		{
@@ -15,28 +16,6 @@
 				"up": {"uv": [14, 2, 8, 3], "texture": "#6"},
 				"down": {"uv": [14, 13, 8, 14], "texture": "#6"}
 			}
-		},
-		{
-			"from": [3, 11, 0.475],
-			"to": [4, 13, 1.475],
-			"faces": {
-				"north": {"uv": [2, 0, 3, 2], "texture": "#missing"},
-				"east": {"uv": [2, 0, 3, 2], "texture": "#missing"},
-				"south": {"uv": [3, 0, 2, 2], "texture": "#missing"},
-				"west": {"uv": [2, 0, 3, 2], "texture": "#missing"},
-				"up": {"uv": [3, 0, 2, 1], "texture": "#missing"},
-				"down": {"uv": [3, 1, 2, 2], "texture": "#missing"}
-			}
 		}
-	],
-	"groups": [
-		{
-			"name": "bone",
-			"origin": [-6.28571, 0.19048, -83.7381],
-			"color": 0,
-			"children": []
-		},
-		0,
-		1
 	]
 }

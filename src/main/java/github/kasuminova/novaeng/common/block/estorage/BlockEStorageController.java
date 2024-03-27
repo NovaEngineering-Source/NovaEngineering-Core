@@ -21,6 +21,7 @@ import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@SuppressWarnings("deprecation")
 public class BlockEStorageController extends BlockController {
     public static final Map<ResourceLocation, BlockEStorageController> REGISTRY = new LinkedHashMap<>();
     public static final BlockEStorageController L4;
@@ -48,6 +49,11 @@ public class BlockEStorageController extends BlockController {
         machineRegistryName = new ResourceLocation(ModularMachinery.MODID, registryName.getPath());
         setRegistryName(registryName);
         setTranslationKey(NovaEngineeringCore.MOD_ID + '.' + registryName.getPath());
+    }
+
+    @Override
+    public boolean isFullBlock(@Nonnull final IBlockState state) {
+        return false;
     }
 
     @Override
