@@ -100,6 +100,7 @@ tasks.jar.configure {
         val attributes = manifest.attributes
         attributes["FMLCorePlugin"] = "github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader"
         attributes["FMLCorePluginContainsFMLMod"] = true
+        attributes["FMLAT"] = "novaeng_core_at.cfg"
     }
 }
 
@@ -117,12 +118,12 @@ listOf(configurations.runtimeClasspath, configurations.testRuntimeClasspath).for
     }
 }
 
-//tasks.deobfuscateMergedJarToSrg.configure {
-//    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
-//}
-//tasks.srgifyBinpatchedJar.configure {
-//    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
-//}
+tasks.deobfuscateMergedJarToSrg.configure {
+    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
+}
+tasks.srgifyBinpatchedJar.configure {
+    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
+}
 
 // Dependencies
 repositories {
@@ -198,6 +199,8 @@ dependencies {
     annotationProcessor (mixin) {
         isTransitive = false
     }
+    compileOnlyApi("org.jetbrains:annotations:24.1.0")
+    annotationProcessor("org.jetbrains:annotations:24.1.0")
 
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
@@ -219,9 +222,9 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:thermal-foundation-222880:2926428"))
     compileOnly(rfg.deobf("curse.maven:thermal-innovation-291737:2920441"))
     compileOnly(rfg.deobf("curse.maven:thermal-expansion-69163:2926431"))
-    compileOnly(rfg.deobf("curse.maven:botania-225643:3330934"))
-    compileOnly(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
-    compileOnly(rfg.deobf("curse.maven:baubles-227083:2518667"))
+    implementation(rfg.deobf("curse.maven:botania-225643:3330934"))
+    implementation(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
+    implementation(rfg.deobf("curse.maven:baubles-227083:2518667"))
     compileOnly(rfg.deobf("curse.maven:matter-overdrive-community-edition-557428:4592069"))
     implementation(rfg.deobf("curse.maven:zenutil-401178:4394263"))
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
@@ -234,6 +237,8 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:brandonscore-231382:3051539"))
     compileOnly(rfg.deobf("curse.maven:draconicevolution-223565:3051542"))
     compileOnly(rfg.deobf("curse.maven:extrabotany-299086:3112313"))
+    implementation(rfg.deobf("curse.maven:chisel-235279:2915375")) // Chisel 1.0.2.45
+    implementation(rfg.deobf("curse.maven:ctm-267602:2915363")) // CTM 1.0.2.31
 }
 
 // Publishing to a Maven repository

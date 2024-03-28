@@ -3,6 +3,8 @@ package github.kasuminova.novaeng;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.command.CommandSPacketProfiler;
 import github.kasuminova.novaeng.common.network.*;
+import gregtech.client.utils.BloomEffectUtil;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -38,6 +40,12 @@ public class NovaEngineeringCore {
     @SidedProxy(clientSide = CLIENT_PROXY, serverSide = COMMON_PROXY)
     public static CommonProxy proxy = null;
     public static Logger log = LogManager.getLogger(MOD_ID);
+
+    public NovaEngineeringCore() {
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            BloomEffectUtil.init();
+        }
+    }
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {

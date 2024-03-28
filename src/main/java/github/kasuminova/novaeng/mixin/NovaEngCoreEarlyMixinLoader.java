@@ -91,7 +91,8 @@ public class NovaEngCoreEarlyMixinLoader implements IFMLLoadingPlugin, IEarlyMix
     @Override
     public List<String> getMixinConfigs() {
         return Arrays.asList(
-                "mixins.novaeng_core_vanilla.json"
+                "mixins.novaeng_core_vanilla.json",
+                "mixins.novaeng_core_gregtech_bloom.json"
         );
     }
 
@@ -99,7 +100,9 @@ public class NovaEngCoreEarlyMixinLoader implements IFMLLoadingPlugin, IEarlyMix
 
     @Override
     public String[] getASMTransformerClass() {
-        return new String[0];
+        return new String[] {
+                "gregtech.asm.GregTechTransformer"
+        };
     }
 
     @Override
