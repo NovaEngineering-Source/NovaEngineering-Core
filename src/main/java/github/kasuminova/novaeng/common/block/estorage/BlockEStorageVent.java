@@ -40,7 +40,9 @@ public class BlockEStorageVent extends BlockEStorage {
 
     @Nonnull
     public IBlockState getStateForPlacement(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
-        return this.getDefaultState().withProperty(FacingProp.HORIZONTALS, placer.getHorizontalFacing().getOpposite());
+        // 鉴于某人把模型做反了，所以这里不反向。
+        EnumFacing placerFacing = placer.getHorizontalFacing();
+        return this.getDefaultState().withProperty(FacingProp.HORIZONTALS, placerFacing);
     }
 
     @Nonnull

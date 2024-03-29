@@ -15,9 +15,9 @@ import javax.annotation.Nonnull;
 
 public class EStorageCellFluid extends EStorageCell<IAEFluidStack> {
 
-    public static final EStorageCellFluid LEVEL_A = new EStorageCellFluid(DriveStorageLevel.A, 16, 8);
-    public static final EStorageCellFluid LEVEL_B = new EStorageCellFluid(DriveStorageLevel.B, 64, 64);
-    public static final EStorageCellFluid LEVEL_C = new EStorageCellFluid(DriveStorageLevel.C, 256, 512);
+    public static final EStorageCellFluid LEVEL_A = new EStorageCellFluid(DriveStorageLevel.A, 16, 4);
+    public static final EStorageCellFluid LEVEL_B = new EStorageCellFluid(DriveStorageLevel.B, 64, 16);
+    public static final EStorageCellFluid LEVEL_C = new EStorageCellFluid(DriveStorageLevel.C, 256, 64);
 
     public EStorageCellFluid(final DriveStorageLevel level, final int millionBytes, final int byteMultiplier) {
         super(level, millionBytes, byteMultiplier);

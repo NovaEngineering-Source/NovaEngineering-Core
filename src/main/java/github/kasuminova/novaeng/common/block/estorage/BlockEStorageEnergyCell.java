@@ -10,8 +10,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -57,6 +61,34 @@ public class BlockEStorageEnergyCell extends BlockEStoragePart {
         return new EStorageEnergyCell(maxEnergyStore);
     }
 
+    @Override
+    public int getLightValue(@Nonnull final IBlockState state) {
+        return state.getValue(EnergyCellStatus.STATUS).ordinal() * 2;
+    }
+
+    @Override
+    public void getDrops(@Nonnull final NonNullList<ItemStack> drops,
+                         @Nonnull final IBlockAccess world,
+                         @Nonnull final BlockPos pos,
+                         @Nonnull final IBlockState state,
+                         final int fortune)
+    {
+        ItemStack dropped = new ItemStack(Item.getItemFromBlock(this));
+        if (dropped.isEmpty()) {
+            return;
+        }
+        if (!(world.getTileEntity(pos) instanceof final EStorageEnergyCell cell)) {
+            super.getDrops(drops, world, pos, state, fortune);
+            return;
+        }
+
+        NBTTagCompound tag = new NBTTagCompound();
+        cell.writeCustomNBT(tag);
+        cell.setEnergyStored(0D);
+        dropped.setTagCompound(tag);
+        drops.add(dropped);
+    }
+
     @Nonnull
     public IBlockState getStateForPlacement(@Nonnull World worldIn, @Nonnull BlockPos pos, @Nonnull EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
         return this.getDefaultState().withProperty(FacingProp.HORIZONTALS, placer.getHorizontalFacing().getOpposite());
@@ -73,8 +105,27 @@ public class BlockEStorageEnergyCell extends BlockEStoragePart {
 
     @Nonnull
     @Override
-    public IBlockState getActualState(@Nonnull final IBlockState state, @Nonnull final IBlockAccess worldIn, @Nonnull final BlockPos pos) {
-        return super.getActualState(state, worldIn, pos);
+    public IBlockState getActualState(@Nonnull final IBlockState state, @Nonnull final IBlockAccess world, @Nonnull final BlockPos pos) {
+        if (world.getTileEntity(pos) instanceof EStorageEnergyCell cell) {
+            return state.withProperty(EnergyCellStatus.STATUS, EStorageEnergyCell.getStatusFromFillFactor(cell.getFillFactor()));
+        }
+        return super.getActualState(state, world, pos);
+    }
+
+    @Override
+    public void onBlockPlacedBy(@Nonnull final World world,
+                                @Nonnull final BlockPos pos,
+                                @Nonnull final IBlockState state,
+                                @Nonnull final EntityLivingBase placer,
+                                @Nonnull final ItemStack stack)
+    {
+        super.onBlockPlacedBy(world, pos, state, placer, stack);
+        NBTTagCompound tag = stack.getTagCompound();
+        if (tag != null && tag.hasKey("energyStored") && tag.hasKey("maxEnergyStore")) {
+            if (world.getTileEntity(pos) instanceof final EStorageEnergyCell cell) {
+                cell.readCustomNBT(tag);
+            }
+        }
     }
 
     @Nonnull

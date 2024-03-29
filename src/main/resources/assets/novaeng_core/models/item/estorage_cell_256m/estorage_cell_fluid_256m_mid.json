@@ -1,0 +1,7 @@
+{
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "novaeng_core:items/estorage_cell_disks_c2_fluid_256m",
+        "layer1": "novaeng_core:items/bloom/estorage_cell_disks_c2_fluid_256m"
+    }
+}

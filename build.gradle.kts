@@ -100,7 +100,7 @@ tasks.jar.configure {
         val attributes = manifest.attributes
         attributes["FMLCorePlugin"] = "github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader"
         attributes["FMLCorePluginContainsFMLMod"] = true
-        attributes["FMLAT"] = "novaeng_core_at.cfg"
+//        attributes["FMLAT"] = "novaeng_core_at.cfg"
     }
 }
 
@@ -118,12 +118,12 @@ listOf(configurations.runtimeClasspath, configurations.testRuntimeClasspath).for
     }
 }
 
-tasks.deobfuscateMergedJarToSrg.configure {
-    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
-}
-tasks.srgifyBinpatchedJar.configure {
-    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
-}
+//tasks.deobfuscateMergedJarToSrg.configure {
+//    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
+//}
+//tasks.srgifyBinpatchedJar.configure {
+//    accessTransformerFiles.from("src/main/resources/META-INF/novaeng_core_at.cfg")
+//}
 
 // Dependencies
 repositories {
@@ -205,6 +205,7 @@ dependencies {
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
     implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
+    implementation(rfg.deobf("curse.maven:component-model-hider-940949:4885858"))
 //    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4991928"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4810661"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
@@ -237,8 +238,6 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:brandonscore-231382:3051539"))
     compileOnly(rfg.deobf("curse.maven:draconicevolution-223565:3051542"))
     compileOnly(rfg.deobf("curse.maven:extrabotany-299086:3112313"))
-    implementation(rfg.deobf("curse.maven:chisel-235279:2915375")) // Chisel 1.0.2.45
-    implementation(rfg.deobf("curse.maven:ctm-267602:2915363")) // CTM 1.0.2.31
 }
 
 // Publishing to a Maven repository

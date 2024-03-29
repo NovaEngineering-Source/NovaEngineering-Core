@@ -6,6 +6,7 @@ import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
 import github.kasuminova.novaeng.common.block.BlockModularServerAssembler;
 import github.kasuminova.novaeng.common.block.estorage.*;
 import github.kasuminova.novaeng.common.item.ItemBlockAngel;
+import github.kasuminova.novaeng.common.item.ItemBlockME;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
@@ -62,10 +63,10 @@ public class RegistryBlocks {
         prepareItemBlockRegister(registerBlock(BlockEStorageEnergyCell.L6));
         prepareItemBlockRegister(registerBlock(BlockEStorageEnergyCell.L9));
         prepareItemBlockRegister(registerBlock(BlockEStorageCellDrive.INSTANCE));
-        prepareItemBlockRegister(registerBlock(BlockEStorageMEChannel.INSTANCE));
-        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L4));
-        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L6));
-        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L9));
+        prepareItemBlockRegister(new ItemBlockME(registerBlock(BlockEStorageMEChannel.INSTANCE)));
+//        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L4));
+//        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L6));
+//        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L9));
         prepareItemBlockRegister(registerBlock(BlockEStorageVent.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockEStorageCasing.INSTANCE));
     }

@@ -16,10 +16,7 @@ import appeng.util.inv.IAEAppEngInventory;
 import appeng.util.inv.InvOperation;
 import appeng.util.inv.filter.IAEItemFilter;
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.block.estorage.BlockEStorageCellDrive;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStatus;
 import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageCapacity;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
 import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.estorage.ECellDriveWatcher;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
@@ -27,8 +24,6 @@ import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellFluid;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellItem;
 import github.kasuminova.novaeng.common.network.PktCellDriveStatusUpdate;
-import hellfirepvp.modularmachinery.client.ClientProxy;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -77,6 +72,9 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         } else if (!writing) {
             writing = true;
             changed = true;
+        }
+        if (cellHandler == null) {
+            return;
         }
         // Static update or changed update.
         if (world.getTotalWorldTime() % 200 == 0) {
@@ -142,36 +140,37 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         if (world == null) {
             return;
         }
-        ItemStack stack = driveInv.getStackInSlot(0);
-        ICellInventoryHandler cellInventory = watcher == null ? null : (ICellInventoryHandler) watcher.getInternal();
-        IBlockState state = world.getBlockState(getPos());
-        if (!(state.getBlock() instanceof BlockEStorageCellDrive)) {
-            return;
-        }
-
-        if (stack.isEmpty()) {
-            world.setBlockState(getPos(), state
-                    .withProperty(DriveStorageLevel.STORAGE_LEVEL, DriveStorageLevel.EMPTY)
-                    .withProperty(DriveStorageType.STORAGE_TYPE, DriveStorageType.EMPTY)
-                    .withProperty(DriveStatus.STATUS, DriveStatus.IDLE)
-                    .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, DriveStorageCapacity.EMPTY)
-            );
-            return;
-        }
-
-        EStorageCell<?> cell = (EStorageCell<?>) stack.getItem();
-        DriveStorageLevel level = cell.getLevel();
-        DriveStorageType type = getCellType(cell);
-        if (type == null) {
-            return;
-        }
-
-        world.setBlockState(getPos(), state
-                .withProperty(DriveStorageLevel.STORAGE_LEVEL, level)
-                .withProperty(DriveStorageType.STORAGE_TYPE, type)
-                .withProperty(DriveStatus.STATUS, writing ? DriveStatus.RUN : DriveStatus.IDLE)
-                .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, getCapacity(cellInventory))
-        );
+        markForUpdate();
+//        ItemStack stack = driveInv.getStackInSlot(0);
+//        ICellInventoryHandler cellInventory = watcher == null ? null : (ICellInventoryHandler) watcher.getInternal();
+//        IBlockState state = world.getBlockState(getPos());
+//        if (!(state.getBlock() instanceof BlockEStorageCellDrive)) {
+//            return;
+//        }
+//
+//        if (stack.isEmpty()) {
+//            world.setBlockState(getPos(), state
+//                    .withProperty(DriveStorageLevel.STORAGE_LEVEL, DriveStorageLevel.EMPTY)
+//                    .withProperty(DriveStorageType.STORAGE_TYPE, DriveStorageType.EMPTY)
+//                    .withProperty(DriveStatus.STATUS, DriveStatus.IDLE)
+//                    .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, DriveStorageCapacity.EMPTY)
+//            );
+//            return;
+//        }
+//
+//        EStorageCell<?> cell = (EStorageCell<?>) stack.getItem();
+//        DriveStorageLevel level = cell.getLevel();
+//        DriveStorageType type = getCellType(cell);
+//        if (type == null) {
+//            return;
+//        }
+//
+//        world.setBlockState(getPos(), state
+//                .withProperty(DriveStorageLevel.STORAGE_LEVEL, level)
+//                .withProperty(DriveStorageType.STORAGE_TYPE, type)
+//                .withProperty(DriveStatus.STATUS, writing ? DriveStatus.RUN : DriveStatus.IDLE)
+//                .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, getCapacity(cellInventory))
+//        );
     }
 
     public static DriveStorageType getCellType(final EStorageCell<?> cell) {
@@ -219,7 +218,7 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
     public void onChangeInventory(final IItemHandler inv, final int slot, final InvOperation mc, final ItemStack removed, final ItemStack added) {
         this.isCached = false; // recalculate the storage cell.
         this.updateHandler(true);
-        this.markNoUpdateSync();
+        this.markForUpdateSync();
 
         EStorageController controller = getController();
         if (controller == null) {
@@ -305,6 +304,10 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         return driveInv;
     }
 
+    public ECellDriveWatcher<IAEItemStack> getWatcher() {
+        return watcher;
+    }
+
     public void onWriting() {
         this.lastWriteTick = world.getTotalWorldTime();
     }
@@ -345,11 +348,7 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         }
 
         if (FMLCommonHandler.instance().getSide().isClient()) {
-            ClientProxy.clientScheduler.addRunnable(() -> {
-                if (loaded && world.isRemote) {
-                    updateHandler(true);
-                }
-            }, 0);
+            notifyUpdate();
         }
     }
 

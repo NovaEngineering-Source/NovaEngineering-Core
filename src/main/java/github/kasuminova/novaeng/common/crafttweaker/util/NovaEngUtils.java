@@ -56,6 +56,25 @@ public class NovaEngUtils {
     }
 
     @ZenMethod
+    public static String formatNumber(long value, int decimalFraction) {
+        if (value < 1_000L) {
+            return String.valueOf(value);
+        } else if (value < 1_000_000L) {
+            return formatFloat((float) value / 1_000L, decimalFraction) + "K";
+        } else if (value < 1_000_000_000L) {
+            return formatDouble((double) value / 1_000_000L, decimalFraction) + "M";
+        } else if (value < 1_000_000_000_000L) {
+            return formatDouble((double) value / 1_000_000_000L, decimalFraction) + "G";
+        } else if (value < 1_000_000_000_000_000L) {
+            return formatDouble((double) value / 1_000_000_000_000L, decimalFraction) + "T";
+        } else if (value < 1_000_000_000_000_000_000L) {
+            return formatDouble((double) value / 1_000_000_000_000_000L, decimalFraction) + "P";
+        } else {
+            return formatDouble((double) value / 1_000_000_000_000_000_000L, decimalFraction) + "E";
+        }
+    }
+
+    @ZenMethod
     public static String formatPercent(double num1, double num2) {
         return formatDouble((num1 / num2) * 100D, 2) + "%";
     }

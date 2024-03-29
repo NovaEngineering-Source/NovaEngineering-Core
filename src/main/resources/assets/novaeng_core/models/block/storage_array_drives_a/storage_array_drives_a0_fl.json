@@ -1,7 +1,10 @@
 {
 	"credit": "Made with Blockbench",
 	"textures": {
-		"4": "novaeng_core:blocks/storage_array_drives_a0_off_fluid"
+		"1": "novaeng_core:blocks/0",
+		"2": "novaeng_core:blocks/bloom/storage_array_drives_a0_off_fluid",
+		"4": "novaeng_core:blocks/storage_array_drives_a0_off_fluid",
+		"particle": "novaeng_core:blocks/0"
 	},
 	"elements": [
 		{
@@ -14,6 +17,19 @@
 				"west": {"uv": [13, 2, 14, 14], "texture": "#4"},
 				"up": {"uv": [14, 2, 8, 3], "texture": "#4"},
 				"down": {"uv": [14, 13, 8, 14], "texture": "#4"}
+			}
+		},
+		{
+			"name": "bloom",
+			"from": [2, 2, 0.5],
+			"to": [8, 14, 11],
+			"faces": {
+				"north": {"uv": [8, 2, 14, 14], "texture": "#2"},
+				"east": {"uv": [8, 2, 9, 14], "texture": "#1"},
+				"south": {"uv": [8, 2, 14, 14], "texture": "#1"},
+				"west": {"uv": [13, 2, 14, 14], "texture": "#1"},
+				"up": {"uv": [14, 2, 8, 3], "texture": "#1"},
+				"down": {"uv": [14, 13, 8, 14], "texture": "#1"}
 			}
 		}
 	]

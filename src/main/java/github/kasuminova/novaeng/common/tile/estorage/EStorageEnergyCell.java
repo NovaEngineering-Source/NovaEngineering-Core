@@ -1,18 +1,40 @@
 package github.kasuminova.novaeng.common.tile.estorage;
 
 import appeng.api.config.Actionable;
+import github.kasuminova.novaeng.common.block.estorage.prop.EnergyCellStatus;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public class EStorageEnergyCell extends EStoragePart implements Comparable<EStorageEnergyCell> {
 
     protected double energyStored = 0D;
     protected double maxEnergyStore = 0D;
+    
+    protected boolean recalculateCap = false;
+
+    protected EnergyCellStatus currentStatus = EnergyCellStatus.EMPTY;
 
     public EStorageEnergyCell() {
     }
 
     public EStorageEnergyCell(final double maxEnergyStore) {
         this.maxEnergyStore = maxEnergyStore;
+    }
+
+    public void recalculateCapacity() {
+        recalculateCap = false;
+
+        double fillFactor = getFillFactor();
+        EnergyCellStatus newStatus = getStatusFromFillFactor(fillFactor);
+        if (newStatus == currentStatus) {
+            return;
+        }
+        currentStatus = newStatus;
+
+        if (world == null) {
+            return;
+        }
+        markForUpdateSync();
     }
 
     public double injectPower(final double amt, final Actionable mode) {
@@ -30,10 +52,13 @@ public class EStorageEnergyCell extends EStoragePart implements Comparable<EStor
         if (energyStored >= maxEnergyStore) {
             return amt;
         }
+
         final double maxCanInsert = maxEnergyStore - energyStored;
         final double toInsert = Math.min(amt, maxCanInsert);
+
         energyStored += toInsert;
-        return maxCanInsert - toInsert;
+        recalculateCap = true;
+        return amt - toInsert;
     }
 
     public double extractPower(final double amt, final Actionable mode) {
@@ -44,9 +69,12 @@ public class EStorageEnergyCell extends EStoragePart implements Comparable<EStor
         if (energyStored <= 0) {
             return 0;
         }
+
         final double maxCanExtract = energyStored;
         final double toExtract = Math.min(amt, maxCanExtract);
+
         energyStored -= toExtract;
+        recalculateCap = true;
         return toExtract;
     }
 
@@ -54,8 +82,20 @@ public class EStorageEnergyCell extends EStoragePart implements Comparable<EStor
         return energyStored;
     }
 
+    public void setEnergyStored(final double energyStored) {
+        this.energyStored = energyStored;
+    }
+
     public double getMaxEnergyStore() {
         return maxEnergyStore;
+    }
+    
+    public double getFillFactor() {
+        return maxEnergyStore == 0 ? 0 : energyStored / maxEnergyStore;
+    }
+
+    public boolean shouldRecalculateCap() {
+        return recalculateCap;
     }
 
     @Override
@@ -63,6 +103,11 @@ public class EStorageEnergyCell extends EStoragePart implements Comparable<EStor
         super.readCustomNBT(tag);
         energyStored = tag.getDouble("energyStored");
         maxEnergyStore = tag.getDouble("maxEnergyStore");
+        currentStatus = getStatusFromFillFactor(getFillFactor());
+
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            notifyUpdate();
+        }
     }
 
     @Override
@@ -76,4 +121,21 @@ public class EStorageEnergyCell extends EStoragePart implements Comparable<EStor
     public int compareTo(final EStorageEnergyCell o) {
         return Double.compare(o.energyStored, energyStored);
     }
+
+    public static EnergyCellStatus getStatusFromFillFactor(final double fillFactor) {
+        EnergyCellStatus status;
+        if (fillFactor >= 0.9D) {
+            status = EnergyCellStatus.FULL;
+        } else if (fillFactor >= 0.7D) {
+            status = EnergyCellStatus.HIGH;
+        } else if (fillFactor >= 0.5D) {
+            status = EnergyCellStatus.MID;
+        } else if (fillFactor >= 0.05D) {
+            status = EnergyCellStatus.LOW;
+        } else {
+            status = EnergyCellStatus.EMPTY;
+        }
+        return status;
+    }
+
 }

@@ -3,22 +3,44 @@ package github.kasuminova.novaeng.common.tile.estorage;
 import appeng.api.config.Actionable;
 import github.kasuminova.mmce.common.util.concurrent.ActionExecutor;
 import github.kasuminova.mmce.common.world.MMWorldEventListener;
+import github.kasuminova.mmce.common.world.MachineComponentManager;
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.client.util.BlockModelHider;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
 import github.kasuminova.novaeng.common.block.estorage.prop.FacingProp;
 import github.kasuminova.novaeng.common.tile.TileCustomController;
 import github.kasuminova.novaeng.common.tile.estorage.bus.EStorageBus;
+import hellfirepvp.modularmachinery.client.ClientProxy;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.*;
 
 public class EStorageController extends TileCustomController {
+
+    public static final List<BlockPos> HIDE_POS_LIST = Arrays.asList(
+            new BlockPos(0, 1,  0),
+            new BlockPos(0, -1, 0),
+
+            new BlockPos(1, 1,  0),
+            new BlockPos(1, 0,  0),
+            new BlockPos(1, -1, 0),
+
+            new BlockPos(0, 1,  1),
+            new BlockPos(0, 0,  1),
+            new BlockPos(0, -1, 1),
+
+            new BlockPos(1, 1,  1),
+            new BlockPos(1, 0,  1),
+            new BlockPos(1, -1, 1)
+    );
 
     protected final List<EStoragePart> storageParts = new ArrayList<>();
     protected final List<EStorageBus> storageBuses = new ArrayList<>();
@@ -51,8 +73,14 @@ public class EStorageController extends TileCustomController {
             return;
         }
         assemble();
+
         if (world.getTotalWorldTime() % 5 == 0) {
             this.cellDrives.forEach(EStorageCellDrive::updateWriteState);
+            this.energyCellsMax.forEach(cell -> {
+                if (cell.shouldRecalculateCap()) {
+                    cell.recalculateCapacity();
+                }
+            });
         }
     }
 
@@ -137,14 +165,48 @@ public class EStorageController extends TileCustomController {
 
     @Override
     public void invalidate() {
-        super.invalidate();
+        tileEntityInvalid = true;
+        loaded = false;
+        foundComponents.forEach((te, component) -> MachineComponentManager.INSTANCE.removeOwner(te, this));
+        if (getWorld().isRemote) {
+            BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
+        }
         disassemble();
+    }
+
+    @Override
+    public void onLoad() {
+        if (!FMLCommonHandler.instance().getSide().isClient()) {
+            return;
+        }
+        ClientProxy.clientScheduler.addRunnable(() -> {
+            BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
+            notifyStructureFormedState(isStructureFormed());
+        }, 0);
+        loaded = true;
     }
 
     @Override
     public void onChunkUnload() {
         super.onChunkUnload();
         disassemble();
+    }
+
+    @Override
+    public void readCustomNBT(final NBTTagCompound compound) {
+        boolean prevLoaded = loaded;
+        loaded = false;
+        
+        super.readCustomNBT(compound);
+
+        loaded = prevLoaded;
+        
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            ClientProxy.clientScheduler.addRunnable(() -> {
+                BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
+                notifyStructureFormedState(isStructureFormed());
+            }, 0);
+        }
     }
 
     public double injectPower(final double amt, final Actionable mode) {
@@ -243,6 +305,10 @@ public class EStorageController extends TileCustomController {
             maxEnergyStore += energyCell.getMaxEnergyStore();
         }
         return maxEnergyStore;
+    }
+
+    public double getEnergyConsumePerTick() {
+        return 0D;
     }
 
     public List<EStorageBus> getStorageBuses() {

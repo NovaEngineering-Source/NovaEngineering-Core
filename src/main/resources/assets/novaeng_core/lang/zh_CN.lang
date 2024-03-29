@@ -64,8 +64,33 @@ top.hypernet.processor.circuit_durability=§9电路板耐久剩余：
 top.hypernet.processor.heat=§9内部热量：
 
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
+tile.novaeng_core.modular_server_assembler.name=模块服务器组装台（未实装）
+tile.novaeng_core.angel_block.name=天使方块+
+tile.novaeng_core.angel_block.tip.0=天使方块，但是更加智能！
+tile.novaeng_core.angel_block.tip.1=允许你在没有任何方块的情况下虚空放置方块。
+tile.novaeng_core.angel_block.tip.2=手持此物品时可在世界预览即将放置的位置。
+tile.novaeng_core.angel_block.tip.3=按住 Shift 时，则固定在脚下放置此方块。
 
-novaeng.hypernet.computation_point_required.tip=§9需要算力 (受并行影响)：§b%s
+novaeng.hypernet.computation_point_required.tip=§9计算：§b%s
+novaeng.hypernet.computation_point_required.tip.parallelized=§9计算 (受并行影响)：§b%s
+
+novaeng.hypernet.calculable.tip.base_ratio=§b基础效率系数：§a%s
+novaeng.hypernet.calculable.tip.energy_consume_ratio=§b设计最大能耗：§c%s RF/t
+novaeng.hypernet.calculable.tip.hardware_bandwidth=§b硬件带宽占用：§a%s
+novaeng.hypernet.calculable.supported=此模块可提供计算功能。
+
+novaeng.hypernet.calculate.tip.efficiency=%s：%s（效率：%s%%）
+
+novaeng.hypernet.calculate.type_name.intricate=§b复杂运算§f
+novaeng.hypernet.calculate.type_name.logic=§9密集运算§f
+novaeng.hypernet.calculate.type_name.neuron=§c神经网络§f
+novaeng.hypernet.calculate.type_name.qbit=§e量子位§f
+
+novaeng.hypernet.calculate.type.intricate=§a%s §b次复杂运算/t§f
+novaeng.hypernet.calculate.type.logic=§a%s §9次密集运算/t§f
+novaeng.hypernet.calculate.type.neuron=§a%s §c神经网络规模§f
+novaeng.hypernet.calculate.type.qbit=§a%s §e量子位§f
+
 novaeng.hypernet.research_required.tip=§6需要研究认知：§f%s
 
 gui.hypernet.controller.title=§9///////// HyperNet 代理网络 /////////
@@ -117,6 +142,8 @@ novaeng.hypernet.tech_level.14=§414§4.
 
 novaeng.adapter.mc.furnace.exp=完成时，添加 §a%s §f点经验。
 
+gui.toast.research.complete=HyperNet 研究已完成！
+
 gui.terminal_controller.title.nxc=nxc 的虚空终端
 gui.terminal_controller.search=§7§o搜索研究...
 gui.terminal_controller.status=§b状态：
@@ -160,3 +187,69 @@ gui.terminal_controller.screen.info.start.error.tech_level=§c未找到研究站
 gui.terminal_controller.screen.info.start.error.computation=§c算力不足。
 gui.terminal_controller.screen.info.start.error.database_space=§c未找到网络数据库或网络数据库空间已满。
 gui.terminal_controller.screen.info.start.error.dependencies=§c缺失前置研究：%s
+
+gui.modular_server_assembler.assembly.cpu.name=CPU 槽位 §a#%s
+gui.modular_server_assembler.assembly.cpu_heat_radiator.name=CPU 散热器槽位 §a#%s
+gui.modular_server_assembler.assembly.cpu_ext.name=CPU 扩展板槽位
+gui.modular_server_assembler.assembly.ram.name=RAM 槽位 §a#%s
+gui.modular_server_assembler.assembly.ram_heat_radiator.name=RAM 散热器槽位 §a#%s
+
+gui.modular_server_assembler.assembly.calculate_card.name=计算卡槽位 §a#%s
+gui.modular_server_assembler.assembly.calculate_card_heat_radiator.name=计算卡散热器槽位 §a#%s
+gui.modular_server_assembler.assembly.calculate_card_ext.name=计算卡总线槽位 §a#%s
+
+gui.modular_server_assembler.assembly.extension.name=扩展卡槽位 §a#%s
+gui.modular_server_assembler.assembly.extension_card_heat_radiator.name=扩展卡散热器槽位 §a#%s
+gui.modular_server_assembler.assembly.extension_ext.name=扩展卡总线槽位 §a#%s
+
+gui.modular_server_assembler.assembly.psu.name=PSU 电源槽位 §a#%s
+gui.modular_server_assembler.assembly.capacitor.name=电容槽位 §a#%s
+
+gui.modular_server_assembler.assembly.invalid=§4插槽内物品无效，请移除。
+gui.modular_server_assembler.assembly.dependencies=以下插槽必须安装后才可解锁本插槽：
+gui.modular_server_assembler.assembly.dependencies.installed=§a（已安装）§f
+gui.modular_server_assembler.assembly.dependencies.uninstalled=§c（缺失）§f
+gui.modular_server_assembler.assembly.dependents=此插槽安装后解锁以下插槽：
+
+gui.modular_server_assembler.assembly.soft_dependencies=此插槽安装后还需要以下插槽安装后才可完全工作：
+gui.modular_server_assembler.assembly.soft_dependents=此插槽安装后以下插槽才可完全工作：
+
+gui.modular_server_assembler.assembly.inv.change.main=点击切换至组件插槽窗口。
+gui.modular_server_assembler.assembly.inv.change.heat=点击切换至散热器插槽窗口。
+
+gui.modular_server_assembler.info.missing_server=在组装台中放入服务器以显示服务器状态。
+gui.modular_server_assembler.info.total_modules=§2已安装的所有模块数量：§a%s
+gui.modular_server_assembler.info.total_cpus=§2已安装的 CPU 数量：§a%s
+gui.modular_server_assembler.info.total_rams=§2已安装的 RAM 数量：§a%s
+gui.modular_server_assembler.info.total_calculate_cards=§2已安装的计算卡数量：§a%s
+gui.modular_server_assembler.info.total_extensions=§2已安装的扩展卡数量：§a%s
+gui.modular_server_assembler.info.total_psus=§2已安装的 PSU 电源数量：§a%s
+gui.modular_server_assembler.info.total_capacitors=§2已安装的电容器数量：§a%s
+
+gui.modular_server_assembler.info.max_energy_cap=§6最大储能：§c%sRF
+gui.modular_server_assembler.info.max_energy_consumption=§6最大能量消耗（Tick）：§c%sRF
+gui.modular_server_assembler.info.max_energy_provision=§6最大能量输入（Tick）：§c%sRF
+gui.modular_server_assembler.info.total_hardware_bandwidth=§9硬件带宽（总计）：§a%s
+gui.modular_server_assembler.info.used_hardware_bandwidth=§9硬件带宽（已使用）：§e%s§f（§6%s§f）
+
+gui.modular_server_assembler.calculate.expected=§b预期计算能力：
+gui.modular_server_assembler.calculate.name=%s：
+gui.modular_server_assembler.calculate.value=%s（效率：%s%%）
+
+gui.modular_server_assembler.info.can_start=§b是否可启动：%s
+gui.modular_server_assembler.info.can_start.true=§a可用
+gui.modular_server_assembler.info.can_start.false=§c不可用
+
+gui.modular_server_assembler.error=§e以下原因阻止了计算机启动：
+
+gui.modular_server_assembler.error.dependencies.0=§c有插槽缺失前置。
+gui.modular_server_assembler.error.dependencies.1=§c以下插槽被其他插槽所依赖，必须安装相应的模块后才可继续：
+
+gui.modular_server_assembler.error.require_cpu=§c至少需要安装一个 CPU 模块。
+gui.modular_server_assembler.error.require_ram=§c至少需要安装一个 RAM 模块。
+gui.modular_server_assembler.error.require_psu=§c至少需要安装一个 PSU 电源。
+gui.modular_server_assembler.error.require_capacitor=§c至少需要安装一个电容器。
+gui.modular_server_assembler.error.hardware_bandwidth=§c使用的硬件带宽过高（最高 150%%）。
+
+gui.modular_server_assembler.error.invalid_slot.0=§c有槽位安装了错误的模块。
+gui.modular_server_assembler.error.invalid_slot.1=§c以下槽位中的模块是有问题的：

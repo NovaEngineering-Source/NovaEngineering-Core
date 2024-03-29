@@ -68,7 +68,7 @@ public class PktCellDriveStatusUpdate implements IMessage, IMessageHandler<PktCe
             return;
         }
         drive.setWriting(writing);
-        drive.updateDriveBlockState();
+        drive.markForUpdate();
     }
 
 }

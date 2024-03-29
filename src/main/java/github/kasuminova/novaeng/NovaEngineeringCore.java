@@ -3,8 +3,6 @@ package github.kasuminova.novaeng;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.command.CommandSPacketProfiler;
 import github.kasuminova.novaeng.common.network.*;
-import gregtech.client.utils.BloomEffectUtil;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -41,12 +39,6 @@ public class NovaEngineeringCore {
     public static CommonProxy proxy = null;
     public static Logger log = LogManager.getLogger(MOD_ID);
 
-    public NovaEngineeringCore() {
-        if (FMLCommonHandler.instance().getSide().isClient()) {
-            BloomEffectUtil.init();
-        }
-    }
-
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
         proxy.construction();
@@ -60,6 +52,7 @@ public class NovaEngineeringCore {
         NET_CHANNEL.registerMessage(PktTerminalGuiData.class, PktTerminalGuiData.class, 1, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktResearchTaskComplete.class, PktResearchTaskComplete.class, 2, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktCellDriveStatusUpdate.class, PktCellDriveStatusUpdate.class, 3, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktEStorageControllerGUIData.class, PktEStorageControllerGUIData.class, 4, Side.CLIENT);
 
         NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, 100, Side.SERVER);
         NET_CHANNEL.registerMessage(PktResearchTaskReset.class, PktResearchTaskReset.class, 101, Side.SERVER);

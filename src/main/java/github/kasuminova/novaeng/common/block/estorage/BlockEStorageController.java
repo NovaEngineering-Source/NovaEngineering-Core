@@ -13,6 +13,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -27,6 +28,8 @@ public class BlockEStorageController extends BlockController {
     public static final BlockEStorageController L4;
     public static final BlockEStorageController L6;
     public static final BlockEStorageController L9;
+
+    public static final AxisAlignedBB FORMED_AABB = new AxisAlignedBB(-1.0D, -1.0D, -1.0D, 1.0D, 2.0D, 1.0D);
 
     static {
         L4 = new BlockEStorageController("l4");
@@ -44,6 +47,7 @@ public class BlockEStorageController extends BlockController {
         this.setHardness(20.0F);
         this.setResistance(2000.0F);
         this.setHarvestLevel("pickaxe", 2);
+        this.fullBlock = false;
 
         registryName = new ResourceLocation(NovaEngineeringCore.MOD_ID, "extendable_digital_storage_subsystem_" + level);
         machineRegistryName = new ResourceLocation(ModularMachinery.MODID, registryName.getPath());
@@ -51,9 +55,26 @@ public class BlockEStorageController extends BlockController {
         setTranslationKey(NovaEngineeringCore.MOD_ID + '.' + registryName.getPath());
     }
 
+//    @Nullable
+//    @Override
+//    public AxisAlignedBB getCollisionBoundingBox(final IBlockState state, @Nonnull final IBlockAccess world, @Nonnull final BlockPos pos) {
+//        return state.getValue(FORMED) ? FORMED_AABB : FULL_BLOCK_AABB;
+//    }
+//
+//    @Nonnull
+//    @Override
+//    public AxisAlignedBB getSelectedBoundingBox(final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos) {
+//        return state.getValue(FORMED) ? FORMED_AABB : FULL_BLOCK_AABB;
+//    }
+
+//    @Override
+//    public int getLightOpacity(@Nonnull final IBlockState state) {
+//        return 0;
+//    }
+
     @Override
-    public boolean isFullBlock(@Nonnull final IBlockState state) {
-        return false;
+    public int getLightValue(@Nonnull final IBlockState state) {
+        return state.getValue(FORMED) ? 10 : 0;
     }
 
     @Override

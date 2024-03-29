@@ -1,6 +1,7 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0": "novaeng_core:items/estorage_cell_b_fluid"
+        "layer0": "novaeng_core:items/estorage_cell_disks_b1_fluid_64m",
+        "layer1": "novaeng_core:items/bloom/estorage_cell_disks_b1_fluid_64m"
     }
 }

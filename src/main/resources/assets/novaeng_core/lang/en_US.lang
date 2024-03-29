@@ -253,3 +253,20 @@ gui.modular_server_assembler.error.hardware_bandwidth=§c使用的硬件带宽�
 
 gui.modular_server_assembler.error.invalid_slot.0=§c有槽位安装了错误的模块。
 gui.modular_server_assembler.error.invalid_slot.1=§c以下槽位中的模块是有问题的：
+
+gui.estorage_controller.cell_info.tip.0=%s（%s）
+gui.estorage_controller.cell_info.tip.1=类型使用：%s / %s
+gui.estorage_controller.cell_info.tip.2=字节使用：%s / %s
+
+gui.estorage_controller.cell_info.item=物品存储矩阵
+gui.estorage_controller.cell_info.fluid=流体存储矩阵
+gui.estorage_controller.cell_info.empty=未知
+
+gui.estorage_controller.graph.fluid.percent=流体存储占用：%s%%
+gui.estorage_controller.graph.item.percent=物品存储占用：%s%%
+gui.estorage_controller.graph.total.percent=总存储占用：%s%%
+gui.estorage_controller.graph.fluid_type=流体类型：%s / %s
+gui.estorage_controller.graph.item_type=物品类型：%s / %s
+gui.estorage_controller.graph.energy_usage=总耗能：%sAE/t
+gui.estorage_controller.graph.energy_stored.percent=能量存储：%s%%
+gui.estorage_controller.graph.energy_stored=能量存储：%sAE / %sAE

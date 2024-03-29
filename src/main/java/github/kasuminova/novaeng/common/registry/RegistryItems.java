@@ -1,8 +1,10 @@
 package github.kasuminova.novaeng.common.registry;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.client.renderer.EStorageEnergyCellItemRenderer;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellFluid;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellItem;
+import github.kasuminova.novaeng.common.item.estorage.ItemBlockEStorageEnergyCell;
 import hellfirepvp.modularmachinery.common.item.ItemDynamicColor;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.Item;
@@ -55,6 +57,9 @@ public class RegistryItems {
         }
         ITEM_MODELS_TO_REGISTER.forEach(RegistryItems::registryItemModel);
         ITEM_MODELS_TO_REGISTER.clear();
+        ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L4, new EStorageEnergyCellItemRenderer("l4"));
+        ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L6, new EStorageEnergyCellItemRenderer("l6"));
+        ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L9, new EStorageEnergyCellItemRenderer("l9"));
     }
 
     public static <T extends Item> T registerItem(T item) {

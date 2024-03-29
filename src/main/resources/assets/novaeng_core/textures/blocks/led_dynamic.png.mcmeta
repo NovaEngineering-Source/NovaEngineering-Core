@@ -1,7 +1,7 @@
 {
   "animation": {
-    "interpolate": true,
-    "frametime": 5
+    "interpolate": false,
+    "frametime": 4
   },
   "ctm": {
     "ctm_version": 1,
