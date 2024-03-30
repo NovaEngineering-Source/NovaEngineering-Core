@@ -12,7 +12,7 @@ import net.minecraft.util.text.TextComponentString;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandPacketProfiler extends CommandBase {
@@ -30,7 +30,7 @@ public class CommandPacketProfiler extends CommandBase {
     @Nonnull
     @Override
     public List<String> getAliases() {
-        return Arrays.asList("reset", "start", "stop", "debug_limit", "te_debug_limit");
+        return Collections.emptyList();
     }
 
     @Nonnull

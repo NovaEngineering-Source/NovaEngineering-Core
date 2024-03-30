@@ -47,7 +47,7 @@ public class PktEStorageControllerGUIData implements IMessage, IMessageHandler<P
         for (int i = 0; i < size; i++) {
             int type = buf.readByte();
             int level = buf.readByte();
-            int usedTypes = buf.readByte();
+            int usedTypes = buf.readShort();
             long usedBytes = buf.readLong();
             dataList.add(new EStorageCellData(DriveStorageType.values()[type], DriveStorageLevel.values()[level], usedTypes, usedBytes));
         }
@@ -64,7 +64,7 @@ public class PktEStorageControllerGUIData implements IMessage, IMessageHandler<P
             long usedBytes = data.usedBytes();
             buf.writeByte(type);
             buf.writeByte(level);
-            buf.writeByte(usedTypes);
+            buf.writeShort(usedTypes);
             buf.writeLong(usedBytes);
         });
         buf.writeDouble(energyData.energyStored());

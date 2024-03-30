@@ -85,7 +85,7 @@ public class EStorageEventHandler {
         World world = player.getEntityWorld();
         int tickExisted = containerESController.getTickExisted();
         containerESController.setTickExisted(tickExisted + 1);
-        if (world.getTotalWorldTime() % 20 != 0 || tickExisted >= 1) {
+        if (world.getTotalWorldTime() % 20 != 0 && tickExisted > 1) {
             return;
         }
         EStorageController controller = containerESController.getOwner();
