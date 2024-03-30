@@ -1,6 +1,9 @@
 package github.kasuminova.novaeng.common.tile.estorage;
 
 import appeng.api.config.Actionable;
+import appeng.api.storage.ICellInventory;
+import appeng.api.storage.ICellInventoryHandler;
+import appeng.api.storage.data.IAEItemStack;
 import github.kasuminova.mmce.common.util.concurrent.ActionExecutor;
 import github.kasuminova.mmce.common.world.MMWorldEventListener;
 import github.kasuminova.mmce.common.world.MachineComponentManager;
@@ -8,8 +11,10 @@ import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.util.BlockModelHider;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
 import github.kasuminova.novaeng.common.block.estorage.prop.FacingProp;
+import github.kasuminova.novaeng.common.estorage.ECellDriveWatcher;
 import github.kasuminova.novaeng.common.tile.TileCustomController;
 import github.kasuminova.novaeng.common.tile.estorage.bus.EStorageBus;
+import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.client.ClientProxy;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import net.minecraft.block.state.IBlockState;
@@ -48,6 +53,9 @@ public class EStorageController extends TileCustomController {
     protected final Queue<EStorageEnergyCell> energyCellsMin = new PriorityQueue<>(Comparator.reverseOrder());
     protected final Queue<EStorageEnergyCell> energyCellsMax = new PriorityQueue<>();
 
+    protected BlockEStorageController parentController = null;
+    protected double idleDrain = 64;
+
     protected EStorageMEChannel channel = null;
 
     protected boolean assembled = false;
@@ -55,6 +63,7 @@ public class EStorageController extends TileCustomController {
     public EStorageController(final ResourceLocation machineRegistryName) {
         this.workMode = WorkMode.SYNC;
         this.parentMachine = MachineRegistry.getRegistry().getMachine(machineRegistryName);
+        this.parentController = BlockEStorageController.REGISTRY.get(new ResourceLocation(NovaEngineeringCore.MOD_ID, machineRegistryName.getPath()));
     }
 
     public EStorageController() {
@@ -138,10 +147,7 @@ public class EStorageController extends TileCustomController {
             return;
         }
         assembled = false;
-        this.storageParts.forEach(part -> {
-            part.onDisassembled();
-            part.setController(null);
-        });
+        this.storageParts.forEach(EStoragePart::onDisassembled);
         clearParts();
     }
 
@@ -161,52 +167,6 @@ public class EStorageController extends TileCustomController {
         }
         assembled = true;
         this.storageParts.forEach(EStoragePart::onAssembled);
-    }
-
-    @Override
-    public void invalidate() {
-        tileEntityInvalid = true;
-        loaded = false;
-        foundComponents.forEach((te, component) -> MachineComponentManager.INSTANCE.removeOwner(te, this));
-        if (getWorld().isRemote) {
-            BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
-        }
-        disassemble();
-    }
-
-    @Override
-    public void onLoad() {
-        if (!FMLCommonHandler.instance().getSide().isClient()) {
-            return;
-        }
-        ClientProxy.clientScheduler.addRunnable(() -> {
-            BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
-            notifyStructureFormedState(isStructureFormed());
-        }, 0);
-        loaded = true;
-    }
-
-    @Override
-    public void onChunkUnload() {
-        super.onChunkUnload();
-        disassemble();
-    }
-
-    @Override
-    public void readCustomNBT(final NBTTagCompound compound) {
-        boolean prevLoaded = loaded;
-        loaded = false;
-        
-        super.readCustomNBT(compound);
-
-        loaded = prevLoaded;
-        
-        if (FMLCommonHandler.instance().getSide().isClient()) {
-            ClientProxy.clientScheduler.addRunnable(() -> {
-                BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
-                notifyStructureFormedState(isStructureFormed());
-            }, 0);
-        }
     }
 
     public double injectPower(final double amt, final Actionable mode) {
@@ -272,6 +232,29 @@ public class EStorageController extends TileCustomController {
 
         return extracted;
     }
+    
+    public void recalculateEnergyUsage() {
+        double newIdleDrain = 64;
+        for (final EStorageCellDrive drive : cellDrives) {
+            ECellDriveWatcher<IAEItemStack> watcher = drive.getWatcher();
+            if (watcher == null) {
+                continue;
+            }
+            ICellInventoryHandler<?> cellInventory = (ICellInventoryHandler<?>) watcher.getInternal();
+            if (cellInventory == null) {
+                continue;
+            }
+            ICellInventory<?> cellInv = cellInventory.getCellInv();
+            if (cellInv == null) {
+                continue;
+            }
+            newIdleDrain += cellInv.getIdleDrain();
+        }
+        this.idleDrain = newIdleDrain;
+        if (this.channel != null) {
+            this.channel.getProxy().setIdlePowerUsage(idleDrain);
+        }
+    }
 
     @Override
     protected void checkRotation() {
@@ -307,8 +290,68 @@ public class EStorageController extends TileCustomController {
         return maxEnergyStore;
     }
 
+    @Override
+    public void invalidate() {
+        tileEntityInvalid = true;
+        loaded = false;
+        foundComponents.forEach((te, component) -> MachineComponentManager.INSTANCE.removeOwner(te, this));
+        if (getWorld().isRemote) {
+            BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
+        }
+        disassemble();
+    }
+
+    @Override
+    public void onLoad() {
+        if (!FMLCommonHandler.instance().getSide().isClient()) {
+            return;
+        }
+        ClientProxy.clientScheduler.addRunnable(() -> {
+            BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
+            notifyStructureFormedState(isStructureFormed());
+        }, 0);
+        loaded = true;
+    }
+
+    @Override
+    public void onChunkUnload() {
+        super.onChunkUnload();
+        disassemble();
+    }
+
+    @Override
+    public void readCustomNBT(final NBTTagCompound compound) {
+        boolean prevLoaded = loaded;
+        loaded = false;
+
+        super.readCustomNBT(compound);
+
+        loaded = prevLoaded;
+
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            ClientProxy.clientScheduler.addRunnable(() -> {
+                BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
+                notifyStructureFormedState(isStructureFormed());
+            }, 0);
+        }
+    }
+
+    @Override
+    protected void readMachineNBT(final NBTTagCompound compound) {
+        super.readMachineNBT(compound);
+        if (compound.hasKey("parentMachine")) {
+            ResourceLocation rl = new ResourceLocation(compound.getString("parentMachine"));
+            parentMachine = MachineRegistry.getRegistry().getMachine(rl);
+            if (parentMachine != null) {
+                this.parentController = BlockEStorageController.REGISTRY.get(new ResourceLocation(NovaEngineeringCore.MOD_ID, parentMachine.getRegistryName().getPath()));
+            } else {
+                ModularMachinery.log.info("Couldn't find machine named " + rl + " for controller at " + getPos());
+            }
+        }
+    }
+
     public double getEnergyConsumePerTick() {
-        return 0D;
+        return idleDrain;
     }
 
     public List<EStorageBus> getStorageBuses() {
@@ -321,6 +364,10 @@ public class EStorageController extends TileCustomController {
 
     public EStorageMEChannel getChannel() {
         return channel;
+    }
+
+    public BlockEStorageController getParentController() {
+        return parentController;
     }
 
     public boolean isAssembled() {

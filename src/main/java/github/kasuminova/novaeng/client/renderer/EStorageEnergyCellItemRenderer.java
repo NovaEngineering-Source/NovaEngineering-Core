@@ -18,6 +18,7 @@ public class EStorageEnergyCellItemRenderer implements ItemMeshDefinition {
         this.modelLocation = new ResourceLocation("novaeng_core", "estorage_energy_cell_" + level);
     }
 
+    @Nonnull
     @Override
     public ModelResourceLocation getModelLocation(@Nonnull final ItemStack stack) {
         double fillFactor = getFillFactor(stack);

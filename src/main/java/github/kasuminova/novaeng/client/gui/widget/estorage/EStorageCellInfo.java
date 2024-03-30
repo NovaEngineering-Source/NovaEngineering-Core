@@ -11,11 +11,9 @@ import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
 import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import github.kasuminova.novaeng.common.item.estorage.EStorageCellFluid;
-import github.kasuminova.novaeng.common.item.estorage.EStorageCellItem;
+import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Collections;
@@ -111,8 +109,8 @@ public class EStorageCellInfo extends Column {
         DriveStorageLevel level = data.level();
         int usedTypes = data.usedTypes();
         long usedBytes = data.usedBytes();
-        int maxTypes = getMaxTypes(data);
-        long maxBytes = getMaxBytes(data);
+        int maxTypes = EStorageCellDrive.getMaxTypes(data);
+        long maxBytes = EStorageCellDrive.getMaxBytes(data);
 
         String typeName = I18n.format("gui.estorage_controller.cell_info." + switch (type) {
             case EMPTY -> "unknown";
@@ -153,34 +151,6 @@ public class EStorageCellInfo extends Column {
     @Override
     public int getHeight() {
         return height;
-    }
-
-    public static int getMaxTypes(final EStorageCellData data) {
-        return switch (data.type()) {
-            case EMPTY -> 0;
-            case ITEM -> 27;
-            case FLUID -> 3;
-        };
-    }
-
-    public static long getMaxBytes(final EStorageCellData data) {
-        DriveStorageType type = data.type();
-        DriveStorageLevel level = data.level();
-        return switch (type) {
-            case EMPTY -> 0;
-            case ITEM -> switch (level) {
-                case EMPTY -> 0;
-                case A -> EStorageCellItem.LEVEL_A.getBytes(ItemStack.EMPTY);
-                case B -> EStorageCellItem.LEVEL_B.getBytes(ItemStack.EMPTY);
-                case C -> EStorageCellItem.LEVEL_C.getBytes(ItemStack.EMPTY);
-            };
-            case FLUID -> switch (level) {
-                case EMPTY -> 0;
-                case A -> EStorageCellFluid.LEVEL_A.getBytes(ItemStack.EMPTY);
-                case B -> EStorageCellFluid.LEVEL_B.getBytes(ItemStack.EMPTY);
-                case C -> EStorageCellFluid.LEVEL_C.getBytes(ItemStack.EMPTY);
-            };
-        };
     }
 
 }

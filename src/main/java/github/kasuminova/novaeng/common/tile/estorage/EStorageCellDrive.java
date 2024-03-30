@@ -16,8 +16,11 @@ import appeng.util.inv.IAEAppEngInventory;
 import appeng.util.inv.InvOperation;
 import appeng.util.inv.filter.IAEItemFilter;
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
 import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageCapacity;
+import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
 import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
+import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.estorage.ECellDriveWatcher;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
@@ -59,6 +62,34 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
 
     public EStorageCellDrive() {
         this.driveInv.setFilter(CellInvFilter.INSTANCE);
+    }
+
+    public static int getMaxTypes(final EStorageCellData data) {
+        return switch (data.type()) {
+            case EMPTY -> 0;
+            case ITEM -> 315;
+            case FLUID -> 25;
+        };
+    }
+
+    public static long getMaxBytes(final EStorageCellData data) {
+        DriveStorageType type = data.type();
+        DriveStorageLevel level = data.level();
+        return switch (type) {
+            case EMPTY -> 0;
+            case ITEM -> switch (level) {
+                case EMPTY -> 0;
+                case A -> EStorageCellItem.LEVEL_A.getBytes(ItemStack.EMPTY);
+                case B -> EStorageCellItem.LEVEL_B.getBytes(ItemStack.EMPTY);
+                case C -> EStorageCellItem.LEVEL_C.getBytes(ItemStack.EMPTY);
+            };
+            case FLUID -> switch (level) {
+                case EMPTY -> 0;
+                case A -> EStorageCellFluid.LEVEL_A.getBytes(ItemStack.EMPTY);
+                case B -> EStorageCellFluid.LEVEL_B.getBytes(ItemStack.EMPTY);
+                case C -> EStorageCellFluid.LEVEL_C.getBytes(ItemStack.EMPTY);
+            };
+        };
     }
 
     public void updateWriteState() {
@@ -129,6 +160,9 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
             inventoryHandlers.put(channel, watcher);
             break;
         }
+        if (storageController != null) {
+            storageController.recalculateEnergyUsage();
+        }
 
         if (cellInventory == null || !refreshState) {
             return;
@@ -136,41 +170,30 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
         updateDriveBlockState();
     }
 
+    public boolean isCellSupported(final DriveStorageLevel level) {
+        if (storageController == null) {
+            return false;
+        }
+        if (level == DriveStorageLevel.A) {
+            BlockEStorageController parent = storageController.getParentController();
+            return parent == BlockEStorageController.L4 || parent == BlockEStorageController.L6 || parent == BlockEStorageController.L9;
+        }
+        if (level == DriveStorageLevel.B) {
+            BlockEStorageController parent = storageController.getParentController();
+            return parent == BlockEStorageController.L6 || parent == BlockEStorageController.L9;
+        }
+        if (level == DriveStorageLevel.C) {
+            BlockEStorageController parent = storageController.getParentController();
+            return parent == BlockEStorageController.L9;
+        }
+        return false;
+    }
+
     public void updateDriveBlockState() {
         if (world == null) {
             return;
         }
         markForUpdate();
-//        ItemStack stack = driveInv.getStackInSlot(0);
-//        ICellInventoryHandler cellInventory = watcher == null ? null : (ICellInventoryHandler) watcher.getInternal();
-//        IBlockState state = world.getBlockState(getPos());
-//        if (!(state.getBlock() instanceof BlockEStorageCellDrive)) {
-//            return;
-//        }
-//
-//        if (stack.isEmpty()) {
-//            world.setBlockState(getPos(), state
-//                    .withProperty(DriveStorageLevel.STORAGE_LEVEL, DriveStorageLevel.EMPTY)
-//                    .withProperty(DriveStorageType.STORAGE_TYPE, DriveStorageType.EMPTY)
-//                    .withProperty(DriveStatus.STATUS, DriveStatus.IDLE)
-//                    .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, DriveStorageCapacity.EMPTY)
-//            );
-//            return;
-//        }
-//
-//        EStorageCell<?> cell = (EStorageCell<?>) stack.getItem();
-//        DriveStorageLevel level = cell.getLevel();
-//        DriveStorageType type = getCellType(cell);
-//        if (type == null) {
-//            return;
-//        }
-//
-//        world.setBlockState(getPos(), state
-//                .withProperty(DriveStorageLevel.STORAGE_LEVEL, level)
-//                .withProperty(DriveStorageType.STORAGE_TYPE, type)
-//                .withProperty(DriveStatus.STATUS, writing ? DriveStatus.RUN : DriveStatus.IDLE)
-//                .withProperty(DriveStorageCapacity.STORAGE_CAPACITY, getCapacity(cellInventory))
-//        );
     }
 
     public static DriveStorageType getCellType(final EStorageCell<?> cell) {
@@ -210,8 +233,11 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
     @SuppressWarnings("unchecked")
     public <T extends IAEStack<T>> IMEInventoryHandler<T> getHandler(final IStorageChannel<T> channel) {
         updateHandler(false);
-        IMEInventoryHandler<?> handler = inventoryHandlers.get(channel);
-        return handler == null ? null : (IMEInventoryHandler<T>) handler;
+        if (driveInv.getStackInSlot(0).getItem() instanceof EStorageCell<?> cell && isCellSupported(cell.getLevel())) {
+            IMEInventoryHandler<?> handler = inventoryHandlers.get(channel);
+            return handler == null ? null : (IMEInventoryHandler<T>) handler;
+        }
+        return null;
     }
 
     @Override

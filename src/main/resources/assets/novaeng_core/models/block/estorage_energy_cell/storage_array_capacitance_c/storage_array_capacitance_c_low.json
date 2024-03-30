@@ -4,7 +4,7 @@
 		"0": "novaeng_core:blocks/storage_array_housing",
 		"2": "novaeng_core:blocks/0",
 		"3": "novaeng_core:blocks/data_bus_b",
-		"4": "novaeng_core:blocks/storage_array_capacitance_c_low",
+		"4": "novaeng_core:blocks/storage_array_capacitance_c_empty",
 		"5": "novaeng_core:blocks/bloom/storage_array_capacitance_c_low",
 		"particle": "novaeng_core:blocks/storage_array_housing"
 	},

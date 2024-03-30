@@ -6,9 +6,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 
 public class ContainerEStorageController extends ContainerBase<EStorageController> {
+    
+    protected int tickExisted = 0;
 
     public ContainerEStorageController(final EStorageController owner, final EntityPlayer opening) {
         super(owner, opening);
+    }
+
+    public int getTickExisted() {
+        return tickExisted;
+    }
+
+    public void setTickExisted(final int tickExisted) {
+        this.tickExisted = tickExisted;
     }
 
     @Override

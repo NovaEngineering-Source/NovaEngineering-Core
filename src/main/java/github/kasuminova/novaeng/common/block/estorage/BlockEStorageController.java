@@ -7,20 +7,28 @@ import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.block.BlockController;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
+import hellfirepvp.modularmachinery.common.util.IOInventory;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Random;
+import java.util.UUID;
 
 @SuppressWarnings("deprecation")
 public class BlockEStorageController extends BlockController {
@@ -55,22 +63,54 @@ public class BlockEStorageController extends BlockController {
         setTranslationKey(NovaEngineeringCore.MOD_ID + '.' + registryName.getPath());
     }
 
-//    @Nullable
-//    @Override
-//    public AxisAlignedBB getCollisionBoundingBox(final IBlockState state, @Nonnull final IBlockAccess world, @Nonnull final BlockPos pos) {
-//        return state.getValue(FORMED) ? FORMED_AABB : FULL_BLOCK_AABB;
-//    }
-//
-//    @Nonnull
-//    @Override
-//    public AxisAlignedBB getSelectedBoundingBox(final IBlockState state, @Nonnull final World world, @Nonnull final BlockPos pos) {
-//        return state.getValue(FORMED) ? FORMED_AABB : FULL_BLOCK_AABB;
-//    }
+    @Override
+    public void getDrops(@Nonnull final NonNullList<ItemStack> drops, @Nonnull final IBlockAccess world, @Nonnull final BlockPos pos, @Nonnull final IBlockState state, final int fortune) {
+        Random rand = world instanceof World ? ((World) world).rand : RANDOM;
 
-//    @Override
-//    public int getLightOpacity(@Nonnull final IBlockState state) {
-//        return 0;
-//    }
+        TileEntity te = world.getTileEntity(pos);
+        if (te instanceof EStorageController ctrl && ctrl.getOwner() != null) {
+            UUID ownerUUID = ctrl.getOwner();
+            Item dropped = getItemDropped(state, rand, fortune);
+            ItemStack stackCtrl = new ItemStack(dropped, 1);
+            if (ownerUUID != null) {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setString("owner", ownerUUID.toString());
+                stackCtrl.setTagCompound(tag);
+            }
+            drops.add(stackCtrl);
+        } else {
+            super.getDrops(drops, world, pos, state, fortune);
+        }
+    }
+
+    @Override
+    public void breakBlock(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        Random rand = worldIn.rand;
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof EStorageController ctrl) {
+            IOInventory inv = ctrl.getInventory();
+            for (int i = 0; i < inv.getSlots(); i++) {
+                ItemStack stack = inv.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    spawnAsEntity(worldIn, pos, stack);
+                    inv.setStackInSlot(i, ItemStack.EMPTY);
+                }
+            }
+
+            UUID ownerUUID = ctrl.getOwner();
+            Item dropped = getItemDropped(state, rand, damageDropped(state));
+            ItemStack stackCtrl = new ItemStack(dropped, 1);
+            if (ownerUUID != null) {
+                NBTTagCompound tag = new NBTTagCompound();
+                tag.setString("owner", ownerUUID.toString());
+                stackCtrl.setTagCompound(tag);
+            }
+            spawnAsEntity(worldIn, pos, stackCtrl);
+        }
+
+        // TODO MM warn.
+        super.breakBlock(worldIn, pos, state);
+    }
 
     @Override
     public int getLightValue(@Nonnull final IBlockState state) {

@@ -2,7 +2,7 @@
 	"credit": "Made with Blockbench",
 	"textures": {
 		"0": "novaeng_core:blocks/storage_array_housing",
-		"2": "novaeng_core:blocks/storage_array_capacitance_a_full",
+		"2": "novaeng_core:blocks/storage_array_capacitance_a_empty",
 		"3": "novaeng_core:blocks/data_bus_b",
 		"4": "novaeng_core:blocks/0",
 		"5": "novaeng_core:blocks/bloom/storage_array_capacitance_a_full",
@@ -22,7 +22,7 @@
 			}
 		},
 		{
-			"name": "bloomv",
+			"name": "bloom",
 			"from": [0, 0, 0],
 			"to": [16, 16, 16],
 			"faces": {

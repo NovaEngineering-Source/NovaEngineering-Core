@@ -25,17 +25,12 @@ public class EStorageCellItem extends EStorageCell<IAEItemStack> {
 
     @Override
     public int getTotalTypes(@Nonnull final ItemStack cellItem) {
-        return 27;
+        return 315;
     }
 
     @Override
     public int getBytesPerType(@Nonnull final ItemStack cellItem) {
-        return 1024;
-    }
-
-    @Override
-    public double getIdleDrain() {
-        return 0;
+        return byteMultiplier * 1024;
     }
 
     @Nonnull

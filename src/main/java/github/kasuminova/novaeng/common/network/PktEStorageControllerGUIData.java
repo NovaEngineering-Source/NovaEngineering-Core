@@ -1,23 +1,16 @@
 package github.kasuminova.novaeng.common.network;
 
-import appeng.api.storage.ICellInventory;
-import appeng.api.storage.ICellInventoryHandler;
-import appeng.api.storage.data.IAEItemStack;
-import appeng.tile.inventory.AppEngCellInventory;
 import github.kasuminova.novaeng.client.gui.GuiEStorageController;
 import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
 import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.container.data.EStorageEnergyData;
-import github.kasuminova.novaeng.common.estorage.ECellDriveWatcher;
-import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -27,6 +20,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class PktEStorageControllerGUIData implements IMessage, IMessageHandler<PktEStorageControllerGUIData, IMessage> {
@@ -39,38 +33,11 @@ public class PktEStorageControllerGUIData implements IMessage, IMessageHandler<P
 
     public PktEStorageControllerGUIData(final EStorageController controller) {
         List<EStorageCellDrive> drives = controller.getCellDrives();
-        drives.forEach(drive -> {
-            AppEngCellInventory driveInv = drive.getDriveInv();
-            ItemStack stack = driveInv.getStackInSlot(0);
-            if (stack.isEmpty()) {
-                return;
-            }
-            EStorageCellHandler handler = EStorageCellHandler.getHandler(stack);
-            if (handler == null) {
-                return;
-            }
-            EStorageCell<?> cell = (EStorageCell<?>) stack.getItem();
-            DriveStorageType type = EStorageCellDrive.getCellType(cell);
-            if (type == null) {
-                return;
-            }
-            DriveStorageLevel level = cell.getLevel();
-            ECellDriveWatcher<IAEItemStack> watcher = drive.getWatcher();
-            if (watcher == null) {
-                return;
-            }
-            ICellInventoryHandler<?> cellInventory = (ICellInventoryHandler<?>) watcher.getInternal();
-            if (cellInventory == null) {
-                return;
-            }
-            ICellInventory<?> cellInv = cellInventory.getCellInv();
-            if (cellInv == null) {
-                return;
-            }
-            long storedTypes = cellInv.getStoredItemTypes();
-            long usedBytes = cellInv.getUsedBytes();
-            dataList.add(new EStorageCellData(type, level, (int) storedTypes, usedBytes));
-        });
+        drives.stream()
+                .filter(drive -> drive.getDriveInv().getStackInSlot(0).getItem() instanceof EStorageCell<?> cell && drive.isCellSupported(cell.getLevel()))
+                .map(EStorageCellData::from)
+                .filter(Objects::nonNull)
+                .forEach(dataList::add);
         energyData = new EStorageEnergyData(controller.getEnergyStored(), controller.getMaxEnergyStore(), controller.getEnergyConsumePerTick());
     }
 

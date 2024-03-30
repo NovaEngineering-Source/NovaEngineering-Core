@@ -27,17 +27,12 @@ public class EStorageCellFluid extends EStorageCell<IAEFluidStack> {
 
     @Override
     public int getTotalTypes(@Nonnull final ItemStack cellItem) {
-        return 3;
+        return 25;
     }
 
     @Override
     public int getBytesPerType(@Nonnull final ItemStack cellItem) {
-        return 3072;
-    }
-
-    @Override
-    public double getIdleDrain() {
-        return 0;
+        return byteMultiplier * 1024;
     }
 
     @Override

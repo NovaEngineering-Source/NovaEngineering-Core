@@ -15,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Rotation;
 import net.minecraft.util.math.BlockPos;
@@ -67,18 +66,23 @@ public class BlockEStorageEnergyCell extends BlockEStoragePart {
     }
 
     @Override
-    public void getDrops(@Nonnull final NonNullList<ItemStack> drops,
-                         @Nonnull final IBlockAccess world,
-                         @Nonnull final BlockPos pos,
-                         @Nonnull final IBlockState state,
-                         final int fortune)
+    public void dropBlockAsItemWithChance(@Nonnull final World worldIn, @Nonnull final BlockPos pos, @Nonnull final IBlockState state, final float chance, final int fortune) {
+    }
+
+    @Override
+    public void breakBlock(final World world,
+                           @Nonnull final BlockPos pos,
+                           @Nonnull final IBlockState state)
     {
         ItemStack dropped = new ItemStack(Item.getItemFromBlock(this));
         if (dropped.isEmpty()) {
+            super.dropBlockAsItemWithChance(world, pos, state, 1.0F, 0);
+            world.removeTileEntity(pos);
             return;
         }
         if (!(world.getTileEntity(pos) instanceof final EStorageEnergyCell cell)) {
-            super.getDrops(drops, world, pos, state, fortune);
+            super.dropBlockAsItemWithChance(world, pos, state, 1.0F, 0);
+            world.removeTileEntity(pos);
             return;
         }
 
@@ -86,7 +90,8 @@ public class BlockEStorageEnergyCell extends BlockEStoragePart {
         cell.writeCustomNBT(tag);
         cell.setEnergyStored(0D);
         dropped.setTagCompound(tag);
-        drops.add(dropped);
+        spawnAsEntity(world, pos, dropped);
+        world.removeTileEntity(pos);
     }
 
     @Nonnull

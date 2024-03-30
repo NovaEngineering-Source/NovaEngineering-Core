@@ -1,7 +1,7 @@
 {
   "forge_marker": 1,
   "defaults": {
-    "model": "novaeng_core:estorage_energy_cell/storage_array_capacitance_a/storage_array_capacitance_a_mid"
+    "model": "novaeng_core:estorage_energy_cell/storage_array_capacitance_a/storage_array_capacitance_a_empty"
   },
   "variants": {
     "facing=north,status=empty": {

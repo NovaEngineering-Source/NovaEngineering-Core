@@ -7,6 +7,22 @@ item.hypernet_connect_card.tooltip.no_pos.tip.1=§2右击任意等级的计算�
 item.hypernet_connect_card.tooltip.pos.tip.0=§b存储卡中保存的坐标：§a（X: %s, Y: %s, Z: %s）
 item.hypernet_connect_card.tooltip.pos.tip.1=§2右击任意等级的计算网络中心控制器来覆写数据。
 
+item.novaeng_core.estorage_cell_item_16m.name=§9ECO - §bLE4 §9存储矩阵§a（物品）
+item.novaeng_core.estorage_cell_item_64m.name=§9ECO - §6LE6 §9存储矩阵§a（物品）
+item.novaeng_core.estorage_cell_item_256m.name=§9ECO - §5LE9 §9存储矩阵§a（物品）
+
+item.novaeng_core.estorage_cell_fluid_16m.name=§9ECO - §bLE4 §9存储矩阵§b（流体）
+item.novaeng_core.estorage_cell_fluid_64m.name=§9ECO - §6LE6 §9存储矩阵§b（流体）
+item.novaeng_core.estorage_cell_fluid_256m.name=§9ECO - §5LE9 §9存储矩阵§b（流体）
+
+novaeng.estorage_cell.insert.tip=蹲下时手持矩阵并右击驱动器以插入矩阵。
+novaeng.estorage_cell.extract.tip=蹲下时空手并右击驱动器以取出矩阵。
+novaeng.estorage_cell.l6.tip=§c只有 §6L6§c 等级及以上的主机可以驱动此矩阵。
+novaeng.estorage_cell.l9.tip=§c只有 §6L9§c 等级的主机可以驱动此矩阵。
+
+novaeng.estorage_cell_drive.player.inserted=§a已插入存储矩阵。
+novaeng.estorage_cell_drive.player.removed=§a已取出存储矩阵。
+
 novaeng.hypernet.connect.result.success=§a连接成功§b（状态：%s 已连接 / %s 最大连接数）。
 novaeng.hypernet.connect.result.no_permission=§c连接失败，HyperNet 网络授权密钥不匹配（原因：非网络所有者）。
 novaeng.hypernet.connect.result.unknown_center=§c连接失败（原因：未知的计算网络中心，区块可能被卸载或控制器不存在）。
@@ -63,6 +79,14 @@ top.hypernet.processor.load=§9平均负载：
 top.hypernet.processor.circuit_durability=§9电路板耐久剩余：
 top.hypernet.processor.heat=§9内部热量：
 
+top.estorage.drive.status=§9驱动器状态：
+top.estorage.drive.status.offline=§c离线
+top.estorage.drive.status.online=§a在线
+top.estorage.drive.cell=§9驱动器矩阵：
+top.estorage.drive.cell.unsupported=§c警告：驱动器不支持此矩阵等级，需要升级主机。
+top.estorage.drive.cell.bytes=§9字节使用：
+top.estorage.drive.cell.types=§9类型使用：
+
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 tile.novaeng_core.modular_server_assembler.name=模块服务器组装台（未实装）
 tile.novaeng_core.angel_block.name=天使方块+
@@ -70,9 +94,19 @@ tile.novaeng_core.angel_block.tip.0=天使方块，但是更加智能！
 tile.novaeng_core.angel_block.tip.1=允许你在没有任何方块的情况下虚空放置方块。
 tile.novaeng_core.angel_block.tip.2=手持此物品时可在世界预览即将放置的位置。
 tile.novaeng_core.angel_block.tip.3=按住 Shift 时，则固定在脚下放置此方块。
+tile.novaeng_core.extendable_digital_storage_subsystem_l4.name=§9ECO - §bL4 §9可扩展存储子系统主机
+tile.novaeng_core.extendable_digital_storage_subsystem_l6.name=§9ECO - §6L6 §9可扩展存储子系统主机
+tile.novaeng_core.extendable_digital_storage_subsystem_l9.name=§9ECO - §5L9 §9可扩展存储子系统主机
+tile.novaeng_core.estorage_energy_cell_l4.name=§9ECO - §bLT4 §9高密度能量元件
+tile.novaeng_core.estorage_energy_cell_l6.name=§9ECO - §6LT6 §9高密度能量元件
+tile.novaeng_core.estorage_energy_cell_l9.name=§9ECO - §5LT9 §9高密度能量元件
+tile.novaeng_core.estorage_cell_drive.name=§9ECO - §bLD §9存储矩阵驱动器
+tile.novaeng_core.estorage_me_channel.name=§9ECO - §bLR §9ME 矩阵通讯接口
+tile.novaeng_core.estorage_vent.name=§9存储系统结构散热器
+tile.novaeng_core.estorage_casing.name=§9存储系统结构外壳
 
-novaeng.hypernet.computation_point_required.tip=§9计算：§b%s
-novaeng.hypernet.computation_point_required.tip.parallelized=§9计算 (受并行影响)：§b%s
+novaeng.hypernet.computation_point_required.tip=§9算力：§b%s
+novaeng.hypernet.computation_point_required.tip.parallelized=§9算力 (受并行影响)：§b%s
 
 novaeng.hypernet.calculable.tip.base_ratio=§b基础效率系数：§a%s
 novaeng.hypernet.calculable.tip.energy_consume_ratio=§b设计最大能耗：§c%s RF/t
@@ -253,3 +287,20 @@ gui.modular_server_assembler.error.hardware_bandwidth=§c使用的硬件带宽�
 
 gui.modular_server_assembler.error.invalid_slot.0=§c有槽位安装了错误的模块。
 gui.modular_server_assembler.error.invalid_slot.1=§c以下槽位中的模块是有问题的：
+
+gui.estorage_controller.cell_info.tip.0=%s（%s）
+gui.estorage_controller.cell_info.tip.1=类型使用：%s / %s
+gui.estorage_controller.cell_info.tip.2=字节使用：%s / %s
+
+gui.estorage_controller.cell_info.item=物品存储矩阵
+gui.estorage_controller.cell_info.fluid=流体存储矩阵
+gui.estorage_controller.cell_info.empty=未知
+
+gui.estorage_controller.graph.fluid.percent=流体存储占用：%s%%
+gui.estorage_controller.graph.item.percent=物品存储占用：%s%%
+gui.estorage_controller.graph.total.percent=总存储占用：%s%%
+gui.estorage_controller.graph.fluid_type=流体类型：%s / %s
+gui.estorage_controller.graph.item_type=物品类型：%s / %s
+gui.estorage_controller.graph.energy_usage=总耗能：%sAE/t
+gui.estorage_controller.graph.energy_stored.percent=能量存储：%s%%
+gui.estorage_controller.graph.energy_stored=能量存储：%sAE / %sAE

@@ -219,6 +219,7 @@ public class EStorageMEChannel extends EStoragePart implements ICellContainer, I
         super.onAssembled();
         ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> {
             proxy.onReady();
+            storageController.recalculateEnergyUsage();
             List<EStorageCellDrive> cellDrives = storageController.getCellDrives();
             if (!cellDrives.isEmpty()) {
                 try {

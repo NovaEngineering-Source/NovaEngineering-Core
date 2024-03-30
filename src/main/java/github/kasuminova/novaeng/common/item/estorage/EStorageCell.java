@@ -11,6 +11,7 @@ import appeng.util.Platform;
 import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
 import github.kasuminova.novaeng.common.core.CreativeTabNovaEng;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -42,6 +43,19 @@ public abstract class EStorageCell<T extends IAEStack<T>> extends AEBaseItem imp
         AEApi.instance()
                 .client()
                 .addCellInformation(EStorageCellHandler.getHandler(stack).getCellInventory(stack, null, this.getChannel()), lines);
+        lines.add(I18n.format("novaeng.estorage_cell.insert.tip"));
+        lines.add(I18n.format("novaeng.estorage_cell.extract.tip"));
+        if (level == DriveStorageLevel.B) {
+            lines.add(I18n.format("novaeng.estorage_cell.l6.tip"));
+        }
+        if (level == DriveStorageLevel.C) {
+            lines.add(I18n.format("novaeng.estorage_cell.l9.tip"));
+        }
+    }
+
+    @Override
+    public double getIdleDrain() {
+        return (double) totalBytes / 1024 / 1024;
     }
 
     public DriveStorageLevel getLevel() {

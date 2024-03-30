@@ -11,7 +11,9 @@ import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.container.data.EStorageEnergyData;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
+import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import net.minecraft.client.resources.I18n;
+import org.lwjgl.input.Keyboard;
 
 import java.util.Collections;
 
@@ -74,7 +76,7 @@ public class EStorageGraph extends Row {
                 double totalUsedBytes = 0;
                 double totalMaxBytes = 0;
                 for (final EStorageCellData data : controllerGUI.getCellDataList()) {
-                    long maxBytes = EStorageCellInfo.getMaxBytes(data);
+                    long maxBytes = EStorageCellDrive.getMaxBytes(data);
                     totalMaxBytes += maxBytes;
                     if (data.type() == DriveStorageType.FLUID) {
                         long usedBytes = data.usedBytes();
@@ -116,7 +118,7 @@ public class EStorageGraph extends Row {
                 double totalUsedBytes = 0;
                 double totalMaxBytes = 0;
                 for (final EStorageCellData data : controllerGUI.getCellDataList()) {
-                    long maxBytes = EStorageCellInfo.getMaxBytes(data);
+                    long maxBytes = EStorageCellDrive.getMaxBytes(data);
                     totalMaxBytes += maxBytes;
                     if (data.type() == DriveStorageType.ITEM) {
                         long usedBytes = data.usedBytes();
@@ -160,7 +162,7 @@ public class EStorageGraph extends Row {
                 double totalUsedBytes = 0;
                 double totalMaxBytes = 0;
                 for (final EStorageCellData data : controllerGUI.getCellDataList()) {
-                    long maxBytes = EStorageCellInfo.getMaxBytes(data);
+                    long maxBytes = EStorageCellDrive.getMaxBytes(data);
                     long usedBytes = data.usedBytes();
                     totalMaxBytes += maxBytes;
                     totalUsedBytes += usedBytes;
@@ -207,7 +209,7 @@ public class EStorageGraph extends Row {
                 for (final EStorageCellData data : controllerGUI.getCellDataList()) {
                     if (data.type() == DriveStorageType.FLUID) {
                         totalUsedFluidTypes += data.usedTypes();
-                        totalMaxFluidTypes += 3;
+                        totalMaxFluidTypes += 25;
                     }
                 }
                 this.totalUsedFluidTypes.set(totalUsedFluidTypes);
@@ -254,7 +256,7 @@ public class EStorageGraph extends Row {
                 for (final EStorageCellData data : controllerGUI.getCellDataList()) {
                     if (data.type() == DriveStorageType.ITEM) {
                         totalUsedItemTypes += data.usedTypes();
-                        totalMaxItemTypes += 27;
+                        totalMaxItemTypes += 315;
                     }
                 }
                 this.totalUsedItemTypes.set(totalUsedItemTypes);
@@ -267,6 +269,8 @@ public class EStorageGraph extends Row {
 
 
     public class EnergyUsageGraph extends Graph {
+
+        protected final AnimationValue energyConsumePerTick = AnimationValue.ofFinished(0, 500, .25, .1, .25, 1);
 
         public EnergyUsageGraph(final EStorageGraph graphParent) {
             super(graphParent,
@@ -284,7 +288,7 @@ public class EStorageGraph extends Row {
             if (!value.isAnimFinished()) {
                 label.setContents(Collections.singletonList(
                         I18n.format("gui.estorage_controller.graph.energy_usage",
-                                NovaEngUtils.formatNumber((long) value.get())))
+                                NovaEngUtils.formatNumber((long) energyConsumePerTick.get())))
                 );
             }
         }
@@ -294,7 +298,12 @@ public class EStorageGraph extends Row {
             if (event instanceof ESGUIDataUpdateEvent) {
                 EStorageEnergyData energyData = controllerGUI.getEnergyData();
                 if (energyData != null) {
-                    value.set(energyData.energyConsumePerTick());
+                    if (energyData.energyStored() > 0) {
+                        value.set(energyData.energyConsumePerTick() / energyData.energyStored());
+                    } else {
+                        value.set(0);
+                    }
+                    this.energyConsumePerTick.set(energyData.energyConsumePerTick());
                 }
             }
             return super.onGuiEvent(event);
@@ -304,6 +313,7 @@ public class EStorageGraph extends Row {
     public class EnergyCapacityGraph extends Graph {
         protected final AnimationValue energyStored = AnimationValue.ofFinished(0, 500, .25, .1, .25, 1);
         protected final AnimationValue maxEnergyStore = AnimationValue.ofFinished(0, 500, .25, .1, .25, 1);
+        protected boolean shiftDown = false;
 
         public EnergyCapacityGraph(final EStorageGraph graphParent) {
             super(graphParent,
@@ -318,7 +328,19 @@ public class EStorageGraph extends Row {
         @Override
         public void update(final WidgetGui gui) {
             super.update(gui);
-            if (!value.isAnimFinished()) {
+            if (value.isAnimFinished()
+                    && (!shiftDown || Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))
+                    && ((shiftDown || !Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) && !Keyboard.isKeyDown(Keyboard.KEY_RSHIFT))) {
+                return;
+            }
+            shiftDown = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+            if (shiftDown) {
+                label.setContents(Collections.singletonList(
+                        I18n.format("gui.estorage_controller.graph.energy_stored",
+                                NovaEngUtils.formatNumber((long) energyStored.get()),
+                                NovaEngUtils.formatNumber((long) maxEnergyStore.get()))
+                ));
+            } else {
                 label.setContents(Collections.singletonList(
                         I18n.format("gui.estorage_controller.graph.energy_stored.percent",
                                 NovaEngUtils.formatDouble(value.get() * 100, 1)))

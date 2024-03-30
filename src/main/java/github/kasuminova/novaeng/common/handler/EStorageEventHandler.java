@@ -13,6 +13,7 @@ import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -56,6 +57,7 @@ public class EStorageEventHandler {
                 return;
             }
             player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, inv.insertItem(0, stackInHand.copy(), false));
+            player.sendMessage(new TextComponentTranslation("novaeng.estorage_cell_drive.player.inserted"));
             event.setCanceled(true);
             return;
         }
@@ -65,6 +67,7 @@ public class EStorageEventHandler {
         }
 
         player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, inv.extractItem(0, stackInSlot.getCount(), false));
+        player.sendMessage(new TextComponentTranslation("novaeng.estorage_cell_drive.player.removed"));
         event.setCanceled(true);
     }
 
@@ -76,11 +79,13 @@ public class EStorageEventHandler {
         if (!(event.player instanceof final EntityPlayerMP player)) {
             return;
         }
-        World world = player.getEntityWorld();
-        if (world.getTotalWorldTime() % 20 != 0) {
+        if (!(player.openContainer instanceof ContainerEStorageController containerESController)) {
             return;
         }
-        if (!(player.openContainer instanceof ContainerEStorageController containerESController)) {
+        World world = player.getEntityWorld();
+        int tickExisted = containerESController.getTickExisted();
+        containerESController.setTickExisted(tickExisted + 1);
+        if (world.getTotalWorldTime() % 20 != 0 || tickExisted >= 1) {
             return;
         }
         EStorageController controller = containerESController.getOwner();

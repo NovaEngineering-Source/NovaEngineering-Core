@@ -9,21 +9,31 @@ import appeng.api.storage.ISaveProvider;
 import appeng.api.storage.IStorageChannel;
 import appeng.api.storage.data.IAEItemStack;
 import appeng.api.storage.data.IAEStack;
+import appeng.api.storage.data.IItemList;
 import appeng.core.AEConfig;
 import appeng.core.AELog;
 import appeng.me.storage.AbstractCellInventory;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
+import github.kasuminova.novaeng.mixin.ae2.AccessorAbstractCellInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 
 public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellInventory<T> {
+    public static final String ITEM_SLOT = "#";
+    public static final String ITEM_SLOT_COUNT = "@";
+    public static final String ITEM_TYPE_TAG = "it";
+    public static final String ITEM_COUNT_TAG = "ic";
+
     private final EStorageCell<T> cellType;
     private final IStorageChannel<T> channel;
 
+    @SuppressWarnings("deprecation")
     protected EStorageCellInventory(final EStorageCell<T> cellType, final ItemStack o, final ISaveProvider container) {
         super(cellType, o, container);
+        ReflectionHelper.setPrivateValue(AbstractCellInventory.class, this, cellType.getTotalTypes(o), "maxItemTypes", null);
         this.cellType = cellType;
         this.channel = cellType.getChannel();
     }
@@ -79,6 +89,86 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
             return inv.getAvailableItems(inv.getChannel().createList()).isEmpty();
         }
         return true;
+    }
+
+    protected IItemList<T> getCellItems() {
+        if (this.cellItems == null) {
+            this.cellItems = this.channel.createList();
+            this.loadCellItems();
+        }
+
+        return this.cellItems;
+    }
+
+    private void loadCellItems() {
+        if (this.cellItems == null) {
+            this.cellItems = this.channel.createList();
+        }
+
+        this.cellItems.resetStatus(); // clears totals and stuff.
+
+        final long types = this.getStoredItemTypes();
+        boolean needsUpdate = false;
+
+        AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+        for (int slot = 0; slot < types; slot++) {
+            NBTTagCompound compoundTag = inv.getTagCompound().getCompoundTag(ITEM_SLOT + slot);
+            long stackSize = inv.getTagCompound().getLong(ITEM_SLOT_COUNT + slot);
+            needsUpdate |= !this.loadCellItem(compoundTag, stackSize);
+        }
+
+        if (needsUpdate) {
+            this.saveChanges();
+        }
+    }
+
+    @Override
+    public void persist() {
+        AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+        if (inv.getIsPersisted()) {
+            return;
+        }
+        NBTTagCompound tagCompound = inv.getTagCompound();
+
+        long itemCount = 0;
+
+        // add new pretty stuff...
+        int x = 0;
+        for (final T v : this.cellItems) {
+            itemCount += v.getStackSize();
+
+            final NBTTagCompound g = new NBTTagCompound();
+            v.writeToNBT(g);
+            tagCompound.setTag(ITEM_SLOT + x, g);
+            tagCompound.setLong(ITEM_SLOT_COUNT + x, v.getStackSize());
+
+            x++;
+        }
+
+        final short oldStoredItems = inv.getStoredItemTypes();
+
+        inv.setStoredItemTypes((short) this.cellItems.size());
+        
+        if (this.cellItems.isEmpty()) {
+            tagCompound.removeTag(ITEM_TYPE_TAG);
+        } else {
+            tagCompound.setShort(ITEM_TYPE_TAG, inv.getStoredItemTypes());
+        }
+
+        inv.setStoredItemCount(itemCount);
+        if (itemCount == 0) {
+            tagCompound.removeTag(ITEM_COUNT_TAG);
+        } else {
+            tagCompound.setLong(ITEM_COUNT_TAG, itemCount);
+        }
+
+        // clean any old crusty stuff...
+        for (; x >= oldStoredItems && x < inv.getMaxItemTypes(); x++) {
+            tagCompound.removeTag(ITEM_SLOT + x);
+            tagCompound.removeTag(ITEM_SLOT_COUNT + x);
+        }
+
+        inv.setIsPersisted(true);
     }
 
     @Override

@@ -15,6 +15,8 @@ import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -57,6 +59,11 @@ public class RegistryItems {
         }
         ITEM_MODELS_TO_REGISTER.forEach(RegistryItems::registryItemModel);
         ITEM_MODELS_TO_REGISTER.clear();
+        setMeshDef();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private static void setMeshDef() {
         ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L4, new EStorageEnergyCellItemRenderer("l4"));
         ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L6, new EStorageEnergyCellItemRenderer("l6"));
         ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L9, new EStorageEnergyCellItemRenderer("l9"));
