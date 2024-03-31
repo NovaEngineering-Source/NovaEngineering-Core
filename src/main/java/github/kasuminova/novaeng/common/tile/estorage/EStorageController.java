@@ -171,10 +171,9 @@ public class EStorageController extends TileCustomController {
 
     public double injectPower(final double amt, final Actionable mode) {
         double toInject = amt;
-        EStorageEnergyCell cell;
 
         if (mode == Actionable.SIMULATE) {
-            while ((cell = energyCellsMin.peek()) != null) {
+            for (final EStorageEnergyCell cell : energyCellsMin) {
                 double prev = toInject;
                 toInject -= (toInject - cell.injectPower(toInject, mode));
                 if (toInject <= 0 || prev == toInject) {
@@ -185,6 +184,7 @@ public class EStorageController extends TileCustomController {
         }
 
         List<EStorageEnergyCell> toReInsert = new LinkedList<>();
+        EStorageEnergyCell cell;
         while ((cell = energyCellsMin.poll()) != null) {
             double prev = toInject;
             toInject -= (toInject - cell.injectPower(toInject, mode));
@@ -203,10 +203,9 @@ public class EStorageController extends TileCustomController {
 
     public double extractPower(final double amt, final Actionable mode) {
         double extracted = 0;
-        EStorageEnergyCell cell;
 
         if (mode == Actionable.SIMULATE) {
-            while ((cell = energyCellsMax.peek()) != null) {
+            for (final EStorageEnergyCell cell : energyCellsMax) {
                 double prev = extracted;
                 extracted += cell.extractPower(amt - extracted, mode);
                 if (extracted >= amt || prev >= extracted) {
@@ -216,6 +215,7 @@ public class EStorageController extends TileCustomController {
             return extracted;
         }
 
+        EStorageEnergyCell cell;
         List<EStorageEnergyCell> toReInsert = new LinkedList<>();
         while ((cell = energyCellsMax.poll()) != null) {
             double prev = extracted;
