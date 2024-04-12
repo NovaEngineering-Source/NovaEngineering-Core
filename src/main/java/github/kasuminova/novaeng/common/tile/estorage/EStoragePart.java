@@ -6,6 +6,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 public abstract class EStoragePart extends TileEntitySynchronized {
     protected EStorageController storageController = null;
@@ -15,6 +16,7 @@ public abstract class EStoragePart extends TileEntitySynchronized {
         this.storageController = storageController;
     }
 
+    @Nullable
     public EStorageController getController() {
         return storageController;
     }

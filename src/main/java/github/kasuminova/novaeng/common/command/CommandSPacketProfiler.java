@@ -36,6 +36,10 @@ public class CommandSPacketProfiler extends CommandBase {
                         @Nonnull final ICommandSender sender,
                         @Nonnull final String[] args)
     {
+        if (args.length > 0 && args[0].equalsIgnoreCase("full")) {
+            SPacketProfiler.getFullProfilerMessages().stream().map(TextComponentString::new).forEach(sender::sendMessage);
+            return;
+        }
         SPacketProfiler.getProfilerMessages().stream().map(TextComponentString::new).forEach(sender::sendMessage);
     }
 

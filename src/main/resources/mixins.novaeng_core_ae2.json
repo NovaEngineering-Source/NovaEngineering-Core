@@ -4,8 +4,13 @@
   "target": "@env(DEFAULT)",
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
+  "server": [
+    "MixinAppEngPacketHandlerBase",
+    "MixinPacketInventoryAction"
+  ],
   "mixins": [
     "AccessorAbstractCellInventory",
+    "MixinCellRegistry",
     "MixinTileChestFilter",
     "MixinTileDriveFilter"
   ]

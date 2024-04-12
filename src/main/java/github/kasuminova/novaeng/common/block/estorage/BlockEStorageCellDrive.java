@@ -83,7 +83,7 @@ public class BlockEStorageCellDrive extends BlockEStoragePart {
 
     @Override
     public int getLightValue(@Nonnull final IBlockState state) {
-        return state.getValue(DriveStorageType.STORAGE_TYPE) == DriveStorageType.EMPTY ? 0 : 5;
+        return state.getValue(DriveStorageType.STORAGE_TYPE) == DriveStorageType.EMPTY ? 1 : 5;
     }
 
     @Nonnull

@@ -57,8 +57,9 @@ public abstract class Graph extends Column {
         this.label.setAutoRecalculateSize(false)
                 .setScale(0.6F)
                 .setVerticalCentering(true)
-                .setWidth((int) (width * 0.7))
-                .setHeight(9)
+                .setRightAligned(!leftAlign)
+                .setWidth(width)
+                .setHeight(10)
                 .setMargin(2, 2, 0, 0);
         setRightAligned(!leftAlign);
         addWidget(this.label);

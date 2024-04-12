@@ -26,6 +26,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 public class EStorageController extends TileCustomController {
@@ -362,6 +363,7 @@ public class EStorageController extends TileCustomController {
         return cellDrives;
     }
 
+    @Nullable
     public EStorageMEChannel getChannel() {
         return channel;
     }

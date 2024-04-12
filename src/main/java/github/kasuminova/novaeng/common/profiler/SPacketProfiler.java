@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.common.profiler;
 
 import com.mojang.authlib.GameProfile;
 import github.kasuminova.novaeng.common.util.ClassUtils;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.NetHandlerPlayServer;
 import net.minecraft.network.NetworkManager;
@@ -27,6 +28,13 @@ public class SPacketProfiler {
         }
 
         GameProfile profile = handlerServer.player.getGameProfile();
+        Map<Class<?>, AtomicLong> packetCounter = PLAYER_CLIENT_PACKETS.computeIfAbsent(profile, v -> new ConcurrentHashMap<>());
+
+        packetCounter.computeIfAbsent(packet.getClass(), v -> new AtomicLong(0)).getAndIncrement();
+    }
+
+    public static void onPacketReceived(final EntityPlayer player, final Object packet) {
+        GameProfile profile = player.getGameProfile();
         Map<Class<?>, AtomicLong> packetCounter = PLAYER_CLIENT_PACKETS.computeIfAbsent(profile, v -> new ConcurrentHashMap<>());
 
         packetCounter.computeIfAbsent(packet.getClass(), v -> new AtomicLong(0)).getAndIncrement();
@@ -80,6 +88,23 @@ public class SPacketProfiler {
                     messages.add(TextFormatting.BLUE + "  " + getPacketClassName(pClass) + ": " + TextFormatting.GOLD + counter.get());
                 });
             }
+        });
+
+        return messages;
+    }
+
+    public static List<String> getFullProfilerMessages() {
+        List<String> messages = new ArrayList<>();
+
+        PLAYER_CLIENT_PACKETS.forEach((profile, map) -> {
+            messages.add(TextFormatting.BLUE + profile.getName() + " (" + profile.getId() + ")");
+            map.entrySet().stream()
+                    .sorted((o1, o2) -> Long.compare(o2.getValue().get(), o1.getValue().get()))
+                    .forEach(entry -> {
+                        Class<?> pClass = entry.getKey();
+                        AtomicLong counter = entry.getValue();
+                        messages.add(TextFormatting.BLUE + "  " + getPacketClassName(pClass) + ": " + TextFormatting.GOLD + counter.get());
+                    });
         });
 
         return messages;

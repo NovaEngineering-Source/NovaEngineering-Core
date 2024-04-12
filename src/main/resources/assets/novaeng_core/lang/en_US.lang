@@ -22,6 +22,7 @@ novaeng.estorage_cell.l9.tip=§c只有 §6L9§c 等级的主机可以驱动此�
 
 novaeng.estorage_cell_drive.player.inserted=§a已插入存储矩阵。
 novaeng.estorage_cell_drive.player.removed=§a已取出存储矩阵。
+novaeng.estorage_cell_drive.player.no_permission=§c访问被拒绝（原因：无 ME 网络权限）。
 
 novaeng.hypernet.connect.result.success=§a连接成功§b（状态：%s 已连接 / %s 最大连接数）。
 novaeng.hypernet.connect.result.no_permission=§c连接失败，HyperNet 网络授权密钥不匹配（原因：非网络所有者）。

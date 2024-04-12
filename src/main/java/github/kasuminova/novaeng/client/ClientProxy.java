@@ -4,6 +4,7 @@ package github.kasuminova.novaeng.client;
 import github.kasuminova.novaeng.client.gui.GuiEStorageController;
 import github.kasuminova.novaeng.client.gui.GuiHyperNetTerminal;
 import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
+import github.kasuminova.novaeng.client.gui.hudcaching.HUDCaching;
 import github.kasuminova.novaeng.client.handler.BlockAngelRendererHandler;
 import github.kasuminova.novaeng.client.handler.ClientEventHandler;
 import github.kasuminova.novaeng.client.handler.HyperNetClientEventHandler;
@@ -57,6 +58,7 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(HyperNetClientEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BlockAngelRendererHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(HUDCaching.INSTANCE);
 
         TitleUtils.setRandomTitle("*PreInit*");
     }

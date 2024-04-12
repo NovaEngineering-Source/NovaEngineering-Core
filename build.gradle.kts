@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.12.0"
+version = "1.12.1"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -204,9 +204,9 @@ dependencies {
 
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
-    implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
+//    implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
     implementation(rfg.deobf("curse.maven:component-model-hider-940949:4885858"))
-//    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:4991928"))
+    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:5255734"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4810661"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:ae2-extended-life-570458:5147702"))
@@ -238,6 +238,10 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:brandonscore-231382:3051539"))
     compileOnly(rfg.deobf("curse.maven:draconicevolution-223565:3051542"))
     compileOnly(rfg.deobf("curse.maven:extrabotany-299086:3112313"))
+    compileOnly(rfg.deobf("curse.maven:libnine-322344:3509087"))
+    compileOnly(rfg.deobf("curse.maven:lazy-ae2-322347:3254160"))
+    compileOnly(rfg.deobf("curse.maven:better-chat-363860:3048407"))
+    compileOnly(rfg.deobf("curse.maven:ae2-fluid-crafting-rework-623955:5237484"))
 }
 
 // Publishing to a Maven repository

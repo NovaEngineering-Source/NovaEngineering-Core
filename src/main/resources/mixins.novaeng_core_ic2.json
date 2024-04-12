@@ -5,11 +5,9 @@
   "minVersion": "0.8",
   "compatibilityLevel": "JAVA_8",
   "server": [
-    "InvokerNetworkManager",
-    "MixinNetworkManager",
-    "MixinTeUpdate"
   ],
   "mixins": [
+    "MixinNetworkManager",
     "MixinTileEntityMatter",
     "MixinTileEntityReplicator"
   ]

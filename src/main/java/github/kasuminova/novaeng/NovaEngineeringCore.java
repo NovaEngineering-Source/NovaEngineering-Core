@@ -3,6 +3,8 @@ package github.kasuminova.novaeng;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.command.CommandSPacketProfiler;
 import github.kasuminova.novaeng.common.network.*;
+import github.kasuminova.novaeng.common.profiler.SPacketProfiler;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.*;
@@ -80,4 +82,17 @@ public class NovaEngineeringCore {
     public void onServerStart(FMLServerStartingEvent event) {
         event.registerServerCommand(CommandSPacketProfiler.INSTANCE);
     }
+
+    @Mod.EventHandler
+    public void onServerStopping(FMLServerStoppingEvent event) {
+        log.info(TextFormatting.BLUE + "服务器正在关闭，正在生成网络包报告。");
+        for (final String message : SPacketProfiler.getProfilerMessages()) {
+            log.info(message);
+        }
+        log.info(TextFormatting.BLUE + "所有玩家的完整网络包报告：");
+        for (final String message : SPacketProfiler.getFullProfilerMessages()) {
+            log.info(message);
+        }
+    }
+
 }

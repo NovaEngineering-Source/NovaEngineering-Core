@@ -1,5 +1,11 @@
 package github.kasuminova.novaeng.common.handler;
 
+import appeng.api.config.SecurityPermissions;
+import appeng.api.networking.IGrid;
+import appeng.api.networking.IGridNode;
+import appeng.api.networking.energy.IEnergyGrid;
+import appeng.api.networking.security.ISecurityGrid;
+import appeng.me.helpers.IGridProxyable;
 import appeng.tile.inventory.AppEngCellInventory;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.container.ContainerEStorageController;
@@ -7,6 +13,7 @@ import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
 import github.kasuminova.novaeng.common.network.PktEStorageControllerGUIData;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
+import github.kasuminova.novaeng.common.tile.estorage.EStorageMEChannel;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -25,6 +32,21 @@ import net.minecraftforge.fml.relauncher.Side;
 public class EStorageEventHandler {
 
     public static final EStorageEventHandler INSTANCE = new EStorageEventHandler();
+    
+    private static boolean canInteract(final EntityPlayer player, final IGridProxyable proxyable) {
+        final IGridNode gn = proxyable.getProxy().getNode();
+        if (gn != null) {
+            final IGrid g = gn.getGrid();
+            final IEnergyGrid eg = g.getCache(IEnergyGrid.class);
+            if (!eg.isNetworkPowered()) {
+                return true;
+            }
+
+            final ISecurityGrid sg = g.getCache(ISecurityGrid.class);
+            return sg.hasPermission(player, SecurityPermissions.BUILD);
+        }
+        return true;
+    }
 
     @SubscribeEvent(priority = EventPriority.LOW)
     public void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
@@ -43,12 +65,22 @@ public class EStorageEventHandler {
             return;
         }
 
-        ItemStack stackInHand = player.getHeldItem(hand);
-
         TileEntity te = world.getTileEntity(event.getPos());
         if (!(te instanceof final EStorageCellDrive drive)) {
             return;
         }
+
+        EStorageController controller = drive.getController();
+        if (controller != null) {
+            EStorageMEChannel channel = controller.getChannel();
+            if (channel != null && !canInteract(player, channel)) {
+                player.sendMessage(new TextComponentTranslation("novaeng.estorage_cell_drive.player.no_permission"));
+                event.setCanceled(true);
+                return;
+            }
+        }
+
+        ItemStack stackInHand = player.getHeldItem(hand);
 
         AppEngCellInventory inv = drive.getDriveInv();
         ItemStack stackInSlot = inv.getStackInSlot(0);
