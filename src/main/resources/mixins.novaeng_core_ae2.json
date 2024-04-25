@@ -10,7 +10,7 @@
   ],
   "mixins": [
     "AccessorAbstractCellInventory",
-    "MixinCellRegistry",
+    "AccessorCellRegistry",
     "MixinTileChestFilter",
     "MixinTileDriveFilter"
   ]

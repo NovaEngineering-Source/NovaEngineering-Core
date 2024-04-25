@@ -23,6 +23,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
         addModdedMixinCFG("mixins.novaeng_core_cofhcore.json",          "cofhcore");
         addModdedMixinCFG("mixins.novaeng_core_draconicevolution.json", "draconicevolution");
         addModdedMixinCFG("mixins.novaeng_core_ic2.json",               "ic2");
+        addModdedMixinCFG("mixins.novaeng_core_igi.json",               "ingameinfoxml");
         addModdedMixinCFG("mixins.novaeng_core_mets.json",              "mets");
         addModdedMixinCFG("mixins.novaeng_core_nae2.json",              "nae2");
         new Thread(() -> {

@@ -1,10 +1,13 @@
 package github.kasuminova.novaeng.common;
 
+import appeng.api.AEApi;
+import appeng.api.storage.ICellHandler;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
 import github.kasuminova.novaeng.common.container.ContainerEStorageController;
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
+import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
 import github.kasuminova.novaeng.common.handler.EStorageEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
@@ -22,6 +25,7 @@ import github.kasuminova.novaeng.common.registry.RegistryMachineSpecial;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
+import github.kasuminova.novaeng.mixin.ae2.AccessorCellRegistry;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.base.Mods;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
@@ -38,6 +42,7 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
 import javax.annotation.Nullable;
+import java.util.List;
 
 @SuppressWarnings("MethodMayBeStatic")
 public class CommonProxy implements IGuiHandler {
@@ -82,6 +87,10 @@ public class CommonProxy implements IGuiHandler {
                 machineSpecial.preInit(machine);
             }
         });
+        if (Mods.AE2.isPresent()) {
+            List<ICellHandler> handlers = ((AccessorCellRegistry) (AEApi.instance().registries().cell())).getHandlers();
+            handlers.add(handlers.size() - 1, EStorageCellHandler.INSTANCE);
+        }
     }
 
     public void postInit() {

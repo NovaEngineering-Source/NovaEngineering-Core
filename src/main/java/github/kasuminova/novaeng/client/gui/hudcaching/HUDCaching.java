@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.client.gui.hudcaching;
 
+import com.github.lunatrius.ingameinfo.handler.Ticker;
 import github.kasuminova.novaeng.mixin.minecraft.forge.AccessorGuiIngameForge;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
@@ -9,11 +10,12 @@ import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraftforge.client.GuiIngameForge;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.lwjgl.opengl.GL11;
 
-@SuppressWarnings("MethodMayBeStatic")
 public class HUDCaching {
 
     public static final HUDCaching INSTANCE = new HUDCaching();
@@ -25,6 +27,7 @@ public class HUDCaching {
     public static boolean renderingCacheOverride = false;
 
     public static boolean enable = true;
+    public static boolean igiRendering = false;
 
     private HUDCaching() {
     }
@@ -92,6 +95,17 @@ public class HUDCaching {
         }
 
         GlStateManager.enableDepth();
+        
+        if (Loader.isModLoaded("ingameinfoxml")) {
+            renderIGIOverlay(partialTicks);
+        }
+    }
+
+    @Optional.Method(modid = "ingameinfoxml")
+    private static void renderIGIOverlay(float partialTicks) {
+        igiRendering = true;
+        Ticker.INSTANCE.onRenderTick(new TickEvent.RenderTickEvent(TickEvent.Phase.END, partialTicks));
+        igiRendering = false;
     }
 
     private static Framebuffer checkFramebufferSizes(Framebuffer framebuffer, int width, int height) {

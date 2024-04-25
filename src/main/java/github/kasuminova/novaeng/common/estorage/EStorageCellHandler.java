@@ -1,13 +1,17 @@
 package github.kasuminova.novaeng.common.estorage;
 
-import appeng.api.storage.*;
+import appeng.api.storage.ICellInventory;
+import appeng.api.storage.ICellInventoryHandler;
+import appeng.api.storage.ISaveProvider;
+import appeng.api.storage.IStorageChannel;
 import appeng.api.storage.data.IAEStack;
+import appeng.core.features.registries.cell.BasicCellHandler;
 import appeng.me.storage.BasicCellInventoryHandler;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import net.minecraft.item.ItemStack;
 
-public class EStorageCellHandler implements ICellHandler {
-    private static final EStorageCellHandler INSTANCE = new EStorageCellHandler();
+public class EStorageCellHandler extends BasicCellHandler {
+    public static final EStorageCellHandler INSTANCE = new EStorageCellHandler();
 
     public static EStorageCellHandler getHandler(final ItemStack cell) {
         if (INSTANCE.isCell(cell)) {

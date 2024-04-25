@@ -7,7 +7,6 @@
   "server": [
   ],
   "mixins": [
-    "MixinNetworkManager",
     "MixinTileEntityMatter",
     "MixinTileEntityReplicator"
   ]

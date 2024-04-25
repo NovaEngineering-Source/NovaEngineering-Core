@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.12.1"
+version = "1.12.5"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -242,6 +242,8 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:lazy-ae2-322347:3254160"))
     compileOnly(rfg.deobf("curse.maven:better-chat-363860:3048407"))
     compileOnly(rfg.deobf("curse.maven:ae2-fluid-crafting-rework-623955:5237484"))
+    compileOnly(rfg.deobf("curse.maven:ingame-info-xml-225604:2489566"))
+    compileOnly(rfg.deobf("curse.maven:lunatriuscore-225605:2489549"))
 }
 
 // Publishing to a Maven repository
