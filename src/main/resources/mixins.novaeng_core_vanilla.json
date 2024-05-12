@@ -20,7 +20,5 @@
     "hudcaching.GuiIngameMixin_HUDCaching"
   ],
   "server": [
-    "forge.MixinFMLEventChannel",
-    "forge.MixinSimpleNetworkWrapper"
   ]
 }

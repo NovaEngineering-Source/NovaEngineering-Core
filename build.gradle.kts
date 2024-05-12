@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.12.5"
+version = "1.13.1"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -204,9 +204,9 @@ dependencies {
 
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
-//    implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
+    implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
+//    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:5255734"))
     implementation(rfg.deobf("curse.maven:component-model-hider-940949:4885858"))
-    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:5255734"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4810661"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:ae2-extended-life-570458:5147702"))
@@ -216,7 +216,8 @@ dependencies {
     implementation(rfg.deobf("curse.maven:CodeChickenLib-242818:2779848"))
     compileOnly(rfg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197"))
     compileOnly(rfg.deobf("curse.maven:industrialcraft-2-242638:3078604"))
-    implementation(rfg.deobf("curse.maven:mekanism-unofficial-edition-v10-edition-840735:4464199"))
+    implementation(rfg.deobf("sddsd233:mekceu-9.8.11.185"))
+//    implementation(rfg.deobf("curse.maven:mekanism-ce-unofficial-840735:5130458"))
     implementation(rfg.deobf("curse.maven:RedstoneFlux-270789:2920436"))
     compileOnly(rfg.deobf("curse.maven:cofh-core-69162:2920433"))
     compileOnly(rfg.deobf("curse.maven:cofh-world-271384:2920434"))

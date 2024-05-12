@@ -128,7 +128,9 @@ public abstract class TileCustomControllerME extends TileCustomController implem
     @Override
     public void validate() {
         super.validate();
-        ModularMachinery.EXECUTE_MANAGER.addSyncTask(proxy::onReady);
+        if (!getWorld().isRemote) {
+            ModularMachinery.EXECUTE_MANAGER.addSyncTask(proxy::onReady);
+        }
     }
 
 }

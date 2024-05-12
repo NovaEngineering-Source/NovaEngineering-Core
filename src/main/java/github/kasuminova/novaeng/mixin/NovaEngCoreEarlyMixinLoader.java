@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.mixin;
 
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -26,7 +27,9 @@ public class NovaEngCoreEarlyMixinLoader implements IFMLLoadingPlugin, IEarlyMix
     static {
         if (isCleanroomLoader()) {
             LOG.info(LOG_PREFIX + "CleanroomLoader detected.");
-            checkLauncher();
+            if (FMLLaunchHandler.side().isClient()) {
+                checkLauncher();
+            }
         }
     }
 

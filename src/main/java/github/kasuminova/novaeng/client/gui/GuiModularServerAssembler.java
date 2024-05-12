@@ -73,6 +73,10 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
         this.widgetController.postGuiEvent(new AssemblerInvUpdateEvent(widgetController.getGui(), assembler.getServer()));
     }
 
+    public TileModularServerAssembler getAssembler() {
+        return assembler;
+    }
+
     @Override
     protected void drawGuiContainerBackgroundLayer(final float partialTicks, final int mouseX, final int mouseY) {
         GlStateManager.color(1.0F, 1.0F, 1.0F);

@@ -12,11 +12,12 @@ public class TitleUtils {
     /**
      * TODO 喜欢我硬编码吗.jpg
      */
-    public static final String DEFAULT_TITLE = "Nova Engineering: World 1.11.2 by Hikari_Nova | Core Ver: " + NovaEngineeringCore.VERSION;
+    public static final String DEFAULT_TITLE = "Nova Engineering: World 1.12.1 by Hikari_Nova | Core Ver: " + NovaEngineeringCore.VERSION;
     public static final String VANILLA_TITLE = "Minecraft 1.12.2";
 
     public static String currentTitle = null;
     public static String lastCurrentTitle = null;
+    public static boolean unsupportedPlatform = false;
 
     /**
      * 设置一言随机标题，必须在客户端主线程使用。
@@ -106,7 +107,7 @@ public class TitleUtils {
     }
 
     private static void setTitle() {
-        if (NovaEngCoreEarlyMixinLoader.isCleanroomLoader()) {
+        if (NovaEngCoreEarlyMixinLoader.isCleanroomLoader() && !unsupportedPlatform) {
             try {
                 Class<?> Display = Class.forName("org.lwjgl.opengl.Display");
                 Method getWindow = Display.getDeclaredMethod("getWindow");
@@ -117,7 +118,8 @@ public class TitleUtils {
                     glfwSetWindowTitle.invoke(null, result, currentTitle);
                 }
             } catch (Exception e) {
-                NovaEngineeringCore.log.warn("Failed to set CleanroomLoader title.", e);
+                NovaEngineeringCore.log.warn("Failed to set CleanroomLoader title, maybe platform is unsupported.", e);
+                unsupportedPlatform = true;
             }
             return;
         }

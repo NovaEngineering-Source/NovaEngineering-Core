@@ -72,8 +72,8 @@ public class TileModularServerAssembler extends TileCustomController {
     protected void notifyClientGUIInventoryUpdate() {
         if (world != null && world.isRemote) {
             GuiScreen currentScreen = Minecraft.getMinecraft().currentScreen;
-            if (currentScreen instanceof GuiModularServerAssembler assembler) {
-                assembler.onServerInventoryUpdate();
+            if (currentScreen instanceof GuiModularServerAssembler assemblerGUI && assemblerGUI.getAssembler() == this) {
+                assemblerGUI.onServerInventoryUpdate();
             }
         }
     }

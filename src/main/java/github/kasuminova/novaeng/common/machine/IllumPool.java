@@ -107,13 +107,13 @@ public class IllumPool implements MachineSpecial {
         machine.getMultiBlockModifiers().add(new MultiBlockModifierReplacement(NORMAL_CATALYST,
                 buildModifierReplacementBlockArray(blockBifrostPerm, CATALYST_POS_PRESET.stream().map(pos -> pos.add(0, 1, 0)).collect(Collectors.toList())),
                 Collections.emptyList(),
-                Collections.singletonList("魔力池上方布满彩虹桥方块可使其激活§a普通模式§f，与其他催化剂模式冲突。"),
+                Collections.singletonList("魔力池上方布满彩虹桥方块可使其激活§a普通模式§f，催化剂模式必须基于此模式。"),
                 StackUtils.getStackFromBlockState(blockBifrostPerm.getDefaultState())));
         // 星光模式
         machine.getMultiBlockModifiers().add(new MultiBlockModifierReplacement(STARLIGHT_CATALYST,
                 buildModifierReplacementBlockArray(blockLiquidStarLight, CATALYST_POS_PRESET.stream().map(pos -> pos.add(0, 1, 0)).collect(Collectors.toList())),
                 Collections.emptyList(),
-                Collections.singletonList("魔力池上方倒满星能液可使其激活§b星光模式§f，与其他催化剂模式冲突。"),
+                Collections.singletonList("魔力池上方倒满星能液可使其激活§b星光模式§f，与催化剂模式冲突。"),
                 StackUtils.getStackFromBlockState(blockLiquidStarLight.getDefaultState())));
         // 炼金模式
         machine.getMultiBlockModifiers().add(new MultiBlockModifierReplacement(ALCHEMY_CATALYST,
@@ -140,15 +140,15 @@ public class IllumPool implements MachineSpecial {
 
             String catalyst = null;
             Map<String, List<RecipeModifier>> foundModifiers = controller.getFoundModifiers();
-            if (foundModifiers.containsKey(ALCHEMY_CATALYST)) {
+            if (foundModifiers.containsKey(ALCHEMY_CATALYST) && foundModifiers.containsKey(NORMAL_CATALYST)) {
                 catalyst = ALCHEMY_CATALYST;
-            } else if (foundModifiers.containsKey(CONJURATION_CATALYST)) {
+            } else if (foundModifiers.containsKey(CONJURATION_CATALYST) && foundModifiers.containsKey(NORMAL_CATALYST)) {
                 catalyst = CONJURATION_CATALYST;
-            } else if (foundModifiers.containsKey(DIMENSION_CATALYST)) {
+            } else if (foundModifiers.containsKey(DIMENSION_CATALYST) && foundModifiers.containsKey(NORMAL_CATALYST)) {
                 catalyst = DIMENSION_CATALYST;
-            } else if (foundModifiers.containsKey(STARLIGHT_CATALYST)) {
+            } else if (foundModifiers.containsKey(STARLIGHT_CATALYST) && !foundModifiers.containsKey(NORMAL_CATALYST)) {
                 catalyst = STARLIGHT_CATALYST;
-            } else if (foundModifiers.containsKey(NORMAL_CATALYST)) {
+            } else if (foundModifiers.containsKey(NORMAL_CATALYST) && !foundModifiers.containsKey(STARLIGHT_CATALYST)) {
                 catalyst = NORMAL_CATALYST;
             }
             if (catalyst != null) {
@@ -201,7 +201,7 @@ public class IllumPool implements MachineSpecial {
         int manaStored = getManaStored(tag);
         float manaConsumeRatio = getManaConsumeRatio(tag);
 
-        int required = Math.round(manaRequired * manaConsumeRatio);
+        int required = Math.max(Math.round(manaRequired * manaConsumeRatio), 1);
         if (manaStored < required) {
             event.setFailed("魔力存储不足或缺少物品输入！");
             return;

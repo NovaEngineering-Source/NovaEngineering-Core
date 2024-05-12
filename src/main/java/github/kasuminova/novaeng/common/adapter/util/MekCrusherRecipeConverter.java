@@ -13,15 +13,15 @@ import mekanism.common.recipe.machines.CrusherRecipe;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
 public class MekCrusherRecipeConverter {
     public static List<MachineRecipe> convert(final Function<ItemStack, MachineRecipe> recipeSupplier, final Predicate<List<ItemStack>> inputFilter, final List<RecipeModifier> modifiers, final int baseEnergyUsage) {
-        HashMap<ItemStackInput, CrusherRecipe> crusherRecipes = RecipeHandler.Recipe.CRUSHER.get();
+        Map<ItemStackInput, CrusherRecipe> crusherRecipes = RecipeHandler.Recipe.CRUSHER.get();
         List<MachineRecipe> machineRecipes = new LinkedList<>();
 
         crusherRecipes.forEach((input, mekRecipe) -> {

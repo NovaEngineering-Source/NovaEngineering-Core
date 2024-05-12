@@ -18,7 +18,9 @@ import org.apache.logging.log4j.Logger;
         dependencies = "required-after:forge@[14.23.5.2847,);" +
                 "required-after:modularmachinery@[1.11.1,);" +
                 "required-after:theoneprobe@[1.12-1.4.28,);" +
-                "required-after:appliedenergistics2@[v0.56.3,);",
+                "required-after:appliedenergistics2@[v0.56.4,);" +
+                "required-after:configanytime@[2.0,);" +
+                "required-after:mixinbooter@[8.0,);",
         acceptedMinecraftVersions = "[1.12, 1.13)"
 )
 @SuppressWarnings("MethodMayBeStatic")

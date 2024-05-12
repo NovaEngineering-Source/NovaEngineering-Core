@@ -6,13 +6,14 @@ import io.netty.util.internal.shaded.org.jctools.queues.atomic.MpscLinkedAtomicQ
 
 import java.util.IdentityHashMap;
 import java.util.Map;
+import java.util.Queue;
 
 public class ParallelNetworkManager {
 
-    private final Map<Object, MpscLinkedAtomicQueue<Action>> groupQueues = new IdentityHashMap<>();
+    private final Map<Object, Queue<Action>> groupQueues = new IdentityHashMap<>();
 
     public void offerAction(final Object group, final Action action) {
-        MpscLinkedAtomicQueue<Action> queue = groupQueues.get(group);
+        Queue<Action> queue = groupQueues.get(group);
         if (queue == null) {
             synchronized (groupQueues) {
                 queue = groupQueues.get(group);
@@ -25,7 +26,7 @@ public class ParallelNetworkManager {
     }
 
     public synchronized void execute() {
-        for (final MpscLinkedAtomicQueue<Action> queue : groupQueues.values()) {
+        for (final Queue<Action> queue : groupQueues.values()) {
             ModularMachinery.EXECUTE_MANAGER.addTask(() -> {
                 synchronized (queue) {
                     Action action;

@@ -54,11 +54,10 @@ public abstract class Graph extends Column {
         this.width = width;
         this.height = height;
         this.reverseColor = reverseColor;
-        this.label.setAutoRecalculateSize(false)
+        this.label.setAutoWrap(false)
                 .setScale(0.6F)
                 .setVerticalCentering(true)
                 .setRightAligned(!leftAlign)
-                .setWidth(width)
                 .setHeight(10)
                 .setMargin(2, 2, 0, 0);
         setRightAligned(!leftAlign);

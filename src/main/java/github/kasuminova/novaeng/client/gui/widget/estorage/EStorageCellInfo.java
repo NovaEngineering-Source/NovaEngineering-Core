@@ -129,18 +129,18 @@ public class EStorageCellInfo extends Column {
         // Type
         addWidget(new MultiLineLabel(Collections.singletonList(
                 I18n.format("gui.estorage_controller.cell_info.tip.0", typeName, levelName))
-        ).setAutoRecalculateSize(false).setScale(.6F).setWidth(width - (10)).setHeight(7).setMargin(10, 0, 2, 0));
+        ).setAutoWrap(false).setScale(.6F).setHeight(7).setMargin(10, 0, 2, 0));
         // StoredTypes / MaxTypes
         addWidget(new MultiLineLabel(Collections.singletonList(
                 I18n.format("gui.estorage_controller.cell_info.tip.1", usedTypes, maxTypes))
-        ).setAutoRecalculateSize(false).setScale(.6F).setWidth(width - (10)).setHeight(7).setMargin(10, 0, 0, 0));
+        ).setAutoWrap(false).setScale(.6F).setHeight(7).setMargin(10, 0, 0, 0));
         // UsedBytes / MaxBytes
         addWidget(new MultiLineLabel(Collections.singletonList(
                 I18n.format("gui.estorage_controller.cell_info.tip.2",
                         NovaEngUtils.formatNumber(usedBytes, 1),
                         NovaEngUtils.formatNumber(maxBytes, 1)
                 ))
-        ).setAutoRecalculateSize(false).setScale(.6F).setWidth(width - (10)).setHeight(7).setMargin(10, 0, 0, 0));
+        ).setAutoWrap(false).setScale(.6F).setHeight(7).setMargin(10, 0, 0, 0));
     }
 
     @Override
