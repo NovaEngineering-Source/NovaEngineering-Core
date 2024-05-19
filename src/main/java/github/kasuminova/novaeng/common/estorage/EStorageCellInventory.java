@@ -1,10 +1,12 @@
 package github.kasuminova.novaeng.common.estorage;
 
+import appeng.api.AEApi;
 import appeng.api.config.Actionable;
 import appeng.api.exceptions.AppEngException;
 import appeng.api.implementations.items.IStorageCell;
 import appeng.api.networking.security.IActionSource;
 import appeng.api.storage.ICellInventory;
+import appeng.api.storage.ICellInventoryHandler;
 import appeng.api.storage.ISaveProvider;
 import appeng.api.storage.IStorageChannel;
 import appeng.api.storage.data.IAEItemStack;
@@ -16,6 +18,7 @@ import appeng.me.storage.AbstractCellInventory;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import github.kasuminova.novaeng.mixin.ae2.AccessorAbstractCellInventory;
+import io.netty.util.internal.ThrowableUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -56,7 +59,7 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
 
             return new EStorageCellInventory<T>(cellType, o, container);
         } catch (final AppEngException e) {
-            NovaEngineeringCore.log.error(e);
+            NovaEngineeringCore.log.error(ThrowableUtil.stackTraceToString(e));
             return null;
         }
     }
@@ -187,8 +190,9 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
         // TODO: Guarantee a read-only access. E.g. provide an isEmpty() method and ensure CellInventory does not write
         // any NBT data for empty cells instead of relying on an empty IItemContainer
         if (isStorageCell(input)) {
-            final ICellInventory<?> meInventory = createInventory(((IAEItemStack) input).createItemStack(), null);
-            if (!isCellEmpty(meInventory)) {
+            ItemStack cellStack = ((IAEItemStack) input).createItemStack();
+            ICellInventoryHandler<?> cellInvHandler = AEApi.instance().registries().cell().getCellInventory(cellStack, null, getStorageCell(cellStack).getChannel());
+            if (cellInvHandler != null && !isCellEmpty(cellInvHandler.getCellInv())) {
                 return input;
             }
         }

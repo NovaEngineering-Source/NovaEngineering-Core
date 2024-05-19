@@ -24,6 +24,7 @@ import hellfirepvp.modularmachinery.client.gui.GuiContainerBase;
 import hellfirepvp.modularmachinery.common.crafting.helper.CraftingStatus;
 import hellfirepvp.modularmachinery.common.util.IOInventory;
 import hellfirepvp.modularmachinery.common.util.MiscUtils;
+import io.netty.util.internal.ThrowableUtil;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -200,7 +201,7 @@ public class GuiHyperNetTerminal extends GuiContainerBase<ContainerHyperNetTermi
 
             drawScreen(mouseX, mouseY);
         } catch (Exception e) {
-            NovaEngineeringCore.log.warn(e);
+            NovaEngineeringCore.log.warn(ThrowableUtil.stackTraceToString(e));
         }
     }
 

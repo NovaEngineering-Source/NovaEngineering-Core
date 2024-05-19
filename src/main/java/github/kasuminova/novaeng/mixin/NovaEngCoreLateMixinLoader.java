@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng.mixin;
 
 import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
+import github.kasuminova.novaeng.client.hitokoto.HitokotoResult;
 import net.minecraftforge.fml.common.Loader;
 import zone.rong.mixinbooter.ILateMixinLoader;
 
@@ -17,15 +18,19 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
 
     static {
         addMixinCFG("mixins.novaeng_core.json");
-        addModdedMixinCFG("mixins.novaeng_core_ae2.json",               "appliedenergistics2");
-        addModdedMixinCFG("mixins.novaeng_core_astralsorcery.json",     "astralsorcery");
-        addModdedMixinCFG("mixins.novaeng_core_athenaeum.json",         "athenaeum");
-        addModdedMixinCFG("mixins.novaeng_core_cofhcore.json",          "cofhcore");
-        addModdedMixinCFG("mixins.novaeng_core_draconicevolution.json", "draconicevolution");
-        addModdedMixinCFG("mixins.novaeng_core_ic2.json",               "ic2");
-        addModdedMixinCFG("mixins.novaeng_core_igi.json",               "ingameinfoxml");
-        addModdedMixinCFG("mixins.novaeng_core_mets.json",              "mets");
-        addModdedMixinCFG("mixins.novaeng_core_nae2.json",              "nae2");
+        addModdedMixinCFG("mixins.novaeng_core_ae2.json",                  "appliedenergistics2");
+        addModdedMixinCFG("mixins.novaeng_core_astralsorcery.json",        "astralsorcery");
+        addModdedMixinCFG("mixins.novaeng_core_athenaeum.json",            "athenaeum");
+        addModdedMixinCFG("mixins.novaeng_core_cofhcore.json",             "cofhcore");
+        addModdedMixinCFG("mixins.novaeng_core_draconicevolution.json",    "draconicevolution");
+        addModdedMixinCFG("mixins.novaeng_core_ic2.json",                  "ic2");
+        addModdedMixinCFG("mixins.novaeng_core_igi.json",                  "ingameinfoxml");
+        addModdedMixinCFG("mixins.novaeng_core_immersiveengineering.json", "immersiveengineering");
+        addModdedMixinCFG("mixins.novaeng_core_mets.json",                 "mets");
+        addModdedMixinCFG("mixins.novaeng_core_nae2.json",                 "nae2");
+
+        // TODO 某些玩家会因为这个莫名其妙的类崩溃？
+        Class<HitokotoResult> toInitialize = HitokotoResult.class;
         new Thread(() -> {
             Thread.currentThread().setName("NovaEng Core Hitokoto Initializer");
             String hitokoto = HitokotoAPI.getRandomHitokoto();

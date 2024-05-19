@@ -1,24 +1,26 @@
 {
-  "package": "github.kasuminova.novaeng.mixin.minecraft",
-  "refmap": "mixins.novaeng_core.refmap.json",
-  "target": "@env(DEFAULT)",
-  "minVersion": "0.8",
-  "compatibilityLevel": "JAVA_8",
-  "mixins": [
-    "MixinNettyPacketDecoder",
-    "forge.MixinSimpleIndexedCodec"
-  ],
-  "client": [
-    "MixinFontRenderer",
-    "MixinNettyCompressionDecoder",
-    "MixinTessellator",
-    "forge.AccessorGuiIngameForge",
-    "hudcaching.EntityRendererMixin_HUDCaching",
-    "hudcaching.FramebufferMixin_HUDCaching",
-    "hudcaching.GlStateManagerMixin_HUDCaching",
-    "hudcaching.GuiIngameForgeMixin_HUDCaching",
-    "hudcaching.GuiIngameMixin_HUDCaching"
-  ],
-  "server": [
-  ]
+    "package": "github.kasuminova.novaeng.mixin.minecraft",
+    "refmap": "mixins.novaeng_core.refmap.json",
+    "target": "@env(DEFAULT)",
+    "minVersion": "0.8",
+    "compatibilityLevel": "JAVA_8",
+    "mixins": [
+        "MixinNettyPacketDecoder",
+        "forge.MixinSimpleIndexedCodec"
+    ],
+    "client": [
+        "MixinFontRenderer",
+        "MixinNettyCompressionDecoder",
+        "MixinTessellator",
+        "forge.AccessorGuiIngameForge",
+        "hudcaching.EntityRendererMixin_HUDCaching",
+        "hudcaching.FramebufferMixin_HUDCaching",
+        "hudcaching.GlStateManagerMixin_HUDCaching",
+        "hudcaching.GuiIngameForgeMixin_HUDCaching",
+        "hudcaching.GuiIngameMixin_HUDCaching"
+    ],
+    "server": [
+        "forge.MixinFMLEventChannel",
+        "forge.MixinSimpleNetworkWrapper"
+    ]
 }

@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.hypernet.research.SimpleResearchData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
+import io.netty.util.internal.ThrowableUtil;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.server.MinecraftServer;
@@ -56,7 +57,7 @@ public class ExportResearchDataToJson extends CommandBase {
             sender.sendMessage(new TextComponentString(
                     TextFormatting.GREEN + "Successfully export research data to hypernet_research_data.json!"));
         } catch (IOException e) {
-            NovaEngineeringCore.log.warn(e);
+            NovaEngineeringCore.log.warn(ThrowableUtil.stackTraceToString(e));
             sender.sendMessage(new TextComponentString(
                     TextFormatting.RED + "Failed to export research data!"));
         }

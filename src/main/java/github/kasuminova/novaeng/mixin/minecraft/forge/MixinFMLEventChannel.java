@@ -30,6 +30,9 @@ public class MixinFMLEventChannel {
         if (!FMLCommonHandler.instance().getMinecraftServerInstance().isCallingFromMinecraftThread()) {
             return;
         }
+        if (NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.isBlacklistChannel(this)) {
+            return;
+        }
         NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.offerAction(this, () -> {
             channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALL);
             channels.get(Side.SERVER).writeAndFlush(pkt).addListener(ChannelFutureListener.FIRE_EXCEPTION_ON_FAILURE);
@@ -40,6 +43,9 @@ public class MixinFMLEventChannel {
     @Inject(method = "sendTo", at = @At("HEAD"), cancellable = true, remap = false)
     private void injectSendTo(final FMLProxyPacket pkt, final EntityPlayerMP player, final CallbackInfo ci) {
         if (!FMLCommonHandler.instance().getMinecraftServerInstance().isCallingFromMinecraftThread()) {
+            return;
+        }
+        if (NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.isBlacklistChannel(this)) {
             return;
         }
         NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.offerAction(this, () -> {
@@ -55,6 +61,9 @@ public class MixinFMLEventChannel {
         if (!FMLCommonHandler.instance().getMinecraftServerInstance().isCallingFromMinecraftThread()) {
             return;
         }
+        if (NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.isBlacklistChannel(this)) {
+            return;
+        }
         NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.offerAction(this, () -> {
             channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.ALLAROUNDPOINT);
             channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(point);
@@ -66,6 +75,9 @@ public class MixinFMLEventChannel {
     @Inject(method = "sendToAllTracking(Lnet/minecraftforge/fml/common/network/internal/FMLProxyPacket;Lnet/minecraftforge/fml/common/network/NetworkRegistry$TargetPoint;)V", at = @At("HEAD"), cancellable = true, remap = false)
     private void injectSendToAllTrackingPoint(final FMLProxyPacket pkt, final NetworkRegistry.TargetPoint point, final CallbackInfo ci) {
         if (!FMLCommonHandler.instance().getMinecraftServerInstance().isCallingFromMinecraftThread()) {
+            return;
+        }
+        if (NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.isBlacklistChannel(this)) {
             return;
         }
         NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.offerAction(this, () -> {
@@ -81,6 +93,9 @@ public class MixinFMLEventChannel {
         if (!FMLCommonHandler.instance().getMinecraftServerInstance().isCallingFromMinecraftThread()) {
             return;
         }
+        if (NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.isBlacklistChannel(this)) {
+            return;
+        }
         NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.offerAction(this, () -> {
             channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGET).set(FMLOutboundHandler.OutboundTarget.TRACKING_ENTITY);
             channels.get(Side.SERVER).attr(FMLOutboundHandler.FML_MESSAGETARGETARGS).set(entity);
@@ -92,6 +107,9 @@ public class MixinFMLEventChannel {
     @Inject(method = "sendToDimension", at = @At("HEAD"), cancellable = true, remap = false)
     private void injectSendToDimension(final FMLProxyPacket pkt, final int dimensionId, final CallbackInfo ci) {
         if (!FMLCommonHandler.instance().getMinecraftServerInstance().isCallingFromMinecraftThread()) {
+            return;
+        }
+        if (NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.isBlacklistChannel(this)) {
             return;
         }
         NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.offerAction(this, () -> {

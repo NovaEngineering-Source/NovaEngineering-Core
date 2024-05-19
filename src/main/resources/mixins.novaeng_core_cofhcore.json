@@ -1,12 +1,12 @@
 {
-  "package": "github.kasuminova.novaeng.mixin.cofh",
-  "refmap": "mixins.novaeng_core.refmap.json",
-  "target": "@env(DEFAULT)",
-  "minVersion": "0.8",
-  "compatibilityLevel": "JAVA_8",
-  "server": [
-    "AccessorPacketHandler",
-    "MixinPacketHandler",
-    "MixinTileCore"
-  ]
+    "package": "github.kasuminova.novaeng.mixin.cofh",
+    "refmap": "mixins.novaeng_core.refmap.json",
+    "target": "@env(DEFAULT)",
+    "minVersion": "0.8",
+    "compatibilityLevel": "JAVA_8",
+    "server": [
+        "AccessorPacketHandler",
+        "MixinPacketHandler",
+        "MixinTileCore"
+    ]
 }

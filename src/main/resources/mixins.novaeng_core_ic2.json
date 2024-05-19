@@ -1,13 +1,16 @@
 {
-  "package": "github.kasuminova.novaeng.mixin.ic2",
-  "refmap": "mixins.novaeng_core.refmap.json",
-  "target": "@env(DEFAULT)",
-  "minVersion": "0.8",
-  "compatibilityLevel": "JAVA_8",
-  "server": [
-  ],
-  "mixins": [
-    "MixinTileEntityMatter",
-    "MixinTileEntityReplicator"
-  ]
+    "package": "github.kasuminova.novaeng.mixin.ic2",
+    "refmap": "mixins.novaeng_core.refmap.json",
+    "target": "@env(DEFAULT)",
+    "minVersion": "0.8",
+    "compatibilityLevel": "JAVA_8",
+    "server": [
+        "MixinContainerBase",
+        "MixinTeUpdate"
+    ],
+    "mixins": [
+        "AccessorTileEntityInventory",
+        "MixinTileEntityMatter",
+        "MixinTileEntityReplicator"
+    ]
 }

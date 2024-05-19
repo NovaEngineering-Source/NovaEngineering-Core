@@ -12,6 +12,7 @@ import appeng.me.storage.MEInventoryHandler;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageMEChannel;
+import io.netty.util.internal.ThrowableUtil;
 
 import java.util.Collections;
 import java.util.List;
@@ -38,7 +39,7 @@ public class ECellDriveWatcher<T extends IAEStack<T>> extends MEInventoryHandler
                     List<T> changed = Collections.singletonList(input.copy().setStackSize(input.getStackSize() - (remainder == null ? 0 : remainder.getStackSize())));
                     proxy.getStorage().postAlterationOfStoredItems(this.getChannel(), changed, channel.getSource());
                 } catch (GridAccessException e) {
-                    NovaEngineeringCore.log.warn(e);
+                    NovaEngineeringCore.log.warn(ThrowableUtil.stackTraceToString(e));
                 }
             }
             this.drive.onWriting();
@@ -59,7 +60,7 @@ public class ECellDriveWatcher<T extends IAEStack<T>> extends MEInventoryHandler
                     List<T> changed = Collections.singletonList(request.copy().setStackSize(-extractable.getStackSize()));
                     proxy.getStorage().postAlterationOfStoredItems(this.getChannel(), changed, channel.getSource());
                 } catch (GridAccessException e) {
-                    NovaEngineeringCore.log.warn(e);
+                    NovaEngineeringCore.log.warn(ThrowableUtil.stackTraceToString(e));
                 }
             }
             this.drive.onWriting();

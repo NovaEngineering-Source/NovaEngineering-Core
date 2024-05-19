@@ -26,14 +26,17 @@ public abstract class MixinTaskExecutor implements ITaskExecutor {
     @Inject(
             method = "onServerTick",
             at = @At(
-                    value = "INVOKE_ASSIGN",
+                    value = "INVOKE",
                     target = "Lgithub/kasuminova/mmce/common/concurrent/TaskExecutor;executeActions()I"
             ),
             remap = false
     )
     private void injectOnServerTickExecuteActions(final TickEvent.ServerTickEvent event, final CallbackInfo ci) {
+        if (event.phase != TickEvent.Phase.END) {
+            return;
+        }
         NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.execute();
-        TaskExecutor.totalExecuted += this.executeActions();
+//        TaskExecutor.totalExecuted += this.executeActions();
     }
 
     @Inject(method = "updateTileEntity", at = @At("HEAD"), remap = false)

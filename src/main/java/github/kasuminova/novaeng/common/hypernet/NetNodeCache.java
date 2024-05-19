@@ -7,6 +7,7 @@ import github.kasuminova.novaeng.common.hypernet.research.ResearchStation;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
+import io.netty.util.internal.ThrowableUtil;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
@@ -78,7 +79,7 @@ public class NetNodeCache {
                         e
                 );
             } catch (Exception e) {
-                NovaEngineeringCore.log.warn(e);
+                NovaEngineeringCore.log.warn(ThrowableUtil.stackTraceToString(e));
                 return null;
             }
         }

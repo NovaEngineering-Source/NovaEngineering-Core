@@ -1,10 +1,10 @@
 {
-    "package": "github.kasuminova.novaeng.mixin.nae2",
+    "package": "github.kasuminova.novaeng.mixin.immersiveengineering",
     "refmap": "mixins.novaeng_core.refmap.json",
     "target": "@env(DEFAULT)",
     "minVersion": "0.8",
     "compatibilityLevel": "JAVA_8",
-    "mixins": [
-        "MixinJEICellCategory"
+    "server": [
+        "MixinTileEntityExcavator"
     ]
 }

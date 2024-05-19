@@ -16,6 +16,7 @@ import hellfirepvp.modularmachinery.common.container.ContainerBase;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
+import io.netty.util.internal.ThrowableUtil;
 import io.netty.util.internal.shaded.org.jctools.queues.atomic.MpscLinkedAtomicQueue;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -111,7 +112,7 @@ public class HyperNetEventHandler {
                     try {
                         action.doAction();
                     } catch (Exception e) {
-                        NovaEngineeringCore.log.warn(e);
+                        NovaEngineeringCore.log.warn(ThrowableUtil.stackTraceToString(e));
                     }
                 }
             }
@@ -121,7 +122,7 @@ public class HyperNetEventHandler {
                     try {
                         action.doAction();
                     } catch (Exception e) {
-                        NovaEngineeringCore.log.warn(e);
+                        NovaEngineeringCore.log.warn(ThrowableUtil.stackTraceToString(e));
                     }
                 }
             }

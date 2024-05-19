@@ -1,17 +1,17 @@
 {
-  "package": "github.kasuminova.novaeng.mixin.ae2",
-  "refmap": "mixins.novaeng_core.refmap.json",
-  "target": "@env(DEFAULT)",
-  "minVersion": "0.8",
-  "compatibilityLevel": "JAVA_8",
-  "server": [
-    "MixinAppEngPacketHandlerBase",
-    "MixinPacketInventoryAction"
-  ],
-  "mixins": [
-    "AccessorAbstractCellInventory",
-    "AccessorCellRegistry",
-    "MixinTileChestFilter",
-    "MixinTileDriveFilter"
-  ]
+    "package": "github.kasuminova.novaeng.mixin.ae2",
+    "refmap": "mixins.novaeng_core.refmap.json",
+    "target": "@env(DEFAULT)",
+    "minVersion": "0.8",
+    "compatibilityLevel": "JAVA_8",
+    "server": [
+        "MixinAppEngPacketHandlerBase",
+        "MixinPacketInventoryAction"
+    ],
+    "mixins": [
+        "AccessorAbstractCellInventory",
+        "AccessorCellRegistry",
+        "MixinTileChestFilter",
+        "MixinTileDriveFilter"
+    ]
 }
