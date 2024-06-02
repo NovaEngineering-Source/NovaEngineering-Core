@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng.common.handler;
 
 import github.kasuminova.mmce.common.util.concurrent.Action;
+import github.kasuminova.mmce.common.util.concurrent.Queues;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.crafttweaker.hypernet.HyperNetHelper;
 import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
@@ -17,7 +18,6 @@ import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import io.netty.util.internal.ThrowableUtil;
-import io.netty.util.internal.shaded.org.jctools.queues.atomic.MpscLinkedAtomicQueue;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -32,14 +32,15 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
+import java.util.Queue;
 import java.util.UUID;
 
 @SuppressWarnings("MethodMayBeStatic")
 public class HyperNetEventHandler {
     public static final HyperNetEventHandler INSTANCE = new HyperNetEventHandler();
 
-    private static final MpscLinkedAtomicQueue<Action> TICK_START_ACTIONS = new MpscLinkedAtomicQueue<>();
-    private static final MpscLinkedAtomicQueue<Action> TICK_END_ACTIONS = new MpscLinkedAtomicQueue<>();
+    private static final Queue<Action> TICK_START_ACTIONS = Queues.createConcurrentQueue();
+    private static final Queue<Action> TICK_END_ACTIONS = Queues.createConcurrentQueue();
 
     public static void addTickStartAction(final Action action) {
         TICK_START_ACTIONS.offer(action);

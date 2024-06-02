@@ -4,6 +4,7 @@ import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.mmce.common.event.recipe.FactoryRecipeTickEvent;
 import github.kasuminova.mmce.common.event.recipe.RecipeCheckEvent;
 import github.kasuminova.mmce.common.helper.IDynamicPatternInfo;
+import github.kasuminova.mmce.common.util.concurrent.Queues;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleCPU;
 import github.kasuminova.novaeng.common.hypernet.upgrade.ProcessorModuleRAM;
@@ -14,7 +15,6 @@ import hellfirepvp.modularmachinery.common.machine.factory.FactoryRecipeThread;
 import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
 import hellfirepvp.modularmachinery.common.tiles.TileFactoryController;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
-import io.netty.util.internal.shaded.org.jctools.queues.atomic.MpscLinkedAtomicQueue;
 import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenGetter;
@@ -24,6 +24,7 @@ import stanhebben.zenscript.annotations.ZenSetter;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Queue;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.concurrent.locks.Lock;
@@ -34,8 +35,8 @@ import java.util.concurrent.locks.ReentrantLock;
 public class DataProcessor extends NetNode {
     private final Lock lock = new ReentrantLock();
 
-    private final MpscLinkedAtomicQueue<Long> recentEnergyUsage = new MpscLinkedAtomicQueue<>();
-    private final MpscLinkedAtomicQueue<Double> recentCalculation = new MpscLinkedAtomicQueue<>();
+    private final Queue<Long> recentEnergyUsage = Queues.createConcurrentQueue();
+    private final Queue<Double> recentCalculation = Queues.createConcurrentQueue();
 
     private final DataProcessorType type;
     private final LinkedList<Double> computationalLoadHistory = new LinkedList<>();
