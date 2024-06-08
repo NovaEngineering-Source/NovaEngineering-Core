@@ -1,9 +1,11 @@
 package github.kasuminova.novaeng.client;
 
 
+import github.kasuminova.mmce.client.renderer.MachineControllerRenderer;
 import github.kasuminova.novaeng.client.gui.GuiEStorageController;
 import github.kasuminova.novaeng.client.gui.GuiHyperNetTerminal;
 import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
+import github.kasuminova.novaeng.client.gui.GuiSingularityCore;
 import github.kasuminova.novaeng.client.gui.hudcaching.HUDCaching;
 import github.kasuminova.novaeng.client.handler.BlockAngelRendererHandler;
 import github.kasuminova.novaeng.client.handler.ClientEventHandler;
@@ -18,6 +20,8 @@ import github.kasuminova.novaeng.common.registry.RegistryItems;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
+import github.kasuminova.novaeng.common.tile.machine.SingularityCore;
+import hellfirepvp.modularmachinery.common.base.Mods;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -26,6 +30,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -59,6 +64,10 @@ public class ClientProxy extends CommonProxy {
         MinecraftForge.EVENT_BUS.register(ClientEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(BlockAngelRendererHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(HUDCaching.INSTANCE);
+
+        if (Mods.GECKOLIB.isPresent()) {
+            ClientRegistry.bindTileEntitySpecialRenderer(SingularityCore.class, MachineControllerRenderer.INSTANCE);
+        }
 
         TitleUtils.setRandomTitle("*PreInit*");
     }
@@ -110,8 +119,10 @@ public class ClientProxy extends CommonProxy {
 
         return switch (type) {
             case HYPERNET_TERMINAL -> new GuiHyperNetTerminal((TileHyperNetTerminal) present, player);
-            case MODULAR_SERVER_ASSEMBLER -> new GuiModularServerAssembler((TileModularServerAssembler) present, player);
+            case MODULAR_SERVER_ASSEMBLER ->
+                    new GuiModularServerAssembler((TileModularServerAssembler) present, player);
             case ESTORAGE_CONTROLLER -> new GuiEStorageController((EStorageController) present, player);
+            case SINGULARITY_CORE -> new GuiSingularityCore((SingularityCore) present, player);
         };
     }
 }

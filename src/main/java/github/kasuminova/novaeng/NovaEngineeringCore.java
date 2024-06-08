@@ -15,12 +15,13 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 @Mod(modid = NovaEngineeringCore.MOD_ID, name = NovaEngineeringCore.MOD_NAME, version = NovaEngineeringCore.VERSION,
-        dependencies = "required-after:forge@[14.23.5.2847,);" +
-                "required-after:modularmachinery@[1.11.1,);" +
-                "required-after:theoneprobe@[1.12-1.4.28,);" +
-                "required-after:appliedenergistics2@[v0.56.4,);" +
-                "required-after:configanytime@[2.0,);" +
-                "required-after:mixinbooter@[8.0,);",
+        dependencies = "required-after:forge@[14.23.5.2847,);" + 
+                       "required-after:modularmachinery@[1.11.1,);" + 
+                       "required:theoneprobe@[1.12-1.4.28,);" + 
+                       "required:appliedenergistics2@[v0.56.4,);" +
+                       "required:lumenized@[1.0.2,);" + 
+                       "required:configanytime@[2.0,);" + 
+                       "required:mixinbooter@[8.0,);",
         acceptedMinecraftVersions = "[1.12, 1.13)"
 )
 @SuppressWarnings("MethodMayBeStatic")
@@ -72,6 +73,7 @@ public class NovaEngineeringCore {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
+        PARALLEL_NETWORK_MANAGER.init();
         proxy.postInit();
     }
 

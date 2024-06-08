@@ -68,7 +68,7 @@ public abstract class MixinPlayerProgress {
     @Unique
     @Nullable
     private EntityPlayerMP novaeng$getCurrentPlayer() {
-        if (FMLCommonHandler.instance().getSide().isClient()) {
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             return null;
         }
         Map<UUID, PlayerProgress> playerProgress = AccessorResearchManager.getPlayerProgressServer();

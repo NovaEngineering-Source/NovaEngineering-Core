@@ -4,6 +4,7 @@ import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.BlockAngel;
 import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
 import github.kasuminova.novaeng.common.block.BlockModularServerAssembler;
+import github.kasuminova.novaeng.common.block.BlockSingularityCoreController;
 import github.kasuminova.novaeng.common.block.estorage.*;
 import github.kasuminova.novaeng.common.item.ItemBlockAngel;
 import github.kasuminova.novaeng.common.item.ItemBlockME;
@@ -13,6 +14,7 @@ import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageEnergyCell;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageMEChannel;
+import github.kasuminova.novaeng.common.tile.machine.SingularityCore;
 import hellfirepvp.modularmachinery.common.block.BlockCustomName;
 import hellfirepvp.modularmachinery.common.block.BlockDynamicColor;
 import hellfirepvp.modularmachinery.common.block.BlockMachineComponent;
@@ -55,6 +57,7 @@ public class RegistryBlocks {
         prepareItemBlockRegister(registerBlock(BlockHyperNetTerminal.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockModularServerAssembler.INSTANCE));
         prepareItemBlockRegister(new ItemBlockAngel(registerBlock(BlockAngel.INSTANCE)));
+        prepareItemBlockRegister(registerBlock(BlockSingularityCoreController.INSTANCE));
 
         prepareItemBlockRegister(registerBlock(BlockEStorageController.L4));
         prepareItemBlockRegister(registerBlock(BlockEStorageController.L6));
@@ -74,6 +77,7 @@ public class RegistryBlocks {
     public static void registerTileEntities() {
         registerTileEntity(TileHyperNetTerminal.class, "hypernet_terminal");
         registerTileEntity(TileModularServerAssembler.class, "modular_server_assembler");
+        registerTileEntity(SingularityCore.class, "singularity_core");
 
         registerTileEntity(EStorageController.class, "estorage_controller");
         registerTileEntity(EStorageEnergyCell.class, "estorage_energy_cell");

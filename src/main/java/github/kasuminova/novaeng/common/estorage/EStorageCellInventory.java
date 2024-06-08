@@ -209,12 +209,18 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
                 r.setStackSize(r.getStackSize() - remainingItemCount);
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() + remainingItemCount);
+                    // Update Count.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemCount(inv.getStoredItemCount() + remainingItemCount);
                     this.saveChanges();
                 }
                 return r;
             } else {
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() + input.getStackSize());
+                    // Update Count.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemCount(inv.getStoredItemCount() + input.getStackSize());
                     this.saveChanges();
                 }
                 return null;
@@ -233,6 +239,10 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
                         toWrite.setStackSize(remainingItemCount);
 
                         this.cellItems.add(toWrite);
+                        // Update Count.
+                        AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                        inv.setStoredItemCount(inv.getStoredItemCount() + toWrite.getStackSize());
+                        inv.setStoredItemTypes((short) (inv.getStoredItemTypes() + 1));
                         this.saveChanges();
                     }
                     return toReturn;
@@ -240,6 +250,10 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
 
                 if (mode == Actionable.MODULATE) {
                     this.cellItems.add(input);
+                    // Update Count.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemCount(inv.getStoredItemCount() + input.getStackSize());
+                    inv.setStoredItemTypes((short) (inv.getStoredItemTypes() + 1));
                     this.saveChanges();
                 }
 
@@ -267,6 +281,12 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
             if (l.getStackSize() <= size) {
                 results.setStackSize(l.getStackSize());
                 if (mode == Actionable.MODULATE) {
+                    // Update Count.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemCount(inv.getStoredItemCount() - results.getStackSize());
+                    if (l.getStackSize() <= 0) {
+                        inv.setStoredItemTypes((short) (inv.getStoredItemTypes() - 1));
+                    }
                     l.setStackSize(0);
                     this.saveChanges();
                 }
@@ -274,6 +294,9 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
                 results.setStackSize(size);
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() - size);
+                    // Update Count.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemCount(inv.getStoredItemCount() - results.getStackSize());
                     this.saveChanges();
                 }
             }
@@ -285,6 +308,16 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
     @Override
     public IStorageChannel<T> getChannel() {
         return this.channel;
+    }
+
+    @Override
+    protected void saveChanges() {
+        if (this.container != null) {
+            ((AccessorAbstractCellInventory) this).setIsPersisted(false);
+            this.container.saveChanges(this);
+        } else {
+            super.saveChanges();
+        }
     }
 
     @Override

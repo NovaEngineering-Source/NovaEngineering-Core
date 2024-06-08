@@ -184,7 +184,7 @@ public class EStorageController extends TileCustomController {
             return toInject;
         }
 
-        List<EStorageEnergyCell> toReInsert = new LinkedList<>();
+        List<EStorageEnergyCell> toReInsert = new ArrayList<>();
         EStorageEnergyCell cell;
         while ((cell = energyCellsMin.poll()) != null) {
             double prev = toInject;
@@ -217,7 +217,7 @@ public class EStorageController extends TileCustomController {
         }
 
         EStorageEnergyCell cell;
-        List<EStorageEnergyCell> toReInsert = new LinkedList<>();
+        List<EStorageEnergyCell> toReInsert = new ArrayList<>();
         while ((cell = energyCellsMax.poll()) != null) {
             double prev = extracted;
             extracted += cell.extractPower(amt - extracted, mode);
@@ -292,26 +292,41 @@ public class EStorageController extends TileCustomController {
     }
 
     @Override
+    public void validate() {
+        tileEntityInvalid = false;
+        loaded = true;
+
+        if (!FMLCommonHandler.instance().getEffectiveSide().isClient()) {
+            return;
+        }
+
+        ClientProxy.clientScheduler.addRunnable(() -> {
+            BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
+            notifyStructureFormedState(isStructureFormed());
+        }, 0);
+    }
+
+    @Override
     public void invalidate() {
         tileEntityInvalid = true;
         loaded = false;
         foundComponents.forEach((te, component) -> MachineComponentManager.INSTANCE.removeOwner(te, this));
-        if (getWorld().isRemote) {
+        disassemble();
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
         }
-        disassemble();
     }
 
     @Override
     public void onLoad() {
-        if (!FMLCommonHandler.instance().getSide().isClient()) {
+        loaded = true;
+        if (!FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             return;
         }
         ClientProxy.clientScheduler.addRunnable(() -> {
             BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
             notifyStructureFormedState(isStructureFormed());
         }, 0);
-        loaded = true;
     }
 
     @Override
@@ -329,7 +344,7 @@ public class EStorageController extends TileCustomController {
 
         loaded = prevLoaded;
 
-        if (FMLCommonHandler.instance().getSide().isClient()) {
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             ClientProxy.clientScheduler.addRunnable(() -> {
                 BlockModelHider.hideOrShowBlocks(HIDE_POS_LIST, this);
                 notifyStructureFormedState(isStructureFormed());

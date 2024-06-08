@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.mixin;
 
 import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
 import github.kasuminova.novaeng.client.hitokoto.HitokotoResult;
+import github.kasuminova.novaeng.common.mod.Mods;
 import net.minecraftforge.fml.common.Loader;
 import zone.rong.mixinbooter.ILateMixinLoader;
 
@@ -28,6 +29,7 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
         addModdedMixinCFG("mixins.novaeng_core_immersiveengineering.json", "immersiveengineering");
         addModdedMixinCFG("mixins.novaeng_core_mets.json",                 "mets");
         addModdedMixinCFG("mixins.novaeng_core_nae2.json",                 "nae2");
+        addMixinCFG("mixins.novaeng_core_unidict.json",                           () -> Mods.UNIDICT.loaded() && Mods.MEKCEU.loaded());
 
         // TODO 某些玩家会因为这个莫名其妙的类崩溃？
         Class<HitokotoResult> toInitialize = HitokotoResult.class;

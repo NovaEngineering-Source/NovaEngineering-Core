@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.13.3"
+version = "1.14.1"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -202,10 +202,15 @@ dependencies {
     compileOnlyApi("org.jetbrains:annotations:24.1.0")
     annotationProcessor("org.jetbrains:annotations:24.1.0")
 
+    // Performance Test Tool
+    runtimeOnly(rfg.deobf("curse.maven:spark-361579:3542217"))
+
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
     implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
 //    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:5255734"))
+    implementation(rfg.deobf("kasuminova:lumenized:1.0.3:dev"))
+    implementation(rfg.deobf("curse.maven:ctm-267602:2915363"))
     implementation(rfg.deobf("curse.maven:component-model-hider-940949:4885858"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4810661"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
@@ -219,6 +224,7 @@ dependencies {
     implementation(rfg.deobf("sddsd233:mekceu-9.8.11.185"))
 //    implementation(rfg.deobf("curse.maven:mekanism-ce-unofficial-840735:5130458"))
     implementation(rfg.deobf("curse.maven:RedstoneFlux-270789:2920436"))
+    implementation(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
     compileOnly(rfg.deobf("curse.maven:cofh-core-69162:2920433"))
     compileOnly(rfg.deobf("curse.maven:cofh-world-271384:2920434"))
     compileOnly(rfg.deobf("curse.maven:thermal-foundation-222880:2926428"))
@@ -228,11 +234,10 @@ dependencies {
     implementation(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
     implementation(rfg.deobf("curse.maven:baubles-227083:2518667"))
     compileOnly(rfg.deobf("curse.maven:matter-overdrive-community-edition-557428:4592069"))
-    implementation(rfg.deobf("curse.maven:zenutil-401178:4394263"))
+    implementation(rfg.deobf("curse.maven:zenutil-401178:5056679"))
     compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
     compileOnly(rfg.deobf("curse.maven:athenaeum-284350:4633750"))
     compileOnly(rfg.deobf("curse.maven:artisan-worktables-284351:3205284"))
-    compileOnly(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
     compileOnly(rfg.deobf("curse.maven:endercore-231868:4671384"))
     compileOnly(rfg.deobf("curse.maven:ender-io-64578:4674244"))
     compileOnly(rfg.deobf("curse.maven:more-electric-tools-366298:3491973"))
@@ -246,6 +251,8 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:ingame-info-xml-225604:2489566"))
     compileOnly(rfg.deobf("curse.maven:lunatriuscore-225605:2489549"))
     compileOnly(rfg.deobf("curse.maven:immersive-engineering-231951:2974106"))
+    compileOnly(rfg.deobf("curse.maven:unidict-244258:3553627"))
+    compileOnly(rfg.deobf("curse.maven:wanionlib-253043:4623135"))
 }
 
 // Publishing to a Maven repository

@@ -358,7 +358,7 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
     @Override
     public <T> T getCapability(@Nonnull final Capability<T> capability, @Nullable final EnumFacing facing) {
         if (capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-            return (T) driveInv;
+            return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(driveInv);
         }
         return super.getCapability(capability, facing);
     }
@@ -373,7 +373,7 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
             ItemHandlerUtil.setStackInSlot(driveInv, x, stackFromNBT(item));
         }
 
-        if (FMLCommonHandler.instance().getSide().isClient()) {
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             notifyUpdate();
         }
     }

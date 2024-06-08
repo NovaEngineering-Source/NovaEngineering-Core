@@ -7,6 +7,7 @@ import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
 import github.kasuminova.novaeng.common.container.ContainerEStorageController;
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
+import github.kasuminova.novaeng.common.container.ContainerSingularityCore;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
 import github.kasuminova.novaeng.common.handler.EStorageEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
@@ -18,6 +19,7 @@ import github.kasuminova.novaeng.common.integration.IntegrationCRT;
 import github.kasuminova.novaeng.common.integration.ic2.IntegrationIC2;
 import github.kasuminova.novaeng.common.integration.theoneprobe.IntegrationTOP;
 import github.kasuminova.novaeng.common.machine.IllumPool;
+import github.kasuminova.novaeng.common.machine.SingularityCore;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
@@ -28,8 +30,6 @@ import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
 import github.kasuminova.novaeng.mixin.ae2.AccessorCellRegistry;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.base.Mods;
-import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
-import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -81,12 +81,9 @@ public class CommonProxy implements IGuiHandler {
         if (Mods.ASTRAL_SORCERY.isPresent() && Mods.BOTANIA.isPresent()) {
             RegistryMachineSpecial.registrySpecialMachine(IllumPool.ILLUM_POOL);
         }
-        RegistryMachineSpecial.getSpecialMachineRegistry().forEach((registryName, machineSpecial) -> {
-            DynamicMachine machine = MachineRegistry.getRegistry().getMachine(registryName);
-            if (machine != null) {
-                machineSpecial.preInit(machine);
-            }
-        });
+        if (Mods.GECKOLIB.isPresent()) {
+            RegistryMachineSpecial.registrySpecialMachine(SingularityCore.SINGULARITY_CORE);
+        }
         if (Mods.AE2.isPresent()) {
             List<ICellHandler> handlers = ((AccessorCellRegistry) (AEApi.instance().registries().cell())).getHandlers();
             handlers.add(0, EStorageCellHandler.INSTANCE);
@@ -95,12 +92,6 @@ public class CommonProxy implements IGuiHandler {
 
     public void postInit() {
         HyperNetMachineEventHandler.registerHandler();
-        RegistryMachineSpecial.getSpecialMachineRegistry().forEach((registryName, machineSpecial) -> {
-            DynamicMachine machine = MachineRegistry.getRegistry().getMachine(registryName);
-            if (machine != null) {
-                machineSpecial.init(machine);
-            }
-        });
     }
 
     public void loadComplete() {
@@ -126,6 +117,7 @@ public class CommonProxy implements IGuiHandler {
             case HYPERNET_TERMINAL -> new ContainerHyperNetTerminal((TileHyperNetTerminal) present, player);
             case MODULAR_SERVER_ASSEMBLER -> new ContainerModularServerAssembler((TileModularServerAssembler) present, player);
             case ESTORAGE_CONTROLLER -> new ContainerEStorageController((EStorageController) present, player);
+            case SINGULARITY_CORE -> new ContainerSingularityCore((github.kasuminova.novaeng.common.tile.machine.SingularityCore) present, player);
         };
     }
 
@@ -140,6 +132,7 @@ public class CommonProxy implements IGuiHandler {
         HYPERNET_TERMINAL(TileHyperNetTerminal.class),
         MODULAR_SERVER_ASSEMBLER(TileModularServerAssembler.class),
         ESTORAGE_CONTROLLER(EStorageController.class),
+        SINGULARITY_CORE(github.kasuminova.novaeng.common.tile.machine.SingularityCore.class),
         ;
 
         public final Class<? extends TileEntity> requiredTileEntity;

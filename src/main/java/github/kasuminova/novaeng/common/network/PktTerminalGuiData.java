@@ -10,14 +10,18 @@ import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import io.netty.buffer.ByteBuf;
 import it.unimi.dsi.fastutil.objects.Object2DoubleOpenHashMap;
+import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -29,6 +33,8 @@ public class PktTerminalGuiData implements IMessage, IMessageHandler<PktTerminal
     private static final Object2DoubleOpenHashMap<ResearchCognitionData> RESEARCHING_DATA = new Object2DoubleOpenHashMap<>();
     private static final List<Database.Status> DATABASES = new ArrayList<>();
     private static ResearchStationType researchStationType = null;
+    
+    private NBTTagCompound tag;
 
     // Server Only
     private TileHyperNetTerminal terminal = null;
@@ -59,40 +65,7 @@ public class PktTerminalGuiData implements IMessage, IMessageHandler<PktTerminal
 
     @Override
     public void fromBytes(final ByteBuf buf) {
-        UNLOCKED_DATA.clear();
-        RESEARCHING_DATA.clear();
-        DATABASES.clear();
-
-        NBTTagCompound tag = ByteBufUtils.readTag(buf);
-        if (tag == null) {
-            return;
-        }
-
-        NBTTagList unlocked = tag.getTagList("unlockedData", Constants.NBT.TAG_STRING);
-        IntStream.range(0, unlocked.tagCount())
-                .mapToObj(unlocked::getStringTagAt)
-                .map(RegistryHyperNet::getResearchCognitionData)
-                .filter(Objects::nonNull)
-                .forEach(UNLOCKED_DATA::add);
-
-        NBTTagList researching = tag.getTagList("researchingData", Constants.NBT.TAG_COMPOUND);
-        IntStream.range(0, researching.tagCount()).mapToObj(researching::getCompoundTagAt).forEach(tagAt -> {
-            String researchName = tagAt.getString("researchName");
-            ResearchCognitionData data = RegistryHyperNet.getResearchCognitionData(researchName);
-            if (data == null) {
-                return;
-            }
-            RESEARCHING_DATA.put(data, tagAt.getDouble("progress"));
-        });
-
-        NBTTagList databases = tag.getTagList("databases", Constants.NBT.TAG_COMPOUND);
-        IntStream.range(0, databases.tagCount())
-                .mapToObj(databases::getCompoundTagAt)
-                .map(Database.Status::readFromNBT)
-                .filter(Objects::nonNull)
-                .forEach(DATABASES::add);
-
-        researchStationType = RegistryHyperNet.getResearchStationType(tag.getString("researchStationType"));
+        tag = ByteBufUtils.readTag(buf);
     }
 
     @Override
@@ -155,6 +128,48 @@ public class PktTerminalGuiData implements IMessage, IMessageHandler<PktTerminal
 
     @Override
     public IMessage onMessage(final PktTerminalGuiData message, final MessageContext ctx) {
+        if (message.tag == null) {
+            return null;
+        }
+        if (FMLCommonHandler.instance().getSide().isClient()) {
+            Minecraft.getMinecraft().addScheduledTask(() -> processPacket(message));
+        }
         return null;
     }
+
+    @SideOnly(Side.CLIENT)
+    private static void processPacket(final PktTerminalGuiData message) {
+        UNLOCKED_DATA.clear();
+        RESEARCHING_DATA.clear();
+        DATABASES.clear();
+
+        NBTTagCompound tag = message.tag;
+
+        NBTTagList unlocked = tag.getTagList("unlockedData", Constants.NBT.TAG_STRING);
+        IntStream.range(0, unlocked.tagCount())
+                .mapToObj(unlocked::getStringTagAt)
+                .map(RegistryHyperNet::getResearchCognitionData)
+                .filter(Objects::nonNull)
+                .forEach(UNLOCKED_DATA::add);
+
+        NBTTagList researching = tag.getTagList("researchingData", Constants.NBT.TAG_COMPOUND);
+        IntStream.range(0, researching.tagCount()).mapToObj(researching::getCompoundTagAt).forEach(tagAt -> {
+            String researchName = tagAt.getString("researchName");
+            ResearchCognitionData data = RegistryHyperNet.getResearchCognitionData(researchName);
+            if (data == null) {
+                return;
+            }
+            RESEARCHING_DATA.put(data, tagAt.getDouble("progress"));
+        });
+
+        NBTTagList databases = tag.getTagList("databases", Constants.NBT.TAG_COMPOUND);
+        IntStream.range(0, databases.tagCount())
+                .mapToObj(databases::getCompoundTagAt)
+                .map(Database.Status::readFromNBT)
+                .filter(Objects::nonNull)
+                .forEach(DATABASES::add);
+
+        researchStationType = RegistryHyperNet.getResearchStationType(tag.getString("researchStationType"));
+    }
+
 }

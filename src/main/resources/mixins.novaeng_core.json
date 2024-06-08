@@ -8,6 +8,7 @@
         "MixinIngredientItemStackRenderer"
     ],
     "mixins": [
+        "MixinCommonProxy",
         "MixinMachineRegistry",
         "MixinTaskExecutor",
         "MixinTileMultiblockMachineController"

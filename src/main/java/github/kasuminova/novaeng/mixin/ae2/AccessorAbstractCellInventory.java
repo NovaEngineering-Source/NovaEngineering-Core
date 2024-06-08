@@ -21,6 +21,9 @@ public interface AccessorAbstractCellInventory {
     void setStoredItemTypes(short storedItemTypes);
 
     @Accessor
+    long getStoredItemCount();
+
+    @Accessor
     void setStoredItemCount(long storedItemCount);
 
     @Accessor

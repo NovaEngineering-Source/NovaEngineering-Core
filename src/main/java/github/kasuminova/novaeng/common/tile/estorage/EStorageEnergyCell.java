@@ -1,7 +1,9 @@
 package github.kasuminova.novaeng.common.tile.estorage;
 
 import appeng.api.config.Actionable;
+import github.kasuminova.novaeng.common.block.estorage.BlockEStorageEnergyCell;
 import github.kasuminova.novaeng.common.block.estorage.prop.EnergyCellStatus;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
@@ -105,8 +107,11 @@ public class EStorageEnergyCell extends EStoragePart implements Comparable<EStor
         maxEnergyStore = tag.getDouble("maxEnergyStore");
         currentStatus = getStatusFromFillFactor(getFillFactor());
 
-        if (FMLCommonHandler.instance().getSide().isClient()) {
-            notifyUpdate();
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient() && world != null) {
+            IBlockState current = world.getBlockState(pos);
+            if (current.getBlock() instanceof BlockEStorageEnergyCell) {
+                world.setBlockState(pos, current.withProperty(EnergyCellStatus.STATUS, EStorageEnergyCell.getStatusFromFillFactor(getFillFactor())));
+            }
         }
     }
 
