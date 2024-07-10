@@ -9,6 +9,7 @@ import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateE
 import github.kasuminova.novaeng.common.container.slot.*;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.server.*;
+import github.kasuminova.novaeng.common.hypernet.server.modifier.ModifierManager;
 import github.kasuminova.novaeng.common.util.TileItemHandler;
 import net.minecraft.client.resources.I18n;
 
@@ -127,7 +128,11 @@ public class ServerInfoColumn extends ScrollingColumn {
         int totalHardwareBandwidth = server.getTotalHardwareBandwidth();
         int usedHardwareBandwidth = server.getUsedHardwareBandwidth();
         hardwareBandwidthTips.add(I18n.format("gui.modular_server_assembler.info.total_hardware_bandwidth", totalHardwareBandwidth));
-        hardwareBandwidthTips.add(I18n.format("gui.modular_server_assembler.info.used_hardware_bandwidth", usedHardwareBandwidth, NovaEngUtils.formatPercent(usedHardwareBandwidth, totalHardwareBandwidth)));
+        if (totalHardwareBandwidth <= 0) {
+            hardwareBandwidthTips.add(I18n.format("gui.modular_server_assembler.info.used_hardware_bandwidth", usedHardwareBandwidth, usedHardwareBandwidth > 0 ? "100%" : "0%"));
+        } else {
+            hardwareBandwidthTips.add(I18n.format("gui.modular_server_assembler.info.used_hardware_bandwidth", usedHardwareBandwidth, NovaEngUtils.formatPercent(usedHardwareBandwidth, totalHardwareBandwidth)));
+        }
         addWidget(createLabel(hardwareBandwidthTips));
         addWidget(createSeparator());
     }
@@ -172,7 +177,7 @@ public class ServerInfoColumn extends ScrollingColumn {
             ));
             tip.add(I18n.format("gui.modular_server_assembler.calculate.value",
                     type.format(server.calculate(
-                            new CalculateRequest(Double.MAX_VALUE, true, type, CalculateStage.START, server.getOwner(), new HashMap<>(), new HashMap<>()))
+                            new CalculateRequest(Double.MAX_VALUE, true, type, CalculateStage.START, server.getOwner(), new ModifierManager(), new HashMap<>()))
                             .generated()
                     ),
                     Calculable.formatEfficiency(server.getCalculateAvgEfficiency(type))
@@ -188,7 +193,7 @@ public class ServerInfoColumn extends ScrollingColumn {
     }
 
     protected MultiLineLabel createLabel(final List<String> contents) {
-        return new MultiLineLabel(contents).setWidth(width - 8 - 4).setScale(0.75F);
+        return new MultiLineLabel(contents).setWidth(width - 8 - 4).setScale(0.8F);
     }
 
     @Override
@@ -199,4 +204,5 @@ public class ServerInfoColumn extends ScrollingColumn {
         }
         return super.onGuiEvent(event);
     }
+
 }

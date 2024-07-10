@@ -106,6 +106,7 @@ public class Rings extends DynamicWidget {
         // 渲染
         gui.mc.getTextureManager().bindTexture(BUTTON);
         gui.drawTexturedModalRect(-(PLATE_SIZE / 2), -(PLATE_SIZE / 2), PLATE_TEX_X, PLATE_TEX_Y, PLATE_SIZE, PLATE_SIZE);
+
         // 黑洞
         gui.drawTexturedModalRect(-(HOLA_SIZE / 2), -(HOLA_SIZE / 2), HOLA_TEX_X, HOLA_TEX_Y, HOLA_SIZE, HOLA_SIZE);
         GlStateManager.popMatrix();

@@ -111,8 +111,10 @@ novaeng.hypernet.computation_point_required.tip.parallelized=§9算力 (受并�
 
 novaeng.hypernet.calculable.tip.base_ratio=§b基础效率系数：§a%s
 novaeng.hypernet.calculable.tip.energy_consume_ratio=§b设计最大能耗：§c%s RF/t
-novaeng.hypernet.calculable.tip.hardware_bandwidth=§b硬件带宽占用：§a%s
 novaeng.hypernet.calculable.supported=此模块可提供计算功能。
+
+novaeng.hypernet.hardware_bandwidth.consume=§b硬件带宽占用：§e%s
+novaeng.hypernet.hardware_bandwidth.provide=§b硬件带宽提供：§a%s
 
 novaeng.hypernet.calculate.tip.efficiency=%s：%s（效率：%s%%）
 

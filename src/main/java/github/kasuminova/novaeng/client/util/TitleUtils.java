@@ -100,7 +100,7 @@ public class TitleUtils {
                 NovaEngineeringCore.log.debug("Invalid title: {}, Excepted: {}", title, lastCurrentTitle);
 //                // 嗯？
 //                Minecraft.getMinecraft().shutdown();
-                return;
+//                return;
             }
         }
         setTitle();

@@ -31,11 +31,11 @@ public abstract class ModuleCalculableBase<T extends ServerModule & Calculable> 
 
     @Override
     public List<String> getTooltip(final T moduleInstance) {
-        List<String> tooltip = new ArrayList<>();
+        List<String> tooltip = new ArrayList<>(super.getTooltip(moduleInstance));
 
+        tooltip.add(I18n.format("novaeng.hypernet.hardware_bandwidth.consume", this.hardwareBandwidth));
         tooltip.add(I18n.format("novaeng.hypernet.calculable.tip.base_ratio", this.baseGeneration));
         tooltip.add(I18n.format("novaeng.hypernet.calculable.tip.energy_consume_ratio", NovaEngUtils.formatNumber(Math.round(this.energyConsumeRatio))));
-        tooltip.add(I18n.format("novaeng.hypernet.calculable.tip.hardware_bandwidth", this.hardwareBandwidth));
         tooltip.add(I18n.format("novaeng.hypernet.calculable.supported"));
 
         PriorityQueue<EfficiencyTip> efficiencyTips = new PriorityQueue<>();
@@ -52,7 +52,6 @@ public abstract class ModuleCalculableBase<T extends ServerModule & Calculable> 
         for (final EfficiencyTip efficiencyTip : efficiencyTips) {
             tooltip.add(efficiencyTip.tip());
         }
-        tooltip.addAll(super.getTooltip(moduleInstance));
         return tooltip;
     }
 

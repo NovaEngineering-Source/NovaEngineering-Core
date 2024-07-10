@@ -3,11 +3,8 @@ package github.kasuminova.novaeng.common.hypernet.server.module;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
-import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-
-import javax.annotation.Nonnull;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.server.module.ModuleCapacitor")
@@ -41,16 +38,6 @@ public class ModuleCapacitor extends ServerModule {
 
     public void setMaxEnergyConsumptionProvide(final long maxEnergyConsumptionProvide) {
         this.maxEnergyConsumptionProvide = maxEnergyConsumptionProvide;
-    }
-
-    @Override
-    public void readNBT(@Nonnull final NBTTagCompound nbt) {
-
-    }
-
-    @Override
-    public void writeNBT(@Nonnull final NBTTagCompound nbt) {
-
     }
 
 }

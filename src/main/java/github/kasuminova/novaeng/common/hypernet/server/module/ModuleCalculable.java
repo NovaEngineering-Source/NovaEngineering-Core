@@ -6,12 +6,10 @@ import github.kasuminova.novaeng.common.hypernet.server.CalculateRequest;
 import github.kasuminova.novaeng.common.hypernet.server.HardwareBandwidthConsumer;
 import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.server.exception.ModularServerException;
-import github.kasuminova.novaeng.common.hypernet.server.modifier.CalculateModifier;
 import github.kasuminova.novaeng.common.hypernet.server.modifier.ModifierKeys;
+import github.kasuminova.novaeng.common.hypernet.server.modifier.ModifierManager;
 import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
 import stanhebben.zenscript.annotations.ZenClass;
-
-import java.util.Map;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.server.module.ModuleCalculable")
@@ -31,10 +29,10 @@ public abstract class ModuleCalculable extends ServerModule implements Calculabl
     public double calculate(final CalculateRequest request) throws ModularServerException {
         double efficiency = getCalculateTypeEfficiency(request.type());
 
-        Map<String, CalculateModifier> modifiers = request.modifiers();
-        double maxCanGenerated = modifiers.computeIfAbsent(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, v -> new CalculateModifier())
-                .apply(modifiers.computeIfAbsent(request.type().getModifierKey(), v -> new CalculateModifier())
-                        .apply(baseGeneration * efficiency));
+        ModifierManager modifier = request.modifier();
+        double maxCanGenerated = modifier.apply(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, 
+                modifier.apply(request.type().getModifierKey(), baseGeneration * efficiency)
+        );
 
         double generated = Math.min(maxCanGenerated, request.maxRequired());
         if (!request.simulate()) {

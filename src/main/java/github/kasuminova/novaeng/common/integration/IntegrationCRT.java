@@ -40,7 +40,7 @@ public class IntegrationCRT {
 
     @SubscribeEvent(priority = EventPriority.HIGH)
     @Optional.Method(modid = "zenutils")
-    public void onScriptsReloaded(ScriptReloadEvent.Post event) {
+    public void onScriptsReloadedPre(ScriptReloadEvent.Post event) {
         RegistryHyperNet.registerHyperNetNode(
                 new ResourceLocation(ModularMachinery.MODID, "hypernet_terminal"),
                 HyperNetTerminal.class
@@ -56,7 +56,11 @@ public class IntegrationCRT {
                 machineSpecial.preInit(machine);
             }
         });
+    }
 
+    @SubscribeEvent(priority = EventPriority.LOW)
+    @Optional.Method(modid = "zenutils")
+    public void onScriptsReloadedPost(ScriptReloadEvent.Post event) {
         // post
         HyperNetMachineEventHandler.registerHandler();
         RegistryMachineSpecial.getSpecialMachineRegistry().forEach((registryName, machineSpecial) -> {

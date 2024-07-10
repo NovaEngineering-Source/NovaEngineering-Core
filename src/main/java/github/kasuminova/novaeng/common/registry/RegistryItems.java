@@ -18,9 +18,7 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 import static hellfirepvp.modularmachinery.common.registry.RegistryItems.pendingDynamicColorItems;
 
@@ -28,7 +26,10 @@ import static hellfirepvp.modularmachinery.common.registry.RegistryItems.pending
 public class RegistryItems {
     public static final List<Item> ITEMS_TO_REGISTER = new LinkedList<>();
     public static final List<Item> ITEMS_TO_REGISTER_CT = new LinkedList<>();
+    public static final Map<String, Item> CUSTOM_MODEL_ITEMS_TO_REGISTER_CT = new LinkedHashMap<>();
+
     public static final List<Item> ITEM_MODELS_TO_REGISTER = new LinkedList<>();
+    public static final Map<String, Item> ITEM_CUSTOM_MODELS_TO_REGISTER = new LinkedHashMap<>();
 
     @SubscribeEvent
     public void registerItems(RegistryEvent.Register<Item> event) {
@@ -51,14 +52,18 @@ public class RegistryItems {
         ITEMS_TO_REGISTER.clear();
         ITEMS_TO_REGISTER_CT.forEach(RegistryItems::registerItem);
         ITEMS_TO_REGISTER_CT.clear();
+        CUSTOM_MODEL_ITEMS_TO_REGISTER_CT.forEach((path, item) -> registerItem(item, path));
+        CUSTOM_MODEL_ITEMS_TO_REGISTER_CT.clear();
     }
 
     public static void registerItemModels() {
         if (FMLCommonHandler.instance().getSide().isServer()) {
             return;
         }
-        ITEM_MODELS_TO_REGISTER.forEach(RegistryItems::registryItemModel);
+        ITEM_MODELS_TO_REGISTER.forEach(RegistryItems::registerItemModel);
         ITEM_MODELS_TO_REGISTER.clear();
+        ITEM_CUSTOM_MODELS_TO_REGISTER.forEach((path, item) -> registerItemModel(item, path));
+        ITEM_CUSTOM_MODELS_TO_REGISTER.clear();
         setMeshDef();
     }
 
@@ -78,7 +83,16 @@ public class RegistryItems {
         return item;
     }
 
-    public static void registryItemModel(final Item item) {
+    public static <T extends Item> T registerItem(T item, String modelPath) {
+        ITEM_CUSTOM_MODELS_TO_REGISTER.put(modelPath, item);
+        GenericRegistryPrimer.INSTANCE.register(item);
+        if (item instanceof ItemDynamicColor) {
+            pendingDynamicColorItems.add((ItemDynamicColor) item);
+        }
+        return item;
+    }
+
+    public static void registerItemModel(final Item item) {
         NonNullList<ItemStack> list = NonNullList.create();
         ResourceLocation registryName = Objects.requireNonNull(item.getRegistryName());
 
@@ -91,6 +105,23 @@ public class RegistryItems {
                     item, stack.getItemDamage(), new ModelResourceLocation(registryName, "inventory")));
         }
 
-        NovaEngineeringCore.log.debug("REGISTERED ITEM MODEL: " + registryName);
+        NovaEngineeringCore.log.debug("REGISTERED ITEM MODEL: {}", registryName);
+    }
+
+    public static void registerItemModel(final Item item, final String modelPath) {
+        NonNullList<ItemStack> list = NonNullList.create();
+        ResourceLocation registryName = Objects.requireNonNull(item.getRegistryName());
+        ResourceLocation modelLocation = new ResourceLocation(registryName.getNamespace(), modelPath);
+
+        item.getSubItems(Objects.requireNonNull(item.getCreativeTab()), list);
+        if (list.isEmpty()) {
+            ModelLoader.setCustomModelResourceLocation(
+                    item, 0, new ModelResourceLocation(modelLocation, "inventory"));
+        } else {
+            list.forEach(stack -> ModelLoader.setCustomModelResourceLocation(
+                    item, stack.getItemDamage(), new ModelResourceLocation(modelLocation, "inventory")));
+        }
+
+        NovaEngineeringCore.log.debug("REGISTERED ITEM MODEL: {}", modelLocation);
     }
 }

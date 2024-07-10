@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.client.gui;
 
-import github.kasuminova.lumenized.client.ShaderManager;
+import com.cleanroommc.client.shader.ShaderManager;
 import github.kasuminova.mmce.client.gui.GuiContainerDynamic;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;

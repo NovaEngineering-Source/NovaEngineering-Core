@@ -33,14 +33,15 @@ public class NovaEngCoreLateMixinLoader implements ILateMixinLoader {
 
         // TODO 某些玩家会因为这个莫名其妙的类崩溃？
         Class<HitokotoResult> toInitialize = HitokotoResult.class;
-        new Thread(() -> {
-            Thread.currentThread().setName("NovaEng Core Hitokoto Initializer");
+        Thread thread = new Thread(() -> {
             String hitokoto = HitokotoAPI.getRandomHitokoto();
             if (hitokoto == null || hitokoto.isEmpty()) {
                 return;
             }
             LOG.info(LOG_PREFIX + hitokoto);
-        }).start();
+        });
+        thread.setName("NovaEng Core Hitokoto Initializer");
+        thread.start();
     }
 
     @Override

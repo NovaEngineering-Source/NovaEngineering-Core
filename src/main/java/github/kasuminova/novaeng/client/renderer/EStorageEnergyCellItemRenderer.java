@@ -1,8 +1,10 @@
 package github.kasuminova.novaeng.client.renderer;
 
 import github.kasuminova.novaeng.common.block.estorage.prop.EnergyCellStatus;
+import github.kasuminova.novaeng.common.item.estorage.ItemBlockEStorageEnergyCell;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageEnergyCell;
 import net.minecraft.client.renderer.ItemMeshDefinition;
+import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -16,6 +18,11 @@ public class EStorageEnergyCellItemRenderer implements ItemMeshDefinition {
 
     public EStorageEnergyCellItemRenderer(String level) {
         this.modelLocation = new ResourceLocation("novaeng_core", "estorage_energy_cell_" + level);
+        for (EnergyCellStatus status : EnergyCellStatus.values()) {
+            ModelBakery.registerItemVariants(ItemBlockEStorageEnergyCell.L4,
+                    new ModelResourceLocation(modelLocation, "facing=north," + EnergyCellStatus.STATUS.getName() + "=" + status.getName())
+            );
+        }
     }
 
     @Nonnull

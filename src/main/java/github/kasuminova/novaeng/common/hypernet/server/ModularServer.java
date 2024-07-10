@@ -8,7 +8,6 @@ import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvPowe
 import github.kasuminova.novaeng.common.hypernet.server.exception.EnergyDeficitException;
 import github.kasuminova.novaeng.common.hypernet.server.exception.EnergyOverloadException;
 import github.kasuminova.novaeng.common.hypernet.server.exception.ModularServerException;
-import github.kasuminova.novaeng.common.hypernet.server.modifier.CalculateModifier;
 import github.kasuminova.novaeng.common.hypernet.server.modifier.ModifierKeys;
 import github.kasuminova.novaeng.common.hypernet.server.module.ModuleCapacitor;
 import github.kasuminova.novaeng.common.hypernet.server.module.ModulePSU;
@@ -203,12 +202,12 @@ public class ModularServer extends CalculateServer implements ServerInvProvider 
 
     protected void calculateHardwareBandwidthEfficiency(final CalculateRequest request) {
         if (totalHardwareBandwidth <= 0) {
-            request.modifiers().computeIfAbsent(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, v -> new CalculateModifier()).multiply(0);
+            request.modifier().multiply(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, 0);
             return;
         }
         float efficiency = Math.max(Math.min((float) totalHardwareBandwidth / usedHardwareBandwidth, 1.0F), 0.5F);
         if (efficiency < 1.0F) {
-            request.modifiers().computeIfAbsent(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, v -> new CalculateModifier()).multiply(efficiency);
+            request.modifier().multiply(ModifierKeys.GLOBAL_CALCULATE_EFFICIENCY, efficiency);
         }
     }
 

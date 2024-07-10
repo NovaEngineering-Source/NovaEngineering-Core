@@ -26,6 +26,7 @@ public abstract class SlotAssemblyDecor<T extends SlotConditionItemHandler> exte
 
     @Override
     public void render(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
+        super.render(gui, renderSize, renderPos, mousePos);
         if (isVisible() && texLocation != null && isAvailable()) {
             gui.getGui().mc.getTextureManager().bindTexture(texLocation);
 

@@ -5,16 +5,14 @@ import github.kasuminova.novaeng.common.hypernet.server.CalculateType;
 import github.kasuminova.novaeng.common.hypernet.server.CalculateTypes;
 import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
 import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
-import net.minecraft.nbt.NBTTagCompound;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-
-import javax.annotation.Nonnull;
 
 @ZenRegister
 @ZenClass("novaeng.hypernet.server.module.ModuleCPU")
 public class ModuleCPU extends ModuleCalculable {
-    public ModuleCPU(final ModularServer server,final ServerModuleBase<?> moduleBase, final double baseGeneration, final double energyConsumeRatio, final int hardwareBandwidth) {
+
+    public ModuleCPU(final ModularServer server, final ServerModuleBase<?> moduleBase, final double baseGeneration, final double energyConsumeRatio, final int hardwareBandwidth) {
         super(server, moduleBase, baseGeneration, energyConsumeRatio, hardwareBandwidth);
     }
 
@@ -36,16 +34,6 @@ public class ModuleCPU extends ModuleCalculable {
         }
 
         return 0;
-    }
-
-    @Override
-    public void readNBT(@Nonnull final NBTTagCompound nbt) {
-        super.readNBT(nbt);
-    }
-
-    @Override
-    public void writeNBT(@Nonnull final NBTTagCompound nbt) {
-        super.writeNBT(nbt);
     }
 
 }

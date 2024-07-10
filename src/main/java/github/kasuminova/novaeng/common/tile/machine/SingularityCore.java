@@ -28,6 +28,7 @@ public class SingularityCore extends TileCustomController {
     public void doControllerTick() {
         tickExecutor = ModularMachinery.EXECUTE_MANAGER.addTask(() -> {
             if (!doStructureCheck() || !isStructureFormed()) {
+                // TODO ...
             }
         }, usedTimeAvg());
     }

@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng.client.gui;
 
 import github.kasuminova.mmce.client.gui.GuiContainerDynamic;
+import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.novaeng.NovaEngineeringCore;
@@ -85,6 +86,11 @@ public class GuiModularServerAssembler extends GuiContainerDynamic<ContainerModu
         final int y = (this.height - this.ySize) / 2;
         Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, MAIN_GUI_WIDTH, MAIN_GUI_HEIGHT, 512, 512);
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(final int mouseX, final int mouseY) {
+        widgetController.postRender(new MousePos(mouseX, mouseY), false);
     }
 
 }
