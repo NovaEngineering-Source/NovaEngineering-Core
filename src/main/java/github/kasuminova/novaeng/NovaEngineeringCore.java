@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng;
 
+import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.command.CommandSPacketProfiler;
 import github.kasuminova.novaeng.common.network.*;
@@ -13,6 +14,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import net.minecraftforge.fml.relauncher.Side;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+
+import static github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader.LOG;
+import static github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader.LOG_PREFIX;
 
 @Mod(modid = NovaEngineeringCore.MOD_ID, name = NovaEngineeringCore.MOD_NAME, version = NovaEngineeringCore.VERSION,
         dependencies = "required-after:forge@[14.23.5.2847,);" + 
@@ -43,6 +47,18 @@ public class NovaEngineeringCore {
     @SidedProxy(clientSide = CLIENT_PROXY, serverSide = COMMON_PROXY)
     public static CommonProxy proxy = null;
     public static Logger log = LogManager.getLogger(MOD_ID);
+
+    static {
+        Thread thread = new Thread(() -> {
+            String hitokoto = HitokotoAPI.getRandomHitokoto();
+            if (hitokoto == null || hitokoto.isEmpty()) {
+                return;
+            }
+            LOG.info(LOG_PREFIX + hitokoto);
+        });
+        thread.setName("NovaEng Core Hitokoto Initializer");
+        thread.start();
+    }
 
     @Mod.EventHandler
     public void construction(FMLConstructionEvent event) {
