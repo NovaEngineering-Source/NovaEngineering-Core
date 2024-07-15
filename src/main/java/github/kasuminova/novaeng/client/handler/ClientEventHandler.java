@@ -1,17 +1,12 @@
 package github.kasuminova.novaeng.client.handler;
 
-import com.llamalad7.betterchat.gui.GuiBetterChat;
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.client.gui.hudcaching.HUDCaching;
 import github.kasuminova.novaeng.client.util.TitleUtils;
 import github.kasuminova.novaeng.common.profiler.CPacketProfiler;
 import github.kasuminova.novaeng.common.profiler.TEUpdatePacketProfiler;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiNewChat;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
-import net.minecraftforge.fml.common.Loader;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent;
@@ -44,29 +39,6 @@ public class ClientEventHandler {
         if (clientTick % 5 == 0) {
             TitleUtils.checkTitleState();
             debugMessageUpdateRequired = true;
-        }
-    }
-    
-    @SubscribeEvent
-    public void onClientRenderTick(TickEvent.RenderTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
-        
-        if (Loader.isModLoaded("betterchat")) {
-            handleBetterChatAnim();
-        }
-    }
-
-    @Optional.Method(modid = "betterchat")
-    protected static void handleBetterChatAnim() {
-        Minecraft mc = Minecraft.getMinecraft();
-        if (mc.gameSettings.hideGUI) {
-            return;
-        }
-        GuiNewChat gui = mc.ingameGUI.getChatGUI();
-        if (gui instanceof GuiBetterChat && GuiBetterChat.percentComplete < 1F && HUDCaching.enable) {
-            HUDCaching.dirty = true;
         }
     }
 

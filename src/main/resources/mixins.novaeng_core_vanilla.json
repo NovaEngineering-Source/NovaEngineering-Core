@@ -11,13 +11,7 @@
     "client": [
         "MixinFontRenderer",
         "MixinNettyCompressionDecoder",
-        "MixinTessellator",
-        "forge.AccessorGuiIngameForge",
-        "hudcaching.EntityRendererMixin_HUDCaching",
-        "hudcaching.FramebufferMixin_HUDCaching",
-        "hudcaching.GlStateManagerMixin_HUDCaching",
-        "hudcaching.GuiIngameForgeMixin_HUDCaching",
-        "hudcaching.GuiIngameMixin_HUDCaching"
+        "MixinTessellator"
     ],
     "server": [
         "forge.MixinFMLEventChannel",

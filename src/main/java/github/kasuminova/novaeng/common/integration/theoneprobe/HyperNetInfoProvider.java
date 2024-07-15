@@ -207,10 +207,12 @@ public class HyperNetInfoProvider implements IProbeInfoProvider {
             return;
         }
 
+        int researching = database.getAllResearchingCognition().size();
         int size = database.getStoredResearchCognition().size();
         leftInfo.text("{*top.hypernet.database.stored.research*}");
-        rightInfo.text(TextFormatting.AQUA + String.valueOf(size) + " / "
-                + TextFormatting.YELLOW + database.getType().getMaxResearchDataStoreSize());
+        rightInfo.text(String.format("%s%s %s(%s) / %s%d",
+                TextFormatting.AQUA, size, TextFormatting.YELLOW, researching, TextFormatting.YELLOW, database.getType().getMaxResearchDataStoreSize())
+        );
     }
 
     private static void processCenterTOP(final ComputationCenter center, final IProbeInfo probeInfo)

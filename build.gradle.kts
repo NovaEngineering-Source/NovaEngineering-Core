@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.14.1"
+version = "1.15.0"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -203,7 +203,7 @@ dependencies {
     annotationProcessor("org.jetbrains:annotations:24.1.0")
 
     // Performance Test Tool
-    runtimeOnly(rfg.deobf("curse.maven:spark-361579:3542217"))
+//    runtimeOnly(rfg.deobf("curse.maven:spark-361579:3542217"))
 
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
@@ -232,6 +232,7 @@ dependencies {
     implementation(rfg.deobf("curse.maven:zenutil-401178:5056679"))
     implementation(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
     implementation(rfg.deobf("curse.maven:scalingguis-319656:2716334"))
+    implementation(rfg.deobf("curse.maven:lolasm-460609:5257348"))
     compileOnly(rfg.deobf("curse.maven:matter-overdrive-community-edition-557428:4592069"))
     compileOnly(rfg.deobf("curse.maven:cofh-core-69162:2920433"))
     compileOnly(rfg.deobf("curse.maven:cofh-world-271384:2920434"))
