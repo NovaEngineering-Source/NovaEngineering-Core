@@ -10,7 +10,7 @@ import github.kasuminova.mmce.common.world.MachineComponentManager;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.util.BlockModelHider;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
-import github.kasuminova.novaeng.common.block.estorage.prop.FacingProp;
+import github.kasuminova.novaeng.common.block.prop.FacingProp;
 import github.kasuminova.novaeng.common.estorage.ECellDriveWatcher;
 import github.kasuminova.novaeng.common.tile.TileCustomController;
 import github.kasuminova.novaeng.common.tile.estorage.bus.EStorageBus;
@@ -132,15 +132,14 @@ public class EStorageController extends TileCustomController {
         }
         if (ticksExisted % 40 == 0) {
             return true;
-        } else {
-            if (isStructureFormed()) {
-                BlockPos pos = getPos();
-                Vec3i min = foundPattern.getMin();
-                Vec3i max = foundPattern.getMax();
-                return MMWorldEventListener.INSTANCE.isAreaChanged(getWorld(), pos.add(min), pos.add(max));
-            }
-            return ticksExisted % Math.min(structureCheckDelay + this.structureCheckCounter * 5, maxStructureCheckDelay) == 0;
         }
+        if (isStructureFormed()) {
+            BlockPos pos = getPos();
+            Vec3i min = foundPattern.getMin();
+            Vec3i max = foundPattern.getMax();
+            return MMWorldEventListener.INSTANCE.isAreaChanged(getWorld(), pos.add(min), pos.add(max));
+        }
+        return ticksExisted % Math.min(structureCheckDelay + this.structureCheckCounter * 5, maxStructureCheckDelay) == 0;
     }
 
     protected void disassemble() {

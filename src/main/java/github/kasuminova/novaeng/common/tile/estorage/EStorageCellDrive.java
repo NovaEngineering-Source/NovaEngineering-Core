@@ -406,9 +406,7 @@ public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IA
 
     @Override
     public void markDirty() {
-        if (this.world != null) {
-            this.world.markChunkDirty(this.pos, this);
-        }
+        markChunkDirty();
     }
 
     private static class CellInvFilter implements IAEItemFilter {

@@ -5,26 +5,31 @@ import java.util.concurrent.ThreadLocalRandom;
 public class RandomUtils {
 
     public static boolean nextBool() {
-        return ThreadLocalRandom.current().nextBoolean();
+        return current().nextBoolean();
     }
 
     public static int nextInt(int bound) {
-        return ThreadLocalRandom.current().nextInt(bound);
+        return current().nextInt(bound);
     }
 
     public static double nextFloat(float bound) {
-        return ThreadLocalRandom.current().nextFloat() * bound;
+        return current().nextFloat() * bound;
     }
 
     public static float nextFloat() {
-        return ThreadLocalRandom.current().nextFloat();
+        return current().nextFloat();
     }
 
     public static double nextDouble(double bound) {
-        return ThreadLocalRandom.current().nextDouble(bound);
+        return current().nextDouble(bound);
     }
 
     public static double nextDouble() {
-        return ThreadLocalRandom.current().nextDouble();
+        return current().nextDouble();
     }
+
+    public static ThreadLocalRandom current() {
+        return ThreadLocalRandom.current();
+    }
+
 }

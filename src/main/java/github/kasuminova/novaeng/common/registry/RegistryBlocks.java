@@ -5,11 +5,17 @@ import github.kasuminova.novaeng.common.block.BlockAngel;
 import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
 import github.kasuminova.novaeng.common.block.BlockModularServerAssembler;
 import github.kasuminova.novaeng.common.block.BlockSingularityCoreController;
+import github.kasuminova.novaeng.common.block.efabricator.*;
 import github.kasuminova.novaeng.common.block.estorage.*;
 import github.kasuminova.novaeng.common.item.ItemBlockAngel;
 import github.kasuminova.novaeng.common.item.ItemBlockME;
+import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorMEChannel;
+import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorParallelProc;
+import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorPatternBus;
+import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorWorker;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
+import github.kasuminova.novaeng.common.tile.efabricator.*;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageEnergyCell;
@@ -59,6 +65,7 @@ public class RegistryBlocks {
         prepareItemBlockRegister(new ItemBlockAngel(registerBlock(BlockAngel.INSTANCE)));
         prepareItemBlockRegister(registerBlock(BlockSingularityCoreController.INSTANCE));
 
+        // EStorage
         prepareItemBlockRegister(registerBlock(BlockEStorageController.L4));
         prepareItemBlockRegister(registerBlock(BlockEStorageController.L6));
         prepareItemBlockRegister(registerBlock(BlockEStorageController.L9));
@@ -72,6 +79,22 @@ public class RegistryBlocks {
 //        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L9));
         prepareItemBlockRegister(registerBlock(BlockEStorageVent.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockEStorageCasing.INSTANCE));
+
+        // EFabricator
+        prepareItemBlockRegister(registerBlock(BlockEFabricatorController.L4));
+        prepareItemBlockRegister(registerBlock(BlockEFabricatorController.L6));
+        prepareItemBlockRegister(registerBlock(BlockEFabricatorController.L9));
+        prepareItemBlockRegister(new ItemEFabricatorParallelProc(registerBlock(BlockEFabricatorParallelProc.L4)));
+        prepareItemBlockRegister(new ItemEFabricatorParallelProc(registerBlock(BlockEFabricatorParallelProc.L6)));
+        prepareItemBlockRegister(new ItemEFabricatorParallelProc(registerBlock(BlockEFabricatorParallelProc.L9)));
+        prepareItemBlockRegister(new ItemEFabricatorMEChannel(registerBlock(BlockEFabricatorMEChannel.INSTANCE)));
+        prepareItemBlockRegister(registerBlock(BlockEFabricatorTail.L4));
+        prepareItemBlockRegister(registerBlock(BlockEFabricatorTail.L6));
+        prepareItemBlockRegister(registerBlock(BlockEFabricatorTail.L9));
+        prepareItemBlockRegister(new ItemEFabricatorPatternBus(registerBlock(BlockEFabricatorPatternBus.INSTANCE)));
+        prepareItemBlockRegister(new ItemEFabricatorWorker(registerBlock(BlockEFabricatorWorker.INSTANCE)));
+        prepareItemBlockRegister(registerBlock(BlockEFabricatorVent.INSTANCE));
+        prepareItemBlockRegister(registerBlock(BlockEFabricatorCasing.INSTANCE));
     }
 
     public static void registerTileEntities() {
@@ -83,6 +106,13 @@ public class RegistryBlocks {
         registerTileEntity(EStorageEnergyCell.class, "estorage_energy_cell");
         registerTileEntity(EStorageCellDrive.class, "estorage_cell_drive");
         registerTileEntity(EStorageMEChannel.class, "estorage_me_channel");
+
+        registerTileEntity(EFabricatorController.class, "efabricator_controller");
+        registerTileEntity(EFabricatorParallelProc.class, "efabricator_parallel_proc");
+        registerTileEntity(EFabricatorTail.class, "efabricator_tail");
+        registerTileEntity(EFabricatorPatternBus.class, "efabricator_pattern_bus");
+        registerTileEntity(EFabricatorWorker.class, "efabricator_worker");
+        registerTileEntity(EFabricatorMEChannel.class, "efabricator_me_channel");
     }
 
     public static void registerBlockModels() {

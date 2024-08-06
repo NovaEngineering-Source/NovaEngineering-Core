@@ -1,4 +1,4 @@
-package github.kasuminova.novaeng.common.block.estorage.prop;
+package github.kasuminova.novaeng.common.block.prop;
 
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.util.EnumFacing;

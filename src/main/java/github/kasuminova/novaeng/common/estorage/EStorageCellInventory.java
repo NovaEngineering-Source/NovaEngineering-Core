@@ -209,13 +209,19 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
                 r.setStackSize(r.getStackSize() - remainingItemCount);
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() + remainingItemCount);
-                    this.saveChanges();
+                    // Update Count.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemCount(inv.getStoredItemCount() + remainingItemCount);
+                    this.saveChangesES();
                 }
                 return r;
             } else {
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() + input.getStackSize());
-                    this.saveChanges();
+                    // Update Count.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemCount(inv.getStoredItemCount() + input.getStackSize());
+                    this.saveChangesES();
                 }
                 return null;
             }
@@ -274,7 +280,10 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
                 results.setStackSize(size);
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() - size);
-                    this.saveChanges();
+                    // Update Count.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemCount(inv.getStoredItemCount() - results.getStackSize());
+                    this.saveChangesES();
                 }
             }
         }
@@ -285,6 +294,15 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
     @Override
     public IStorageChannel<T> getChannel() {
         return this.channel;
+    }
+
+    protected void saveChangesES() {
+        if (this.container != null) {
+            ((AccessorAbstractCellInventory) this).setIsPersisted(false);
+            this.container.saveChanges(this);
+        } else {
+            saveChanges();
+        }
     }
 
     @Override

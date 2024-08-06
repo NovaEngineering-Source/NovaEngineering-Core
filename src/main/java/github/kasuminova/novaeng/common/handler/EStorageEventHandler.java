@@ -10,7 +10,7 @@ import appeng.tile.inventory.AppEngCellInventory;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.container.ContainerEStorageController;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
-import github.kasuminova.novaeng.common.network.PktEStorageControllerGUIData;
+import github.kasuminova.novaeng.common.network.PktEStorageGUIData;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageMEChannel;
@@ -121,7 +121,7 @@ public class EStorageEventHandler {
             return;
         }
         EStorageController controller = containerESController.getOwner();
-        NovaEngineeringCore.NET_CHANNEL.sendTo(new PktEStorageControllerGUIData(controller), player);
+        NovaEngineeringCore.NET_CHANNEL.sendTo(new PktEStorageGUIData(controller), player);
     }
 
 }

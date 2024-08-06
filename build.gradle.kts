@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.15.0"
+version = "1.16.0"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -215,7 +215,8 @@ dependencies {
     implementation(rfg.deobf("curse.maven:component-model-hider-940949:4885858"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4810661"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
-    implementation(rfg.deobf("curse.maven:ae2-extended-life-570458:5147702"))
+    implementation(rfg.deobf("curse.maven:ae2-extended-life-570458:5378163"))
+    implementation(rfg.deobf("curse.maven:ae2-fluid-crafting-rework-623955:5504001"))
     implementation(rfg.deobf("curse.maven:nae2-884359:4955559"))
 //    implementation(rfg.deobf("curse.maven:applied-energistics-2-223794:2747063"))
 //    implementation(rfg.deobf("curse.maven:tx-loader-706505:4515357"))
@@ -230,7 +231,7 @@ dependencies {
     implementation(rfg.deobf("curse.maven:astral-sorcery-241721:3044416"))
     implementation(rfg.deobf("curse.maven:baubles-227083:2518667"))
     implementation(rfg.deobf("curse.maven:zenutil-401178:5056679"))
-    implementation(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
+    compileOnly(rfg.deobf("curse.maven:smooth-font-285742:3944565"))
     implementation(rfg.deobf("curse.maven:scalingguis-319656:2716334"))
     implementation(rfg.deobf("curse.maven:lolasm-460609:5257348"))
     compileOnly(rfg.deobf("curse.maven:matter-overdrive-community-edition-557428:4592069"))
@@ -256,6 +257,12 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:immersive-engineering-231951:2974106"))
     compileOnly(rfg.deobf("curse.maven:unidict-244258:3553627"))
     compileOnly(rfg.deobf("curse.maven:wanionlib-253043:4623135"))
+    compileOnly(rfg.deobf("curse.maven:dme-737252:5043404"))
+    // Performance Test Tool
+    runtimeOnly(rfg.deobf("curse.maven:spark-361579:3245793"))
+    // Optimization
+    implementation(rfg.deobf("curse.maven:stellarcore-1064321:5560444"))
+    implementation(rfg.deobf("curse.maven:configanytime-870276:5212709"))
 }
 
 // Publishing to a Maven repository

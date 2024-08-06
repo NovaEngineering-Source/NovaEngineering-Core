@@ -22,6 +22,48 @@ novaeng.estorage_cell.l9.tip=§c只有 §6L9§c 等级的主机可以驱动此�
 
 novaeng.estorage_cell_drive.player.inserted=§a已插入存储矩阵。
 novaeng.estorage_cell_drive.player.removed=§a已取出存储矩阵。
+novaeng.estorage_cell_drive.player.no_permission=§c访问被拒绝（原因：无 ME 网络权限）。
+
+novaeng.efabricator_parallel_proc.info.0=§5并行核心§7为合成子系统提供§5并行数§7。
+novaeng.efabricator_parallel_proc.info.1=§5并行数§7可提高§b工作核心§7每次处理合成任务的§a处理数量§7（最大不超过队列深度）。
+novaeng.efabricator_parallel_proc.modifiers=§5并行数§7修正：
+novaeng.efabricator_parallel_proc.overclock_modifiers=启用§c超频§7时：
+novaeng.efabricator_parallel_proc.modifier.add=最大并行数：§a+%s
+novaeng.efabricator_parallel_proc.modifier.sub=最大并行数修正：§c-%s
+novaeng.efabricator_parallel_proc.modifier.mul=最大并行数修正：§a+%s%%
+novaeng.efabricator_parallel_proc.modifier.mul.debuff=最大并行数修正：§c-%s%%
+novaeng.efabricator_parallel_proc.info.2=启用§9主动冷却§7时：
+novaeng.efabricator_parallel_proc.info.3=  §a消除§7超频的§c负面§7修正。
+novaeng.efabricator_parallel_proc.info.4=  工作后溢出的并行数转换为工作间隔§a减成§7并消耗§9冷却液§7，最低不低于 §b1§7 Tick（§b0.05s§7）。
+novaeng.efabricator_parallel_proc.info.5=    每溢出 §e5%%§7 最大并行数，为子系统降低 §b1§7 Tick（§b0.05s§7）的工作间隔。
+novaeng.efabricator_parallel_proc.info.6=    每降低 §b1§7 Tick（§b0.05s§7）工作间隔，额外消耗 §c最大并行数 * 4%%§7 冷却单位。
+
+novaeng.efabricator_worker.info.0=§b工作核心§7是合成子系统的§e主要部分§7。
+novaeng.efabricator_worker.info.1=每个核心带有 §a32§7 队列深度，每次工作处理 §a1§7 个合成任务。
+novaeng.efabricator_worker.info.2=每次合成能量消耗：§b10 AE
+novaeng.efabricator_worker.info.3=启用§c超频§7时：
+novaeng.efabricator_worker.info.4=  队列深度 §ax2 §b(F4)
+novaeng.efabricator_worker.info.5=  队列深度 §ax4 §6(F6)
+novaeng.efabricator_worker.info.6=  队列深度 §ax8 §5(F9)
+novaeng.efabricator_worker.info.7=  能量消耗 §cx4 §b(F4)
+novaeng.efabricator_worker.info.8=  能量消耗 §cx8 §6(F6)
+novaeng.efabricator_worker.info.9=  能量消耗 §cx16 §5(F9)
+novaeng.efabricator_worker.info.10=启用§9主动冷却§7时：
+novaeng.efabricator_worker.info.11=  §a消除§7超频的§c负面§7修正。
+novaeng.efabricator_worker.info.12=  每次合成额外消耗 §c5§7 冷却单位。
+novaeng.efabricator_worker.info.13=  每个工作核心为子系统降低 §b1§7 Tick（§b0.05s§7）的工作间隔，最低不低于 §b10§7 Tick（§b0.5s§7）。
+
+novaeng.efabricator_pattern_bus.info.0=§e样板总线§7是合成子系统的§e主要部分§7。
+novaeng.efabricator_pattern_bus.info.1=§e样板总线§7为子系统储存§b样板§7，每个总线有 §a72§7 格样板槽位。
+novaeng.efabricator_pattern_bus.info.2=兼容 §b合成样板§7 / §a流体装配室合成样板§7，§c不兼容其他样板§7（如处理模式样板）。
+novaeng.efabricator_pattern_bus.info.3=在 ME 样板终端编写§e合成样板§7时可使用§b快速上传§7。
+novaeng.efabricator_pattern_bus.info.4=  网络中§c必须§7存在§a在线§7的子系统。
+novaeng.efabricator_pattern_bus.info.5=  子系统中§c必须§7至少存在 §b1§7 个有样板空位的§e样板总线§7。
+
+novaeng.efabricator_me_channel.info.0=§9矩阵通讯接口§7是子系统与 ME 网络之间的§b协议兼容层§7。
+novaeng.efabricator_me_channel.info.1=  §9通讯接口§7向 ME 网络提供样板核心的访问权限。
+novaeng.efabricator_me_channel.info.2=  子系统只能通过§9通讯接口§7获取能源。
+novaeng.efabricator_me_channel.info.3=通过连接 ME 线缆至§9通讯接口§7以和子系统建立连接。
 
 novaeng.hypernet.connect.result.success=§a连接成功§b（状态：%s 已连接 / %s 最大连接数）。
 novaeng.hypernet.connect.result.no_permission=§c连接失败，HyperNet 网络授权密钥不匹配（原因：非网络所有者）。
@@ -87,6 +129,13 @@ top.estorage.drive.cell.unsupported=§c警告：驱动器不支持此矩阵等�
 top.estorage.drive.cell.bytes=§9字节使用：
 top.estorage.drive.cell.types=§9类型使用：
 
+top.efabricator.worker.status=§9工作核心状态：
+top.efabricator.worker.status.offline=§c离线
+top.efabricator.worker.status.online=§a在线
+top.efabricator.worker.queue_status=§9队列状态：
+top.efabricator.worker.current_crafting=§9正在合成：
+top.efabricator.worker.enqueued_crafting=§9排队中：
+
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 tile.novaeng_core.modular_server_assembler.name=模块服务器组装台（未实装）
 tile.novaeng_core.angel_block.name=天使方块+
@@ -105,13 +154,30 @@ tile.novaeng_core.estorage_me_channel.name=§9ECO - §bLR §9ME 矩阵通讯接�
 tile.novaeng_core.estorage_vent.name=§9存储系统结构散热器
 tile.novaeng_core.estorage_casing.name=§9存储系统结构外壳
 
+tile.novaeng_core.extendable_fabricator_subsystem_l4.name=§9ECO - §bF4 §e可扩展合成子系统主机
+tile.novaeng_core.extendable_fabricator_subsystem_l6.name=§9ECO - §6F6 §e可扩展合成子系统主机
+tile.novaeng_core.extendable_fabricator_subsystem_l9.name=§9ECO - §5F9 §e可扩展合成子系统主机
+tile.novaeng_core.efabricator_worker.name=§9ECO - §eFX §b工作核心
+tile.novaeng_core.efabricator_parallel_proc_l4.name=§9ECO - §bFT4 §5并行核心
+tile.novaeng_core.efabricator_parallel_proc_l6.name=§9ECO - §6FT6 §5并行核心
+tile.novaeng_core.efabricator_parallel_proc_l9.name=§9ECO - §5FT9 §5并行核心
+tile.novaeng_core.efabricator_pattern_bus.name=§9ECO - §eFD 智能样板总线
+tile.novaeng_core.efabricator_me_channel.name=§9ECO - §eFR §9ME 矩阵通讯接口
+tile.novaeng_core.efabricator_vent.name=§e合成系统结构散热器
+tile.novaeng_core.efabricator_casing.name=§e合成系统结构外壳
+tile.novaeng_core.efabricator_tail_l4.name=§e合成系统结构连结器 - §bF4
+tile.novaeng_core.efabricator_tail_l6.name=§e合成系统结构连结器 - §6F6
+tile.novaeng_core.efabricator_tail_l9.name=§e合成系统结构连结器 - §5F9
+
 novaeng.hypernet.computation_point_required.tip=§9算力：§b%s
 novaeng.hypernet.computation_point_required.tip.parallelized=§9算力 (受并行影响)：§b%s
 
 novaeng.hypernet.calculable.tip.base_ratio=§b基础效率系数：§a%s
 novaeng.hypernet.calculable.tip.energy_consume_ratio=§b设计最大能耗：§c%s RF/t
-novaeng.hypernet.calculable.tip.hardware_bandwidth=§b硬件带宽占用：§a%s
 novaeng.hypernet.calculable.supported=此模块可提供计算功能。
+
+novaeng.hypernet.hardware_bandwidth.consume=§b硬件带宽占用：§e%s
+novaeng.hypernet.hardware_bandwidth.provide=§b硬件带宽提供：§a%s
 
 novaeng.hypernet.calculate.tip.efficiency=%s：%s（效率：%s%%）
 
@@ -304,3 +370,40 @@ gui.estorage_controller.graph.item_type=物品类型：%s / %s
 gui.estorage_controller.graph.energy_usage=总耗能：%sAE/t
 gui.estorage_controller.graph.energy_stored.percent=能量存储：%s%%
 gui.estorage_controller.graph.energy_stored=能量存储：%sAE / %sAE
+
+gui.efabricator_pattern_bus.title=§9ECO - §eFD 智能样板总线
+gui.efabricator_pattern_bus.inventory=物品栏
+
+gui.efabricator.total_crafted=统计 - 已完成配方数：%s
+gui.efabricator.total_crafted.update=统计 - 已完成配方数：%s，合成速度：§a+%s/Tick§f
+gui.efabricator.button.upload_pattern=上传样板至当前网络中可用的§9可扩展合成子系统§r中。
+gui.efabricator.queue.status=队列：%s / %s
+gui.efabricator.max_energy_usage=最大能耗：§b%s AE
+gui.efabricator.max_energy_usage.tip=显示值为所有工作核心满负载时工作一次的能耗。
+gui.efabricator.overclocked.enable.tip=单击启用§e超频 I§f 模式，在有限范围内提升性能，消耗更多§c能量§f。
+gui.efabricator.overclocked.disable.tip=单击禁用§e超频 I§f 模式。
+gui.efabricator.active_cooling=主动冷却：%s
+gui.efabricator.active_cooling.enable.tip.0=单击启用 §9ECO - FZ 主动冷却子系统§f，消耗流体输入仓内的§9冷却液，§f提升§a性能§f并降低§a能耗§f。
+gui.efabricator.active_cooling.enable.tip.1=支持的§9冷却液§f：
+gui.efabricator.active_cooling.enable.tip.1.coolant=  输入：%s §a%smB§f，输出：%s §a%smB§f，冷却单位：§b%s§f
+gui.efabricator.active_cooling.enable.tip.1.coolant.no_output=  输入：%s §a%smB§f，输出：§c无§f，冷却单位：§b%s§f
+gui.efabricator.active_cooling.enable.tip.2=启用主动冷却会使子系统进入§6超频 II§f 模式。
+gui.efabricator.active_cooling.enable.tip.3=如果§e超频 I§f 模式已启用，启用§9主动冷却§f会使子系统进入§c超频 III§f 模式。
+gui.efabricator.active_cooling.enable.tip.4=  §c超频 III§f 模式将§2极大幅度§f提升整机性能，并降低§a能量§f消耗，消耗更多§9冷却液§f。
+gui.efabricator.active_cooling.enable.tip.5=§f启用期间如果§9冷却液§f不足会§c停止合成§f工作。
+gui.efabricator.active_cooling.enable.tip.6=§f如果流体输出仓为满，则§c无法消耗§f冷却液。
+gui.efabricator.active_cooling.disable.tip=单击禁用 §9ECO - FZ 主动冷却子系统§f。
+gui.efabricator.active_cooling.on=§a启用
+gui.efabricator.active_cooling.off=§c禁用
+gui.efabricator.pattern_bus.count=样板总线：%s
+gui.efabricator.parallel_proc.count=并行核心：%s
+gui.efabricator.worker.count=工作核心：%s
+gui.efabricator.crafting_progress.0=总队列占用：%s%%
+gui.efabricator.crafting_progress.1=%s / %s
+gui.efabricator.crafting_time.0=预计耗时：%s
+gui.efabricator.total_parallelism=总并行数：%s
+gui.efabricator.total_parallelism.limit=限制为：%s
+gui.efabricator.total_parallelism.overflow=溢出：%s (%s%%)
+gui.efabricator.total_parallelism.overflow_speedup=加速：%s Tick (%s%%)
+gui.efabricator.total_parallelism.overflow_speedup.coolants.0=冷却液消耗：
+gui.efabricator.total_parallelism.overflow_speedup.coolants.1=%s mB/t

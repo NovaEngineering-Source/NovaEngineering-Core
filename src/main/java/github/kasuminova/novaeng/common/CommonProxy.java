@@ -4,11 +4,9 @@ import appeng.api.AEApi;
 import appeng.api.storage.ICellHandler;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
-import github.kasuminova.novaeng.common.container.ContainerEStorageController;
-import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
-import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
-import github.kasuminova.novaeng.common.container.ContainerSingularityCore;
+import github.kasuminova.novaeng.common.container.*;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
+import github.kasuminova.novaeng.common.handler.EFabricatorEventHandler;
 import github.kasuminova.novaeng.common.handler.EStorageEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
@@ -26,7 +24,10 @@ import github.kasuminova.novaeng.common.registry.RegistryItems;
 import github.kasuminova.novaeng.common.registry.RegistryMachineSpecial;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
+import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorController;
+import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorPatternBus;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
+import github.kasuminova.novaeng.common.util.MachineCoolants;
 import github.kasuminova.novaeng.mixin.ae2.AccessorCellRegistry;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.base.Mods;
@@ -62,6 +63,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(IntegrationCRT.INSTANCE);
         MinecraftForge.EVENT_BUS.register(HyperNetEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(EStorageEventHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(EFabricatorEventHandler.INSTANCE);
 
         if (Loader.isModLoaded("ic2")) {
             IntegrationIC2.preInit();
@@ -91,6 +93,7 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void postInit() {
+        MachineCoolants.INSTANCE.init();
         HyperNetMachineEventHandler.registerHandler();
     }
 
@@ -118,6 +121,8 @@ public class CommonProxy implements IGuiHandler {
             case MODULAR_SERVER_ASSEMBLER -> new ContainerModularServerAssembler((TileModularServerAssembler) present, player);
             case ESTORAGE_CONTROLLER -> new ContainerEStorageController((EStorageController) present, player);
             case SINGULARITY_CORE -> new ContainerSingularityCore((github.kasuminova.novaeng.common.tile.machine.SingularityCore) present, player);
+            case EFABRICATOR_CONTROLLER -> new ContainerEFabricatorController((EFabricatorController) present, player);
+            case EFABRICATOR_PATTERN_BUS -> new ContainerEFabricatorPatternBus((EFabricatorPatternBus) present, player);
         };
     }
 
@@ -133,6 +138,8 @@ public class CommonProxy implements IGuiHandler {
         MODULAR_SERVER_ASSEMBLER(TileModularServerAssembler.class),
         ESTORAGE_CONTROLLER(EStorageController.class),
         SINGULARITY_CORE(github.kasuminova.novaeng.common.tile.machine.SingularityCore.class),
+        EFABRICATOR_CONTROLLER(EFabricatorController.class),
+        EFABRICATOR_PATTERN_BUS(EFabricatorPatternBus.class),
         ;
 
         public final Class<? extends TileEntity> requiredTileEntity;

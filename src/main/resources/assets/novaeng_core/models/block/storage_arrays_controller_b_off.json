@@ -1,24 +1,80 @@
 {
-	"credit": "Made with Blockbench",
-	"textures": {
-		"0": "novaeng_core:blocks/storage_array_housing",
-		"3": "novaeng_core:blocks/storage_array_vents_a",
-		"4": "novaeng_core:blocks/data_bus_a2",
-		"5": "novaeng_core:blocks/storage_arrays_controller_b_off",
-		"particle": "novaeng_core:blocks/storage_array_housing"
-	},
-	"elements": [
-		{
-			"from": [0, 0, 0],
-			"to": [16, 16, 16],
-			"faces": {
-				"north": {"uv": [0, 0, 16, 16], "texture": "#5"},
-				"east": {"uv": [0, 0, 16, 16], "texture": "#4"},
-				"south": {"uv": [0, 0, 16, 16], "texture": "#3"},
-				"west": {"uv": [0, 0, 16, 16], "texture": "#4"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#0"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#0"}
-			}
-		}
-	]
+    "credit": "Made with Blockbench",
+    "textures": {
+        "0": "novaeng_core:blocks/storage_array_housing",
+        "3": "novaeng_core:blocks/storage_array_vents_a",
+        "4": "novaeng_core:blocks/data_bus_a2",
+        "5": "novaeng_core:blocks/storage_arrays_controller_b_off",
+        "particle": "novaeng_core:blocks/storage_array_housing"
+    },
+    "elements": [
+        {
+            "from": [
+                0,
+                0,
+                0
+            ],
+            "to": [
+                16,
+                16,
+                16
+            ],
+            "faces": {
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#5"
+                },
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#4"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#3"
+                },
+                "west": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#4"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#0"
+                }
+            }
+        }
+    ]
 }

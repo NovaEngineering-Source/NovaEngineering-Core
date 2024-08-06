@@ -3,6 +3,7 @@ package github.kasuminova.novaeng.mixin.mmce;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
 import github.kasuminova.novaeng.common.block.BlockSingularityCoreController;
+import github.kasuminova.novaeng.common.block.efabricator.BlockEFabricatorController;
 import github.kasuminova.novaeng.common.block.estorage.BlockEStorageController;
 import hellfirepvp.modularmachinery.common.block.BlockController;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
@@ -40,6 +41,10 @@ public class MixinMachineRegistry {
         ResourceLocation novaEngResLoc = new ResourceLocation(NovaEngineeringCore.MOD_ID, registryName.getPath());
         if (BlockEStorageController.REGISTRY.containsKey(novaEngResLoc)) {
             BlockController.MACHINE_CONTROLLERS.put(machine, BlockEStorageController.REGISTRY.get(novaEngResLoc));
+            return true;
+        }
+        if (BlockEFabricatorController.REGISTRY.containsKey(novaEngResLoc)) {
+            BlockController.MACHINE_CONTROLLERS.put(machine, BlockEFabricatorController.REGISTRY.get(novaEngResLoc));
             return true;
         }
         instance.add(e);

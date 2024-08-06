@@ -1,28 +1,28 @@
 {
-  "forge_marker": 1,
-  "defaults": {
-    "model": "novaeng_core:estorage_vent"
-  },
-  "variants": {
-    "facing=north": {
-      "model": "novaeng_core:estorage_vent"
+    "forge_marker": 1,
+    "defaults": {
+        "model": "novaeng_core:estorage_vent"
     },
-    "facing=south": {
-      "model": "novaeng_core:estorage_vent",
-      "y": 180
-    },
-    "facing=west": {
-      "model": "novaeng_core:estorage_vent",
-      "y": 270
-    },
-    "facing=east": {
-      "model": "novaeng_core:estorage_vent",
-      "y": 90
-    },
-    "inventory": [
-      {
-        "transform": "forge:default-block"
-      }
-    ]
-  }
+    "variants": {
+        "facing=north": {
+            "model": "novaeng_core:estorage_vent"
+        },
+        "facing=south": {
+            "model": "novaeng_core:estorage_vent",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "novaeng_core:estorage_vent",
+            "y": 270
+        },
+        "facing=east": {
+            "model": "novaeng_core:estorage_vent",
+            "y": 90
+        },
+        "inventory": [
+            {
+                "transform": "forge:default-block"
+            }
+        ]
+    }
 }

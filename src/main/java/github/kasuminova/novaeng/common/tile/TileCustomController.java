@@ -1,11 +1,13 @@
 package github.kasuminova.novaeng.common.tile;
 
+import hellfirepvp.modularmachinery.common.block.BlockController;
 import hellfirepvp.modularmachinery.common.crafting.ActiveMachineRecipe;
 import hellfirepvp.modularmachinery.common.crafting.helper.CraftingStatus;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import hellfirepvp.modularmachinery.common.machine.RecipeThread;
 import hellfirepvp.modularmachinery.common.modifier.RecipeModifier;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 
@@ -13,6 +15,26 @@ import javax.annotation.Nullable;
 
 public abstract class TileCustomController extends TileMultiblockMachineController {
     protected CraftingStatus controllerStatus = CraftingStatus.IDLE;
+
+    @Override
+    public void notifyStructureFormedState(final boolean formed) {
+        //noinspection ConstantValue
+        if (world == null || getPos() == null) {
+            // Where is the controller?
+            return;
+        }
+        IBlockState state = world.getBlockState(getPos());
+        if (controllerRotation == null || !(state.getBlock() instanceof BlockController)) {
+            // Where is the controller?
+            return;
+        }
+
+        IBlockState newState = state.getBlock().getDefaultState()
+                .withProperty(BlockController.FACING, controllerRotation)
+                .withProperty(BlockController.FORMED, formed);
+
+        world.setBlockState(getPos(), newState, 3);
+    }
 
     @Override
     protected void readMachineNBT(NBTTagCompound compound) {

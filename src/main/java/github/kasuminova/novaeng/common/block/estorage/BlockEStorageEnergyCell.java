@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.common.block.estorage;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.estorage.prop.EnergyCellStatus;
-import github.kasuminova.novaeng.common.block.estorage.prop.FacingProp;
+import github.kasuminova.novaeng.common.block.prop.FacingProp;
 import github.kasuminova.novaeng.common.core.CreativeTabNovaEng;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageEnergyCell;
 import net.minecraft.block.SoundType;

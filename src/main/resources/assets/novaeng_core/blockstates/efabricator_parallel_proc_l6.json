@@ -1,0 +1,28 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "novaeng_core:module_molecular_assembly_matrix/l6_modules_assembled_parallel_molecules"
+    },
+    "variants": {
+        "facing=north": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/l6_modules_assembled_parallel_molecules"
+        },
+        "facing=south": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/l6_modules_assembled_parallel_molecules",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/l6_modules_assembled_parallel_molecules",
+            "y": 270
+        },
+        "facing=east": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/l6_modules_assembled_parallel_molecules",
+            "y": 90
+        },
+        "inventory": [
+            {
+                "transform": "forge:default-block"
+            }
+        ]
+    }
+}

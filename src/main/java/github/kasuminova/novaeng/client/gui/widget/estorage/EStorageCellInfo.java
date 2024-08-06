@@ -3,6 +3,7 @@ package github.kasuminova.novaeng.client.gui.widget.estorage;
 import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
+import github.kasuminova.mmce.client.gui.util.TextureProperties;
 import github.kasuminova.mmce.client.gui.widget.MultiLineLabel;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.mmce.client.gui.widget.container.Column;
@@ -12,7 +13,6 @@ import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
-import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 
@@ -24,29 +24,38 @@ public class EStorageCellInfo extends Column {
 
     public static final int CELL_BACKGROUND_TEXTURE_WIDTH = 67;
     public static final int CELL_BACKGROUND_TEXTURE_HEIGHT = 26;
-    
-    public static final int L4_CELL_BACKGROUND_TEXTURE_X = 1;
-    public static final int L4_CELL_BACKGROUND_TEXTURE_Y = 1;
-    
-    public static final int L6_CELL_BACKGROUND_TEXTURE_X = 1;
-    public static final int L6_CELL_BACKGROUND_TEXTURE_Y = 28;
-    
-    public static final int L9_CELL_BACKGROUND_TEXTURE_X = 1;
-    public static final int L9_CELL_BACKGROUND_TEXTURE_Y = 55;
-    
+
     public static final int CELL_TYPE_BACKGROUND_WIDTH = 8;
     public static final int CELL_TYPE_BACKGROUND_HEIGHT = 26;
-    
-    public static final int FLUID_CELL_TYPE_BACKGROUND_TEXTURE_X = 10;
-    public static final int FLUID_CELL_TYPE_BACKGROUND_TEXTURE_Y = 82;
 
-    public static final int ITEM_CELL_TYPE_BACKGROUND_TEXTURE_X = 19;
-    public static final int ITEM_CELL_TYPE_BACKGROUND_TEXTURE_Y = 82;
+    public static final TextureProperties CELL_BACKGROUND_L4 = new TextureProperties(BG_TEX_RES,
+            1, 1,
+            CELL_BACKGROUND_TEXTURE_WIDTH, CELL_BACKGROUND_TEXTURE_HEIGHT
+    );
 
-    protected int cellBgTexX;
-    protected int cellBgTexY;
-    protected int cellTypeBgTexX;
-    protected int cellTypeBgTexY;
+    public static final TextureProperties CELL_BACKGROUND_L6 = new TextureProperties(BG_TEX_RES,
+            1, 28,
+            CELL_BACKGROUND_TEXTURE_WIDTH, CELL_BACKGROUND_TEXTURE_HEIGHT
+    );
+
+    public static final TextureProperties CELL_BACKGROUND_L9 = new TextureProperties(BG_TEX_RES,
+            1, 55,
+            CELL_BACKGROUND_TEXTURE_WIDTH, CELL_BACKGROUND_TEXTURE_HEIGHT
+    );
+
+    public static final TextureProperties CELL_TYPE_BACKGROUND_ITEM = new TextureProperties(BG_TEX_RES,
+            19, 82,
+            CELL_TYPE_BACKGROUND_WIDTH,
+            CELL_TYPE_BACKGROUND_HEIGHT
+    );
+
+    public static final TextureProperties CELL_TYPE_BACKGROUND_FLUID = new TextureProperties(BG_TEX_RES,
+            10, 82,
+            CELL_TYPE_BACKGROUND_WIDTH, CELL_TYPE_BACKGROUND_HEIGHT
+    );
+
+    protected TextureProperties cellBackground = TextureProperties.EMPTY;
+    protected TextureProperties cellTypeBackground = TextureProperties.EMPTY;
 
     protected final EStorageCellData data;
 
@@ -62,45 +71,20 @@ public class EStorageCellInfo extends Column {
 
     @Override
     protected void preRenderInternal(final WidgetGui widgetGui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
-        GuiScreen gui = widgetGui.getGui();
-        gui.mc.getTextureManager().bindTexture(BG_TEX_RES);
-        gui.drawTexturedModalRect(
-                renderPos.posX(), renderPos.posY(),
-                cellBgTexX, cellBgTexY,
-                CELL_BACKGROUND_TEXTURE_WIDTH, CELL_BACKGROUND_TEXTURE_HEIGHT
-        );
-        gui.drawTexturedModalRect(
-                renderPos.posX(), renderPos.posY(),
-                cellTypeBgTexX, cellTypeBgTexY,
-                CELL_TYPE_BACKGROUND_WIDTH, CELL_TYPE_BACKGROUND_HEIGHT
-        );
+        cellBackground.renderIfPresent(renderPos, widgetGui);
+        cellTypeBackground.renderIfPresent(renderPos, widgetGui);
         super.preRenderInternal(widgetGui, renderSize, renderPos, mousePos);
     }
 
     protected void initBackground() {
         switch (data.level()) {
-            case A -> {
-                cellBgTexX = L4_CELL_BACKGROUND_TEXTURE_X;
-                cellBgTexY = L4_CELL_BACKGROUND_TEXTURE_Y;
-            }
-            case B -> {
-                cellBgTexX = L6_CELL_BACKGROUND_TEXTURE_X;
-                cellBgTexY = L6_CELL_BACKGROUND_TEXTURE_Y;
-            }
-            case C -> {
-                cellBgTexX = L9_CELL_BACKGROUND_TEXTURE_X;
-                cellBgTexY = L9_CELL_BACKGROUND_TEXTURE_Y;
-            }
+            case A -> cellBackground = CELL_BACKGROUND_L4;
+            case B -> cellBackground = CELL_BACKGROUND_L6;
+            case C -> cellBackground = CELL_BACKGROUND_L9;
         }
         switch (data.type()) {
-            case ITEM -> {
-                cellTypeBgTexX = ITEM_CELL_TYPE_BACKGROUND_TEXTURE_X;
-                cellTypeBgTexY = ITEM_CELL_TYPE_BACKGROUND_TEXTURE_Y;
-            }
-            case FLUID -> {
-                cellTypeBgTexX = FLUID_CELL_TYPE_BACKGROUND_TEXTURE_X;
-                cellTypeBgTexY = FLUID_CELL_TYPE_BACKGROUND_TEXTURE_Y;
-            }
+            case ITEM -> cellTypeBackground = CELL_TYPE_BACKGROUND_ITEM;
+            case FLUID -> cellTypeBackground = CELL_TYPE_BACKGROUND_FLUID;
         }
     }
 

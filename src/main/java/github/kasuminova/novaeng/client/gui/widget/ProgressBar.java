@@ -1,12 +1,8 @@
 package github.kasuminova.novaeng.client.gui.widget;
 
-import github.kasuminova.mmce.client.gui.util.AnimationValue;
-import github.kasuminova.mmce.client.gui.util.MousePos;
-import github.kasuminova.mmce.client.gui.util.RenderPos;
-import github.kasuminova.mmce.client.gui.util.RenderSize;
+import github.kasuminova.mmce.client.gui.util.*;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
-import github.kasuminova.novaeng.client.gui.util.TextureProperties;
 import net.minecraft.client.gui.GuiScreen;
 
 import java.util.ArrayList;
@@ -40,16 +36,16 @@ public class ProgressBar extends DynamicWidget {
         }
 
         // ProgressBar / Foreground.
-        if (progressTextures.isEmpty() || !(maxProgress > 0)) {
+        if (progressTextures.isEmpty() || maxProgress <= 0) {
             return;
         }
 
-        double percent = progress.get() / maxProgress;
+        double percent = Math.min(1, progress.get() / maxProgress);
 
         // Progress background
         findProgressBackgroundTex(percent).ifPresent(tex -> tex.render(renderPos, gui));
 
-        float renderPercent = (float) (percent - ((float) (int) percent));
+        float renderPercent = (float) percent;
         if (isHorizontal()) {
             // Horizontal.
             if (leftToRight) {
@@ -204,7 +200,7 @@ public class ProgressBar extends DynamicWidget {
 
     public ProgressBar setLeftToRight(final boolean leftToRight) {
         this.leftToRight = leftToRight;
-        return this;
+        return setHorizontal(true);
     }
 
     public ProgressBar setRightToLeft() {
@@ -225,7 +221,7 @@ public class ProgressBar extends DynamicWidget {
 
     public ProgressBar setUpToDown(final boolean upToDown) {
         this.leftToRight = upToDown;
-        return this;
+        return setVertical(true);
     }
 
     public ProgressBar setDownToUp(final boolean downToUp) {

@@ -1,0 +1,28 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_structural_radiators"
+    },
+    "variants": {
+        "facing=north": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_structural_radiators"
+        },
+        "facing=south": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_structural_radiators",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_structural_radiators",
+            "y": 270
+        },
+        "facing=east": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_structural_radiators",
+            "y": 90
+        },
+        "inventory": [
+            {
+                "transform": "forge:default-block"
+            }
+        ]
+    }
+}

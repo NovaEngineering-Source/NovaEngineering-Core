@@ -50,7 +50,7 @@ public abstract class ModuleCalculableBase<T extends ServerModule & Calculable> 
         }
 
         for (final EfficiencyTip efficiencyTip : efficiencyTips) {
-            tooltip.add(efficiencyTip.tip());
+            tooltip.add("  " + efficiencyTip.tip());
         }
         return tooltip;
     }

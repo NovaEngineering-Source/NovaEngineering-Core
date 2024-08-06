@@ -1,7 +1,7 @@
 {
-  "variants": {
-    "normal": {
-      "model": "novaeng_core:angel_block"
+    "variants": {
+        "normal": {
+            "model": "novaeng_core:angel_block"
+        }
     }
-  }
 }

@@ -1,43 +1,155 @@
 {
-	"credit": "Made with Blockbench",
-	"textures": {
-		"1": "novaeng_core:blocks/storage_arrays_controller_south",
-		"2": "novaeng_core:blocks/storage_arrays_controller_up",
-		"3": "novaeng_core:blocks/storage_arrays_controller_east_c",
-		"4": "novaeng_core:blocks/storage_arrays_controller_c_north",
-		"5": "novaeng_core:blocks/storage_arrays_controller_down",
-		"6": "novaeng_core:blocks/storage_arrays_controller_c_west",
-		"7": "novaeng_core:blocks/0",
-		"8": "novaeng_core:blocks/bloom/storage_arrays_controller_c_north",
-		"9": "novaeng_core:blocks/bloom/storage_arrays_controller_west_v2",
-		"10": "novaeng_core:blocks/bloom/storage_arrays_controller_c_west",
-		"particle": "novaeng_core:blocks/storage_arrays_controller_east_c"
-	},
-	"elements": [
-		{
-			"from": [0, -16, 0],
-			"to": [32, 32, 32],
-			"faces": {
-				"north": {"uv": [0, 0, 10.66667, 16], "texture": "#4"},
-				"east": {"uv": [0, 0, 10.66667, 16], "texture": "#6"},
-				"south": {"uv": [0, 0, 10.66667, 16], "texture": "#1"},
-				"west": {"uv": [10.66667, 0, 0, 16], "texture": "#3"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#2"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#5"}
-			}
-		},
-		{
-			"name": "bloom",
-			"from": [0, -16, 0],
-			"to": [32, 32, 32],
-			"faces": {
-				"north": {"uv": [0, 0, 10.66667, 16], "texture": "#8"},
-				"east": {"uv": [0, 0, 10.66667, 16], "texture": "#10"},
-				"south": {"uv": [10.66667, 0, 0, 16], "texture": "#9"},
-				"west": {"uv": [10.66667, 0, 0, 16], "texture": "#7"},
-				"up": {"uv": [0, 0, 16, 16], "texture": "#7"},
-				"down": {"uv": [0, 0, 16, 16], "texture": "#7"}
-			}
-		}
-	]
+    "credit": "Made with Blockbench",
+    "textures": {
+        "1": "novaeng_core:blocks/storage_arrays_controller_south",
+        "2": "novaeng_core:blocks/storage_arrays_controller_up",
+        "3": "novaeng_core:blocks/storage_arrays_controller_east_c",
+        "4": "novaeng_core:blocks/storage_arrays_controller_c_north",
+        "5": "novaeng_core:blocks/storage_arrays_controller_down",
+        "6": "novaeng_core:blocks/storage_arrays_controller_c_west",
+        "7": "novaeng_core:blocks/0",
+        "8": "novaeng_core:blocks/bloom/storage_arrays_controller_c_north",
+        "9": "novaeng_core:blocks/bloom/storage_arrays_controller_west_v2",
+        "10": "novaeng_core:blocks/bloom/storage_arrays_controller_c_west",
+        "particle": "novaeng_core:blocks/storage_arrays_controller_east_c"
+    },
+    "elements": [
+        {
+            "from": [
+                0,
+                -16,
+                0
+            ],
+            "to": [
+                32,
+                32,
+                32
+            ],
+            "faces": {
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        10.66667,
+                        16
+                    ],
+                    "texture": "#4"
+                },
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        10.66667,
+                        16
+                    ],
+                    "texture": "#6"
+                },
+                "south": {
+                    "uv": [
+                        0,
+                        0,
+                        10.66667,
+                        16
+                    ],
+                    "texture": "#1"
+                },
+                "west": {
+                    "uv": [
+                        10.66667,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#3"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#2"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#5"
+                }
+            }
+        },
+        {
+            "name": "bloom",
+            "from": [
+                0,
+                -16,
+                0
+            ],
+            "to": [
+                32,
+                32,
+                32
+            ],
+            "faces": {
+                "north": {
+                    "uv": [
+                        0,
+                        0,
+                        10.66667,
+                        16
+                    ],
+                    "texture": "#8"
+                },
+                "east": {
+                    "uv": [
+                        0,
+                        0,
+                        10.66667,
+                        16
+                    ],
+                    "texture": "#10"
+                },
+                "south": {
+                    "uv": [
+                        10.66667,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#9"
+                },
+                "west": {
+                    "uv": [
+                        10.66667,
+                        0,
+                        0,
+                        16
+                    ],
+                    "texture": "#7"
+                },
+                "up": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#7"
+                },
+                "down": {
+                    "uv": [
+                        0,
+                        0,
+                        16,
+                        16
+                    ],
+                    "texture": "#7"
+                }
+            }
+        }
+    ]
 }

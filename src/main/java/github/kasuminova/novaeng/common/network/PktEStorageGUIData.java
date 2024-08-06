@@ -23,15 +23,15 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-public class PktEStorageControllerGUIData implements IMessage, IMessageHandler<PktEStorageControllerGUIData, IMessage> {
+public class PktEStorageGUIData implements IMessage, IMessageHandler<PktEStorageGUIData, IMessage> {
 
     protected final List<EStorageCellData> dataList = new ArrayList<>();
     protected EStorageEnergyData energyData = null;
 
-    public PktEStorageControllerGUIData() {
+    public PktEStorageGUIData() {
     }
 
-    public PktEStorageControllerGUIData(final EStorageController controller) {
+    public PktEStorageGUIData(final EStorageController controller) {
         List<EStorageCellDrive> drives = controller.getCellDrives();
         drives.stream()
                 .filter(drive -> drive.getDriveInv().getStackInSlot(0).getItem() instanceof EStorageCell<?> cell && drive.isCellSupported(cell.getLevel()))
@@ -73,7 +73,7 @@ public class PktEStorageControllerGUIData implements IMessage, IMessageHandler<P
     }
 
     @Override
-    public IMessage onMessage(final PktEStorageControllerGUIData message, final MessageContext ctx) {
+    public IMessage onMessage(final PktEStorageGUIData message, final MessageContext ctx) {
         if (FMLCommonHandler.instance().getSide().isClient()) {
             processPacket(message);
         }
@@ -81,7 +81,7 @@ public class PktEStorageControllerGUIData implements IMessage, IMessageHandler<P
     }
 
     @SideOnly(Side.CLIENT)
-    protected static void processPacket(final PktEStorageControllerGUIData message) {
+    protected static void processPacket(final PktEStorageGUIData message) {
         List<EStorageCellData> dataList = message.dataList;
         EStorageEnergyData energyData = message.energyData;
         GuiScreen cur = Minecraft.getMinecraft().currentScreen;

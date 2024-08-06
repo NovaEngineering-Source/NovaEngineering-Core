@@ -10,8 +10,7 @@
     ],
     "client": [
         "MixinFontRenderer",
-        "MixinNettyCompressionDecoder",
-        "MixinTessellator"
+        "MixinNettyCompressionDecoder"
     ],
     "server": [
         "forge.MixinFMLEventChannel",

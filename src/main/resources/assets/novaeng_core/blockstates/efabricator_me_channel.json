@@ -1,0 +1,28 @@
+{
+    "forge_marker": 1,
+    "defaults": {
+        "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_mechanical_me_port"
+    },
+    "variants": {
+        "facing=north": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_mechanical_me_port"
+        },
+        "facing=south": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_mechanical_me_port",
+            "y": 180
+        },
+        "facing=west": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_mechanical_me_port",
+            "y": 270
+        },
+        "facing=east": {
+            "model": "novaeng_core:module_molecular_assembly_matrix/carbon_fiber_mechanical_me_port",
+            "y": 90
+        },
+        "inventory": [
+            {
+                "transform": "forge:default-block"
+            }
+        ]
+    }
+}

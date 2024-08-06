@@ -63,19 +63,19 @@ public class AssemblyInvExtension extends AssemblyInvToggleable {
         this.open.setTextureLocation(GuiModularServerAssembler.TEXTURES_ELEMENTS);
         this.open.setMargin(5, 0, 4, 0);
         this.open.setWidth(18).setHeight(18);
-        this.open.setTextureXY(BUTTON_TEX_X, 237);
-        this.open.setHoveredTextureXY(BUTTON_TEX_X, 219);
+        this.open.setTexture(BUTTON_TEX_X, 237);
+        this.open.setHoveredTexture(BUTTON_TEX_X, 219);
 
         this.toggleFirst.setTextureLocation(WIDGET_TEX_LOCATION);
         this.toggleFirst.setWidth(TOGGLE_BUTTON_WIDTH).setHeight(TOGGLE_BUTTON_HEIGHT);
-        this.toggleFirst.setTextureXY(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_TEX_Y);
-        this.toggleFirst.setHoveredTextureXY(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_HOVERED_TEX_Y);
-        this.toggleFirst.setClickedTextureXY(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_CLICKED_TEX_Y);
+        this.toggleFirst.setTexture(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_TEX_Y);
+        this.toggleFirst.setHoveredTexture(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_HOVERED_TEX_Y);
+        this.toggleFirst.setClickedTexture(TOGGLE_FIRST_BUTTON_TEX_X, TOGGLE_BUTTON_CLICKED_TEX_Y);
         this.toggleSecond.setTextureLocation(WIDGET_TEX_LOCATION);
         this.toggleSecond.setWidth(TOGGLE_BUTTON_WIDTH).setHeight(TOGGLE_BUTTON_HEIGHT);
-        this.toggleSecond.setTextureXY(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_TEX_Y);
-        this.toggleSecond.setHoveredTextureXY(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_HOVERED_TEX_Y);
-        this.toggleSecond.setClickedTextureXY(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_CLICKED_TEX_Y);
+        this.toggleSecond.setTexture(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_TEX_Y);
+        this.toggleSecond.setHoveredTexture(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_HOVERED_TEX_Y);
+        this.toggleSecond.setClickedTexture(TOGGLE_SECOND_BUTTON_TEX_X, TOGGLE_BUTTON_CLICKED_TEX_Y);
 
         AssemblySlotManager slotManager = assemblyInvManager.slotManager;
 

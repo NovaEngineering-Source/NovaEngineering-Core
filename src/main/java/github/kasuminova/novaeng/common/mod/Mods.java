@@ -4,8 +4,8 @@ import net.minecraftforge.fml.common.Loader;
 
 public enum Mods {
 
-    AE2(  "appliedenergistics2"),
-    AE2EL("appliedenergistics2") {
+    AE2(    "appliedenergistics2"),
+    AE2EL(  "appliedenergistics2") {
         @Override
         public boolean loaded() {
             if (initialized) {
@@ -23,9 +23,9 @@ public enum Mods {
             }
         }
     },
-    IC2(   "ic2"),
-    MEK(   "mekanism"),
-    MEKCEU("mekanism") {
+    IC2(    "ic2"),
+    MEK(    "mekanism"),
+    MEKCEU( "mekanism") {
         @Override
         public boolean loaded() {
             if (!MEK.loaded()) {

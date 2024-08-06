@@ -2,10 +2,7 @@ package github.kasuminova.novaeng.client;
 
 
 import github.kasuminova.mmce.client.renderer.MachineControllerRenderer;
-import github.kasuminova.novaeng.client.gui.GuiEStorageController;
-import github.kasuminova.novaeng.client.gui.GuiHyperNetTerminal;
-import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
-import github.kasuminova.novaeng.client.gui.GuiSingularityCore;
+import github.kasuminova.novaeng.client.gui.*;
 import github.kasuminova.novaeng.client.handler.BlockAngelRendererHandler;
 import github.kasuminova.novaeng.client.handler.ClientEventHandler;
 import github.kasuminova.novaeng.client.handler.HyperNetClientEventHandler;
@@ -18,6 +15,8 @@ import github.kasuminova.novaeng.common.registry.RegistryBlocks;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
+import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorController;
+import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorPatternBus;
 import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
 import github.kasuminova.novaeng.common.tile.machine.SingularityCore;
 import hellfirepvp.modularmachinery.common.base.Mods;
@@ -121,6 +120,9 @@ public class ClientProxy extends CommonProxy {
                     new GuiModularServerAssembler((TileModularServerAssembler) present, player);
             case ESTORAGE_CONTROLLER -> new GuiEStorageController((EStorageController) present, player);
             case SINGULARITY_CORE -> new GuiSingularityCore((SingularityCore) present, player);
+            case EFABRICATOR_CONTROLLER -> new GuiEFabricatorController((EFabricatorController) present, player);
+            case EFABRICATOR_PATTERN_BUS -> new GuiEFabricatorPatternBus((EFabricatorPatternBus) present, player);
         };
     }
+
 }

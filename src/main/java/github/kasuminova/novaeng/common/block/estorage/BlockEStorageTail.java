@@ -1,7 +1,7 @@
 package github.kasuminova.novaeng.common.block.estorage;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.block.estorage.prop.FacingProp;
+import github.kasuminova.novaeng.common.block.prop.FacingProp;
 import hellfirepvp.modularmachinery.common.block.BlockController;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;

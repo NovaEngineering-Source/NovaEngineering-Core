@@ -42,8 +42,8 @@ public class AssemblyInvCalculateCard extends AssemblyInv {
         this.open.setTextureLocation(GuiModularServerAssembler.TEXTURES_ELEMENTS);
         this.open.setMargin(5, 0, 4, 0);
         this.open.setWidth(18).setHeight(18);
-        this.open.setTextureXY(BUTTON_TEX_X, 237);
-        this.open.setHoveredTextureXY(37, 219);
+        this.open.setTexture(BUTTON_TEX_X, 237);
+        this.open.setHoveredTexture(37, 219);
 
         AssemblySlotManager slotManager = assemblyInvManager.slotManager;
 
