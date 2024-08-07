@@ -13,9 +13,12 @@ import net.minecraft.world.World;
 
 import javax.annotation.Nonnull;
 
+/**
+ * TODO: 朝向烂了。四向模型，定制给了个顶部朝向的模型。
+ */
 @SuppressWarnings("deprecation")
 public class BlockEFabricatorVent extends BlockEFabricator {
-    
+
     public static final BlockEFabricatorVent INSTANCE = new BlockEFabricatorVent();
 
     protected BlockEFabricatorVent() {

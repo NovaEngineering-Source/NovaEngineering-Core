@@ -74,9 +74,6 @@ public class RegistryBlocks {
         prepareItemBlockRegister(registerBlock(BlockEStorageEnergyCell.L9));
         prepareItemBlockRegister(registerBlock(BlockEStorageCellDrive.INSTANCE));
         prepareItemBlockRegister(new ItemBlockME(registerBlock(BlockEStorageMEChannel.INSTANCE)));
-//        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L4));
-//        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L6));
-//        prepareItemBlockRegister(registerBlock(BlockEStorageTail.L9));
         prepareItemBlockRegister(registerBlock(BlockEStorageVent.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockEStorageCasing.INSTANCE));
 
@@ -88,9 +85,10 @@ public class RegistryBlocks {
         prepareItemBlockRegister(new ItemEFabricatorParallelProc(registerBlock(BlockEFabricatorParallelProc.L6)));
         prepareItemBlockRegister(new ItemEFabricatorParallelProc(registerBlock(BlockEFabricatorParallelProc.L9)));
         prepareItemBlockRegister(new ItemEFabricatorMEChannel(registerBlock(BlockEFabricatorMEChannel.INSTANCE)));
-        prepareItemBlockRegister(registerBlock(BlockEFabricatorTail.L4));
-        prepareItemBlockRegister(registerBlock(BlockEFabricatorTail.L6));
-        prepareItemBlockRegister(registerBlock(BlockEFabricatorTail.L9));
+        // 烂了，模型作者自己都修不好。
+//        prepareItemBlockRegister(registerBlock(BlockEFabricatorTail.L4));
+//        prepareItemBlockRegister(registerBlock(BlockEFabricatorTail.L6));
+//        prepareItemBlockRegister(registerBlock(BlockEFabricatorTail.L9));
         prepareItemBlockRegister(new ItemEFabricatorPatternBus(registerBlock(BlockEFabricatorPatternBus.INSTANCE)));
         prepareItemBlockRegister(new ItemEFabricatorWorker(registerBlock(BlockEFabricatorWorker.INSTANCE)));
         prepareItemBlockRegister(registerBlock(BlockEFabricatorVent.INSTANCE));

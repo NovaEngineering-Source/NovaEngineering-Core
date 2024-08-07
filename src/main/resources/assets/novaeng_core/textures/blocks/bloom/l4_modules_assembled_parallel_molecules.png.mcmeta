@@ -1,0 +1,22 @@
+{
+  "ctm": {
+    "ctm_version": 1,
+    "type": "CTM",
+    "layer": "BLOOM",
+    "gregtech": true,
+    "textures": [
+      "novaeng_core:blocks/bloom/l4_modules_assembled_parallel_molecules-ctm"
+    ],
+    "extra": {
+      "light": 15,
+      "connect_to": [
+        {"block": "novaeng_core:carbon_fiber_chassis"},
+        {"block": "novaeng_core:l4_modules_assembled_parallel_molecules"},
+        {"block": "novaeng_core:l6_modules_assembled_parallel_molecules"},
+        {"block": "novaeng_core:l9_modules_assembled_parallel_molecules"},
+        {"block": "novaeng_core:module_molecular_assembly_drivers"},
+        {"block": "novaeng_core:module_molecular_template_bus"}
+      ]
+    }
+  }
+}

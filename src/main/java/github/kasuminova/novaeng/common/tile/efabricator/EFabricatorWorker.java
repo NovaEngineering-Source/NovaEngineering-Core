@@ -13,10 +13,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
+import java.util.*;
 
 public class EFabricatorWorker extends EFabricatorPart {
 
@@ -198,6 +195,7 @@ public class EFabricatorWorker extends EFabricatorPart {
         private static final String STACK_SET_TAG = "SS";
         private static final String STACK_SET_TAG_ID_PREFIX = "S#";
         private static final String STACK_SET_SIZE_TAG = "SSS";
+        private static final String REPEAT_TAG = "R";
 
         private final Deque<EFabricatorWorker.CraftWork> queue = new ArrayDeque<>();
 
@@ -234,7 +232,23 @@ public class EFabricatorWorker extends EFabricatorPart {
 
             // Queue
             NBTTagList queueTag = new NBTTagList();
-            queue.forEach(craftWork -> queueTag.appendTag(craftWork.writeToNBT(stackSet)));
+            CraftWork prev = null;
+            int repeat = 0;
+            for (CraftWork craftWork : queue) {
+                if (prev != null && prev.equals(craftWork)) {
+                    repeat++;
+                    continue;
+                }
+                if (repeat > 0) {
+                    queueTag.getCompoundTagAt(queueTag.tagCount() - 1).setShort(REPEAT_TAG, (short) repeat);
+                    repeat = 0;
+                }
+                queueTag.appendTag(craftWork.writeToNBT(stackSet));
+                prev = craftWork;
+            }
+            if (repeat > 0) {
+                queueTag.getCompoundTagAt(queueTag.tagCount() - 1).setShort(REPEAT_TAG, (short) repeat);
+            }
             nbt.setTag(QUEUE_TAG, queueTag);
 
             // StackSet
@@ -264,7 +278,13 @@ public class EFabricatorWorker extends EFabricatorPart {
             // Queue
             NBTTagList queueTag = nbt.getTagList(QUEUE_TAG, Constants.NBT.TAG_COMPOUND);
             for (int i = 0; i < queueTag.tagCount(); i++) {
-                queue.add(new EFabricatorWorker.CraftWork(queueTag.getCompoundTagAt(i), stackSet));
+                NBTTagCompound tagAt = queueTag.getCompoundTagAt(i);
+                CraftWork work = new CraftWork(tagAt, stackSet);
+                queue.add(work);
+                short repeat = tagAt.getShort(REPEAT_TAG);
+                for (short r = 0; r < repeat; r++) {
+                    queue.add(work.copy());
+                }
             }
         }
 
@@ -302,12 +322,11 @@ public class EFabricatorWorker extends EFabricatorPart {
             for (int remainIdx = 0; remainIdx < remaining.length; remainIdx++) {
                 final ItemStack remain = remaining[remainIdx];
                 if (remain.isEmpty()) {
-//                    nbt.setShort("R#" + remainIdx, (short) -1);
                     continue;
                 }
 
                 for (int setIdx = 0; setIdx < stackSet.size(); setIdx++) {
-                    if (ItemUtils.matchStacks(remain, stackSet.get(setIdx))) {
+                    if (matchStacksStrict(remain, stackSet.get(setIdx))) {
                         nbt.setShort(REMAIN_TAG_PREFIX + remainIdx, (short) setIdx);
                         continue remain;
                     }
@@ -319,7 +338,7 @@ public class EFabricatorWorker extends EFabricatorPart {
 
             // Output
             for (int setIdx = 0; setIdx < stackSet.size(); setIdx++) {
-                if (ItemUtils.matchStacks(output, stackSet.get(setIdx))) {
+                if (matchStacksStrict(output, stackSet.get(setIdx))) {
                     nbt.setShort(OUTPUT_TAG, (short) setIdx);
                     return nbt;
                 }
@@ -328,6 +347,28 @@ public class EFabricatorWorker extends EFabricatorPart {
             stackSet.add(output);
             nbt.setShort(OUTPUT_TAG, (short) (stackSet.size() - 1));
             return nbt;
+        }
+
+        public CraftWork copy() {
+            ItemStack[] remaining = Arrays.stream(this.remaining).map(ItemStack::copy).toArray(ItemStack[]::new);
+            return new CraftWork(remaining, output.copy());
+        }
+
+        @Override
+        public boolean equals(final Object obj) {
+            if (obj instanceof final CraftWork craftWork) {
+                for (int i = 0; i < remaining.length; i++) {
+                    if (!matchStacksStrict(remaining[i], craftWork.remaining[i])) {
+                        return false;
+                    }
+                }
+                return matchStacksStrict(output, craftWork.output);
+            }
+            return false;
+        }
+
+        private static boolean matchStacksStrict(final ItemStack stack1, final ItemStack stack2) {
+            return ItemUtils.matchStacks(stack1, stack2) && stack1.getCount() == stack2.getCount();
         }
 
         public ItemStack[] getRemaining() {

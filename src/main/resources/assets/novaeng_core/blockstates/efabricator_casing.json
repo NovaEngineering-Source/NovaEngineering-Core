@@ -1,11 +1,11 @@
 {
     "forge_marker": 1,
     "defaults": {
-        "model": "novaeng_core:estorage_casing"
+        "model": "novaeng_core:module_molecular_assembly_matrix/efabricator_casing"
     },
     "variants": {
         "normal": {
-            "model": "novaeng_core:estorage_casing"
+            "model": "novaeng_core:module_molecular_assembly_matrix/efabricator_casing"
         },
         "inventory": [
             {

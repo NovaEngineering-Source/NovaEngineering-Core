@@ -8,6 +8,9 @@ import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerEFabricatorPatternBus extends AEBaseContainer {
 
+    public static final int ROWS = 6;
+    public static final int COLS = 12;
+
     private final EFabricatorPatternBus owner;
 
     public ContainerEFabricatorPatternBus(final EFabricatorPatternBus owner, final EntityPlayer player) {
@@ -17,10 +20,10 @@ public class ContainerEFabricatorPatternBus extends AEBaseContainer {
         this.bindPlayerInventory(getInventoryPlayer(), 27, 150);
 
         AppEngInternalInventory patterns = owner.getPatterns();
-        for (int row = 0; row < 6; row++) {
-            for (int col = 0; col < 12; col++) {
+        for (int row = 0; row < ROWS; row++) {
+            for (int col = 0; col < COLS; col++) {
                 this.addSlotToContainer(new SlotRestrictedInput(SlotRestrictedInput.PlacableItemType.ENCODED_PATTERN, patterns,
-                        (row * 9) + col, 8 + (col * 18), 28 + (row * 18), getInventoryPlayer()));
+                        (row * COLS) + col, 8 + (col * 18), 28 + (row * 18), getInventoryPlayer()));
             }
         }
     }

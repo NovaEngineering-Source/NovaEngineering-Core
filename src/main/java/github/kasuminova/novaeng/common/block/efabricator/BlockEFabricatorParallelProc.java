@@ -27,29 +27,29 @@ public class BlockEFabricatorParallelProc extends BlockEFabricatorPart {
 
     public static final BlockEFabricatorParallelProc L4 = new BlockEFabricatorParallelProc("l4", 
             Arrays.asList(
-                    new Modifier(EFabricatorParallelProc.Type.ADD, 8, false)
+                    new Modifier(EFabricatorParallelProc.Type.ADD, 16, false)
             ),
             Arrays.asList(
-                    new Modifier(EFabricatorParallelProc.Type.ADD, 12, false),
+                    new Modifier(EFabricatorParallelProc.Type.ADD, 20, false),
                     new Modifier(EFabricatorParallelProc.Type.MULTIPLY, 0.99, true)
             )
     );
     public static final BlockEFabricatorParallelProc L6 = new BlockEFabricatorParallelProc("l6",
             Arrays.asList(
-                    new Modifier(EFabricatorParallelProc.Type.ADD, 32, false)
+                    new Modifier(EFabricatorParallelProc.Type.ADD, 48, false)
             ),
             Arrays.asList(
-                    new Modifier(EFabricatorParallelProc.Type.ADD, 48, false),
-                    new Modifier(EFabricatorParallelProc.Type.MULTIPLY, 0.985, true)
+                    new Modifier(EFabricatorParallelProc.Type.ADD, 60, false),
+                    new Modifier(EFabricatorParallelProc.Type.MULTIPLY, 0.98, true)
             )
     );
     public static final BlockEFabricatorParallelProc L9 = new BlockEFabricatorParallelProc("l9",
             Arrays.asList(
-                    new Modifier(EFabricatorParallelProc.Type.ADD, 128, false)
+                    new Modifier(EFabricatorParallelProc.Type.ADD, 144, false)
             ),
             Arrays.asList(
-                    new Modifier(EFabricatorParallelProc.Type.ADD, 192, false),
-                    new Modifier(EFabricatorParallelProc.Type.MULTIPLY, 0.98, true)
+                    new Modifier(EFabricatorParallelProc.Type.ADD, 180, false),
+                    new Modifier(EFabricatorParallelProc.Type.MULTIPLY, 0.97, true)
             )
     );
 

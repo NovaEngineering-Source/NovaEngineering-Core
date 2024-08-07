@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.common;
 
 import appeng.api.AEApi;
 import appeng.api.storage.ICellHandler;
+import github.kasuminova.mmce.common.integration.ModIntegrationAE2;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
 import github.kasuminova.novaeng.common.container.*;
@@ -121,8 +122,21 @@ public class CommonProxy implements IGuiHandler {
             case MODULAR_SERVER_ASSEMBLER -> new ContainerModularServerAssembler((TileModularServerAssembler) present, player);
             case ESTORAGE_CONTROLLER -> new ContainerEStorageController((EStorageController) present, player);
             case SINGULARITY_CORE -> new ContainerSingularityCore((github.kasuminova.novaeng.common.tile.machine.SingularityCore) present, player);
-            case EFABRICATOR_CONTROLLER -> new ContainerEFabricatorController((EFabricatorController) present, player);
-            case EFABRICATOR_PATTERN_BUS -> new ContainerEFabricatorPatternBus((EFabricatorPatternBus) present, player);
+            case EFABRICATOR_CONTROLLER -> {
+                EFabricatorController efController = (EFabricatorController) present;
+                if (efController.getChannel() != null && ModIntegrationAE2.securityCheck(player, efController.getChannel().getProxy())) {
+                    yield null;
+                }
+                yield new ContainerEFabricatorController(efController, player);
+            }
+            case EFABRICATOR_PATTERN_BUS -> {
+                EFabricatorPatternBus efPatternBus = (EFabricatorPatternBus) present;
+                EFabricatorController efController = efPatternBus.getController();
+                if (efController != null && efController.getChannel() != null && ModIntegrationAE2.securityCheck(player, efController.getChannel().getProxy())) {
+                    yield null;
+                }
+                yield new ContainerEFabricatorPatternBus(efPatternBus, player);
+            }
         };
     }
 
