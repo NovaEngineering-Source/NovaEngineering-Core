@@ -308,7 +308,7 @@ public class StatisticPanel extends Row {
 
             public Info setProgress(int prog, int max) {
                 progressPercent.setContents(Collections.singletonList(
-                        I18n.format("gui.efabricator.crafting_progress.0", prog * 100 / max)
+                        I18n.format("gui.efabricator.crafting_progress.0",  max <= 0 ? 0 : prog * 100 / max)
                 ));
                 progress.setContents(Collections.singletonList(
                         I18n.format("gui.efabricator.crafting_progress.1", prog, max)

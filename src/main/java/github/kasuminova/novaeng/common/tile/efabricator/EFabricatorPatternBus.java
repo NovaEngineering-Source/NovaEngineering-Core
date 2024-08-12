@@ -16,6 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
@@ -97,7 +98,9 @@ public class EFabricatorPatternBus extends EFabricatorPart implements IAEAppEngI
     @Override
     public void validate() {
         super.validate();
-        ModularMachinery.EXECUTE_MANAGER.addSyncTask(this::refreshPatterns);
+        if (FMLCommonHandler.instance().getEffectiveSide().isServer()) {
+            ModularMachinery.EXECUTE_MANAGER.addSyncTask(this::refreshPatterns);
+        }
     }
 
     @Override

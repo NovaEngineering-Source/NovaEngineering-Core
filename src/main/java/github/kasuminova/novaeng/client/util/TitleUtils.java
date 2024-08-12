@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.client.util;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
+import github.kasuminova.novaeng.common.config.NovaEngCoreConfig;
 import github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader;
 import org.lwjgl.opengl.Display;
 
@@ -27,6 +28,9 @@ public class TitleUtils {
      */
     public static void setRandomTitle(final String state) {
         lastCurrentTitle = currentTitle;
+        if (!NovaEngCoreConfig.CLIENT.enableNovaEngTitle) {
+            return;
+        }
 
         String hitokotoCache = HitokotoAPI.getHitokotoCache();
         if (hitokotoCache != null) {
@@ -45,6 +49,9 @@ public class TitleUtils {
      */
     public static void setRandomTitle() {
         lastCurrentTitle = currentTitle;
+        if (!NovaEngCoreConfig.CLIENT.enableNovaEngTitle) {
+            return;
+        }
 
         String hitokotoCache = HitokotoAPI.getHitokotoCache();
 
@@ -107,6 +114,9 @@ public class TitleUtils {
     }
 
     private static void setTitle() {
+        if (!NovaEngCoreConfig.CLIENT.enableNovaEngTitle) {
+            return;
+        }
         if (NovaEngCoreEarlyMixinLoader.isCleanroomLoader() && !unsupportedPlatform) {
             try {
                 Class<?> Display = Class.forName("org.lwjgl.opengl.Display");

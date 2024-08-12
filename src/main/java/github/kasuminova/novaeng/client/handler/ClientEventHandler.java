@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.client.handler;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.util.TitleUtils;
+import github.kasuminova.novaeng.common.config.NovaEngCoreConfig;
 import github.kasuminova.novaeng.common.profiler.CPacketProfiler;
 import github.kasuminova.novaeng.common.profiler.TEUpdatePacketProfiler;
 import net.minecraft.client.Minecraft;
@@ -37,7 +38,9 @@ public class ClientEventHandler {
         clientTick++;
 
         if (clientTick % 5 == 0) {
-            TitleUtils.checkTitleState();
+            if (NovaEngCoreConfig.CLIENT.enableNovaEngTitle) {
+                TitleUtils.checkTitleState();
+            }
             debugMessageUpdateRequired = true;
         }
     }

@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.common.block.efabricator;
 
+import appeng.tile.inventory.AppEngInternalInventory;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.block.prop.FacingProp;
@@ -11,6 +12,7 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -67,6 +69,22 @@ public class BlockEFabricatorPatternBus extends BlockEFabricatorPart {
             }
         }
         return true;
+    }
+
+    @Override
+    public void breakBlock(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
+        TileEntity te = worldIn.getTileEntity(pos);
+        if (te instanceof EFabricatorPatternBus terminal) {
+            AppEngInternalInventory inv = terminal.getPatterns();
+            for (int i = 0; i < inv.getSlots(); i++) {
+                ItemStack stack = inv.getStackInSlot(i);
+                if (!stack.isEmpty()) {
+                    spawnAsEntity(worldIn, pos, stack);
+                    inv.setStackInSlot(i, ItemStack.EMPTY);
+                }
+            }
+        }
+        super.breakBlock(worldIn, pos, state);
     }
 
     @Nonnull

@@ -42,7 +42,7 @@ public class TotalCraftedLabel extends Row {
 
         int added = (int) (newValue - value);
         if (value != 0 && added > 0) {
-            double craftPerTick = ((added / (20F / EFabricatorEventHandler.UPDATE_INTERVAL)) / 20F);
+            double craftPerTick = ((added * (20F / EFabricatorEventHandler.UPDATE_INTERVAL)) / 20F);
             history.push(craftPerTick);
             double avgCraftPerTick = history.stream().mapToDouble(Double::doubleValue).average().orElse(0D);
             updateLabel(newValue, avgCraftPerTick);

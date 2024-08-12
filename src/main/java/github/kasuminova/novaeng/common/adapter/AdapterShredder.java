@@ -30,13 +30,13 @@ public class AdapterShredder extends RecipeAdapter {
         List<MachineRecipe> recipes = new LinkedList<>();
 
         recipes.addAll(PulverizerRecipeConverter.convert(
-                (stack) -> createRecipeShell(owningMachineName, HashedItemStack.stackToString(stack), modifiers), stacks -> checkStackRegistered(registeredStack, stacks), modifiers));
+                stack -> createRecipeShell(owningMachineName, HashedItemStack.stackToString(stack), modifiers), stacks -> checkStackRegistered(registeredStack, stacks), modifiers));
         recipes.addAll(NCOBasicRecipeConverter.convert(
-                (stack) -> createRecipeShell(owningMachineName, HashedItemStack.stackToString(stack), modifiers), stacks -> checkStackRegistered(registeredStack, stacks), modifiers, 10));
+                stack -> createRecipeShell(owningMachineName, HashedItemStack.stackToString(stack), modifiers), stacks -> checkStackRegistered(registeredStack, stacks), modifiers, 10));
         recipes.addAll(MekCrusherRecipeConverter.convert(
-                (stack) -> createRecipeShell(owningMachineName, HashedItemStack.stackToString(stack), modifiers), stacks -> checkStackRegistered(registeredStack, stacks), modifiers, 10));
+                stack -> createRecipeShell(owningMachineName, HashedItemStack.stackToString(stack), modifiers), stacks -> checkStackRegistered(registeredStack, stacks), modifiers, 10));
         recipes.addAll(IC2MachineRecipeConverter.convertMaceratorRecipes(
-                (stack) -> createRecipeShell(owningMachineName, HashedItemStack.stackToString(stack), modifiers), stacks -> checkStackRegistered(registeredStack, stacks), modifiers, 10));
+                stack -> createRecipeShell(owningMachineName, HashedItemStack.stackToString(stack), modifiers), stacks -> checkStackRegistered(registeredStack, stacks), modifiers, 10));
 
         incId++;
         return recipes;
@@ -53,16 +53,16 @@ public class AdapterShredder extends RecipeAdapter {
     }
 
     protected boolean checkStackRegistered(Set<HashedItemStack> registeredStack, List<ItemStack> stacks) {
-        List<HashedItemStack> checked = new LinkedList<>();
+        List<HashedItemStack> checked = new ArrayList<>();
         for (final ItemStack stack : stacks) {
             if (stack.isEmpty()) {
                 return false;
             }
-            HashedItemStack hashedItemStack = HashedItemStack.of(stack);
-            if (registeredStack.contains(hashedItemStack)) {
+            HashedItemStack hashedStack = HashedItemStack.ofTagUnsafe(stack);
+            if (registeredStack.contains(hashedStack)) {
                 return false;
             }
-            checked.add(hashedItemStack);
+            checked.add(hashedStack.copy());
         }
         registeredStack.addAll(checked);
         return true;

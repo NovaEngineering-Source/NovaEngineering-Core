@@ -3,6 +3,7 @@ package github.kasuminova.novaeng;
 import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.command.CommandSPacketProfiler;
+import github.kasuminova.novaeng.common.config.NovaEngCoreConfig;
 import github.kasuminova.novaeng.common.network.*;
 import github.kasuminova.novaeng.common.profiler.SPacketProfiler;
 import net.minecraft.util.text.TextFormatting;
@@ -50,15 +51,17 @@ public class NovaEngineeringCore {
     public static Logger log = LogManager.getLogger(MOD_ID);
 
     static {
-        Thread thread = new Thread(() -> {
-            String hitokoto = HitokotoAPI.getRandomHitokoto();
-            if (hitokoto == null || hitokoto.isEmpty()) {
-                return;
-            }
-            LOG.info(LOG_PREFIX + hitokoto);
-        });
-        thread.setName("NovaEng Core Hitokoto Initializer");
-        thread.start();
+        if (NovaEngCoreConfig.CLIENT.enableNovaEngTitle) {
+            Thread thread = new Thread(() -> {
+                String hitokoto = HitokotoAPI.getRandomHitokoto();
+                if (hitokoto == null || hitokoto.isEmpty()) {
+                    return;
+                }
+                LOG.info(LOG_PREFIX + hitokoto);
+            });
+            thread.setName("NovaEng Core Hitokoto Initializer");
+            thread.start();
+        }
     }
 
     @Mod.EventHandler

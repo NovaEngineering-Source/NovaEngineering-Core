@@ -121,14 +121,21 @@ public class EFabricatorInfoProvider implements IProbeInfoProvider {
         // Enqueued crafting
         box = newBox(probeInfo).vertical().text("{*top.efabricator.worker.enqueued_crafting*}");
         IProbeInfo row = box.horizontal();
-        int max = Math.min(workDeque.size() - 1, 32);
+        int max = Math.min(workDeque.size() - 2, 32);
         int maxItemsPerRow = 8;
         int rowItems = maxItemsPerRow;
+        boolean first = true;
         for (final EFabricatorWorker.CraftWork work : workDeque) {
             // Count
             if (rowItems == 0) {
                 rowItems = maxItemsPerRow;
                 row = box.horizontal();
+            }
+
+            // Filter first item
+            if (first) {
+                first = false;
+                continue;
             }
 
             // Info

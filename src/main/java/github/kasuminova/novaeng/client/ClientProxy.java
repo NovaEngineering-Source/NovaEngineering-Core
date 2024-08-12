@@ -6,7 +6,6 @@ import github.kasuminova.novaeng.client.gui.*;
 import github.kasuminova.novaeng.client.handler.BlockAngelRendererHandler;
 import github.kasuminova.novaeng.client.handler.ClientEventHandler;
 import github.kasuminova.novaeng.client.handler.HyperNetClientEventHandler;
-import github.kasuminova.novaeng.client.hitokoto.HitokotoAPI;
 import github.kasuminova.novaeng.client.util.TitleUtils;
 import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.command.CommandPacketProfiler;
@@ -34,15 +33,10 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 
 import javax.annotation.Nullable;
-import java.util.concurrent.CompletableFuture;
 
 @SuppressWarnings("MethodMayBeStatic")
 @Mod.EventBusSubscriber(Side.CLIENT)
 public class ClientProxy extends CommonProxy {
-
-    static {
-        CompletableFuture.runAsync(HitokotoAPI::getRandomHitokoto);
-    }
 
     public ClientProxy() {
         MinecraftForge.EVENT_BUS.register(this);
