@@ -5,6 +5,8 @@ import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.command.CommandSPacketProfiler;
 import github.kasuminova.novaeng.common.config.NovaEngCoreConfig;
 import github.kasuminova.novaeng.common.network.*;
+import github.kasuminova.novaeng.common.network.appeng.PktCraftingTreeData;
+import github.kasuminova.novaeng.common.network.appeng.PktSwitchCraftingTree;
 import github.kasuminova.novaeng.common.profiler.SPacketProfiler;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Mod;
@@ -80,12 +82,14 @@ public class NovaEngineeringCore {
         NET_CHANNEL.registerMessage(PktEStorageGUIData.class, PktEStorageGUIData.class, 4, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktEFabricatorWorkerStatusUpdate.class, PktEFabricatorWorkerStatusUpdate.class, 5, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktEFabricatorGUIData.class, PktEFabricatorGUIData.class, 6, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktCraftingTreeData.class, PktCraftingTreeData.class, 7, Side.CLIENT);
 
         NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, 100, Side.SERVER);
         NET_CHANNEL.registerMessage(PktResearchTaskReset.class, PktResearchTaskReset.class, 101, Side.SERVER);
         NET_CHANNEL.registerMessage(PktResearchTaskProvideCreative.class, PktResearchTaskProvideCreative.class, 102, Side.SERVER);
         NET_CHANNEL.registerMessage(PktPatternTermUploadPattern.class, PktPatternTermUploadPattern.class, 103, Side.SERVER);
         NET_CHANNEL.registerMessage(PktEFabricatorGUIAction.class, PktEFabricatorGUIAction.class, 104, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktSwitchCraftingTree.class, PktSwitchCraftingTree.class, 105, Side.SERVER);
 
         proxy.preInit();
     }

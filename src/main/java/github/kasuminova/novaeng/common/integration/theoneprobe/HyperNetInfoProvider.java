@@ -2,9 +2,9 @@ package github.kasuminova.novaeng.common.integration.theoneprobe;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import github.kasuminova.novaeng.common.hypernet.*;
-import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
-import github.kasuminova.novaeng.common.hypernet.research.ResearchStation;
+import github.kasuminova.novaeng.common.hypernet.old.*;
+import github.kasuminova.novaeng.common.hypernet.old.research.ResearchCognitionData;
+import github.kasuminova.novaeng.common.hypernet.old.research.ResearchStation;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.common.machine.DynamicMachine;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;

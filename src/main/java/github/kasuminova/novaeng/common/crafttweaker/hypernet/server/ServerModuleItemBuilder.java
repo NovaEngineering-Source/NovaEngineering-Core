@@ -3,7 +3,7 @@ package github.kasuminova.novaeng.common.crafttweaker.hypernet.server;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.model.ItemModelFileAutoGenerator;
-import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
+import github.kasuminova.novaeng.common.hypernet.computer.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.item.ItemServerModule;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
 import net.minecraft.client.Minecraft;

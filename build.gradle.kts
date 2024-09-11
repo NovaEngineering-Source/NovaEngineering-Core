@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.16.1"
+version = "1.17.0"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -189,7 +189,7 @@ dependencies {
 
     // Mixins
 //    implementation("zone.rong:mixinbooter:7.1")
-    val mixin : String = modUtils.enableMixins("zone.rong:mixinbooter:8.9", "mixins.novaeng_core.refmap.json").toString()
+    val mixin : String = modUtils.enableMixins("zone.rong:mixinbooter:9.3", "mixins.novaeng_core.refmap.json").toString()
     api (mixin) {
         isTransitive = false
     }

@@ -73,8 +73,7 @@ public class EStorageController extends TileCustomController {
 
     @Override
     public void doControllerTick() {
-        this.tickExecutor = new ActionExecutor(this::onSyncTick);
-        this.tickExecutor.run();
+        onSyncTick();
     }
 
     protected void onSyncTick() {

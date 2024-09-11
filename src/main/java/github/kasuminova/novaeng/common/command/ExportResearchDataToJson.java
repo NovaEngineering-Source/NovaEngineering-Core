@@ -4,7 +4,7 @@ import com.github.bsideup.jabel.Desugar;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.hypernet.research.SimpleResearchData;
+import github.kasuminova.novaeng.common.hypernet.old.research.SimpleResearchData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import io.netty.util.internal.ThrowableUtil;
 import net.minecraft.command.CommandBase;

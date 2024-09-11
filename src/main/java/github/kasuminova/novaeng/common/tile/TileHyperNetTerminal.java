@@ -3,7 +3,7 @@ package github.kasuminova.novaeng.common.tile;
 import github.kasuminova.mmce.common.event.Phase;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
-import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
+import github.kasuminova.novaeng.common.hypernet.old.HyperNetTerminal;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.block.BlockController;
 import hellfirepvp.modularmachinery.common.crafting.helper.CraftingStatus;

@@ -1,10 +1,14 @@
 package github.kasuminova.novaeng.common.network;
 
+import appeng.api.implementations.guiobjects.IGuiItemObject;
 import appeng.api.networking.IGridNode;
 import appeng.api.networking.IMachineSet;
+import appeng.api.networking.security.IActionHost;
 import appeng.container.implementations.ContainerPatternEncoder;
 import appeng.container.slot.SlotRestrictedInput;
+import appeng.helpers.WirelessTerminalGuiObject;
 import appeng.me.GridAccessException;
+import appeng.parts.reporting.AbstractPartEncoder;
 import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorMEChannel;
 import github.kasuminova.novaeng.mixin.ae2.AccessorContainerPatternEncoder;
 import hellfirepvp.modularmachinery.ModularMachinery;
@@ -42,7 +46,16 @@ public class PktPatternTermUploadPattern implements IMessage, IMessageHandler<Pk
             }
 
             try {
-                IMachineSet channelNodes = encoder.getPart().getProxy().getGrid().getMachines(EFabricatorMEChannel.class);
+                AbstractPartEncoder part = encoder.getPart();
+                IGuiItemObject itemObject = ((AccessorContainerPatternEncoder) encoder).getIGuiItemObject();
+                IMachineSet channelNodes;
+                if (part != null) {
+                    channelNodes = part.getProxy().getGrid().getMachines(EFabricatorMEChannel.class);
+                } else if (itemObject instanceof IActionHost wirelessTerm) {
+                    channelNodes = wirelessTerm.getActionableNode().getGrid().getMachines(EFabricatorMEChannel.class);
+                } else {
+                    return;
+                }
                 for (final IGridNode channelNode : channelNodes) {
                     EFabricatorMEChannel channel = (EFabricatorMEChannel) channelNode.getMachine();
                     if (channel.insertPattern(patternStack)) {

@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.common.item;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.core.CreativeTabNovaEng;
-import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
+import github.kasuminova.novaeng.common.hypernet.computer.module.base.ServerModuleBase;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 

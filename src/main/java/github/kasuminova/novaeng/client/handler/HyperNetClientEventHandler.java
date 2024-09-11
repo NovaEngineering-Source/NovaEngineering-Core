@@ -1,7 +1,7 @@
 package github.kasuminova.novaeng.client.handler;
 
-import github.kasuminova.novaeng.common.hypernet.server.module.ServerModule;
-import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
+import github.kasuminova.novaeng.common.hypernet.computer.module.ServerModule;
+import github.kasuminova.novaeng.common.hypernet.computer.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
 import net.minecraft.client.resources.I18n;

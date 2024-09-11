@@ -1,7 +1,7 @@
 package github.kasuminova.novaeng.common.network;
 
 import github.kasuminova.novaeng.client.gui.toast.ResearchCompleteToast;
-import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
+import github.kasuminova.novaeng.common.hypernet.old.research.ResearchCognitionData;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;

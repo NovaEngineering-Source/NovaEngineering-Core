@@ -3,7 +3,7 @@ package github.kasuminova.novaeng.common.tile;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.gui.GuiModularServerAssembler;
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
-import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.computer.ModularServer;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
 import hellfirepvp.modularmachinery.common.util.IOInventory;

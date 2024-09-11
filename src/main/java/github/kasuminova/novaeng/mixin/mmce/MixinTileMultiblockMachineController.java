@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.mixin.mmce;
 
-import github.kasuminova.novaeng.common.hypernet.NetNodeCache;
+import github.kasuminova.novaeng.common.hypernet.old.NetNodeCache;
 import github.kasuminova.novaeng.common.machine.MachineSpecial;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.registry.RegistryMachineSpecial;

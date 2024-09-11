@@ -1,8 +1,11 @@
 package github.kasuminova.novaeng.client;
 
 
+import appeng.api.storage.ITerminalHost;
+import appeng.container.implementations.ContainerCraftConfirm;
 import github.kasuminova.mmce.client.renderer.MachineControllerRenderer;
 import github.kasuminova.novaeng.client.gui.*;
+import github.kasuminova.novaeng.client.gui.GuiCraftingTree;
 import github.kasuminova.novaeng.client.handler.BlockAngelRendererHandler;
 import github.kasuminova.novaeng.client.handler.ClientEventHandler;
 import github.kasuminova.novaeng.client.handler.HyperNetClientEventHandler;
@@ -116,6 +119,12 @@ public class ClientProxy extends CommonProxy {
             case SINGULARITY_CORE -> new GuiSingularityCore((SingularityCore) present, player);
             case EFABRICATOR_CONTROLLER -> new GuiEFabricatorController((EFabricatorController) present, player);
             case EFABRICATOR_PATTERN_BUS -> new GuiEFabricatorPatternBus((EFabricatorPatternBus) present, player);
+            case CRAFTING_TREE -> {
+                if (!(player.openContainer instanceof ContainerCraftConfirm confirm)) {
+                    yield null;
+                }
+                yield new GuiCraftingTree(player.inventory, (ITerminalHost) confirm.getTarget());
+            }
         };
     }
 

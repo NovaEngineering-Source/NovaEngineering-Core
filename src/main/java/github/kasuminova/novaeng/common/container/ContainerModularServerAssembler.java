@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.common.container;
 
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
 import github.kasuminova.novaeng.common.container.slot.SlotModularServer;
-import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.computer.ModularServer;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import hellfirepvp.modularmachinery.common.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;

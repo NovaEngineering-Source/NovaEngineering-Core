@@ -2,8 +2,8 @@ package github.kasuminova.novaeng.common.crafttweaker.expansion;
 
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
-import github.kasuminova.novaeng.common.hypernet.NetNodeCache;
-import github.kasuminova.novaeng.common.hypernet.machine.AssemblyLine;
+import github.kasuminova.novaeng.common.hypernet.old.NetNodeCache;
+import github.kasuminova.novaeng.common.hypernet.old.machine.AssemblyLine;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.crafting.helper.ComponentRequirement;
 import hellfirepvp.modularmachinery.common.integration.crafttweaker.RecipeBuilder;

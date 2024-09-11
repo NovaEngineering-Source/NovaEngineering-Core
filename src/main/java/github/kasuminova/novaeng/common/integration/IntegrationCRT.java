@@ -2,9 +2,9 @@ package github.kasuminova.novaeng.common.integration;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
-import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
-import github.kasuminova.novaeng.common.hypernet.machine.AssemblyLine;
-import github.kasuminova.novaeng.common.hypernet.recipe.HyperNetRecipeManager;
+import github.kasuminova.novaeng.common.hypernet.old.HyperNetTerminal;
+import github.kasuminova.novaeng.common.hypernet.old.machine.AssemblyLine;
+import github.kasuminova.novaeng.common.hypernet.old.recipe.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import github.kasuminova.novaeng.common.registry.RegistryMachineSpecial;
 import hellfirepvp.modularmachinery.ModularMachinery;

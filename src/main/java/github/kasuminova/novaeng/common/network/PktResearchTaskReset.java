@@ -1,9 +1,9 @@
 package github.kasuminova.novaeng.common.network;
 
 import github.kasuminova.novaeng.common.container.ContainerHyperNetTerminal;
-import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
-import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
-import github.kasuminova.novaeng.common.hypernet.research.ResearchStation;
+import github.kasuminova.novaeng.common.hypernet.old.ComputationCenter;
+import github.kasuminova.novaeng.common.hypernet.old.HyperNetTerminal;
+import github.kasuminova.novaeng.common.hypernet.old.research.ResearchStation;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import io.netty.buffer.ByteBuf;

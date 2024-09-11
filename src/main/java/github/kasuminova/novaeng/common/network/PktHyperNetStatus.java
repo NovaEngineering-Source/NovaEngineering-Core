@@ -1,7 +1,7 @@
 package github.kasuminova.novaeng.common.network;
 
-import github.kasuminova.novaeng.common.hypernet.ComputationCenter;
-import github.kasuminova.novaeng.common.hypernet.ComputationCenterCache;
+import github.kasuminova.novaeng.common.hypernet.old.ComputationCenter;
+import github.kasuminova.novaeng.common.hypernet.old.ComputationCenterCache;
 import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.nbt.NBTTagCompound;

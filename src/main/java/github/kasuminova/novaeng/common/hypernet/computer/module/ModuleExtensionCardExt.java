@@ -1,0 +1,35 @@
+package github.kasuminova.novaeng.common.hypernet.computer.module;
+
+import crafttweaker.annotations.ZenRegister;
+import github.kasuminova.novaeng.common.hypernet.computer.module.base.ServerModuleBase;
+import github.kasuminova.novaeng.common.hypernet.computer.HardwareBandwidthConsumer;
+import github.kasuminova.novaeng.common.hypernet.computer.ModularServer;
+import stanhebben.zenscript.annotations.ZenClass;
+import stanhebben.zenscript.annotations.ZenMethod;
+
+@ZenRegister
+@ZenClass("novaeng.hypernet.server.module.ModuleExtensionCardExt")
+public class ModuleExtensionCardExt extends ServerModule implements HardwareBandwidthConsumer {
+
+    protected int hardwareBandwidth;
+
+    public ModuleExtensionCardExt(final ModularServer server, final ServerModuleBase<?> moduleBase, final int hardwareBandwidth) {
+        super(server, moduleBase);
+        this.hardwareBandwidth = hardwareBandwidth;
+    }
+
+    @ZenMethod
+    public static ModuleExtensionCardExt cast(ServerModule module) {
+        return module instanceof ModuleExtensionCardExt ? (ModuleExtensionCardExt) module : null;
+    }
+
+    @Override
+    public int getHardwareBandwidth() {
+        return hardwareBandwidth;
+    }
+
+    public void setHardwareBandwidth(final int hardwareBandwidth) {
+        this.hardwareBandwidth = hardwareBandwidth;
+    }
+
+}

@@ -2,18 +2,21 @@ package github.kasuminova.novaeng.common;
 
 import appeng.api.AEApi;
 import appeng.api.storage.ICellHandler;
+import appeng.api.storage.ITerminalHost;
+import appeng.container.implementations.ContainerCraftConfirm;
 import github.kasuminova.mmce.common.integration.ModIntegrationAE2;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
 import github.kasuminova.novaeng.common.container.*;
+import github.kasuminova.novaeng.common.container.appeng.ContainerCraftingTree;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
 import github.kasuminova.novaeng.common.handler.EFabricatorEventHandler;
 import github.kasuminova.novaeng.common.handler.EStorageEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
 import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
-import github.kasuminova.novaeng.common.hypernet.HyperNetTerminal;
-import github.kasuminova.novaeng.common.hypernet.machine.AssemblyLine;
-import github.kasuminova.novaeng.common.hypernet.recipe.HyperNetRecipeManager;
+import github.kasuminova.novaeng.common.hypernet.old.HyperNetTerminal;
+import github.kasuminova.novaeng.common.hypernet.old.machine.AssemblyLine;
+import github.kasuminova.novaeng.common.hypernet.old.recipe.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.integration.IntegrationCRT;
 import github.kasuminova.novaeng.common.integration.ic2.IntegrationIC2;
 import github.kasuminova.novaeng.common.integration.theoneprobe.IntegrationTOP;
@@ -137,6 +140,12 @@ public class CommonProxy implements IGuiHandler {
                 }
                 yield new ContainerEFabricatorPatternBus(efPatternBus, player);
             }
+            case CRAFTING_TREE -> {
+                if (!(player.openContainer instanceof ContainerCraftConfirm confirm)) {
+                    yield null;
+                }
+                yield new ContainerCraftingTree(player.inventory, (ITerminalHost) confirm.getTarget());
+            }
         };
     }
 
@@ -154,6 +163,7 @@ public class CommonProxy implements IGuiHandler {
         SINGULARITY_CORE(github.kasuminova.novaeng.common.tile.machine.SingularityCore.class),
         EFABRICATOR_CONTROLLER(EFabricatorController.class),
         EFABRICATOR_PATTERN_BUS(EFabricatorPatternBus.class),
+        CRAFTING_TREE(null),
         ;
 
         public final Class<? extends TileEntity> requiredTileEntity;

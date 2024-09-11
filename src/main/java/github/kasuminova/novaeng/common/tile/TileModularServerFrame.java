@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.tile;
 
-import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.computer.ModularServer;
 import hellfirepvp.modularmachinery.common.tiles.base.TileColorableMachineComponent;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import hellfirepvp.modularmachinery.common.util.IOInventory;

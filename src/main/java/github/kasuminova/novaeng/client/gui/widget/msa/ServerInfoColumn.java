@@ -8,8 +8,9 @@ import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateEvent;
 import github.kasuminova.novaeng.common.container.slot.*;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import github.kasuminova.novaeng.common.hypernet.server.*;
-import github.kasuminova.novaeng.common.hypernet.server.modifier.ModifierManager;
+import github.kasuminova.novaeng.common.hypernet.calculation.*;
+import github.kasuminova.novaeng.common.hypernet.computer.*;
+import github.kasuminova.novaeng.common.hypernet.calculation.modifier.ModifierManager;
 import github.kasuminova.novaeng.common.util.TileItemHandler;
 import net.minecraft.client.resources.I18n;
 

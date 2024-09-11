@@ -4,7 +4,7 @@ import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblerInvUpdateEvent;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
-import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.computer.ModularServer;
 
 public class AssemblyInvManager extends Column {
     protected AssemblySlotManager slotManager;

@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.container.slot;
 
-import github.kasuminova.novaeng.common.hypernet.server.module.base.ModuleCopperPipeBase;
+import github.kasuminova.novaeng.common.hypernet.computer.module.base.ModuleCopperPipeBase;
 import github.kasuminova.novaeng.common.registry.ServerModuleRegistry;
 import github.kasuminova.novaeng.common.util.TileItemHandler;
 import net.minecraft.item.ItemStack;

@@ -4,7 +4,7 @@ import com.google.common.base.Preconditions;
 import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IItemStack;
 import crafttweaker.api.minecraft.CraftTweakerMC;
-import github.kasuminova.novaeng.common.hypernet.server.module.base.ServerModuleBase;
+import github.kasuminova.novaeng.common.hypernet.computer.module.base.ServerModuleBase;
 import github.kasuminova.novaeng.common.item.ItemServerModule;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

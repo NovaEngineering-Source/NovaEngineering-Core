@@ -86,16 +86,16 @@ public class ParallelNetworkManager {
 
     public void execute() {
         synchronized (groupQueues) {
-            for (final Queue<ActionExecutor> queue : groupQueues.values()) {
-                ModularMachinery.EXECUTE_MANAGER.addTask(() -> {
+            ModularMachinery.EXECUTE_MANAGER.addTask(() -> {
+                for (final Queue<ActionExecutor> queue : groupQueues.values()) {
                     synchronized (queue) {
                         ActionExecutor action;
                         while ((action = queue.poll()) != null) {
                             action.run();
                         }
                     }
-                });
-            }
+                }
+            });
         }
     }
 

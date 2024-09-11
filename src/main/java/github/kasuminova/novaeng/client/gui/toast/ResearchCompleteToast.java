@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.client.gui.toast;
 
-import github.kasuminova.novaeng.common.hypernet.research.ResearchCognitionData;
+import github.kasuminova.novaeng.common.hypernet.old.research.ResearchCognitionData;
 import net.minecraft.client.gui.toasts.GuiToast;
 import net.minecraft.client.gui.toasts.IToast;
 import net.minecraft.client.renderer.GlStateManager;

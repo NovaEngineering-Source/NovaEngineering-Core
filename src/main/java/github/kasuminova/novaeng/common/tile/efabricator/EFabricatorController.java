@@ -480,7 +480,8 @@ public class EFabricatorController extends TileCustomController {
         if (parentController == L9) {
             return Levels.L9;
         }
-        return null;
+        NovaEngineeringCore.log.warn("Invalid EFabricator controller level: {}", parentController);
+        return Levels.L4;
     }
 
     public EFabricatorMEChannel getChannel() {

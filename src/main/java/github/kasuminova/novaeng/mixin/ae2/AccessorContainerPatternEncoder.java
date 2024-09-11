@@ -1,5 +1,6 @@
 package github.kasuminova.novaeng.mixin.ae2;
 
+import appeng.api.implementations.guiobjects.IGuiItemObject;
 import appeng.container.implementations.ContainerPatternEncoder;
 import appeng.container.slot.SlotRestrictedInput;
 import org.spongepowered.asm.mixin.Mixin;
@@ -10,5 +11,8 @@ public interface AccessorContainerPatternEncoder {
 
     @Accessor
     SlotRestrictedInput getPatternSlotOUT();
+
+    @Accessor
+    IGuiItemObject getIGuiItemObject();
 
 }

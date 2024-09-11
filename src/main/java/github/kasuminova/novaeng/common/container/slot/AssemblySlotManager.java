@@ -1,11 +1,11 @@
 package github.kasuminova.novaeng.common.container.slot;
 
 import github.kasuminova.novaeng.common.container.ContainerModularServerAssembler;
-import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
-import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvCPUConst;
-import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvCalculateCardConst;
-import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvExtensionConst;
-import github.kasuminova.novaeng.common.hypernet.server.assembly.AssemblyInvPowerConst;
+import github.kasuminova.novaeng.common.hypernet.computer.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.computer.assembly.AssemblyInvCPUConst;
+import github.kasuminova.novaeng.common.hypernet.computer.assembly.AssemblyInvCalculateCardConst;
+import github.kasuminova.novaeng.common.hypernet.computer.assembly.AssemblyInvExtensionConst;
+import github.kasuminova.novaeng.common.hypernet.computer.assembly.AssemblyInvPowerConst;
 import github.kasuminova.novaeng.common.util.TileItemHandler;
 import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;

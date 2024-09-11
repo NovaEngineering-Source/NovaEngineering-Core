@@ -77,7 +77,7 @@ public class CPacketProfiler {
             long packetTotalAmount = entry.getValue().getFirst();
             long packetTotalSize = entry.getValue().getSecond();
 
-            if (ClassUtils.getAllInterfaces(pClass).contains(Packet.class)) {
+            if (pClass.getName().startsWith("net.minecraft")) {
                 messages.add(
                         String.format("Pkt Class: %s",
                                 TextFormatting.BLUE + pClass.getSimpleName() + TextFormatting.WHITE

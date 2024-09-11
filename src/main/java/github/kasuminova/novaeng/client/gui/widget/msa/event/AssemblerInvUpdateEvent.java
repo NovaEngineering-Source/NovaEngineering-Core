@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.client.gui.widget.msa.event;
 
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
-import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.computer.ModularServer;
 
 public class AssemblerInvUpdateEvent extends GuiEvent {
 

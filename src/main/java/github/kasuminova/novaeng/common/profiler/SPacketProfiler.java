@@ -111,7 +111,7 @@ public class SPacketProfiler {
     }
 
     private static String getPacketClassName(final Class<?> pClass) {
-        if (ClassUtils.getAllInterfaces(pClass).contains(Packet.class)) {
+        if (pClass.getName().startsWith("net.minecraft")) {
             return pClass.getSimpleName();
         }
         return pClass.getName();

@@ -10,7 +10,7 @@ import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvCloseEve
 import github.kasuminova.novaeng.client.gui.widget.msa.event.AssemblyInvOpenEvent;
 import github.kasuminova.novaeng.common.container.slot.AssemblySlotManager;
 import github.kasuminova.novaeng.common.container.slot.SlotConditionItemHandler;
-import github.kasuminova.novaeng.common.hypernet.server.ModularServer;
+import github.kasuminova.novaeng.common.hypernet.computer.ModularServer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 

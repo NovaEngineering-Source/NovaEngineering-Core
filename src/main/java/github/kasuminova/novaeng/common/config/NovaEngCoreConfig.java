@@ -2,7 +2,6 @@ package github.kasuminova.novaeng.common.config;
 
 import com.cleanroommc.configanytime.ConfigAnytime;
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.stellarcore.common.config.StellarCoreConfig;
 import net.minecraftforge.common.config.Config;
 import net.minecraftforge.common.config.ConfigManager;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -28,7 +27,7 @@ public class NovaEngCoreConfig {
         必须在最后加载。
     */
     static {
-        ConfigAnytime.register(StellarCoreConfig.class);
+        ConfigAnytime.register(NovaEngCoreConfig.class);
     }
 
     @SubscribeEvent
