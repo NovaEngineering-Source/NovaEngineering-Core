@@ -51,7 +51,7 @@ public class NetNodeImpl extends NetNode {
             return;
         }
 
-        double generation = center.getComputationPointGeneration();
+        double generation = center.getComputationPointGeneration() - center.getComputationPointConsumption();
         if (generation < pointRequired) {
             event.setFailed("算力不足！预期："
                     + NovaEngUtils.formatFLOPS(pointRequired) + "，当前："

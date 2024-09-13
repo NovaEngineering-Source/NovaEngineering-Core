@@ -8,11 +8,11 @@ import github.kasuminova.mmce.client.gui.widget.MultiLineLabel;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageLevel;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageCellDrive;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ResourceLocation;
 

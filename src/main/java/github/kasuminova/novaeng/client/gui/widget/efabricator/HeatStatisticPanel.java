@@ -14,7 +14,7 @@ import github.kasuminova.novaeng.client.gui.widget.ProgressBar;
 import github.kasuminova.novaeng.client.gui.widget.efabricator.event.EFGUIDataUpdateEvent;
 import github.kasuminova.novaeng.common.container.data.EFabricatorData;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorWorker;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorWorker;
 import net.minecraft.client.resources.I18n;
 
 import java.util.Collections;

@@ -5,7 +5,7 @@ import appeng.client.gui.implementations.GuiPatternTerm;
 import appeng.client.gui.widgets.GuiTabButton;
 import appeng.container.implementations.ContainerPatternEncoder;
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.block.efabricator.BlockEFabricatorController;
+import github.kasuminova.novaeng.common.block.ecotech.efabricator.BlockEFabricatorController;
 import github.kasuminova.novaeng.common.network.PktPatternTermUploadPattern;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;

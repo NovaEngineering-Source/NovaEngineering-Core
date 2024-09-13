@@ -10,8 +10,8 @@ import appeng.me.GridAccessException;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.me.storage.MEInventoryHandler;
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageMEChannel;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageCellDrive;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageMEChannel;
 import io.netty.util.internal.ThrowableUtil;
 
 import java.util.Collections;

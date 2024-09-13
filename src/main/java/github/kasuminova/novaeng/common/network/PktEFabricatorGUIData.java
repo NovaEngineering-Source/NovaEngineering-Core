@@ -2,8 +2,8 @@ package github.kasuminova.novaeng.common.network;
 
 import github.kasuminova.novaeng.client.gui.GuiEFabricatorController;
 import github.kasuminova.novaeng.common.container.data.EFabricatorData;
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorController;
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorWorker;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorController;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorWorker;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -34,7 +34,7 @@ public class PktEFabricatorGUIData implements IMessage, IMessageHandler<PktEFabr
                 controller.getEnergyStored(),
                 controller.getTotalCrafted(),
                 controller.getLevel(),
-                controller.getFabricatorWorkers().stream()
+                controller.getWorkers().stream()
                         .map(EFabricatorWorker::getQueue)
                         .map(queue -> new EFabricatorData.WorkerStatus(queue.peek() != null ? queue.peek().getOutput() : ItemStack.EMPTY, queue.size()))
                         .collect(Collectors.toList())

@@ -3,7 +3,7 @@ package github.kasuminova.novaeng.common.container;
 import appeng.container.AEBaseContainer;
 import appeng.container.slot.SlotRestrictedInput;
 import appeng.tile.inventory.AppEngInternalInventory;
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorPatternBus;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorPatternBus;
 import net.minecraft.entity.player.EntityPlayer;
 
 public class ContainerEFabricatorPatternBus extends AEBaseContainer {

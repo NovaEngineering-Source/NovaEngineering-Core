@@ -3,7 +3,7 @@ package github.kasuminova.novaeng.client.gui;
 import appeng.client.gui.AEBaseGui;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.container.ContainerEFabricatorPatternBus;
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorPatternBus;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorPatternBus;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;

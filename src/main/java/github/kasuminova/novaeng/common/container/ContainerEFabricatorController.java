@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.container;
 
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorController;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorController;
 import hellfirepvp.modularmachinery.common.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;

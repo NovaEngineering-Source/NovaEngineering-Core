@@ -2,7 +2,7 @@ package github.kasuminova.novaeng.common.handler;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.container.ContainerEFabricatorController;
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorController;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorController;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;

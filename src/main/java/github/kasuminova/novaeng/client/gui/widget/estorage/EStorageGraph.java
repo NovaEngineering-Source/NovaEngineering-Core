@@ -7,11 +7,11 @@ import github.kasuminova.mmce.client.gui.widget.container.Row;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.GuiEStorageController;
 import github.kasuminova.novaeng.client.gui.widget.estorage.event.ESGUIDataUpdateEvent;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.container.data.EStorageEnergyData;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageCellDrive;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.input.Keyboard;
 

@@ -1,7 +1,7 @@
 package github.kasuminova.novaeng.common.network;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageCellDrive;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;

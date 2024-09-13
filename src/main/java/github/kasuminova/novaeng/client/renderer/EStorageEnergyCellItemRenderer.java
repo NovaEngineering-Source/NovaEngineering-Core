@@ -1,8 +1,8 @@
 package github.kasuminova.novaeng.client.renderer;
 
-import github.kasuminova.novaeng.common.block.estorage.prop.EnergyCellStatus;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.EnergyCellStatus;
 import github.kasuminova.novaeng.common.item.estorage.ItemBlockEStorageEnergyCell;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageEnergyCell;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageEnergyCell;
 import net.minecraft.client.renderer.ItemMeshDefinition;
 import net.minecraft.client.renderer.block.model.ModelBakery;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

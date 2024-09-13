@@ -52,7 +52,7 @@ public class RecipePrimerHyperNet {
             );
         }
 
-        return primer.addPreCheckHandler(event -> {
+        return primer.addPostCheckHandler(event -> {
             TileMultiblockMachineController ctrl = event.getController();
             NetNodeImpl node = NetNodeCache.getCache(ctrl, NetNodeImpl.class);
             if (node != null) {

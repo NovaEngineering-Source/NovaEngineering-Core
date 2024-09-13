@@ -1,13 +1,13 @@
 package github.kasuminova.novaeng.common.integration.theoneprobe;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageLevel;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageEnergyCell;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageCellDrive;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageController;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageEnergyCell;
 import mcjty.theoneprobe.api.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;

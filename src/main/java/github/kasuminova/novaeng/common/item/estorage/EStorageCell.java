@@ -8,7 +8,7 @@ import appeng.items.AEBaseItem;
 import appeng.items.contents.CellConfig;
 import appeng.items.contents.CellUpgrades;
 import appeng.util.Platform;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageLevel;
 import github.kasuminova.novaeng.common.core.CreativeTabNovaEng;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
 import net.minecraft.client.resources.I18n;

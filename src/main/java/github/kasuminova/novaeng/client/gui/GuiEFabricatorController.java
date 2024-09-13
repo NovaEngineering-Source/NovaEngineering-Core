@@ -11,7 +11,7 @@ import github.kasuminova.novaeng.client.gui.widget.efabricator.TotalCraftedLabel
 import github.kasuminova.novaeng.client.gui.widget.efabricator.event.EFGUIDataUpdateEvent;
 import github.kasuminova.novaeng.common.container.ContainerEFabricatorController;
 import github.kasuminova.novaeng.common.container.data.EFabricatorData;
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorController;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorController;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;

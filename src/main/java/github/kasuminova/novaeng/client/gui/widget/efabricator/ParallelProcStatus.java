@@ -7,7 +7,7 @@ import github.kasuminova.mmce.client.gui.util.TextureProperties;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.novaeng.client.gui.GuiEFabricatorController;
-import github.kasuminova.novaeng.common.block.efabricator.prop.Levels;
+import github.kasuminova.novaeng.common.block.ecotech.efabricator.prop.Levels;
 
 public class ParallelProcStatus extends DynamicWidget {
 

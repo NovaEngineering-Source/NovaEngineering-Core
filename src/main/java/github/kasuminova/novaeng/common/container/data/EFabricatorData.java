@@ -1,7 +1,7 @@
 package github.kasuminova.novaeng.common.container.data;
 
 import com.github.bsideup.jabel.Desugar;
-import github.kasuminova.novaeng.common.block.efabricator.prop.Levels;
+import github.kasuminova.novaeng.common.block.ecotech.efabricator.prop.Levels;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.common.network.ByteBufUtils;

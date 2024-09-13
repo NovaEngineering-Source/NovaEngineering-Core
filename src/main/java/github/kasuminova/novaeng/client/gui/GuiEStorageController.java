@@ -13,7 +13,7 @@ import github.kasuminova.novaeng.client.gui.widget.estorage.event.ESGraphFocusUp
 import github.kasuminova.novaeng.common.container.ContainerEStorageController;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.container.data.EStorageEnergyData;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageController;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;

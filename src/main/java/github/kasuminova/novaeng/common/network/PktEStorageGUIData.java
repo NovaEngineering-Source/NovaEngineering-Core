@@ -1,13 +1,13 @@
 package github.kasuminova.novaeng.common.network;
 
 import github.kasuminova.novaeng.client.gui.GuiEStorageController;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageLevel;
-import github.kasuminova.novaeng.common.block.estorage.prop.DriveStorageType;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageLevel;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
 import github.kasuminova.novaeng.common.container.data.EStorageEnergyData;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageCellDrive;
-import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageCellDrive;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageController;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;

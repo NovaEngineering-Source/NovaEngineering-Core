@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.container;
 
-import github.kasuminova.novaeng.common.tile.estorage.EStorageController;
+import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageController;
 import hellfirepvp.modularmachinery.common.container.ContainerBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;

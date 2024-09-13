@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.item.estorage;
 
-import github.kasuminova.novaeng.common.block.estorage.BlockEStorageEnergyCell;
+import github.kasuminova.novaeng.common.block.ecotech.estorage.BlockEStorageEnergyCell;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 

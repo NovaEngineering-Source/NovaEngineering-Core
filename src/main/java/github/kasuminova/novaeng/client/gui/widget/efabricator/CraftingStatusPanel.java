@@ -12,7 +12,7 @@ import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.GuiEFabricatorController;
 import github.kasuminova.novaeng.client.gui.widget.efabricator.event.EFGUIDataUpdateEvent;
 import github.kasuminova.novaeng.common.container.data.EFabricatorData;
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorWorker;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorWorker;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package github.kasuminova.novaeng.common.network;
 
 import github.kasuminova.novaeng.common.container.ContainerEFabricatorController;
-import github.kasuminova.novaeng.common.tile.efabricator.EFabricatorController;
+import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorController;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;

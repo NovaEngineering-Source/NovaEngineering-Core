@@ -1,6 +1,6 @@
 package github.kasuminova.novaeng.common.item.efabriactor;
 
-import github.kasuminova.novaeng.common.block.efabricator.BlockEFabricatorParallelProc;
+import github.kasuminova.novaeng.common.block.ecotech.efabricator.BlockEFabricatorParallelProc;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBlock;
