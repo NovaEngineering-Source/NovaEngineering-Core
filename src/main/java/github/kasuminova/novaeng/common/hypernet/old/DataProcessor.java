@@ -258,7 +258,7 @@ public class DataProcessor extends NetNode {
         }
 
         double maxCanGenerated = polledCounter[0];
-        double generated = calculateComputationPointProvision(maxCanGenerated, doCalculate);
+        double generated = calculateComputationPointProvision(maxCanGenerated, doCalculate) * getEfficiency();
 
         if (doCalculate) {
             doHeatGeneration(generated);
@@ -319,13 +319,12 @@ public class DataProcessor extends NetNode {
         }
 
         long totalEnergyConsumption = 0;
-        double maxGen = maxGeneration * getEfficiency();
 
         double generationLimit = 0F;
         double totalGenerated = 0F;
 
         for (ProcessorModuleRAM ram : moduleRAMS) {
-            double generated = ram.calculate(doCalculate, maxGen - generationLimit);
+            double generated = ram.calculate(doCalculate, maxGeneration - generationLimit);
             generationLimit += generated;
             if (doCalculate) {
                 totalEnergyConsumption += (long) ((generated / ram.getComputationPointGenerationLimit()) * ram.getEnergyConsumption());
@@ -375,7 +374,7 @@ public class DataProcessor extends NetNode {
 
     @Override
     public double getComputationPointProvision(final double maxGeneration) {
-        return calculateComputationPointProvision(maxGeneration, false);
+        return calculateComputationPointProvision(maxGeneration, false) * getEfficiency();
     }
 
     @ZenGetter("computationalLoad")

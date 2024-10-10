@@ -27,6 +27,7 @@ import github.kasuminova.novaeng.common.item.estorage.EStorageCell;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellFluid;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellItem;
 import github.kasuminova.novaeng.common.network.PktCellDriveStatusUpdate;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -40,7 +41,6 @@ import net.minecraftforge.items.IItemHandler;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collection;
-import java.util.IdentityHashMap;
 import java.util.Map;
 
 import static appeng.helpers.ItemStackHelper.stackFromNBT;
@@ -50,7 +50,7 @@ import static appeng.helpers.ItemStackHelper.stackWriteToNBT;
 public class EStorageCellDrive extends EStoragePart implements ISaveProvider, IAEAppEngInventory {
 
     protected final AppEngCellInventory driveInv = new AppEngCellInventory(this, 1);
-    protected final Map<IStorageChannel<? extends IAEStack<?>>, IMEInventoryHandler<?>> inventoryHandlers = new IdentityHashMap<>();
+    protected final Map<IStorageChannel<? extends IAEStack<?>>, IMEInventoryHandler<?>> inventoryHandlers = new Reference2ObjectOpenHashMap<>();
 
     protected EStorageCellHandler cellHandler = null;
     protected ECellDriveWatcher<IAEItemStack> watcher = null;

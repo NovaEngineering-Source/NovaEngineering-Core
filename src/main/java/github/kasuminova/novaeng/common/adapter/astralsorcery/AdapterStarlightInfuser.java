@@ -105,7 +105,7 @@ public class AdapterStarlightInfuser extends RecipeAdapter {
             // Mana input
             float consumeChance = infusionRecipe.getLiquidStarlightConsumptionChance();
             int craftingTickTime = infusionRecipe.craftingTickTime();
-            int manaToConsume = Math.round(craftingTickTime * 100 * consumeChance);
+            int manaToConsume = Math.round(craftingTickTime * 10 * (1F - consumeChance));
             recipe.addRecipeEventHandler(RecipeCheckEvent.class, (IEventHandler<RecipeCheckEvent>) event -> {
                 if (event.phase != Phase.START) return;
                 IllumPool.onRecipeCheck(event, manaToConsume);

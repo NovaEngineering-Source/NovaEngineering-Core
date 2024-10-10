@@ -43,7 +43,7 @@ public class TreeRow extends Row {
                 RenderPos absRenderPos = widgetRenderPos.add(renderPos);
                 int totalWidth = widget.getWidth() + widget.getMarginRight() + getPlaceHolderWidth(i + 1);
                 if (absRenderPos.posX() + totalWidth > 0) {
-                    renderFunction.doRender(widget, gui, new RenderSize(widget.getWidth(), widget.getHeight()).smaller(renderSize), absRenderPos, mousePos.relativeTo(widgetRenderPos));
+                    renderFunction.doRender(widget, gui, new RenderSize(widget.getWidth(), widget.getHeight()).smaller(renderSize), absRenderPos, mousePos.relativeTo(absRenderPos));
                 }
             }
 

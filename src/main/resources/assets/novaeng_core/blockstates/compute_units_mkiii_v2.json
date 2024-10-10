@@ -1,0 +1,15 @@
+{
+  "forge_marker": 1,
+  "defaults": {"model": "novaeng_core:compute_units/compute_units_mkiii_v2" },
+  "variants": {
+      "facing=north": { "model": "novaeng_core:compute_units/compute_units_mkiii_v2", "y": -180  },
+      "facing=south": { "model": "novaeng_core:compute_units/compute_units_mkiii_v2"},
+      "facing=west":  { "model": "novaeng_core:compute_units/compute_units_mkiii_v2", "y": 90 },
+      "facing=east":  { "model": "novaeng_core:compute_units/compute_units_mkiii_v2", "y": 270 },
+      "inventory": [
+        {
+          "transform": "forge:default-block"
+        }
+      ]
+    }
+  }

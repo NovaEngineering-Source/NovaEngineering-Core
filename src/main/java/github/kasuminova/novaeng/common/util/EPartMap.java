@@ -3,14 +3,17 @@ package github.kasuminova.novaeng.common.util;
 import github.kasuminova.novaeng.common.tile.ecotech.EPart;
 import github.kasuminova.novaeng.common.tile.ecotech.EPartController;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import it.unimi.dsi.fastutil.objects.Reference2ObjectOpenHashMap;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Consumer;
 
 @SuppressWarnings("unchecked")
 public class EPartMap<P extends EPart<?>> {
 
-    protected final Map<Class<?>, List<P>> parts = new IdentityHashMap<>();
+    protected final Map<Class<?>, List<P>> parts = new Reference2ObjectOpenHashMap<>();
 
     public P addPart(final P part) {
         parts.computeIfAbsent(part.getClass(), k -> new ObjectArrayList<>()).add(part);
@@ -20,8 +23,8 @@ public class EPartMap<P extends EPart<?>> {
         return part;
     }
 
-    public <PT extends P> List<PT> getParts(final Class<PT> partClass) {
-        return (List<PT>) parts.getOrDefault(partClass, new ObjectArrayList<>());
+    public <R extends P> List<R> getParts(final Class<R> partClass) {
+        return (List<R>) parts.getOrDefault(partClass, new ObjectArrayList<>());
     }
 
     public void forEachPart(final Consumer<P> consumer) {

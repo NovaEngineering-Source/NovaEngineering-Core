@@ -1,6 +1,5 @@
 package github.kasuminova.novaeng.common.crafttweaker.expansion;
 
-import crafttweaker.CraftTweakerAPI;
 import crafttweaker.annotations.ZenRegister;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.old.NetNodeCache;
@@ -10,7 +9,6 @@ import github.kasuminova.novaeng.common.registry.RegistryHyperNet;
 import hellfirepvp.modularmachinery.common.integration.crafttweaker.RecipePrimer;
 import hellfirepvp.modularmachinery.common.tiles.base.TileMultiblockMachineController;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import stanhebben.zenscript.annotations.ZenExpansion;
@@ -40,11 +38,6 @@ public class RecipePrimerHyperNet {
                                                        final float required,
                                                        final boolean triggerFailure)
     {
-        ResourceLocation machineName = primer.getParentMachineName();
-        if (RegistryHyperNet.isHyperNetSupported(machineName)) {
-            CraftTweakerAPI.logError(String.format("%s of this recipe does not support HyperNet!", machineName));
-            return primer;
-        }
         if (FMLCommonHandler.instance().getSide().isClient()) {
             primer.addRecipeTooltip(
                     I18n.format("novaeng.hypernet.computation_point_required.tip",
@@ -115,12 +108,6 @@ public class RecipePrimerHyperNet {
     public static RecipePrimer requireResearch(final RecipePrimer primer,
                                                final ResearchCognitionData... researchRequired)
     {
-        ResourceLocation machineName = primer.getParentMachineName();
-        if (RegistryHyperNet.isHyperNetSupported(machineName)) {
-            CraftTweakerAPI.logError(String.format("%s of this recipe does not support HyperNet!", machineName));
-            return primer;
-        }
-
         if (FMLCommonHandler.instance().getSide().isClient()) {
             String researchTip = Arrays.stream(researchRequired)
                     .map(ResearchCognitionData::getTranslatedName)

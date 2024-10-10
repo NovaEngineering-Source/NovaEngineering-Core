@@ -29,7 +29,7 @@ public abstract class EStorageCell<T extends IAEStack<T>> extends AEBaseItem imp
 
     public EStorageCell(DriveStorageLevel level, final int millionBytes, final int byteMultiplier) {
         this.level = level;
-        this.totalBytes = millionBytes * 1024 * 1024;
+        this.totalBytes = (millionBytes * 1000) * 1024;
         this.byteMultiplier = byteMultiplier;
         this.setMaxStackSize(1);
         this.setCreativeTab(CreativeTabNovaEng.INSTANCE);

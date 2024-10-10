@@ -1,0 +1,13 @@
+{
+  "forge_marker": 1,
+  "defaults": {"model": "novaeng_core:compute_units/racks_no_clapboard_up"},
+  "variants": {
+    "facing=down":  { "model": "novaeng_core:compute_units/racks_no_clapboard_up", "x": 0,"y":180,"z":0},
+    "facing=up":    { "model": "novaeng_core:compute_units/racks_no_clapboard_up", "x": 180  },
+    "facing=north": { "model": "novaeng_core:compute_units/racks_no_clapboard_up", "x": 90,"y":180},
+    "facing=south": { "model": "novaeng_core:compute_units/racks_no_clapboard_up", "x": 90 },
+    "facing=west":  { "model": "novaeng_core:compute_units/racks_no_clapboard_up", "x": -270,"y":90 },
+    "facing=east":  { "model": "novaeng_core:compute_units/racks_no_clapboard_up", "x": 90,"y":270 },
+    "inventory": [{"transform": "forge:default-block"}]
+  }
+}

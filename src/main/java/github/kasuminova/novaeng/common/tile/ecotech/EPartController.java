@@ -49,7 +49,7 @@ public abstract class EPartController<P extends EPart<?>> extends TileCustomCont
                 return;
             }
             TileEntity te = this.getWorld().getTileEntity(realPos);
-            if (!(te instanceof EPart<?>)) {
+            if (!(te instanceof AbstractEPart<?>)) {
                 return;
             }
             P part = (P) te;

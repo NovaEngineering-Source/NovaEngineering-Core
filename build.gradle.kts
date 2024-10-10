@@ -12,7 +12,7 @@ plugins {
 
 // Project properties
 group = "github.kasuminova.novaeng"
-version = "1.18.0"
+version = "1.20.0"
 
 // Set the toolchain version to decouple the Java we run Gradle with from the Java used to compile and run the mod
 java {
@@ -261,7 +261,7 @@ dependencies {
     // Performance Test Tool
     runtimeOnly(rfg.deobf("curse.maven:spark-361579:3245793"))
     // Optimization
-    implementation(rfg.deobf("curse.maven:stellarcore-1064321:5560444"))
+    implementation(rfg.deobf("curse.maven:stellarcore-1064321:5791405"))
     implementation(rfg.deobf("curse.maven:configanytime-870276:5212709"))
 }
 

@@ -33,4 +33,5 @@ public class EStorageCellHandler extends BasicCellHandler {
         }
         return new BasicCellInventoryHandler<>(inv, channel);
     }
+
 }

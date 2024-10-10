@@ -106,6 +106,7 @@ public class EFabricatorController extends EPartController<EFabricatorPart> {
     protected boolean activeCooling = false;
 
     protected PktEFabricatorGUIData guiDataPacket = null;
+    protected volatile boolean guiDataDirty = false;
 
     public EFabricatorController(final ResourceLocation machineRegistryName) {
         this();
@@ -142,13 +143,13 @@ public class EFabricatorController extends EPartController<EFabricatorPart> {
         long prevTotalCrafted = totalCrafted;
         List<EFabricatorWorker> workers = getWorkers();
         workers.forEach(worker -> worker.updateStatus(false));
-        workers.stream()
-                .filter(EFabricatorWorker::hasWork)
-                .mapToInt(EFabricatorWorker::doWork)
-                .forEach(worked -> {
-                    totalCrafted += worked;
-                    consumedParallelism += worked <= 1 ? 0 : worked;
-                });
+        for (EFabricatorWorker worker : workers) {
+            if (worker.hasWork()) {
+                int worked = worker.doWork();
+                totalCrafted += worked;
+                consumedParallelism += worked <= 1 ? 0 : worked;
+            }
+        }
         if (activeCooling && hasWork()) {
             convertOverflowParallelismToWorkDelay(parallelism - consumedParallelism);
         }
@@ -215,11 +216,12 @@ public class EFabricatorController extends EPartController<EFabricatorPart> {
             return;
         }
 
-        getWorkers().stream()
-                .filter(worker -> worker.getEnergyCache() < worker.getMaxEnergyCache())
-                .forEach(worker -> worker.supplyEnergy(
-                        (int) energy.extractAEPower(worker.getMaxEnergyCache() - worker.getEnergyCache(), Actionable.MODULATE, PowerMultiplier.CONFIG))
-                );
+        for (EFabricatorWorker worker : getWorkers()) {
+            if (worker.getEnergyCache() < worker.getMaxEnergyCache()) {
+                worker.supplyEnergy(
+                        (int) energy.extractAEPower(worker.getMaxEnergyCache() - worker.getEnergyCache(), Actionable.MODULATE, PowerMultiplier.CONFIG));
+            }
+        }
     }
 
     protected void clearOutputBuffer() {
@@ -364,16 +366,22 @@ public class EFabricatorController extends EPartController<EFabricatorPart> {
     }
 
     public boolean hasWork() {
-        return getWorkers().stream().anyMatch(EFabricatorWorker::hasWork);
+        for (EFabricatorWorker eFabricatorWorker : getWorkers()) {
+            if (eFabricatorWorker.hasWork()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public synchronized void updateGUIDataPacket() {
-        this.guiDataPacket = new PktEFabricatorGUIData(this);
+        guiDataDirty = true;
     }
 
     public PktEFabricatorGUIData getGuiDataPacket() {
-        if (guiDataPacket == null) {
-            updateGUIDataPacket();
+        if (guiDataDirty || guiDataPacket == null) {
+            this.guiDataPacket = new PktEFabricatorGUIData(this);
+            this.guiDataDirty = false;
         }
         return guiDataPacket;
     }

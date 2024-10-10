@@ -10,16 +10,14 @@ import github.kasuminova.novaeng.common.adapter.RecipeAdapterExtended;
 import github.kasuminova.novaeng.common.container.*;
 import github.kasuminova.novaeng.common.container.appeng.ContainerCraftingTree;
 import github.kasuminova.novaeng.common.estorage.EStorageCellHandler;
-import github.kasuminova.novaeng.common.handler.EFabricatorEventHandler;
-import github.kasuminova.novaeng.common.handler.EStorageEventHandler;
-import github.kasuminova.novaeng.common.handler.HyperNetEventHandler;
-import github.kasuminova.novaeng.common.handler.HyperNetMachineEventHandler;
+import github.kasuminova.novaeng.common.handler.*;
 import github.kasuminova.novaeng.common.hypernet.old.HyperNetTerminal;
 import github.kasuminova.novaeng.common.hypernet.old.machine.AssemblyLine;
 import github.kasuminova.novaeng.common.hypernet.old.recipe.HyperNetRecipeManager;
 import github.kasuminova.novaeng.common.integration.IntegrationCRT;
 import github.kasuminova.novaeng.common.integration.ic2.IntegrationIC2;
 import github.kasuminova.novaeng.common.integration.theoneprobe.IntegrationTOP;
+import github.kasuminova.novaeng.common.machine.GeocentricDrill;
 import github.kasuminova.novaeng.common.machine.IllumPool;
 import github.kasuminova.novaeng.common.machine.SingularityCore;
 import github.kasuminova.novaeng.common.registry.RegistryBlocks;
@@ -31,6 +29,7 @@ import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorController;
 import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorPatternBus;
 import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageController;
+import github.kasuminova.novaeng.common.tile.machine.GeocentricDrillController;
 import github.kasuminova.novaeng.common.util.MachineCoolants;
 import github.kasuminova.novaeng.mixin.ae2.AccessorCellRegistry;
 import hellfirepvp.modularmachinery.ModularMachinery;
@@ -68,6 +67,7 @@ public class CommonProxy implements IGuiHandler {
         MinecraftForge.EVENT_BUS.register(HyperNetEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(EStorageEventHandler.INSTANCE);
         MinecraftForge.EVENT_BUS.register(EFabricatorEventHandler.INSTANCE);
+        MinecraftForge.EVENT_BUS.register(ECalculatorEventHandler.INSTANCE);
 
         if (Loader.isModLoaded("ic2")) {
             IntegrationIC2.preInit();
@@ -90,6 +90,7 @@ public class CommonProxy implements IGuiHandler {
         if (Mods.GECKOLIB.isPresent()) {
             RegistryMachineSpecial.registrySpecialMachine(SingularityCore.SINGULARITY_CORE);
         }
+        RegistryMachineSpecial.registrySpecialMachine(GeocentricDrill.GEOCENTRIC_DRILL);
         if (Mods.AE2.isPresent()) {
             List<ICellHandler> handlers = ((AccessorCellRegistry) (AEApi.instance().registries().cell())).getHandlers();
             handlers.add(0, EStorageCellHandler.INSTANCE);
@@ -146,6 +147,7 @@ public class CommonProxy implements IGuiHandler {
                 }
                 yield new ContainerCraftingTree(player.inventory, (ITerminalHost) confirm.getTarget());
             }
+            case GEOCENTRIC_DRILL_CONTROLLER -> new ContainerGeocentricDrill((GeocentricDrillController) present, player);
         };
     }
 
@@ -164,6 +166,7 @@ public class CommonProxy implements IGuiHandler {
         EFABRICATOR_CONTROLLER(EFabricatorController.class),
         EFABRICATOR_PATTERN_BUS(EFabricatorPatternBus.class),
         CRAFTING_TREE(null),
+        GEOCENTRIC_DRILL_CONTROLLER(GeocentricDrillController.class),
         ;
 
         public final Class<? extends TileEntity> requiredTileEntity;

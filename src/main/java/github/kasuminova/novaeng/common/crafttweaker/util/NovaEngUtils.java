@@ -19,9 +19,7 @@ public class NovaEngUtils {
 
     @ZenMethod
     public static String formatFloat(float value, int decimalFraction) {
-        NumberFormat nf = NumberFormat.getNumberInstance();
-        nf.setMaximumFractionDigits(decimalFraction);
-        return nf.format(value);
+        return formatDouble(value, decimalFraction);
     }
 
     @ZenMethod

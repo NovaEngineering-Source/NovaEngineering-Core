@@ -42,19 +42,17 @@ public class HyperNetHelper {
      */
     @ZenMethod
     public static void proxyMachineForHyperNet(String machineName) {
-        MMEvents.WAIT_FOR_MODIFY.add(() -> {
-            DynamicMachine machine = MachineRegistry.getRegistry().getMachine(new ResourceLocation(ModularMachinery.MODID, machineName));
-            if (machine != null) {
-                proxyMachineForHyperNet(machine);
-            }
-        });
+        proxyMachineForHyperNet(new ResourceLocation(ModularMachinery.MODID, machineName));
     }
 
-    public static void proxyMachineForHyperNet(DynamicMachine machine) {
-        ResourceLocation registryName = machine.getRegistryName();
+    public static void proxyMachineForHyperNet(ResourceLocation registryName) {
         RegistryHyperNet.registerHyperNetNode(registryName, NetNodeImpl.class);
-
-        addControllerGUIHyperNetInfo(machine, NetNodeImpl.class);
+        MMEvents.WAIT_FOR_MODIFY.add(() -> {
+            DynamicMachine machine = MachineRegistry.getRegistry().getMachine(registryName);
+            if (machine != null) {
+                addControllerGUIHyperNetInfo(machine, NetNodeImpl.class);
+            }
+        });
     }
 
     public static <T extends NetNodeImpl> void addControllerGUIHyperNetInfo(final DynamicMachine machine, Class<T> netNodeType) {

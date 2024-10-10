@@ -58,10 +58,8 @@ public abstract class MixinTileMultiblockMachineController extends TileEntity {
         novaeng_hypernet$removeCache();
     }
 
-    @Unique
-    @Override
-    public void onChunkUnload() {
-        super.onChunkUnload();
+    @Inject(method = "onChunkUnload", at = @At("RETURN"), remap = false)
+    public void injectOnChunkUnload(final CallbackInfo ci) {
         novaeng_hypernet$removeCache();
     }
 

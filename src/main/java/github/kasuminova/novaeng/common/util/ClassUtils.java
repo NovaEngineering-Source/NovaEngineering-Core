@@ -1,46 +1,25 @@
 package github.kasuminova.novaeng.common.util;
 
-import com.google.common.collect.Sets;
+import it.unimi.dsi.fastutil.objects.ReferenceOpenHashSet;
 
+import javax.annotation.Nullable;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Set;
-import java.util.WeakHashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ClassUtils {
-    private static final Map<Class<?>, Set<Class<?>>> CLASS_INTERFACES_CACHE = new WeakHashMap<>();
-    private static final Map<Class<?>, Set<Class<?>>> CLASS_SUPERCLASSES_CACHE = new WeakHashMap<>();
+
+    private static final Map<Class<?>, Set<Class<?>>> CLASS_INTERFACES_CACHE = new ConcurrentHashMap<>();
+
+    private static final Map<Class<?>, Set<Class<?>>> CLASS_SUPERCLASSES_CACHE = new ConcurrentHashMap<>();
 
     public static Set<Class<?>> getAllInterfaces(Class<?> clazz) {
-        Set<Class<?>> cache = CLASS_INTERFACES_CACHE.get(clazz);
-        if (cache != null) {
-            return cache;
-        }
-        synchronized (CLASS_INTERFACES_CACHE) {
-            cache = CLASS_INTERFACES_CACHE.get(clazz);
-            if (cache != null) {
-                return cache;
-            }
-            Set<Class<?>> interfaces = getAllInterfaces(clazz, Sets.newIdentityHashSet());
-            CLASS_INTERFACES_CACHE.put(clazz, interfaces);
-            return interfaces;
-        }
+        return CLASS_INTERFACES_CACHE.computeIfAbsent(clazz, (key) -> getAllInterfaces(clazz, new ReferenceOpenHashSet<>()));
     }
 
-    public static Set<Class<?>> getAllSuperClasses(Class<?> clazz, Class<?> topClass) {
-        Set<Class<?>> cache = CLASS_SUPERCLASSES_CACHE.get(clazz);
-        if (cache != null) {
-            return cache;
-        }
-        synchronized (CLASS_SUPERCLASSES_CACHE) {
-            cache = CLASS_SUPERCLASSES_CACHE.get(clazz);
-            if (cache != null) {
-                return cache;
-            }
-            Set<Class<?>> superClasses = getAllSuperClasses(clazz, topClass, Sets.newIdentityHashSet());
-            CLASS_SUPERCLASSES_CACHE.put(clazz, superClasses);
-            return superClasses;
-        }
+    public static Set<Class<?>> getAllSuperClasses(Class<?> clazz, @Nullable Class<?> topClass) {
+        return CLASS_SUPERCLASSES_CACHE.computeIfAbsent(clazz, (key) -> getAllSuperClasses(clazz, topClass, new ReferenceOpenHashSet<>()));
     }
 
     protected static Set<Class<?>> getAllInterfaces(Class<?> clazz, Set<Class<?>> interfaceSet) {
@@ -52,9 +31,14 @@ public class ClassUtils {
         return interfaceSet;
     }
 
-    protected static Set<Class<?>> getAllSuperClasses(Class<?> clazz, Class<?> topClass, Set<Class<?>> superClasses) {
+    protected static Set<Class<?>> getAllSuperClasses(Class<?> clazz, @Nullable Class<?> topClass, Set<Class<?>> superClasses) {
+        boolean topClassIsInterface = topClass != null && topClass.isInterface();
+
         Class<?> superClass = clazz.getSuperclass();
-        if (superClass != null && superClass != topClass) {
+        if (superClass != null && (!topClassIsInterface || superClass != topClass)) {
+            if (topClassIsInterface && getAllInterfaces(superClass).contains(topClass)) {
+                return superClasses;
+            }
             superClasses.add(superClass);
             getAllSuperClasses(superClass, topClass, superClasses);
         }

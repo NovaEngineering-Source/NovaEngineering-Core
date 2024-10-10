@@ -16,11 +16,11 @@ public class EStorageEnergyCellItemRenderer implements ItemMeshDefinition {
     
     protected final ResourceLocation modelLocation;
 
-    public EStorageEnergyCellItemRenderer(String level) {
+    public EStorageEnergyCellItemRenderer(ItemBlockEStorageEnergyCell item, String level) {
         this.modelLocation = new ResourceLocation("novaeng_core", "estorage_energy_cell_" + level);
         for (EnergyCellStatus status : EnergyCellStatus.values()) {
-            ModelBakery.registerItemVariants(ItemBlockEStorageEnergyCell.L4,
-                    new ModelResourceLocation(modelLocation, "facing=north," + EnergyCellStatus.STATUS.getName() + "=" + status.getName())
+            ModelBakery.registerItemVariants(item, new ModelResourceLocation(
+                    modelLocation, "facing=north," + EnergyCellStatus.STATUS.getName() + "=" + status.getName())
             );
         }
     }

@@ -102,7 +102,7 @@ public class EStorageController extends EPartController<EStoragePart> {
             return toInject;
         }
 
-        List<EStorageEnergyCell> toReInsert = new ArrayList<>();
+        List<EStorageEnergyCell> toReInsert = new LinkedList<>();
         EStorageEnergyCell cell;
         while ((cell = energyCellsMin.poll()) != null) {
             double prev = toInject;
@@ -135,7 +135,7 @@ public class EStorageController extends EPartController<EStoragePart> {
         }
 
         EStorageEnergyCell cell;
-        List<EStorageEnergyCell> toReInsert = new ArrayList<>();
+        List<EStorageEnergyCell> toReInsert = new LinkedList<>();
         while ((cell = energyCellsMax.poll()) != null) {
             double prev = extracted;
             extracted += cell.extractPower(amt - extracted, mode);

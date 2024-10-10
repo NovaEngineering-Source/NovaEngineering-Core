@@ -34,12 +34,10 @@ public class BlockModelHider {
             return;
         }
 
-        if (!MultiblockWorldSavedData.multiDisabled.containsKey(ctrlPos)) {
-            MultiblockWorldSavedData.addDisableModel(ctrlPos, posList.stream()
-                    .map(pos -> MiscUtils.rotateYCCWNorthUntil(pos, ctrl.getControllerRotation()))
-                    .map(pos -> pos.add(ctrlPos))
-                    .collect(Collectors.toList()));
-        }
+        MultiblockWorldSavedData.addDisableModel(ctrlPos, posList.stream()
+                .map(pos -> MiscUtils.rotateYCCWNorthUntil(pos, ctrl.getControllerRotation()))
+                .map(pos -> pos.add(ctrlPos))
+                .collect(Collectors.toList()));
     }
 
     @SuppressWarnings("DuplicatedCode")
@@ -52,12 +50,10 @@ public class BlockModelHider {
             return;
         }
 
-        if (!MultiblockWorldSavedData.multiDisabled.containsKey(ctrlPos)) {
-            MultiblockWorldSavedData.addDisableModel(ctrlPos, posList.stream()
-                    .map(pos -> MiscUtils.rotateYCCWNorthUntil(pos, ctrl.getControllerRotation()))
-                    .map(pos -> pos.add(ctrlPos))
-                    .collect(Collectors.toList()));
-        }
+        MultiblockWorldSavedData.addDisableModel(ctrlPos, posList.stream()
+                .map(pos -> MiscUtils.rotateYCCWNorthUntil(pos, ctrl.getControllerRotation()))
+                .map(pos -> pos.add(ctrlPos))
+                .collect(Collectors.toList()));
     }
 
 }

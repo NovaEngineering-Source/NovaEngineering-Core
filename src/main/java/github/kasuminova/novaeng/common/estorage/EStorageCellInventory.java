@@ -239,14 +239,24 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
                         toWrite.setStackSize(remainingItemCount);
 
                         this.cellItems.add(toWrite);
-                        this.saveChanges();
+
+                        // Update Types and Counts.
+                        AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                        inv.setStoredItemTypes((short) (inv.getStoredItemTypes() + 1));
+                        inv.setStoredItemCount(inv.getStoredItemCount() + remainingItemCount);
+                        this.saveChangesES();
                     }
                     return toReturn;
                 }
 
                 if (mode == Actionable.MODULATE) {
                     this.cellItems.add(input);
-                    this.saveChanges();
+
+                    // Update Types and Counts.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemTypes((short) (inv.getStoredItemTypes() + 1));
+                    inv.setStoredItemCount(inv.getStoredItemCount() + input.getStackSize());
+                    this.saveChangesES();
                 }
 
                 return null;
@@ -272,14 +282,20 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
 
             if (l.getStackSize() <= size) {
                 results.setStackSize(l.getStackSize());
-                if (mode == Actionable.MODULATE) {
+                if (mode == Actionable.MODULATE && l.getStackSize() > 0) {
                     l.setStackSize(0);
-                    this.saveChanges();
+
+                    // Update Types and Counts.
+                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    inv.setStoredItemCount(inv.getStoredItemCount() - results.getStackSize());
+                    inv.setStoredItemTypes((short) (inv.getStoredItemTypes() - 1));
+                    this.saveChangesES();
                 }
             } else {
                 results.setStackSize(size);
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() - size);
+
                     // Update Count.
                     AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
                     inv.setStoredItemCount(inv.getStoredItemCount() - results.getStackSize());
@@ -296,6 +312,9 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
         return this.channel;
     }
 
+    /**
+     * 类似 {@link AbstractCellInventory#saveChanges()}，但是不对 cellItems 进行完全扫描。
+     */
     protected void saveChangesES() {
         if (this.container != null) {
             ((AccessorAbstractCellInventory) this).setIsPersisted(false);

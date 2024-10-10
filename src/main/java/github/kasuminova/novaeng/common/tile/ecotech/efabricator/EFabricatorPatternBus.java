@@ -29,7 +29,7 @@ import java.util.stream.IntStream;
 
 public class EFabricatorPatternBus extends EFabricatorPart implements IAEAppEngInventory {
 
-    public static final int PATTERN_SLOTS = 72;
+    public static final int PATTERN_SLOTS = 12 * 6;
 
     protected final AppEngInternalInventory patterns = new AppEngInternalInventory(this, PATTERN_SLOTS, 1, PatternItemFilter.INSTANCE);
     protected final List<ICraftingPatternDetails> details = new ObjectArrayList<>(PATTERN_SLOTS);

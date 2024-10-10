@@ -50,7 +50,7 @@ public class ParallelNetworkManager {
 
     @Optional.Method(modid = "appliedenergistics2")
     private void initializeAE2Blacklist() {
-        try { 
+        try {
             FMLEventChannel ec = ObfuscationReflectionHelper.getPrivateValue(NetworkHandler.class, NetworkHandler.instance(), "ec");
             if (ec != null) {
                 addBlacklistChannel(ec);

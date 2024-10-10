@@ -7,6 +7,8 @@ import github.kasuminova.novaeng.common.config.NovaEngCoreConfig;
 import github.kasuminova.novaeng.common.network.*;
 import github.kasuminova.novaeng.common.network.appeng.PktCraftingTreeData;
 import github.kasuminova.novaeng.common.network.appeng.PktSwitchCraftingTree;
+import github.kasuminova.novaeng.common.network.packetprofiler.PktCProfilerReply;
+import github.kasuminova.novaeng.common.network.packetprofiler.PktCProfilerRequest;
 import github.kasuminova.novaeng.common.profiler.SPacketProfiler;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.Mod;
@@ -23,14 +25,15 @@ import static github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader.LOG_PR
 
 @Mod(modid = NovaEngineeringCore.MOD_ID, name = NovaEngineeringCore.MOD_NAME, version = NovaEngineeringCore.VERSION,
         dependencies = "required-after:forge@[14.23.5.2847,);" + 
-                       "required-after:modularmachinery@[1.11.1,);" + 
+                       "required-after:modularmachinery@[2.0.0,);" + 
                        "required:theoneprobe@[1.12-1.4.28,);" + 
                        "required:appliedenergistics2@[v0.56.4,);" +
                        "required:ae2fc@[2.6.3-r,);" +
-                       "required:lumenized@[1.0.2,);" + 
                        "required:configanytime@[2.0,);" + 
-                       "required:mixinbooter@[8.0,);",
-        acceptedMinecraftVersions = "[1.12, 1.13)"
+                       "required:mixinbooter@[8.0,);" +
+                       "required:lumenized@[1.0.2,);",
+        acceptedMinecraftVersions = "[1.12, 1.13)",
+        acceptableRemoteVersions = "[1.20.0, 1.21.0)"
 )
 @SuppressWarnings("MethodMayBeStatic")
 public class NovaEngineeringCore {
@@ -83,6 +86,7 @@ public class NovaEngineeringCore {
         NET_CHANNEL.registerMessage(PktEFabricatorWorkerStatusUpdate.class, PktEFabricatorWorkerStatusUpdate.class, 5, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktEFabricatorGUIData.class, PktEFabricatorGUIData.class, 6, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktCraftingTreeData.class, PktCraftingTreeData.class, 7, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktCProfilerRequest.class, PktCProfilerRequest.class, 8, Side.CLIENT);
 
         NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, 100, Side.SERVER);
         NET_CHANNEL.registerMessage(PktResearchTaskReset.class, PktResearchTaskReset.class, 101, Side.SERVER);
@@ -90,6 +94,8 @@ public class NovaEngineeringCore {
         NET_CHANNEL.registerMessage(PktPatternTermUploadPattern.class, PktPatternTermUploadPattern.class, 103, Side.SERVER);
         NET_CHANNEL.registerMessage(PktEFabricatorGUIAction.class, PktEFabricatorGUIAction.class, 104, Side.SERVER);
         NET_CHANNEL.registerMessage(PktSwitchCraftingTree.class, PktSwitchCraftingTree.class, 105, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktCProfilerReply.class, PktCProfilerReply.class, 106, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktGeocentricDrillControl.class, PktGeocentricDrillControl.class, 107, Side.SERVER);
 
         proxy.preInit();
     }

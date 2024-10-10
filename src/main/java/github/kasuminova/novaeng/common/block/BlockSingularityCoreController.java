@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -69,26 +68,6 @@ public class BlockSingularityCoreController extends BlockController {
     @SideOnly(Side.CLIENT)
     public String getLocalizedName() {
         return I18n.format("tile.novaeng_core.singularity_core_controller.name");
-    }
-
-    @Override
-    public void getDrops(@Nonnull final NonNullList<ItemStack> drops, @Nonnull final IBlockAccess world, @Nonnull final BlockPos pos, @Nonnull final IBlockState state, final int fortune) {
-        Random rand = world instanceof World ? ((World) world).rand : RANDOM;
-
-        TileEntity te = world.getTileEntity(pos);
-        if (te instanceof SingularityCore ctrl && ctrl.getOwner() != null) {
-            UUID ownerUUID = ctrl.getOwner();
-            Item dropped = getItemDropped(state, rand, fortune);
-            ItemStack stackCtrl = new ItemStack(dropped, 1);
-            if (ownerUUID != null) {
-                NBTTagCompound tag = new NBTTagCompound();
-                tag.setString("owner", ownerUUID.toString());
-                stackCtrl.setTagCompound(tag);
-            }
-            drops.add(stackCtrl);
-        } else {
-            super.getDrops(drops, world, pos, state, fortune);
-        }
     }
 
     @Override

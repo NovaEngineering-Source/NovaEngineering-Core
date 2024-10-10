@@ -99,7 +99,7 @@ public class EFabricatorInfoProvider implements IProbeInfoProvider {
                         .borderColor(lightenColor(color, .8))
                         .backgroundColor(0xFF000000)
                         .numberFormat(NumberFormat.NONE)
-                        .width(queueDepth)
+                        .width(queueDepthToBarLength(queueDepth))
                 );
 
         Deque<EFabricatorWorker.CraftWork> workDeque = queue.getQueue();
@@ -111,8 +111,12 @@ public class EFabricatorInfoProvider implements IProbeInfoProvider {
         box = newBox(probeInfo);
         IProbeInfo currentCrafting = box.horizontal(box.defaultLayoutStyle().alignment(ElementAlignment.ALIGN_CENTER));
         currentCrafting.text("{*top.efabricator.worker.current_crafting*}");
-        //noinspection DataFlowIssue
-        currentCrafting.item(workDeque.peek().getOutput());
+        EFabricatorWorker.CraftWork peek = workDeque.peek();
+        if (peek == null) {
+            return;
+        }
+
+        currentCrafting.item(peek.getOutput());
 
         if (workDeque.size() <= 1) {
             return;
@@ -148,6 +152,24 @@ public class EFabricatorInfoProvider implements IProbeInfoProvider {
                 break;
             }
         }
+    }
+
+    private static int queueDepthToBarLength(int queueDepth) {
+        float mul = 1;
+        int len = 0;
+        int depth = queueDepth;
+
+        while (depth > 0) {
+            int append = (int) (Math.min(depth, 32) * mul);
+            if (append < 1) {
+                break;
+            }
+            len += append;
+            mul *= 0.8F;
+            depth -= append;
+        }
+
+        return len;
     }
 
     // Utility methods to darken and lighten colors

@@ -1,27 +1,26 @@
 package github.kasuminova.novaeng.common.registry;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.common.block.BlockAngel;
-import github.kasuminova.novaeng.common.block.BlockHyperNetTerminal;
-import github.kasuminova.novaeng.common.block.BlockModularServerAssembler;
-import github.kasuminova.novaeng.common.block.BlockSingularityCoreController;
+import github.kasuminova.novaeng.common.block.*;
+import github.kasuminova.novaeng.common.block.ecotech.ecalculator.*;
 import github.kasuminova.novaeng.common.block.ecotech.efabricator.*;
 import github.kasuminova.novaeng.common.block.ecotech.estorage.*;
-import github.kasuminova.novaeng.common.block.efabricator.*;
-import github.kasuminova.novaeng.common.block.estorage.*;
 import github.kasuminova.novaeng.common.item.ItemBlockAngel;
 import github.kasuminova.novaeng.common.item.ItemBlockME;
+import github.kasuminova.novaeng.common.item.ecalculator.ItemECalculatorMEChannel;
 import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorMEChannel;
 import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorParallelProc;
 import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorPatternBus;
 import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorWorker;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
+import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.*;
 import github.kasuminova.novaeng.common.tile.ecotech.efabricator.*;
 import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageCellDrive;
 import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageController;
 import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageEnergyCell;
 import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageMEChannel;
+import github.kasuminova.novaeng.common.tile.machine.GeocentricDrillController;
 import github.kasuminova.novaeng.common.tile.machine.SingularityCore;
 import hellfirepvp.modularmachinery.common.block.BlockCustomName;
 import hellfirepvp.modularmachinery.common.block.BlockDynamicColor;
@@ -66,6 +65,7 @@ public class RegistryBlocks {
         prepareItemBlockRegister(registerBlock(BlockModularServerAssembler.INSTANCE));
         prepareItemBlockRegister(new ItemBlockAngel(registerBlock(BlockAngel.INSTANCE)));
         prepareItemBlockRegister(registerBlock(BlockSingularityCoreController.INSTANCE));
+        prepareItemBlockRegister(registerBlock(BlockGeocentricDrillController.INSTANCE));
 
         // EStorage
         prepareItemBlockRegister(registerBlock(BlockEStorageController.L4));
@@ -95,24 +95,57 @@ public class RegistryBlocks {
         prepareItemBlockRegister(new ItemEFabricatorWorker(registerBlock(BlockEFabricatorWorker.INSTANCE)));
         prepareItemBlockRegister(registerBlock(BlockEFabricatorVent.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockEFabricatorCasing.INSTANCE));
+
+        // ECalculator
+        prepareItemBlockRegister(registerBlock(BlockECalculatorController.L4));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorController.L6));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorController.L9));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorParallelProc.L4));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorParallelProc.L6));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorParallelProc.L9));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCore.L4));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCore.L6));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCore.L9));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCoreHyper.L4));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCoreHyper.L6));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCoreHyper.L9));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorTail.L4));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorTail.L6));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorTail.L9));
+        prepareItemBlockRegister(new ItemECalculatorMEChannel(registerBlock(BlockECalculatorMEChannel.INSTANCE)));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorCellDrive.INSTANCE));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorTransmitterBus.INSTANCE));
+        prepareItemBlockRegister(registerBlock(BlockECalculatorCasing.INSTANCE));
     }
 
     public static void registerTileEntities() {
         registerTileEntity(TileHyperNetTerminal.class, "hypernet_terminal");
         registerTileEntity(TileModularServerAssembler.class, "modular_server_assembler");
         registerTileEntity(SingularityCore.class, "singularity_core");
+        registerTileEntity(GeocentricDrillController.class, "geocentric_drill_controller");
 
+        // EStorage
         registerTileEntity(EStorageController.class, "estorage_controller");
         registerTileEntity(EStorageEnergyCell.class, "estorage_energy_cell");
         registerTileEntity(EStorageCellDrive.class, "estorage_cell_drive");
         registerTileEntity(EStorageMEChannel.class, "estorage_me_channel");
 
+        // EFabricator
         registerTileEntity(EFabricatorController.class, "efabricator_controller");
         registerTileEntity(EFabricatorParallelProc.class, "efabricator_parallel_proc");
         registerTileEntity(EFabricatorTail.class, "efabricator_tail");
         registerTileEntity(EFabricatorPatternBus.class, "efabricator_pattern_bus");
         registerTileEntity(EFabricatorWorker.class, "efabricator_worker");
         registerTileEntity(EFabricatorMEChannel.class, "efabricator_me_channel");
+
+        // ECalculator
+        registerTileEntity(ECalculatorController.class, "ecalculator_controller");
+        registerTileEntity(ECalculatorParallelProc.class, "ecalculator_parallel_proc");
+        registerTileEntity(ECalculatorThreadCore.class, "ecalculator_thread_core");
+        registerTileEntity(ECalculatorTail.class, "ecalculator_tail");
+        registerTileEntity(ECalculatorMEChannel.class, "ecalculator_me_channel");
+        registerTileEntity(ECalculatorCellDrive.class, "ecalculator_cell_drive");
+        registerTileEntity(ECalculatorTransmitterBus.class, "ecalculator_transmitter_bus");
     }
 
     public static void registerBlockModels() {

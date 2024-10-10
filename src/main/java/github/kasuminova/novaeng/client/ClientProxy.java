@@ -5,7 +5,6 @@ import appeng.api.storage.ITerminalHost;
 import appeng.container.implementations.ContainerCraftConfirm;
 import github.kasuminova.mmce.client.renderer.MachineControllerRenderer;
 import github.kasuminova.novaeng.client.gui.*;
-import github.kasuminova.novaeng.client.gui.GuiCraftingTree;
 import github.kasuminova.novaeng.client.handler.BlockAngelRendererHandler;
 import github.kasuminova.novaeng.client.handler.ClientEventHandler;
 import github.kasuminova.novaeng.client.handler.HyperNetClientEventHandler;
@@ -20,6 +19,7 @@ import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorController;
 import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorPatternBus;
 import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageController;
+import github.kasuminova.novaeng.common.tile.machine.GeocentricDrillController;
 import github.kasuminova.novaeng.common.tile.machine.SingularityCore;
 import hellfirepvp.modularmachinery.common.base.Mods;
 import net.minecraft.entity.player.EntityPlayer;
@@ -125,6 +125,7 @@ public class ClientProxy extends CommonProxy {
                 }
                 yield new GuiCraftingTree(player.inventory, (ITerminalHost) confirm.getTarget());
             }
+            case GEOCENTRIC_DRILL_CONTROLLER -> new GuiGeocentricDrill((GeocentricDrillController) present, player);
         };
     }
 

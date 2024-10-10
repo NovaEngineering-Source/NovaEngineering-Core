@@ -40,7 +40,7 @@ novaeng.efabricator_parallel_proc.info.6=    每降低 §b1§7 Tick（§b0.05s§
 
 novaeng.efabricator_worker.info.0=§b工作核心§7是合成子系统的§e主要部分§7。
 novaeng.efabricator_worker.info.1=每个核心带有 §a32§7 队列深度，每次工作处理 §a1§7 个合成任务。
-novaeng.efabricator_worker.info.2=每次合成能量消耗：§b10 AE
+novaeng.efabricator_worker.info.2=每次合成能量消耗：§b100 AE
 novaeng.efabricator_worker.info.3=启用§c超频§7时：
 novaeng.efabricator_worker.info.4=  队列深度 §ax2 §b(F4)
 novaeng.efabricator_worker.info.5=  队列深度 §ax4 §6(F6)
@@ -168,6 +168,10 @@ tile.novaeng_core.efabricator_casing.name=§e合成系统结构外壳
 tile.novaeng_core.efabricator_tail_l4.name=§e合成系统结构连结器 - §bF4
 tile.novaeng_core.efabricator_tail_l6.name=§e合成系统结构连结器 - §6F6
 tile.novaeng_core.efabricator_tail_l9.name=§e合成系统结构连结器 - §5F9
+
+tile.novaeng_core.geocentric_drill_controller.name=§6地心钻探机控制器
+
+craftcheck.failure.geocentric_drill_depth=无法钻探，最低钻探深度为 1000m！
 
 novaeng.hypernet.computation_point_required.tip=§9算力：§b%s
 novaeng.hypernet.computation_point_required.tip.parallelized=§9算力 (受并行影响)：§b%s
@@ -419,3 +423,18 @@ gui.crafting_tree.back=返回
 gui.crafting_tree.tip.0=单击节点以选中。
 gui.crafting_tree.tip.1=单击空白处取消选中，使用 ↑ ↓ ← → 键在选中的节点间移动。
 gui.crafting_tree.tip.2=按住 CTRL 时，只在缺失物品的节点间移动（仅限 ← → 键）。
+
+gui.geocentric_drill.ore_control=矿物控制表
+gui.geocentric_drill.dive=单击使钻探机下潜 §a100m§f，最大值 §e10000m§f。
+gui.geocentric_drill.dive.ctrl_down=单击使钻探机下潜 §a1000m§f，最大值 §e10000m§f。
+gui.geocentric_drill.ascend=单击使钻探机上浮 §a100m§f，最小值 §e1000m§f。
+gui.geocentric_drill.ascend.ctrl_down=单击使钻探机上浮 §a1000m§f，最小值 §e1000m§f。
+
+gui.geocentric_drill.monitor.depth=§b当前深度 / 目标深度：§a%sm§b / §e%sm
+gui.geocentric_drill.monitor.output_multiplier=§b产出倍率：§a%sx§b
+
+gui.geocentric_drill.ore_control.tooltip.mark=单击标记此矿物，§a提高§f此矿物的输出权重，§c降低§f其他矿物的输出权重。
+gui.geocentric_drill.ore_control.tooltip.unmark=单击取消标记此矿物。
+gui.geocentric_drill.ore_control.tooltip.chance=输出权重：§a%s%%§f
+
+itemGroup.novaeng_core=新星工程：核心

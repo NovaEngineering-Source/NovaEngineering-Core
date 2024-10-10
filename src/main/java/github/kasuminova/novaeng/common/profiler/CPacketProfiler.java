@@ -1,8 +1,6 @@
 package github.kasuminova.novaeng.common.profiler;
 
-import github.kasuminova.novaeng.common.util.ClassUtils;
 import hellfirepvp.modularmachinery.common.util.MiscUtils;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.Tuple;
 import net.minecraft.util.text.TextFormatting;
@@ -47,6 +45,36 @@ public class CPacketProfiler {
         }
 
         TOTAL_RECEIVED_DATA_SIZE.addAndGet(length);
+    }
+
+    public static CPacketProfilerData getProfilerData(final int limit) {
+        long totalPacketSize = TOTAL_RECEIVED_DATA_SIZE.get();
+        long profileTimeExisted = enabled ? System.currentTimeMillis() - profilerStartTime : profilerStopTime - profilerStartTime;
+        double networkBandwidthPerSec = profileTimeExisted <= 0 ? 0 : (totalPacketSize / ((double) profileTimeExisted / 1000D));
+
+        @SuppressWarnings("SimplifyStreamApiCallChains")
+        List<Map.Entry<Class<?>, Tuple<Long, Long>>> sorted = CPacketProfiler.PACKET_TOTAL_SIZE.entrySet().stream()
+                .sorted((o1, o2) -> Long.compare(o2.getValue().getSecond(), o1.getValue().getSecond()))
+                .limit(limit)
+                .collect(Collectors.toList());
+        @SuppressWarnings("SimplifyStreamApiCallChains")
+        List<Map.Entry<Class<?>, Tuple<Long, Long>>> teSorted = TEUpdatePacketProfiler.TE_UPDATE_PACKET_TOTAL_SIZE.entrySet().stream()
+                .sorted((o1, o2) -> Long.compare(o2.getValue().getSecond(), o1.getValue().getSecond()))
+                .limit(limit)
+                .collect(Collectors.toList());
+
+        CPacketProfilerData data = new CPacketProfilerData((float) networkBandwidthPerSec);
+        sorted.forEach((entry) -> {
+            Class<?> pktClass = entry.getKey();
+            if (pktClass.getName().startsWith("net.minecraft")) {
+                data.addPacket(pktClass.getSimpleName(), (int) (long) entry.getValue().getFirst(), entry.getValue().getSecond());
+            } else {
+                data.addPacket(pktClass.getName(), (int) (long) entry.getValue().getFirst(), entry.getValue().getSecond());
+            }
+        });
+        teSorted.forEach((entry) -> data.addTileEntityPacket(entry.getKey().getName(), (int) (long) entry.getValue().getFirst(), entry.getValue().getSecond()));
+
+        return data;
     }
 
     public static List<String> getProfilerMessages(final int limit) {

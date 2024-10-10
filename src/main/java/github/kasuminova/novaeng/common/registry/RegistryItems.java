@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.common.registry;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.client.renderer.EStorageEnergyCellItemRenderer;
+import github.kasuminova.novaeng.common.item.ecalculator.ECalculatorCell;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellFluid;
 import github.kasuminova.novaeng.common.item.estorage.EStorageCellItem;
 import github.kasuminova.novaeng.common.item.estorage.ItemBlockEStorageEnergyCell;
@@ -42,6 +43,10 @@ public class RegistryItems {
         ITEMS_TO_REGISTER.add(EStorageCellFluid.LEVEL_B);
         ITEMS_TO_REGISTER.add(EStorageCellFluid.LEVEL_C);
 
+        ITEMS_TO_REGISTER.add(ECalculatorCell.L4);
+        ITEMS_TO_REGISTER.add(ECalculatorCell.L6);
+        ITEMS_TO_REGISTER.add(ECalculatorCell.L9);
+
         registerItems();
 
         GenericRegistryPrimer.INSTANCE.fillRegistry(event.getRegistry().getRegistrySuperType(), event.getRegistry());
@@ -58,6 +63,8 @@ public class RegistryItems {
 
     public static void registerItemModels() {
         if (FMLCommonHandler.instance().getSide().isServer()) {
+            ITEM_MODELS_TO_REGISTER.clear();
+            ITEM_CUSTOM_MODELS_TO_REGISTER.clear();
             return;
         }
         ITEM_MODELS_TO_REGISTER.forEach(RegistryItems::registerItemModel);
@@ -69,9 +76,9 @@ public class RegistryItems {
 
     @SideOnly(Side.CLIENT)
     private static void setMeshDef() {
-        ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L4, new EStorageEnergyCellItemRenderer("l4"));
-        ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L6, new EStorageEnergyCellItemRenderer("l6"));
-        ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L9, new EStorageEnergyCellItemRenderer("l9"));
+        ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L4, new EStorageEnergyCellItemRenderer(ItemBlockEStorageEnergyCell.L4, "l4"));
+        ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L6, new EStorageEnergyCellItemRenderer(ItemBlockEStorageEnergyCell.L6, "l6"));
+        ModelLoader.setCustomMeshDefinition(ItemBlockEStorageEnergyCell.L9, new EStorageEnergyCellItemRenderer(ItemBlockEStorageEnergyCell.L9, "l9"));
     }
 
     public static <T extends Item> T registerItem(T item) {

@@ -9,7 +9,7 @@ public class CreativeTabNovaEng extends CreativeTabs {
     public static final CreativeTabNovaEng INSTANCE = new CreativeTabNovaEng();
 
     private CreativeTabNovaEng() {
-        super("NovaEngineering - World");
+        super("novaeng_core");
     }
 
     @Nonnull
@@ -18,4 +18,5 @@ public class CreativeTabNovaEng extends CreativeTabs {
         // TODO Icon...
         return ItemStack.EMPTY;
     }
+
 }

@@ -1,65 +1,20 @@
 package github.kasuminova.novaeng.common.tile.ecotech;
 
-import hellfirepvp.modularmachinery.common.tiles.base.TileEntitySynchronized;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public abstract class EPart<C extends EPartController<?>> extends TileEntitySynchronized {
+public interface EPart<C extends EPartController<?>> {
 
-    protected C partController = null;
-    protected boolean loaded = false;
-
-    public void setController(final EPartController<?> storageController) {
-        this.partController = (C) storageController;
-    }
+    void setController(final EPartController<?> storageController);
 
     @Nullable
-    public C getController() {
-        return partController;
+    C getController();
+
+    default boolean isAssembled() {
+        return getController() != null;
     }
 
-    public void onAssembled() {
-    }
+    void onAssembled();
 
-    public void onDisassembled() {
-    }
-
-    @Override
-    public void onLoad() {
-        super.onLoad();
-        this.loaded = true;
-    }
-
-    @Override
-    public void onChunkUnload() {
-        loaded = false;
-        super.onChunkUnload();
-        if (partController != null) {
-            partController.disassemble();
-        }
-    }
-
-    @Override
-    public void invalidate() {
-        loaded = false;
-        super.invalidate();
-        if (partController != null) {
-            partController.disassemble();
-        }
-    }
-
-    @Override
-    public boolean shouldRefresh(@Nonnull final World world, @Nonnull final BlockPos pos, final IBlockState oldState, final IBlockState newSate) {
-        return oldState.getBlock() != newSate.getBlock();
-    }
-
-    @Override
-    public void validate() {
-        super.validate();
-    }
+    void onDisassembled();
 
 }
