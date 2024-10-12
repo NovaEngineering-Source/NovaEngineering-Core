@@ -9,6 +9,7 @@ import github.kasuminova.novaeng.client.util.BlockModelHider;
 import github.kasuminova.novaeng.common.block.ecotech.ecalculator.BlockECalculatorController;
 import github.kasuminova.novaeng.common.block.ecotech.ecalculator.prop.Levels;
 import github.kasuminova.novaeng.common.ecalculator.ECPUCluster;
+import github.kasuminova.novaeng.common.network.PktECalculatorGUIData;
 import github.kasuminova.novaeng.common.tile.ecotech.EPartController;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.client.ClientProxy;
@@ -21,7 +22,6 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class ECalculatorController extends EPartController<ECalculatorPart> {
@@ -70,6 +70,9 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
     protected int parallelism = 0;
     protected long totalBytes = 0;
 
+    protected PktECalculatorGUIData guiDataPacket = null;
+    protected volatile boolean guiDataDirty = false;
+
     public ECalculatorController(final ResourceLocation machineRegistryName) {
         this();
         this.parentMachine = MachineRegistry.getRegistry().getMachine(machineRegistryName);
@@ -82,6 +85,9 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
 
     @Override
     protected boolean onSyncTick() {
+        if (this.ticksExisted % 5 == 0) {
+            updateGUIDataPacket();
+        }
         return false;
     }
 
@@ -117,30 +123,45 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
 
     @SuppressWarnings("DataFlowIssue")
     protected void recalculateParallelism() {
-        this.parallelism = parts.getParts(ECalculatorParallelProc.class).stream()
+        this.parallelism = getParallelProcs().stream()
                 .mapToInt(ECalculatorParallelProc::getParallelism).sum();
 
         // Update accelerators
-        final List<ECalculatorThreadCore> threadCores = this.parts.getParts(ECalculatorThreadCore.class);
-        threadCores.forEach(threadCore -> threadCore.getCpus().stream()
+        getThreadCores().forEach(threadCore -> threadCore.getCpus().stream()
                 .map(cpus -> (ECPUCluster) (Object) cpus)
                 .forEach(ecpuCluster -> ecpuCluster.novaeng_ec$setAccelerators(this.parallelism))
         );
     }
 
     protected void recalculateTotalBytes() {
-        this.totalBytes = parts.getParts(ECalculatorCellDrive.class).stream()
+        this.totalBytes = getCellDrives().stream()
                 .mapToLong(ECalculatorCellDrive::getSuppliedBytes).sum();
     }
 
+    public long getTotalBytes() {
+        return totalBytes;
+    }
+
     public long getAvailableBytes() {
-        List<ECalculatorThreadCore> threadCores = parts.getParts(ECalculatorThreadCore.class);
+        List<ECalculatorThreadCore> threadCores = getThreadCores();
         return totalBytes - threadCores.stream().mapToLong(ECalculatorThreadCore::getUsedStorage).sum();
+    }
+
+    private List<ECalculatorCellDrive> getCellDrives() {
+        return parts.getParts(ECalculatorCellDrive.class);
+    }
+
+    public List<ECalculatorThreadCore> getThreadCores() {
+        return parts.getParts(ECalculatorThreadCore.class);
+    }
+
+    private List<ECalculatorParallelProc> getParallelProcs() {
+        return parts.getParts(ECalculatorParallelProc.class);
     }
 
     @SuppressWarnings("DataFlowIssue")
     public void onVirtualCPUSubmitJob(final long usedBytes) {
-        List<ECalculatorThreadCore> threadCores = parts.getParts(ECalculatorThreadCore.class);
+        List<ECalculatorThreadCore> threadCores = getThreadCores();
         for (final ECalculatorThreadCore threadCore : threadCores) {
             if (threadCore.addCPU(virtualCPU, false)) {
                 ECPUCluster ecpuCluster = (ECPUCluster) (Object) this.virtualCPU;
@@ -154,7 +175,9 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
         for (final ECalculatorThreadCore threadCore : threadCores) {
             if (threadCore.addCPU(virtualCPU, true)) {
                 ECPUCluster ecpuCluster = (ECPUCluster) (Object) this.virtualCPU;
-                ecpuCluster.novaeng_ec$setAvailableStorage((long) (usedBytes * 1.05F));
+                final long usedExtraBytes = (long) (usedBytes * 0.1F);
+                ecpuCluster.novaeng_ec$setAvailableStorage(usedBytes + usedExtraBytes);
+                ecpuCluster.novaeng_ec$setUsedExtraStorage(usedExtraBytes);
                 ecpuCluster.novaeng_ec$setVirtualCPUOwner(null);
                 this.virtualCPU = null;
                 createVirtualCPU();
@@ -166,7 +189,7 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
 
     public void createVirtualCPU() {
         final long availableBytes = getAvailableBytes();
-        if (availableBytes <= totalBytes * 0.01F) {
+        if (availableBytes < totalBytes * 0.1F) {
             if (this.virtualCPU != null) {
                 this.virtualCPU.destroy();
                 this.virtualCPU = null;
@@ -182,7 +205,7 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
         }
 
         boolean canAddCluster = false;
-        for (final ECalculatorThreadCore part : parts.getParts(ECalculatorThreadCore.class)) {
+        for (final ECalculatorThreadCore part : getThreadCores()) {
             if (part.canAddCPU()) {
                 canAddCluster = true;
                 break;
@@ -207,7 +230,7 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
 
     public List<CraftingCPUCluster> getClusterList() {
         final List<CraftingCPUCluster> clusters = new ArrayList<>();
-        final List<ECalculatorThreadCore> threadCores = parts.getParts(ECalculatorThreadCore.class);
+        final List<ECalculatorThreadCore> threadCores = getThreadCores();
         for (ECalculatorThreadCore threadCore : threadCores) {
             threadCore.refreshCPUSource();
             clusters.addAll(threadCore.getCpus());
@@ -245,6 +268,18 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
         return channel;
     }
 
+    public synchronized void updateGUIDataPacket() {
+        guiDataDirty = true;
+    }
+
+    public PktECalculatorGUIData getGuiDataPacket() {
+        if (guiDataDirty || guiDataPacket == null) {
+            this.guiDataPacket = new PktECalculatorGUIData(this);
+            this.guiDataDirty = false;
+        }
+        return guiDataPacket;
+    }
+
     @Override
     public void validate() {
         if (!FMLCommonHandler.instance().getEffectiveSide().isClient()) {
@@ -263,8 +298,9 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
     public void invalidate() {
         super.invalidate();
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
-            // Remove
-            BlockModelHider.hideOrShowBlocks(Collections.emptyList(), this);
+            List<BlockPos> posList = new ArrayList<>(HIDE_POS_LIST);
+            processDynamicPatternHidePos(posList);
+            BlockModelHider.hideOrShowBlocks(posList, this);
         }
     }
 
@@ -284,8 +320,12 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
 
     @Override
     public void readCustomNBT(final NBTTagCompound compound) {
+        boolean prevLoaded = loaded;
+        loaded = false;
+
         super.readCustomNBT(compound);
 
+        loaded = prevLoaded;
         if (FMLCommonHandler.instance().getEffectiveSide().isClient()) {
             ClientProxy.clientScheduler.addRunnable(() -> {
                 List<BlockPos> posList = new ArrayList<>(HIDE_POS_LIST);

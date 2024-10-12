@@ -56,29 +56,30 @@ public abstract class MixinGuiCraftingStatus extends AEBaseGui {
 
     @Shadow
     private GuiScrollbar cpuScrollbar;
+
     @Unique
     private static final ResourceLocation novaeng_ec$TEXTURE = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/ecalculator_gui_2.png");
 
     @Unique
-    private static final TextureProperties novaeng_ec$L4 = TextureProperties.of(novaeng_ec$TEXTURE, 0, 0, 66, 21);
+    private static final TextureProperties novaeng_ec$L4 = TextureProperties.of(novaeng_ec$TEXTURE, 1, 1, 67, 22);
 
     @Unique
-    private static final TextureProperties novaeng_ec$L4_CELL = TextureProperties.of(novaeng_ec$TEXTURE, 0, 110, 16, 16);
+    private static final TextureProperties novaeng_ec$L4_CELL = TextureProperties.of(novaeng_ec$TEXTURE, 0, 124, 16, 16);
 
     @Unique
-    private static final TextureProperties novaeng_ec$L6 = TextureProperties.of(novaeng_ec$TEXTURE, 0, 22, 66, 21);
+    private static final TextureProperties novaeng_ec$L6 = TextureProperties.of(novaeng_ec$TEXTURE, 1, 26, 67, 22);
 
     @Unique
-    private static final TextureProperties novaeng_ec$L6_CELL = TextureProperties.of(novaeng_ec$TEXTURE, 34, 110, 16, 16);
+    private static final TextureProperties novaeng_ec$L6_CELL = TextureProperties.of(novaeng_ec$TEXTURE, 34, 124, 16, 16);
 
     @Unique
-    private static final TextureProperties novaeng_ec$L9 = TextureProperties.of(novaeng_ec$TEXTURE, 0, 44, 66, 21);
+    private static final TextureProperties novaeng_ec$L9 = TextureProperties.of(novaeng_ec$TEXTURE, 1, 51, 67, 22);
 
     @Unique
-    private static final TextureProperties novaeng_ec$L9_CELL = TextureProperties.of(novaeng_ec$TEXTURE, 17, 110, 16, 16);
+    private static final TextureProperties novaeng_ec$L9_CELL = TextureProperties.of(novaeng_ec$TEXTURE, 17, 124, 16, 16);
 
     @Unique
-    private static final TextureProperties novaeng_ec$L11 = TextureProperties.of(novaeng_ec$TEXTURE, 0, 66, 66, 21);
+    private static final TextureProperties novaeng_ec$L11 = TextureProperties.of(novaeng_ec$TEXTURE, 1, 76, 67, 22);
 
     public MixinGuiCraftingStatus() {
         super(null);
@@ -136,10 +137,10 @@ public abstract class MixinGuiCraftingStatus extends AEBaseGui {
 
         String name = cpu.getName();
         if (name == null || name.isEmpty()) {
-            name = color + "#" + cpu.getSerial();
+            name = color + "#" + cpu.getSerial() + TextFormatting.RESET;
         }
-        if (name.length() > 12) {
-            name = name.substring(0, 11) + "..";
+        if (name.replaceAll("§.", "").length() > 8) {
+            name = name.substring(0, 7) + "..";
         }
         GL11.glPushMatrix();
         GL11.glTranslatef(x + (3 + 8), y + 3, 0);
@@ -158,7 +159,7 @@ public abstract class MixinGuiCraftingStatus extends AEBaseGui {
                 case L6 -> novaeng_ec$L6_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
                 case L9 -> novaeng_ec$L9_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
             }
-            GL11.glTranslatef(18.0f, 3.0f, 0.0f);
+            GL11.glTranslatef(18.0f, 3.5f, 0.0f);
             String amount = Long.toString(craftingStack.getStackSize());
             if (amount.length() > 9) {
                 amount = amount.substring(0, 9) + "..";
@@ -177,7 +178,7 @@ public abstract class MixinGuiCraftingStatus extends AEBaseGui {
                 case L6 -> novaeng_ec$L6_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
                 case L9 -> novaeng_ec$L9_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
             }
-            GL11.glTranslatef(20.0f, 3.0f, 0.0f);
+            GL11.glTranslatef(18.0f, 3.5f, 0.0f);
             GL11.glScalef(1.5f, 1.5f, 1.0f);
             font.drawString(cpu.formatStorage(), 0, 0, textColor);
         }

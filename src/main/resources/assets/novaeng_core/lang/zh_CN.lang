@@ -15,14 +15,62 @@ item.novaeng_core.estorage_cell_fluid_16m.name=§9ECO - §bLE4 §9存储矩阵§
 item.novaeng_core.estorage_cell_fluid_64m.name=§9ECO - §6LE6 §9存储矩阵§b（流体）
 item.novaeng_core.estorage_cell_fluid_256m.name=§9ECO - §5LE9 §9存储矩阵§b（流体）
 
-novaeng.estorage_cell.insert.tip=蹲下时手持矩阵并右击驱动器以插入矩阵。
-novaeng.estorage_cell.extract.tip=蹲下时空手并右击驱动器以取出矩阵。
+item.novaeng_core.ecalculator_cell_64m.name=§9ECO - §bCE4 §b闪存晶阵
+item.novaeng_core.ecalculator_cell_1024m.name=§9ECO - §6CE6 §b闪存晶阵
+item.novaeng_core.ecalculator_cell_16384m.name=§9ECO - §5CE9 §b闪存晶阵
+
+novaeng.ecalculator_cell.insert.tip=蹲下时手持矩阵并右击驱动器以插入晶阵。
+novaeng.ecalculator_cell.extract.tip=蹲下时空手并右击驱动器以取出晶阵。
+novaeng.ecalculator_cell.tip.0=§b闪存晶阵§7为§9计算子系统§7提供§a内存存储§7。
+novaeng.ecalculator_cell.tip.1=§b闪存晶阵§7是存储矩阵的高速读取特化版本。
+novaeng.ecalculator_cell.tip.2=相比§9存储矩阵§7，其内部规模要§a更加宏大§7，但即便如此存储容量也远§c不如§9存储矩阵§7。
+novaeng.ecalculator_cell.l6.tip=§c只有 §6C6§c 等级及以上的主机可以驱动此晶阵。
+novaeng.ecalculator_cell.l9.tip=§c只有 §6C9§c 等级的主机可以驱动此晶阵。
+
+novaeng.estorage_cell.insert.tip=蹲下时§a手持矩阵并右击§7驱动器以插入矩阵。
+novaeng.estorage_cell.extract.tip=蹲下时§a空手并右击§7驱动器以取出矩阵。
 novaeng.estorage_cell.l6.tip=§c只有 §6L6§c 等级及以上的主机可以驱动此矩阵。
 novaeng.estorage_cell.l9.tip=§c只有 §6L9§c 等级的主机可以驱动此矩阵。
 
 novaeng.estorage_cell_drive.player.inserted=§a已插入存储矩阵。
 novaeng.estorage_cell_drive.player.removed=§a已取出存储矩阵。
 novaeng.estorage_cell_drive.player.no_permission=§c访问被拒绝（原因：无 ME 网络权限）。
+
+novaeng.ecalculator_thread_core.info.0=§b线程核心§7是计算子系统的主要部分，为主机提供§5线程数§7。
+novaeng.ecalculator_thread_core.info.1=§b线程核心§7提供的§9线程§7为子系统提供最大§b虚拟合成处理器（vCPU）§7数量。
+novaeng.ecalculator_thread_core.info.2=拆除时首先会尝试§e返还并取消§7当前任务的物品至 ME 网络，如果返还失败则§a保存数据至掉落物§7。
+novaeng.ecalculator_thread_core.modifiers=§b线程数§7修正：
+novaeng.ecalculator_thread_core.modifier.add=  最大线程数：§a+%s
+
+novaeng.ecalculator_thread_core_hyper.info.0=§9超线程核心§7相比§b线程核心§7，能为主机提供§a更多§7的§5线程数§7。
+novaeng.ecalculator_thread_core_hyper.info.1=作为代价，每个§a合成任务§7需要的字节数会§c更多§7（§c+10%%§7）。
+novaeng.ecalculator_thread_core_hyper.info.2=主机会优先使用§b普通线程§7而不是§9超线程§7。
+novaeng.ecalculator_thread_core_hyper.modifier.add=  最大超线程数：§a+%s
+
+novaeng.ecalculator_parallel_proc.info.0=§5并行核心§7为计算子系统提供§5并行数§7。
+novaeng.ecalculator_parallel_proc.info.1=§5并行数§7可提高§a所有§b线程核心§7每次处理合成任务的§a处理数量§7。
+novaeng.ecalculator_parallel_proc.modifiers=§5并行数§7修正：
+novaeng.ecalculator_parallel_proc.modifier.add=  最大并行数：§a+%s
+
+novaeng.ecalculator_cell_drive.info.0=§b晶阵驱动器§7为计算子系统提供§b闪存晶阵§7的存储空间。
+novaeng.ecalculator_cell_drive.info.1=§b晶阵驱动器§7能够驱动的晶阵等级取决于主机的§5等级§7。
+novaeng.ecalculator_cell_drive.player.inserted=§a已插入闪存晶阵。
+novaeng.ecalculator_cell_drive.player.removed=§a已取出闪存晶阵。
+novaeng.ecalculator_cell_drive.player.no_permission=§c访问被拒绝（原因：无 ME 网络权限）。
+
+novaeng.extendable_storage_subsystem.info.0=整个§9存储子系统§7的§a核心§7。
+novaeng.extendable_storage_subsystem.info.1=最大长度：§a12
+novaeng.extendable_fabricator_subsystem.info.0=整个§e合成子系统§7的§a核心§7。
+novaeng.extendable_fabricator_subsystem.info.1=最大长度：§a12
+novaeng.extendable_calculate_subsystem.info.0=整个§b计算子系统§7的§a核心§7。
+novaeng.extendable_calculate_subsystem.info.1=最大长度：§a12
+novaeng.extendable_calculate_subsystem.info.2=计算子系统引入了§b虚拟合成处理器§7的设定（简称 §bvCPU§7），通过 ME 通讯接口来访问。
+novaeng.extendable_calculate_subsystem.info.3=§b虚拟合成处理器（vCPU）§7：
+novaeng.extendable_calculate_subsystem.info.4=  主机每次只向 ME 网络提供一个 §bvCPU§7，其容量为子系统当前所有可用的字节数。
+novaeng.extendable_calculate_subsystem.info.5=  每当用户发配合成任务给 §bvCPU§7 时，主机会自动调节 §bvCPU§7 的字节数至任务所需的字节数，然后将其分配给§b线程核心§7。
+novaeng.extendable_calculate_subsystem.info.6=  分配完成后，如果系统当前可用字节数大于 §e10%%§7，则会自动分配新的 §bvCPU§7，否则§c停止分配§7，直到可用字节数大于 §e10%%§7。
+novaeng.extendable_calculate_subsystem.info.7=  只要系统中已分配的 §bvCPU§7 数不超过§e最大线程数§7，则可以一直分配新的 §bvCPU§7，直到上限。
+novaeng.extendable_calculate_subsystem.info.8=  §bvCPU§7 会在合成任务完成后，并且§e物品全部返还§7时§a立刻销毁§7。
 
 novaeng.efabricator_parallel_proc.info.0=§5并行核心§7为合成子系统提供§5并行数§7。
 novaeng.efabricator_parallel_proc.info.1=§5并行数§7可提高§b工作核心§7每次处理合成任务的§a处理数量§7（最大不超过队列深度）。
@@ -64,6 +112,11 @@ novaeng.efabricator_me_channel.info.0=§9矩阵通讯接口§7是子系统与 ME
 novaeng.efabricator_me_channel.info.1=  §9通讯接口§7向 ME 网络提供样板核心的访问权限。
 novaeng.efabricator_me_channel.info.2=  子系统只能通过§9通讯接口§7获取能源。
 novaeng.efabricator_me_channel.info.3=通过连接 ME 线缆至§9通讯接口§7以和子系统建立连接。
+
+novaeng.ecalculator_me_channel.info.0=§9矩阵通讯接口§7是子系统与 ME 网络之间的§b协议兼容层§7。
+novaeng.ecalculator_me_channel.info.1=  §9通讯接口§7向 ME 网络提供§b虚拟合成处理器§7。
+novaeng.ecalculator_me_channel.info.2=  此子系统§a不消耗§7额外能源。
+novaeng.ecalculator_me_channel.info.3=通过连接 ME 线缆至§9通讯接口§7以和子系统建立连接。
 
 novaeng.hypernet.connect.result.success=§a连接成功§b（状态：%s 已连接 / %s 最大连接数）。
 novaeng.hypernet.connect.result.no_permission=§c连接失败，HyperNet 网络授权密钥不匹配（原因：非网络所有者）。
@@ -168,6 +221,26 @@ tile.novaeng_core.efabricator_casing.name=§e合成系统结构外壳
 tile.novaeng_core.efabricator_tail_l4.name=§e合成系统结构连结器 - §bF4
 tile.novaeng_core.efabricator_tail_l6.name=§e合成系统结构连结器 - §6F6
 tile.novaeng_core.efabricator_tail_l9.name=§e合成系统结构连结器 - §5F9
+
+tile.novaeng_core.extendable_calculator_subsystem_l4.name=§9ECO - §bC4 §b可扩展计算子系统主机
+tile.novaeng_core.extendable_calculator_subsystem_l6.name=§9ECO - §6C6 §b可扩展计算子系统主机
+tile.novaeng_core.extendable_calculator_subsystem_l9.name=§9ECO - §5C9 §b可扩展计算子系统主机
+tile.novaeng_core.ecalculator_cell_drive.name=§9ECO - §bCD §9晶阵驱动器
+tile.novaeng_core.ecalculator_transmitter_bus.name=§9ECO - §bCI §b超导晶阵传输总线
+tile.novaeng_core.ecalculator_parallel_proc_l4.name=§9ECO - §bCT4 §5并行核心
+tile.novaeng_core.ecalculator_parallel_proc_l6.name=§9ECO - §6CT6 §5并行核心
+tile.novaeng_core.ecalculator_parallel_proc_l9.name=§9ECO - §5CT9 §5并行核心
+tile.novaeng_core.ecalculator_thread_core_l4.name=§9ECO - §bCM4A §b线程核心
+tile.novaeng_core.ecalculator_thread_core_hyper_l4.name=§9ECO - §bCM4B §9超线程核心
+tile.novaeng_core.ecalculator_thread_core_l6.name=§9ECO - §6CM6A §b线程核心
+tile.novaeng_core.ecalculator_thread_core_hyper_l6.name=§9ECO - §6CM6B §9超线程核心
+tile.novaeng_core.ecalculator_thread_core_l9.name=§9ECO - §5CM9A §b线程核心
+tile.novaeng_core.ecalculator_thread_core_hyper_l9.name=§9ECO - §5CM9B §9超线程核心
+tile.novaeng_core.ecalculator_me_channel.name=§9ECO - §bCR §9ME 矩阵通讯接口
+tile.novaeng_core.ecalculator_casing.name=§b计算系统结构外壳
+tile.novaeng_core.ecalculator_tail_l4.name=§b计算系统散热总控 - §bC4
+tile.novaeng_core.ecalculator_tail_l6.name=§b计算系统散热总控 - §6C6
+tile.novaeng_core.ecalculator_tail_l9.name=§b计算系统散热总控 - §5C9
 
 tile.novaeng_core.geocentric_drill_controller.name=§6地心钻探机控制器
 
@@ -380,7 +453,7 @@ gui.efabricator_pattern_bus.inventory=物品栏
 
 gui.efabricator.total_crafted=统计 - 已完成配方数：%s
 gui.efabricator.total_crafted.update=统计 - 已完成配方数：%s，合成速度：§a+%s/Tick§f
-gui.efabricator.button.upload_pattern=上传样板至当前网络中可用的§9可扩展合成子系统§r中。
+gui.efabricator.button.upload_pattern=上传样板至当前网络中可用的§9可扩展合成子系统§7中。
 gui.efabricator.queue.status=队列：%s / %s
 gui.efabricator.max_energy_usage=最大能耗：§b%s AE
 gui.efabricator.max_energy_usage.tip=显示值为所有工作核心满负载时工作一次的能耗。
@@ -411,18 +484,6 @@ gui.efabricator.total_parallelism.overflow=溢出：%s (%s%%)
 gui.efabricator.total_parallelism.overflow_speedup=加速：%s Tick (%s%%)
 gui.efabricator.total_parallelism.overflow_speedup.coolants.0=冷却液消耗：
 gui.efabricator.total_parallelism.overflow_speedup.coolants.1=%s mB/t
-
-gui.crafting_tree.title=合成树预览
-gui.crafting_tree.switch=查看合成树
-gui.crafting_tree.sub_node_missing=§c材料不足。§f
-gui.crafting_tree.missing=§c缺失：§e%s§f
-gui.crafting_tree.screenshot=截图合成树（未实装）
-gui.crafting_tree.missing_only=单击只显示缺失材料的节点。
-gui.crafting_tree.default=单击返回默认视图。
-gui.crafting_tree.back=返回
-gui.crafting_tree.tip.0=单击节点以选中。
-gui.crafting_tree.tip.1=单击空白处取消选中，使用 ↑ ↓ ← → 键在选中的节点间移动。
-gui.crafting_tree.tip.2=按住 CTRL 时，只在缺失物品的节点间移动（仅限 ← → 键）。
 
 gui.geocentric_drill.ore_control=矿物控制表
 gui.geocentric_drill.dive=单击使钻探机下潜 §a100m§f，最大值 §e10000m§f。

@@ -2,27 +2,33 @@ package github.kasuminova.novaeng.common.tile.ecotech.ecalculator;
 
 import appeng.api.util.WorldCoord;
 import appeng.me.cluster.implementations.CraftingCPUCluster;
+import github.kasuminova.mmce.common.util.Sides;
 import github.kasuminova.novaeng.common.ecalculator.ECPUCluster;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraftforge.common.util.Constants;
 
+import javax.annotation.Nonnull;
 import java.util.List;
 
 public class ECalculatorThreadCore extends ECalculatorPart {
 
+    private static final ThreadLocal<Boolean> WRITE_CPU_NBT = ThreadLocal.withInitial(() -> true);
+
     protected final ObjectArrayList<CraftingCPUCluster> cpus = new ObjectArrayList<>();
 
-    protected int maxClusterCount = 0;
-    protected int maxClusterCountHyperThread = 0;
+    protected int threads = 0;
+    protected int maxThreads = 0;
+    protected int maxHyperThreads = 0;
 
     public ECalculatorThreadCore() {
     }
 
-    public ECalculatorThreadCore(final int maxClusterCount, final int maxClusterCountHyperThread) {
-        this.maxClusterCount = maxClusterCount;
-        this.maxClusterCountHyperThread = maxClusterCountHyperThread;
+    public ECalculatorThreadCore(final int maxThreads, final int maxHyperThreads) {
+        this.maxThreads = maxThreads;
+        this.maxHyperThreads = maxHyperThreads;
     }
 
     public List<CraftingCPUCluster> getCpus() {
@@ -30,8 +36,8 @@ public class ECalculatorThreadCore extends ECalculatorPart {
     }
 
     public boolean addCPU(final CraftingCPUCluster cluster, final boolean hyperThread) {
-        if (cpus.size() >= maxClusterCount) {
-            if (!hyperThread || cpus.size() >= maxClusterCount + maxClusterCountHyperThread) {
+        if (cpus.size() >= maxThreads) {
+            if (!hyperThread || cpus.size() >= maxThreads + maxHyperThreads) {
                 return false;
             }
         }
@@ -42,7 +48,22 @@ public class ECalculatorThreadCore extends ECalculatorPart {
     }
 
     public boolean canAddCPU() {
-        return cpus.size() < (maxClusterCount + maxClusterCountHyperThread);
+        return cpus.size() < (maxThreads + maxHyperThreads);
+    }
+
+    /**
+     * Client side only.
+     */
+    public int getThreads() {
+        return threads;
+    }
+
+    public int getMaxThreads() {
+        return maxThreads;
+    }
+
+    public int getMaxHyperThreads() {
+        return maxHyperThreads;
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -55,8 +76,7 @@ public class ECalculatorThreadCore extends ECalculatorPart {
     }
 
     public void onBlockDestroyed() {
-        cpus.clone().forEach(CraftingCPUCluster::destroy);
-        cpus.clear();
+        cpus.clone().forEach(CraftingCPUCluster::cancel);
     }
 
     public void onCPUDestroyed(final CraftingCPUCluster cluster) {
@@ -74,16 +94,39 @@ public class ECalculatorThreadCore extends ECalculatorPart {
         return cpus.stream().mapToLong(CraftingCPUCluster::getAvailableStorage).sum();
     }
 
+    @Nonnull
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
+        try {
+            WRITE_CPU_NBT.set(false);
+            return super.getUpdatePacket();
+        } finally {
+            WRITE_CPU_NBT.set(true);
+        }
+    }
+
+    @Nonnull
+    @Override
+    public NBTTagCompound getUpdateTag() {
+        try {
+            WRITE_CPU_NBT.set(false);
+            return super.getUpdateTag();
+        } finally {
+            WRITE_CPU_NBT.set(true);
+        }
+    }
+
     @Override
     public void readCustomNBT(final NBTTagCompound compound) {
         super.readCustomNBT(compound);
 
         if (compound.hasKey("maxClusterCount")) {
-            this.maxClusterCount = compound.getByte("maxClusterCount");
+            this.maxThreads = compound.getByte("maxClusterCount");
         }
         if (compound.hasKey("maxClusterCountHyperThread")) {
-            this.maxClusterCountHyperThread = compound.getByte("maxClusterCountHyperThread");
+            this.maxHyperThreads = compound.getByte("maxClusterCountHyperThread");
         }
+        this.threads = compound.getByte("threads");
 
         cpus.clone().forEach(CraftingCPUCluster::destroy);
         cpus.clear();
@@ -96,40 +139,48 @@ public class ECalculatorThreadCore extends ECalculatorPart {
             CraftingCPUCluster cluster = new CraftingCPUCluster(coord, coord);
             ECPUCluster eCluster = (ECPUCluster) (Object) cluster;
 
-            cluster.readFromNBT(clusterTag);
             eCluster.novaeng_ec$setThreadCore(this);
             eCluster.novaeng_ec$setAvailableStorage(clusterTag.getLong("availableStorage"));
+            eCluster.novaeng_ec$setUsedExtraStorage(clusterTag.getLong("usedExtraStorage"));
+            cluster.readFromNBT(clusterTag);
             cpus.add(cluster);
         }
+
+        updateContainingBlockInfo();
     }
 
     @Override
     public void writeCustomNBT(final NBTTagCompound compound) {
         super.writeCustomNBT(compound);
-        
-        compound.setByte("maxClusterCount", (byte) maxClusterCount);
-        compound.setByte("maxClusterCountHyperThread", (byte) maxClusterCountHyperThread);
 
-        final NBTTagList clustersTag = new NBTTagList();
-        cpus.forEach(cluster -> {
-            NBTTagCompound clusterTag = new NBTTagCompound();
-            cluster.writeToNBT(clusterTag);
-            clusterTag.setLong("availableStorage", cluster.getAvailableStorage());
-            clustersTag.appendTag(clusterTag);
-        });
-        compound.setTag("clusters", clustersTag);
+        compound.setByte("maxClusterCount", (byte) maxThreads);
+        compound.setByte("maxClusterCountHyperThread", (byte) maxHyperThreads);
+        compound.setByte("threads", (byte) this.cpus.size());
+
+        if (Sides.isRunningOnClient() || (Sides.isRunningOnServer() && WRITE_CPU_NBT.get())) {
+            final NBTTagList clustersTag = new NBTTagList();
+            cpus.forEach(cluster -> {
+                ECPUCluster eCluster = (ECPUCluster) (Object) cluster;
+                NBTTagCompound clusterTag = new NBTTagCompound();
+                cluster.writeToNBT(clusterTag);
+                clusterTag.setLong("availableStorage", cluster.getAvailableStorage());
+                clusterTag.setLong("usedExtraStorage", eCluster.novaeng_ec$getUsedExtraStorage());
+                clustersTag.appendTag(clusterTag);
+            });
+            compound.setTag("clusters", clustersTag);
+        }
     }
 
     @Override
     public void onDisassembled() {
         super.onDisassembled();
-        markNoUpdateSync();
+        markForUpdateSync();
     }
 
     @Override
     public void onAssembled() {
         super.onAssembled();
-        markNoUpdateSync();
+        markForUpdateSync();
     }
 
 }

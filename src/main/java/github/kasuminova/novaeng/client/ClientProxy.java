@@ -1,8 +1,6 @@
 package github.kasuminova.novaeng.client;
 
 
-import appeng.api.storage.ITerminalHost;
-import appeng.container.implementations.ContainerCraftConfirm;
 import github.kasuminova.mmce.client.renderer.MachineControllerRenderer;
 import github.kasuminova.novaeng.client.gui.*;
 import github.kasuminova.novaeng.client.handler.BlockAngelRendererHandler;
@@ -16,6 +14,7 @@ import github.kasuminova.novaeng.common.registry.RegistryBlocks;
 import github.kasuminova.novaeng.common.registry.RegistryItems;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
+import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorController;
 import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorController;
 import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorPatternBus;
 import github.kasuminova.novaeng.common.tile.ecotech.estorage.EStorageController;
@@ -119,13 +118,8 @@ public class ClientProxy extends CommonProxy {
             case SINGULARITY_CORE -> new GuiSingularityCore((SingularityCore) present, player);
             case EFABRICATOR_CONTROLLER -> new GuiEFabricatorController((EFabricatorController) present, player);
             case EFABRICATOR_PATTERN_BUS -> new GuiEFabricatorPatternBus((EFabricatorPatternBus) present, player);
-            case CRAFTING_TREE -> {
-                if (!(player.openContainer instanceof ContainerCraftConfirm confirm)) {
-                    yield null;
-                }
-                yield new GuiCraftingTree(player.inventory, (ITerminalHost) confirm.getTarget());
-            }
             case GEOCENTRIC_DRILL_CONTROLLER -> new GuiGeocentricDrill((GeocentricDrillController) present, player);
+            case ECALCULATOR_CONTROLLER -> new GuiECalculatorController((ECalculatorController) present, player);
         };
     }
 

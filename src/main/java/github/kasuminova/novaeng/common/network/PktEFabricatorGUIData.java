@@ -36,7 +36,10 @@ public class PktEFabricatorGUIData implements IMessage, IMessageHandler<PktEFabr
                 controller.getLevel(),
                 controller.getWorkers().stream()
                         .map(EFabricatorWorker::getQueue)
-                        .map(queue -> new EFabricatorData.WorkerStatus(queue.peek() != null ? queue.peek().getOutput() : ItemStack.EMPTY, queue.size()))
+                        .map(queue -> {
+                            EFabricatorWorker.CraftWork peek = queue.peek();
+                            return new EFabricatorData.WorkerStatus(peek != null ? peek.getOutput() : ItemStack.EMPTY, queue.size());
+                        })
                         .collect(Collectors.toList())
         );
     }

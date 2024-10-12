@@ -20,4 +20,8 @@ public interface ECPUCluster {
 
     Levels novaeng_ec$getControllerLevel();
 
+    long novaeng_ec$getUsedExtraStorage();
+
+    void novaeng_ec$setUsedExtraStorage(final long usedExtraStorage);
+
 }

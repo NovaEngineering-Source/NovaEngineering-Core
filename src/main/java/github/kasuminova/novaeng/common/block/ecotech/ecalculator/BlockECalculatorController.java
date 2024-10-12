@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng.common.block.ecotech.ecalculator;
 
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorController;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.common.block.BlockController;
@@ -111,8 +112,7 @@ public class BlockECalculatorController extends BlockController {
         if (!worldIn.isRemote) {
             TileEntity te = worldIn.getTileEntity(pos);
             if (te instanceof ECalculatorController) {
-                // TODO GUIs
-//                playerIn.openGui(NovaEngineeringCore.MOD_ID, CommonProxy.GuiType.EFABRICATOR_CONTROLLER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
+                playerIn.openGui(NovaEngineeringCore.MOD_ID, CommonProxy.GuiType.ECALCULATOR_CONTROLLER.ordinal(), worldIn, pos.getX(), pos.getY(), pos.getZ());
             }
         }
         return true;

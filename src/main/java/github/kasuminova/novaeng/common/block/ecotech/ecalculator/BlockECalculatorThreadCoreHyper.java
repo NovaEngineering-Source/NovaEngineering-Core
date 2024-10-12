@@ -5,9 +5,9 @@ import net.minecraft.util.ResourceLocation;
 
 public class BlockECalculatorThreadCoreHyper extends BlockECalculatorThreadCore {
 
-    public static final BlockECalculatorThreadCoreHyper L4 = new BlockECalculatorThreadCoreHyper("l4", 0, 4);
-    public static final BlockECalculatorThreadCoreHyper L6 = new BlockECalculatorThreadCoreHyper("l6", 1, 7);
-    public static final BlockECalculatorThreadCoreHyper L9 = new BlockECalculatorThreadCoreHyper("l9", 2, 14);
+    public static final BlockECalculatorThreadCoreHyper L4 = new BlockECalculatorThreadCoreHyper("l4", 0, 2);
+    public static final BlockECalculatorThreadCoreHyper L6 = new BlockECalculatorThreadCoreHyper("l6", 0, 4);
+    public static final BlockECalculatorThreadCoreHyper L9 = new BlockECalculatorThreadCoreHyper("l9", 1, 8);
 
     protected BlockECalculatorThreadCoreHyper(final String level, final int threads, final int hyperThreads) {
         super(

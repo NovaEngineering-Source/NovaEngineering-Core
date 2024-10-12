@@ -5,15 +5,15 @@ import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.util.TextureProperties;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
-import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.novaeng.client.gui.GuiEFabricatorController;
 import github.kasuminova.novaeng.client.gui.widget.ProgressBar;
+import github.kasuminova.novaeng.client.gui.widget.SizedColumn;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 
 import java.util.Collections;
 
-public class CraftingStatus extends Column {
+public class CraftingStatus extends SizedColumn {
 
     private static final TextureProperties TEXTURE_BACKGROUND = new TextureProperties(
             GuiEFabricatorController.TEXTURES_ELEMENTS,
@@ -41,8 +41,7 @@ public class CraftingStatus extends Column {
     private boolean available;
 
     public CraftingStatus(boolean available) {
-        this.width = 18;
-        this.height = 18;
+        setWidthHeight(18, 18);
 
         slot.setMargin(6, 0, 2, 1);
         progress.setLeftToRight(true)
@@ -94,13 +93,4 @@ public class CraftingStatus extends Column {
         return this;
     }
 
-    @Override
-    public int getWidth() {
-        return this.width;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.height;
-    }
 }

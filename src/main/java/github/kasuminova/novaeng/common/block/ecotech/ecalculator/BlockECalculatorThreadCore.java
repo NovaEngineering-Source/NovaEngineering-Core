@@ -4,7 +4,6 @@ import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.ecotech.ecalculator.prop.Levels;
 import github.kasuminova.novaeng.common.block.ecotech.ecalculator.prop.ThreadCoreStatus;
 import github.kasuminova.novaeng.common.block.prop.FacingProp;
-import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorPart;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorThreadCore;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockStateContainer;
@@ -24,9 +23,9 @@ import javax.annotation.Nonnull;
 @SuppressWarnings("deprecation")
 public class BlockECalculatorThreadCore extends BlockECalculatorPart {
 
-    public static final BlockECalculatorThreadCore L4 = new BlockECalculatorThreadCore("l4", 2, 0);
-    public static final BlockECalculatorThreadCore L6 = new BlockECalculatorThreadCore("l6", 4, 0);
-    public static final BlockECalculatorThreadCore L9 = new BlockECalculatorThreadCore("l9", 8, 0);
+    public static final BlockECalculatorThreadCore L4 = new BlockECalculatorThreadCore("l4", 1, 0);
+    public static final BlockECalculatorThreadCore L6 = new BlockECalculatorThreadCore("l6", 2, 0);
+    public static final BlockECalculatorThreadCore L9 = new BlockECalculatorThreadCore("l9", 4, 0);
 
     protected final int threads;
     protected final int hyperThreads;
@@ -43,6 +42,14 @@ public class BlockECalculatorThreadCore extends BlockECalculatorPart {
         );
     }
 
+    public int getThreads() {
+        return threads;
+    }
+
+    public int getHyperThreads() {
+        return hyperThreads;
+    }
+
     protected BlockECalculatorThreadCore(final String level, final int threads, final int hyperThreads) {
         this(
                 new ResourceLocation(NovaEngineeringCore.MOD_ID, "ecalculator_thread_core_" + level),
@@ -54,6 +61,12 @@ public class BlockECalculatorThreadCore extends BlockECalculatorPart {
     @Nullable
     @Override
     public TileEntity createNewTileEntity(@Nonnull final World worldIn, final int meta) {
+        return new ECalculatorThreadCore(this.threads, this.hyperThreads);
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(@Nonnull final World world, @Nonnull final IBlockState state) {
         return new ECalculatorThreadCore(this.threads, this.hyperThreads);
     }
 
@@ -70,16 +83,16 @@ public class BlockECalculatorThreadCore extends BlockECalculatorPart {
     @Override
     public IBlockState getActualState(@Nonnull final IBlockState state, @Nonnull final IBlockAccess world, @Nonnull final BlockPos pos) {
         TileEntity te = world.getTileEntity(pos);
-        if (!(te instanceof ECalculatorPart part)) {
+        if (!(te instanceof ECalculatorThreadCore threadCore)) {
             return state;
         }
 
-        Levels level = part.getControllerLevel();
+        Levels level = threadCore.getControllerLevel();
         if (level == null) {
             return state;
         }
 
-        return state.withProperty(ThreadCoreStatus.STATUS, ThreadCoreStatus.ON);
+        return state.withProperty(ThreadCoreStatus.STATUS, threadCore.getThreads() > 0 ? ThreadCoreStatus.RUN : ThreadCoreStatus.ON);
     }
 
     @Override

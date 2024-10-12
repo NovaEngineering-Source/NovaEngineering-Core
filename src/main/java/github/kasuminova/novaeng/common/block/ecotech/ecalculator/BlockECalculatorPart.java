@@ -2,6 +2,7 @@ package github.kasuminova.novaeng.common.block.ecotech.ecalculator;
 
 import github.kasuminova.novaeng.common.core.CreativeTabNovaEng;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -19,6 +20,10 @@ public abstract class BlockECalculatorPart extends BlockContainer {
         this.fullBlock = false;
         this.lightOpacity = 0;
         this.setCreativeTab(CreativeTabNovaEng.INSTANCE);
+        this.setHardness(20.0F);
+        this.setResistance(2000.0F);
+        this.setSoundType(SoundType.METAL);
+        this.setHarvestLevel("pickaxe", 2);
     }
 
     @Override

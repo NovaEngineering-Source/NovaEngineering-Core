@@ -11,6 +11,7 @@ import github.kasuminova.mmce.client.gui.widget.container.Row;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.GuiEFabricatorController;
 import github.kasuminova.novaeng.client.gui.widget.ProgressBar;
+import github.kasuminova.novaeng.client.gui.widget.SizedColumn;
 import github.kasuminova.novaeng.client.gui.widget.efabricator.event.EFGUIDataUpdateEvent;
 import github.kasuminova.novaeng.common.container.data.EFabricatorData;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
@@ -21,7 +22,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-public class HeatStatisticPanel extends Column {
+public class HeatStatisticPanel extends SizedColumn {
 
     public static final int WIDTH = 51;
     public static final int HEIGHT = 77;
@@ -36,8 +37,7 @@ public class HeatStatisticPanel extends Column {
     private final ProgressBar hotCoolantBar;
 
     public HeatStatisticPanel() {
-        this.width = WIDTH;
-        this.height = HEIGHT;
+        setWidthHeight(WIDTH, HEIGHT);
 
         energyUsage = new BackgroundLabel(Collections.singletonList(I18n.format("gui.efabricator.max_energy_usage", 0)));
         energyUsage
@@ -150,16 +150,6 @@ public class HeatStatisticPanel extends Column {
     protected void preRenderInternal(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         TEXTURE_BACKGROUND.render(renderPos, gui);
         super.preRenderInternal(gui, renderSize, renderPos, mousePos);
-    }
-
-    @Override
-    public int getWidth() {
-        return this.width;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.height;
     }
 
     public static class BackgroundLabel extends Column {

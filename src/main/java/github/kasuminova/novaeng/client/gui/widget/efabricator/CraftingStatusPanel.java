@@ -6,17 +6,17 @@ import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.util.TextureProperties;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
-import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.mmce.client.gui.widget.container.Row;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.GuiEFabricatorController;
+import github.kasuminova.novaeng.client.gui.widget.SizedColumn;
 import github.kasuminova.novaeng.client.gui.widget.efabricator.event.EFGUIDataUpdateEvent;
 import github.kasuminova.novaeng.common.container.data.EFabricatorData;
 import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorWorker;
 
 import java.util.List;
 
-public class CraftingStatusPanel extends Column {
+public class CraftingStatusPanel extends SizedColumn {
 
     public static final int WIDTH = 229;
     public static final int HEIGHT = 58;
@@ -36,9 +36,7 @@ public class CraftingStatusPanel extends Column {
     protected int length = 0;
 
     public CraftingStatusPanel() {
-        this.width = WIDTH;
-        this.height = HEIGHT;
-
+        setWidthHeight(WIDTH, HEIGHT);
         rebuildWidgets(0);
     }
 
@@ -96,7 +94,7 @@ public class CraftingStatusPanel extends Column {
             if (widget instanceof ParallelProcStatus procStatus) {
                 procStatus.setLevel(data.level());
             }
-            
+
             row = (Row) widgets.get(PROC_ROW_WIDGET_IDX_1);
             widget = row.getWidgets().get(i);
             if (widget instanceof ParallelProcStatus procStatus) {
@@ -109,16 +107,6 @@ public class CraftingStatusPanel extends Column {
     protected void preRenderInternal(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         TEXTURE_BACKGROUND.render(renderPos, gui);
         super.preRenderInternal(gui, renderSize, renderPos, mousePos);
-    }
-
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
     }
 
 }

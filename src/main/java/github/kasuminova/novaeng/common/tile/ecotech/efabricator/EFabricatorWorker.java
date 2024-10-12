@@ -34,7 +34,7 @@ public class EFabricatorWorker extends EFabricatorPart {
     public EFabricatorWorker() {
     }
 
-    public int doWork() {
+    public synchronized int doWork() {
         EFabricatorController controller = partController;
         int coolantCache = controller.getCoolantCache();
         int energyUsage;

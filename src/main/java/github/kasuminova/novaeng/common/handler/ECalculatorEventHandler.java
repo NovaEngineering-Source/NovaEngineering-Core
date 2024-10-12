@@ -7,10 +7,13 @@ import appeng.api.networking.energy.IEnergyGrid;
 import appeng.api.networking.security.ISecurityGrid;
 import appeng.me.helpers.IGridProxyable;
 import appeng.tile.inventory.AppEngInternalInventory;
+import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.container.ContainerECalculatorController;
 import github.kasuminova.novaeng.common.item.ecalculator.ECalculatorCell;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorCellDrive;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorController;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -19,11 +22,36 @@ import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.relauncher.Side;
 
 @SuppressWarnings("MethodMayBeStatic")
 public class ECalculatorEventHandler {
 
     public static final ECalculatorEventHandler INSTANCE = new ECalculatorEventHandler();
+
+    public static final int UPDATE_INTERVAL = 10;
+
+    @SubscribeEvent
+    public void onPlayerTick(TickEvent.PlayerTickEvent event) {
+        if (event.phase != TickEvent.Phase.START || event.side == Side.CLIENT) {
+            return;
+        }
+        if (!(event.player instanceof final EntityPlayerMP player)) {
+            return;
+        }
+        if (!(player.openContainer instanceof ContainerECalculatorController containerECController)) {
+            return;
+        }
+        World world = player.getEntityWorld();
+        int tickExisted = containerECController.getTickExisted();
+        containerECController.setTickExisted(tickExisted + 1);
+        if (world.getTotalWorldTime() % UPDATE_INTERVAL != 0 && tickExisted > 1) {
+            return;
+        }
+        ECalculatorController controller = containerECController.getOwner();
+        NovaEngineeringCore.NET_CHANNEL.sendTo(controller.getGuiDataPacket(), player);
+    }
 
     private static boolean canInteract(final EntityPlayer player, final IGridProxyable proxyable) {
         final IGridNode gn = proxyable.getProxy().getNode();

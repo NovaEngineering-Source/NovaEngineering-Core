@@ -118,38 +118,40 @@ public class EFabricatorInfoProvider implements IProbeInfoProvider {
 
         currentCrafting.item(peek.getOutput());
 
-        if (workDeque.size() <= 1) {
-            return;
-        }
-
-        // Enqueued crafting
-        box = newBox(probeInfo).vertical().text("{*top.efabricator.worker.enqueued_crafting*}");
-        IProbeInfo row = box.horizontal();
-        int max = Math.min(workDeque.size() - 2, 32);
-        int maxItemsPerRow = 8;
-        int rowItems = maxItemsPerRow;
-        boolean first = true;
-        for (final EFabricatorWorker.CraftWork work : workDeque) {
-            // Count
-            if (rowItems == 0) {
-                rowItems = maxItemsPerRow;
-                row = box.horizontal();
+        synchronized (worker) {
+            if (workDeque.size() <= 1) {
+                return;
             }
 
-            // Filter first item
-            if (first) {
-                first = false;
-                continue;
-            }
+            // Enqueued crafting
+            box = newBox(probeInfo).vertical().text("{*top.efabricator.worker.enqueued_crafting*}");
+            IProbeInfo row = box.horizontal();
+            int max = Math.min(workDeque.size() - 1, 32);
+            int maxItemsPerRow = 8;
+            int rowItems = maxItemsPerRow;
+            boolean first = true;
+            for (final EFabricatorWorker.CraftWork work : workDeque) {
+                // Count
+                if (rowItems == 0) {
+                    rowItems = maxItemsPerRow;
+                    row = box.horizontal();
+                }
 
-            // Info
-            row.item(work.getOutput());
+                // Filter first item
+                if (first) {
+                    first = false;
+                    continue;
+                }
 
-            // Count
-            rowItems--;
-            max--;
-            if (max <= 0) {
-                break;
+                // Info
+                row.item(work.getOutput());
+
+                // Count
+                rowItems--;
+                max--;
+                if (max <= 0) {
+                    break;
+                }
             }
         }
     }

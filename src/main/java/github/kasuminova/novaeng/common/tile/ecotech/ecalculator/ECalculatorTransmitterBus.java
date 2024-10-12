@@ -141,6 +141,8 @@ public class ECalculatorTransmitterBus extends ECalculatorPart {
 
         this.upConnected = compound.getBoolean("upConnected");
         this.downConnected = compound.getBoolean("downConnected");
+
+        updateContainingBlockInfo();
     }
 
     @Override

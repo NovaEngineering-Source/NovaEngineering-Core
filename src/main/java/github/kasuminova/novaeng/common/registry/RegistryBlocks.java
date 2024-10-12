@@ -7,11 +7,9 @@ import github.kasuminova.novaeng.common.block.ecotech.efabricator.*;
 import github.kasuminova.novaeng.common.block.ecotech.estorage.*;
 import github.kasuminova.novaeng.common.item.ItemBlockAngel;
 import github.kasuminova.novaeng.common.item.ItemBlockME;
-import github.kasuminova.novaeng.common.item.ecalculator.ItemECalculatorMEChannel;
-import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorMEChannel;
-import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorParallelProc;
-import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorPatternBus;
-import github.kasuminova.novaeng.common.item.efabriactor.ItemEFabricatorWorker;
+import github.kasuminova.novaeng.common.item.ecalculator.*;
+import github.kasuminova.novaeng.common.item.efabriactor.*;
+import github.kasuminova.novaeng.common.item.estorage.ItemEStorageController;
 import github.kasuminova.novaeng.common.tile.TileHyperNetTerminal;
 import github.kasuminova.novaeng.common.tile.TileModularServerAssembler;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.*;
@@ -68,9 +66,9 @@ public class RegistryBlocks {
         prepareItemBlockRegister(registerBlock(BlockGeocentricDrillController.INSTANCE));
 
         // EStorage
-        prepareItemBlockRegister(registerBlock(BlockEStorageController.L4));
-        prepareItemBlockRegister(registerBlock(BlockEStorageController.L6));
-        prepareItemBlockRegister(registerBlock(BlockEStorageController.L9));
+        prepareItemBlockRegister(new ItemEStorageController(registerBlock(BlockEStorageController.L4)));
+        prepareItemBlockRegister(new ItemEStorageController(registerBlock(BlockEStorageController.L6)));
+        prepareItemBlockRegister(new ItemEStorageController(registerBlock(BlockEStorageController.L9)));
         prepareItemBlockRegister(registerBlock(BlockEStorageEnergyCell.L4));
         prepareItemBlockRegister(registerBlock(BlockEStorageEnergyCell.L6));
         prepareItemBlockRegister(registerBlock(BlockEStorageEnergyCell.L9));
@@ -80,9 +78,9 @@ public class RegistryBlocks {
         prepareItemBlockRegister(registerBlock(BlockEStorageCasing.INSTANCE));
 
         // EFabricator
-        prepareItemBlockRegister(registerBlock(BlockEFabricatorController.L4));
-        prepareItemBlockRegister(registerBlock(BlockEFabricatorController.L6));
-        prepareItemBlockRegister(registerBlock(BlockEFabricatorController.L9));
+        prepareItemBlockRegister(new ItemEFabricatorController(registerBlock(BlockEFabricatorController.L4)));
+        prepareItemBlockRegister(new ItemEFabricatorController(registerBlock(BlockEFabricatorController.L6)));
+        prepareItemBlockRegister(new ItemEFabricatorController(registerBlock(BlockEFabricatorController.L9)));
         prepareItemBlockRegister(new ItemEFabricatorParallelProc(registerBlock(BlockEFabricatorParallelProc.L4)));
         prepareItemBlockRegister(new ItemEFabricatorParallelProc(registerBlock(BlockEFabricatorParallelProc.L6)));
         prepareItemBlockRegister(new ItemEFabricatorParallelProc(registerBlock(BlockEFabricatorParallelProc.L9)));
@@ -97,23 +95,23 @@ public class RegistryBlocks {
         prepareItemBlockRegister(registerBlock(BlockEFabricatorCasing.INSTANCE));
 
         // ECalculator
-        prepareItemBlockRegister(registerBlock(BlockECalculatorController.L4));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorController.L6));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorController.L9));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorParallelProc.L4));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorParallelProc.L6));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorParallelProc.L9));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCore.L4));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCore.L6));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCore.L9));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCoreHyper.L4));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCoreHyper.L6));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorThreadCoreHyper.L9));
+        prepareItemBlockRegister(new ItemECalculatorController(registerBlock(BlockECalculatorController.L4)));
+        prepareItemBlockRegister(new ItemECalculatorController(registerBlock(BlockECalculatorController.L6)));
+        prepareItemBlockRegister(new ItemECalculatorController(registerBlock(BlockECalculatorController.L9)));
+        prepareItemBlockRegister(new ItemECalculatorParallelProc(registerBlock(BlockECalculatorParallelProc.L4)));
+        prepareItemBlockRegister(new ItemECalculatorParallelProc(registerBlock(BlockECalculatorParallelProc.L6)));
+        prepareItemBlockRegister(new ItemECalculatorParallelProc(registerBlock(BlockECalculatorParallelProc.L9)));
+        prepareItemBlockRegister(new ItemECalculatorThreadCore(registerBlock(BlockECalculatorThreadCore.L4)));
+        prepareItemBlockRegister(new ItemECalculatorThreadCore(registerBlock(BlockECalculatorThreadCore.L6)));
+        prepareItemBlockRegister(new ItemECalculatorThreadCore(registerBlock(BlockECalculatorThreadCore.L9)));
+        prepareItemBlockRegister(new ItemECalculatorThreadCore(registerBlock(BlockECalculatorThreadCoreHyper.L4)));
+        prepareItemBlockRegister(new ItemECalculatorThreadCore(registerBlock(BlockECalculatorThreadCoreHyper.L6)));
+        prepareItemBlockRegister(new ItemECalculatorThreadCore(registerBlock(BlockECalculatorThreadCoreHyper.L9)));
         prepareItemBlockRegister(registerBlock(BlockECalculatorTail.L4));
         prepareItemBlockRegister(registerBlock(BlockECalculatorTail.L6));
         prepareItemBlockRegister(registerBlock(BlockECalculatorTail.L9));
         prepareItemBlockRegister(new ItemECalculatorMEChannel(registerBlock(BlockECalculatorMEChannel.INSTANCE)));
-        prepareItemBlockRegister(registerBlock(BlockECalculatorCellDrive.INSTANCE));
+        prepareItemBlockRegister(new ItemECalculatorCellDrive(registerBlock(BlockECalculatorCellDrive.INSTANCE)));
         prepareItemBlockRegister(registerBlock(BlockECalculatorTransmitterBus.INSTANCE));
         prepareItemBlockRegister(registerBlock(BlockECalculatorCasing.INSTANCE));
     }

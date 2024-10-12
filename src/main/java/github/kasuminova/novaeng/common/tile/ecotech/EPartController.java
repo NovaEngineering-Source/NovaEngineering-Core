@@ -13,6 +13,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3i;
+import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 public abstract class EPartController<P extends EPart<?>> extends TileCustomController {
 
@@ -25,13 +27,27 @@ public abstract class EPartController<P extends EPart<?>> extends TileCustomCont
             disassemble();
             return;
         }
-        assemble();
+        if (!assemble()) {
+            return;
+        }
 
-//        final long tickStart = System.nanoTime();
         if (onSyncTick()) {
             this.tickExecutor = ModularMachinery.EXECUTE_MANAGER.addTask(this::onAsyncTick, timeRecorder.usedTimeAvg());
         }
-//        timeRecorder.incrementUsedTime((int) TimeUnit.MICROSECONDS.convert(System.nanoTime() - tickStart, TimeUnit.NANOSECONDS));
+    }
+
+    public boolean checkControllerShared() {
+        BlockPos pos = getPos();
+        World world = getWorld();
+        if (world.getTileEntity(pos.up(2)) instanceof EPartController<?> partController) {
+            if (partController.getControllerBlock() == getControllerBlock()) {
+                return true;
+            }
+        }
+        if (world.getTileEntity(pos.down(2)) instanceof EPartController<?> partController) {
+            return partController.getControllerBlock() == getControllerBlock();
+        }
+        return false;
     }
 
     protected abstract boolean onSyncTick();
@@ -78,12 +94,17 @@ public abstract class EPartController<P extends EPart<?>> extends TileCustomCont
         return ticksExisted % Math.min(structureCheckDelay + this.structureCheckCounter * 5, maxStructureCheckDelay) == 0;
     }
 
-    protected void assemble() {
+    protected boolean assemble() {
         if (assembled) {
-            return;
+            return true;
+        }
+        if (checkControllerShared()) {
+            disassemble();
+            return false;
         }
         assembled = true;
         parts.assemble(this);
+        return true;
     }
 
     protected void disassemble() {
@@ -150,6 +171,18 @@ public abstract class EPartController<P extends EPart<?>> extends TileCustomCont
     @Override
     public boolean isWorking() {
         return assembled;
+    }
+
+    @Override
+    public void updateContainingBlockInfo() {
+        super.updateContainingBlockInfo();
+        if (FMLCommonHandler.instance().getEffectiveSide().isClient() && world != null) {
+            final IBlockState state = world.getBlockState(pos);
+            final IBlockState actual = state.getActualState(world, pos);
+            if (state != actual) {
+                world.setBlockState(pos, actual);
+            }
+        }
     }
 
 }

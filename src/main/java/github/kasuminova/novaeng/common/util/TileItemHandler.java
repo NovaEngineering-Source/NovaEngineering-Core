@@ -144,7 +144,7 @@ public class TileItemHandler extends IItemHandlerImpl {
         invSet:
         for (int i = 0; i < inventory.length; i++) {
             SlotStackHolder holder = this.inventory[i];
-            ItemStack stackInHolder = holder.itemStack;
+            ItemStack stackInHolder = holder.itemStack.get();
             if (stackInHolder.isEmpty()) {
                 stackSetIdxSet[i] = -1;
                 continue;
@@ -199,7 +199,7 @@ public class TileItemHandler extends IItemHandlerImpl {
             SlotStackHolder holder = new SlotStackHolder(i);
             int setIdx = ((NBTPrimitive) invSetTag.get(i)).getByte();
             if (setIdx != -1) {
-                holder.itemStack = stackSet.get(setIdx).copy();
+                holder.itemStack.set(stackSet.get(setIdx).copy());
             }
             this.inventory[i] = holder;
         }

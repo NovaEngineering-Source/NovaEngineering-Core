@@ -3,7 +3,7 @@ package github.kasuminova.novaeng.common.tile.ecotech.ecalculator;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class ECalculatorParallelProc extends ECalculatorPart {
-    
+
     public int parallelism = 0;
 
     public ECalculatorParallelProc() {
@@ -21,6 +21,8 @@ public class ECalculatorParallelProc extends ECalculatorPart {
     public void readCustomNBT(final NBTTagCompound compound) {
         super.readCustomNBT(compound);
         this.parallelism = compound.getShort("parallelism");
+
+        updateContainingBlockInfo();
     }
 
     @Override

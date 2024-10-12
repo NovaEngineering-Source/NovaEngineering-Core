@@ -6,7 +6,6 @@
     "compatibilityLevel": "JAVA_8",
     "client": [
         "MixinAppEngClientPacketHandler",
-        "MixinGuiCraftConfirm",
         "MixinGuiCraftingStatus",
         "MixinGuiPatternTerm"
     ],
@@ -16,10 +15,7 @@
     "mixins": [
         "AccessorAbstractCellInventory",
         "AccessorCellRegistry",
-        "AccessorContainerCraftConfirm",
         "AccessorContainerPatternEncoder",
-        "AccessorCraftingTreeNode",
-        "AccessorCraftingTreeProcess",
         "MixinAppEngServerPacketHandler",
         "MixinContainerCraftConfirm",
         "MixinCraftingCPUCluster",

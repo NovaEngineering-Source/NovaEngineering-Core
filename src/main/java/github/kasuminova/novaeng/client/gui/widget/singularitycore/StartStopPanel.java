@@ -6,15 +6,15 @@ import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.Button4State;
 import github.kasuminova.mmce.client.gui.widget.MultiLineLabel;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
-import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.mmce.client.gui.widget.container.Row;
 import github.kasuminova.novaeng.client.gui.GuiSingularityCore;
+import github.kasuminova.novaeng.client.gui.widget.SizedColumn;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Collections;
 
-public class StartStopPanel extends Column {
+public class StartStopPanel extends SizedColumn {
 
     public static final int WIDTH = 93;
     public static final int HEIGHT = 35;
@@ -28,8 +28,7 @@ public class StartStopPanel extends Column {
 
     public StartStopPanel(final GuiSingularityCore coreGUI) {
         this.coreGUI = coreGUI;
-        this.width = WIDTH;
-        this.height = HEIGHT;
+        setWidthHeight(WIDTH, HEIGHT);
         addWidgets(
                 new MultiLineLabel(Collections.singletonList("§c状态：§a已启动§6（环数：3）"))
                         .setVerticalCentering(true)
@@ -69,16 +68,6 @@ public class StartStopPanel extends Column {
                 WIDTH, HEIGHT
         );
         super.preRenderInternal(widgetGui, renderSize, renderPos, mousePos);
-    }
-
-    @Override
-    public int getWidth() {
-        return this.width;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.height;
     }
 
 }

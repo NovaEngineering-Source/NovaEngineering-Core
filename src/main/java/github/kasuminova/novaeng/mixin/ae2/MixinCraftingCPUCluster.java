@@ -37,6 +37,9 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
 
     @Unique
     private ECalculatorController novaeng_ec$virtualCPUOwner = null;
+    
+    @Unique
+    private long novaeng_ec$usedExtraStorage = 0;
 
     @Shadow
     private long availableStorage;
@@ -201,21 +204,25 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
         }
     }
 
+    @Unique
     @Override
     public void novaeng_ec$setAvailableStorage(final long availableStorage) {
         this.availableStorage = availableStorage;
     }
 
+    @Unique
     @Override
     public void novaeng_ec$setAccelerators(final int accelerators) {
         this.accelerator = accelerators;
     }
 
+    @Unique
     @Override
     public ECalculatorThreadCore novaeng_ec$getController() {
         return novaeng_ec$core;
     }
 
+    @Unique
     @Override
     public void novaeng_ec$setThreadCore(final ECalculatorThreadCore threadCore) {
         this.novaeng_ec$core = threadCore;
@@ -230,6 +237,7 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
         }
     }
 
+    @Unique
     @Override
     public void novaeng_ec$setVirtualCPUOwner(@Nullable final ECalculatorController virtualCPUOwner) {
         this.novaeng_ec$virtualCPUOwner = virtualCPUOwner;
@@ -243,6 +251,8 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
         }
     }
 
+    @Unique
+    @Override
     public Levels novaeng_ec$getControllerLevel() {
         final ECalculatorController controller;
         if (this.novaeng_ec$core != null) {
@@ -257,6 +267,18 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
             return controller.getLevel();
         }
         return null;
+    }
+
+    @Unique
+    @Override
+    public void novaeng_ec$setUsedExtraStorage(final long usedExtraStorage) {
+        this.novaeng_ec$usedExtraStorage = usedExtraStorage;
+    }
+
+    @Unique
+    @Override
+    public long novaeng_ec$getUsedExtraStorage() {
+        return novaeng_ec$usedExtraStorage;
     }
 
 }

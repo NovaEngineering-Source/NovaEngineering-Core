@@ -43,6 +43,12 @@ public class BlockECalculatorTransmitterBus extends BlockECalculatorPart {
         return new ECalculatorTransmitterBus();
     }
 
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(@Nonnull final World world, @Nonnull final IBlockState state) {
+        return new ECalculatorTransmitterBus();
+    }
+
     @Override
     public void neighborChanged(@Nonnull final IBlockState state, @Nonnull final World worldIn, @Nonnull final BlockPos pos, @Nonnull final Block blockIn, @Nonnull final BlockPos fromPos) {
         TileEntity te = worldIn.getTileEntity(pos);

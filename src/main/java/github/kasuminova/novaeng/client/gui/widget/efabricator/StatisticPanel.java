@@ -7,11 +7,11 @@ import github.kasuminova.mmce.client.gui.util.TextureProperties;
 import github.kasuminova.mmce.client.gui.widget.MultiLineLabel;
 import github.kasuminova.mmce.client.gui.widget.base.DynamicWidget;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
-import github.kasuminova.mmce.client.gui.widget.container.Column;
-import github.kasuminova.mmce.client.gui.widget.container.Row;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.client.gui.GuiEFabricatorController;
 import github.kasuminova.novaeng.client.gui.widget.ProgressBar;
+import github.kasuminova.novaeng.client.gui.widget.SizedColumn;
+import github.kasuminova.novaeng.client.gui.widget.SizedRow;
 import github.kasuminova.novaeng.client.gui.widget.efabricator.event.EFGUIDataUpdateEvent;
 import github.kasuminova.novaeng.common.container.data.EFabricatorData;
 import github.kasuminova.novaeng.common.tile.ecotech.efabricator.EFabricatorWorker;
@@ -19,7 +19,7 @@ import net.minecraft.client.resources.I18n;
 
 import java.util.Collections;
 
-public class StatisticPanel extends Row {
+public class StatisticPanel extends SizedRow {
 
     public static final int WIDTH = 148;
     public static final int HEIGHT = 36;
@@ -28,8 +28,7 @@ public class StatisticPanel extends Row {
     );
 
     public StatisticPanel() {
-        this.width = WIDTH;
-        this.height = HEIGHT;
+        setWidthHeight(WIDTH, HEIGHT);
         Modules modules = new Modules();
         QueueStatistics queueStatistics = new QueueStatistics();
         ParallelismStatistics parallelismStatistics = new ParallelismStatistics();
@@ -47,22 +46,12 @@ public class StatisticPanel extends Row {
     }
 
     @Override
-    public int getWidth() {
-        return this.width;
-    }
-
-    @Override
-    public int getHeight() {
-        return this.height;
-    }
-
-    @Override
     protected void preRenderInternal(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
         TEXTURE_BACKGROUND.render(renderPos, gui);
         super.preRenderInternal(gui, renderSize, renderPos, mousePos);
     }
     
-    public static class Modules extends Column {
+    public static class Modules extends SizedColumn {
 
         public static final int WIDTH = 40;
         public static final int HEIGHT = 32;
@@ -76,8 +65,7 @@ public class StatisticPanel extends Row {
         private final MultiLineLabel workerCount;
 
         public Modules() {
-            this.width = WIDTH;
-            this.height = HEIGHT;
+            setWidthHeight(WIDTH, HEIGHT);
             this.patternBusCount = new MultiLineLabel(Collections.singletonList(I18n.format("gui.efabricator.pattern_bus.count", 0)));
             this.parallelProcCount = new MultiLineLabel(Collections.singletonList(I18n.format("gui.efabricator.parallel_proc.count", 0)));
             this.workerCount = new MultiLineLabel(Collections.singletonList(I18n.format("gui.efabricator.worker.count", 0)));
@@ -126,16 +114,6 @@ public class StatisticPanel extends Row {
 
         public Level getLevel() {
             return level;
-        }
-
-        @Override
-        public int getWidth() {
-            return this.width;
-        }
-
-        @Override
-        public int getHeight() {
-            return this.height;
         }
 
         @Override
@@ -204,7 +182,7 @@ public class StatisticPanel extends Row {
 
     }
 
-    public static class QueueStatistics extends Row {
+    public static class QueueStatistics extends SizedRow {
 
         public static final int WIDTH = 51;
         public static final int HEIGHT = 32;
@@ -216,8 +194,7 @@ public class StatisticPanel extends Row {
         private final ProgressBar queueStatisticsBar;
 
         public QueueStatistics() {
-            this.width = WIDTH;
-            this.height = HEIGHT;
+            setWidthHeight(WIDTH, HEIGHT);
             this.queueStatisticsBar = new ProgressBar();
             this.info = new Info();
             addWidgets(
@@ -258,22 +235,12 @@ public class StatisticPanel extends Row {
         }
 
         @Override
-        public int getWidth() {
-            return this.width;
-        }
-
-        @Override
-        public int getHeight() {
-            return this.height;
-        }
-
-        @Override
         protected void preRenderInternal(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
             TEXTURE_BACKGROUND.render(renderPos, gui);
             super.preRenderInternal(gui, renderSize, renderPos, mousePos);
         }
 
-        public static class Info extends Column {
+        public static class Info extends SizedColumn {
 
             public static final int WIDTH = 51;
             public static final int HEIGHT = 32;
@@ -282,8 +249,7 @@ public class StatisticPanel extends Row {
             private final MultiLineLabel progress;
 
             public Info() {
-                this.width = WIDTH - (9 + 2 + 2);
-                this.height = HEIGHT;
+                setWidthHeight(WIDTH - (9 + 2 + 2), HEIGHT);
                 this.progressPercent = new MultiLineLabel(Collections.singletonList(
                         I18n.format("gui.efabricator.crafting_progress.0", 0)
                 ));
@@ -316,21 +282,11 @@ public class StatisticPanel extends Row {
                 return this;
             }
 
-            @Override
-            public int getWidth() {
-                return this.width;
-            }
-
-            @Override
-            public int getHeight() {
-                return this.height;
-            }
-
         }
 
     }
 
-    public static class ParallelismStatistics extends Row {
+    public static class ParallelismStatistics extends SizedRow {
 
         public static final int WIDTH = 51;
         public static final int HEIGHT = 32;
@@ -342,8 +298,7 @@ public class StatisticPanel extends Row {
         private final ProgressBar parallelismBar;
 
         public ParallelismStatistics() {
-            this.width = WIDTH;
-            this.height = HEIGHT;
+            setWidthHeight(WIDTH, HEIGHT);
             this.info = new Info();
             this.parallelismBar = new ProgressBar();
             addWidgets(
@@ -384,22 +339,12 @@ public class StatisticPanel extends Row {
         }
 
         @Override
-        public int getWidth() {
-            return this.width;
-        }
-
-        @Override
-        public int getHeight() {
-            return this.height;
-        }
-
-        @Override
         protected void preRenderInternal(final WidgetGui gui, final RenderSize renderSize, final RenderPos renderPos, final MousePos mousePos) {
             TEXTURE_BACKGROUND.render(renderPos, gui);
             super.preRenderInternal(gui, renderSize, renderPos, mousePos);
         }
 
-        public static class Info extends Column {
+        public static class Info extends SizedColumn {
 
             public static final int WIDTH = 51;
             public static final int HEIGHT = 32;
@@ -409,8 +354,7 @@ public class StatisticPanel extends Row {
             private final MultiLineLabel parallelismOverflow;
 
             public Info() {
-                this.width = WIDTH - (9 + 2 + 2);
-                this.height = HEIGHT;
+                setWidthHeight(WIDTH - (9 + 2 + 2), HEIGHT);
                 this.parallelism = new MultiLineLabel(Collections.singletonList(
                         I18n.format("gui.efabricator.total_parallelism", 0)
                 ));
@@ -454,16 +398,6 @@ public class StatisticPanel extends Row {
                         I18n.format("gui.efabricator.total_parallelism.overflow", overflow, overflow == 0 ? 0 : (overflow * 100 / parallelism))
                 ));
                 return this;
-            }
-
-            @Override
-            public int getWidth() {
-                return this.width;
-            }
-
-            @Override
-            public int getHeight() {
-                return this.height;
             }
 
         }

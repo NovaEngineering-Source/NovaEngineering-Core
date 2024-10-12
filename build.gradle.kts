@@ -207,12 +207,13 @@ dependencies {
 
     // Mod Dependencies
     implementation("CraftTweaker2:CraftTweaker2-MC1120-Main:1.12-4.+")
-    implementation(rfg.deobf("hellfirepvp:modularmachinery:2.0.0:main"))
+    implementation(rfg.deobf("hellfirepvp:modularmachinery:2.1.0:main"))
+    implementation(rfg.deobf("kasuminova:MMCE-ComponentModelHider:1.1:dev"))
     implementation(rfg.deobf("lumien231:resourceloader:1.5.3:main"))
 //    implementation(rfg.deobf("curse.maven:modularmachinery-community-edition-817377:5255734"))
     implementation(rfg.deobf("kasuminova:lumenized:1.0.3:dev"))
     implementation(rfg.deobf("curse.maven:ctm-267602:2915363"))
-    implementation(rfg.deobf("curse.maven:component-model-hider-940949:4885858"))
+//    implementation(rfg.deobf("curse.maven:component-model-hider-940949:4885858"))
     implementation(rfg.deobf("curse.maven:had-enough-items-557549:4810661"))
     implementation(rfg.deobf("curse.maven:the-one-probe-245211:2667280"))
     implementation(rfg.deobf("curse.maven:ae2-extended-life-570458:5378163"))

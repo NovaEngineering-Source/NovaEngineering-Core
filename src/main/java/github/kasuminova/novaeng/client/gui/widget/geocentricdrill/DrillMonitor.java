@@ -4,7 +4,7 @@ import github.kasuminova.mmce.client.gui.util.MousePos;
 import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
-import github.kasuminova.mmce.client.gui.widget.container.Column;
+import github.kasuminova.novaeng.client.gui.widget.SizedColumn;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import github.kasuminova.novaeng.common.hypernet.old.NetNodeCache;
 import github.kasuminova.novaeng.common.hypernet.old.NetNodeImpl;
@@ -17,7 +17,7 @@ import net.minecraft.client.resources.I18n;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DrillMonitor extends Column {
+public class DrillMonitor extends SizedColumn {
     
     public static final int WIDTH = 162;
     public static final int HEIGHT = 45;
@@ -31,8 +31,7 @@ public class DrillMonitor extends Column {
 
     public DrillMonitor(final GeocentricDrillController controller) {
         super();
-        this.width = WIDTH;
-        this.height = HEIGHT;
+        setWidthHeight(WIDTH, HEIGHT);
         this.controller = controller;
     }
 
@@ -96,16 +95,6 @@ public class DrillMonitor extends Column {
         if (node != null) {
             node.readNBT();
         }
-    }
-
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
     }
 
 }

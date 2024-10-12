@@ -6,8 +6,8 @@ import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.util.TextureProperties;
 import github.kasuminova.mmce.client.gui.widget.MultiLineLabel;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
-import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.client.gui.widget.SizedColumn;
 import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageLevel;
 import github.kasuminova.novaeng.common.block.ecotech.estorage.prop.DriveStorageType;
 import github.kasuminova.novaeng.common.container.data.EStorageCellData;
@@ -18,7 +18,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.Collections;
 
-public class EStorageCellInfo extends Column {
+public class EStorageCellInfo extends SizedColumn {
 
     public static final ResourceLocation BG_TEX_RES = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/estorage_controller_elements.png");
 
@@ -61,8 +61,7 @@ public class EStorageCellInfo extends Column {
 
     public EStorageCellInfo(final EStorageCellData data) {
         this.data = data;
-        this.width = 67;
-        this.height = 26;
+        setWidthHeight(67, 26);
         initBackground();
         initInfo();
         setMarginDown(2);
@@ -125,16 +124,6 @@ public class EStorageCellInfo extends Column {
                         NovaEngUtils.formatNumber(maxBytes, 1)
                 ))
         ).setAutoWrap(false).setScale(.6F).setHeight(7).setMargin(10, 0, 0, 0));
-    }
-
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
     }
 
 }

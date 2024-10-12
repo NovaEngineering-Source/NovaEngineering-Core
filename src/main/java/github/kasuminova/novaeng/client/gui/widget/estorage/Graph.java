@@ -6,9 +6,9 @@ import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.widget.MultiLineLabel;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
-import github.kasuminova.mmce.client.gui.widget.container.Column;
 import github.kasuminova.mmce.client.gui.widget.event.GuiEvent;
 import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.client.gui.widget.SizedColumn;
 import github.kasuminova.novaeng.client.gui.widget.estorage.event.ESGraphFocusUpdateEvent;
 import github.kasuminova.novaeng.common.util.RandomUtils;
 import net.minecraft.client.gui.GuiScreen;
@@ -17,7 +17,7 @@ import net.minecraft.util.ResourceLocation;
 
 import java.util.Collections;
 
-public abstract class Graph extends Column {
+public abstract class Graph extends SizedColumn {
     public static final ResourceLocation BG_TEX_RES = new ResourceLocation(NovaEngineeringCore.MOD_ID, "textures/gui/estorage_controller_elements.png");
 
     protected final EStorageGraph graphParent;
@@ -51,8 +51,6 @@ public abstract class Graph extends Column {
         this.bgTexY = bgTexY;
         this.bgTexWidth = bgTexWidth;
         this.bgTexHeight = bgTexHeight;
-        this.width = width;
-        this.height = height;
         this.reverseColor = reverseColor;
         this.label.setAutoWrap(false)
                 .setScale(0.6F)
@@ -60,6 +58,7 @@ public abstract class Graph extends Column {
                 .setRightAligned(!leftAlign)
                 .setHeight(10)
                 .setMargin(2, 2, 0, 0);
+        setWidthHeight(width, height);
         setRightAligned(!leftAlign);
         addWidget(this.label);
         setUseScissor(false);

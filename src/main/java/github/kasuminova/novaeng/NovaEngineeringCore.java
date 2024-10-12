@@ -5,8 +5,6 @@ import github.kasuminova.novaeng.common.CommonProxy;
 import github.kasuminova.novaeng.common.command.CommandSPacketProfiler;
 import github.kasuminova.novaeng.common.config.NovaEngCoreConfig;
 import github.kasuminova.novaeng.common.network.*;
-import github.kasuminova.novaeng.common.network.appeng.PktCraftingTreeData;
-import github.kasuminova.novaeng.common.network.appeng.PktSwitchCraftingTree;
 import github.kasuminova.novaeng.common.network.packetprofiler.PktCProfilerReply;
 import github.kasuminova.novaeng.common.network.packetprofiler.PktCProfilerRequest;
 import github.kasuminova.novaeng.common.profiler.SPacketProfiler;
@@ -25,7 +23,7 @@ import static github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader.LOG_PR
 
 @Mod(modid = NovaEngineeringCore.MOD_ID, name = NovaEngineeringCore.MOD_NAME, version = NovaEngineeringCore.VERSION,
         dependencies = "required-after:forge@[14.23.5.2847,);" + 
-                       "required-after:modularmachinery@[2.0.0,);" + 
+                       "required-after:modularmachinery@[2.1.0,);" + 
                        "required:theoneprobe@[1.12-1.4.28,);" + 
                        "required:appliedenergistics2@[v0.56.4,);" +
                        "required:ae2fc@[2.6.3-r,);" +
@@ -74,28 +72,32 @@ public class NovaEngineeringCore {
         proxy.construction();
     }
 
+    @SuppressWarnings("ValueOfIncrementOrDecrementUsed")
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         event.getModMetadata().version = VERSION;
 
-        NET_CHANNEL.registerMessage(PktHyperNetStatus.class, PktHyperNetStatus.class, 0, Side.CLIENT);
-        NET_CHANNEL.registerMessage(PktTerminalGuiData.class, PktTerminalGuiData.class, 1, Side.CLIENT);
-        NET_CHANNEL.registerMessage(PktResearchTaskComplete.class, PktResearchTaskComplete.class, 2, Side.CLIENT);
-        NET_CHANNEL.registerMessage(PktCellDriveStatusUpdate.class, PktCellDriveStatusUpdate.class, 3, Side.CLIENT);
-        NET_CHANNEL.registerMessage(PktEStorageGUIData.class, PktEStorageGUIData.class, 4, Side.CLIENT);
-        NET_CHANNEL.registerMessage(PktEFabricatorWorkerStatusUpdate.class, PktEFabricatorWorkerStatusUpdate.class, 5, Side.CLIENT);
-        NET_CHANNEL.registerMessage(PktEFabricatorGUIData.class, PktEFabricatorGUIData.class, 6, Side.CLIENT);
-        NET_CHANNEL.registerMessage(PktCraftingTreeData.class, PktCraftingTreeData.class, 7, Side.CLIENT);
-        NET_CHANNEL.registerMessage(PktCProfilerRequest.class, PktCProfilerRequest.class, 8, Side.CLIENT);
+        byte start = 0;
 
-        NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, 100, Side.SERVER);
-        NET_CHANNEL.registerMessage(PktResearchTaskReset.class, PktResearchTaskReset.class, 101, Side.SERVER);
-        NET_CHANNEL.registerMessage(PktResearchTaskProvideCreative.class, PktResearchTaskProvideCreative.class, 102, Side.SERVER);
-        NET_CHANNEL.registerMessage(PktPatternTermUploadPattern.class, PktPatternTermUploadPattern.class, 103, Side.SERVER);
-        NET_CHANNEL.registerMessage(PktEFabricatorGUIAction.class, PktEFabricatorGUIAction.class, 104, Side.SERVER);
-        NET_CHANNEL.registerMessage(PktSwitchCraftingTree.class, PktSwitchCraftingTree.class, 105, Side.SERVER);
-        NET_CHANNEL.registerMessage(PktCProfilerReply.class, PktCProfilerReply.class, 106, Side.SERVER);
-        NET_CHANNEL.registerMessage(PktGeocentricDrillControl.class, PktGeocentricDrillControl.class, 107, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktHyperNetStatus.class, PktHyperNetStatus.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktTerminalGuiData.class, PktTerminalGuiData.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktResearchTaskComplete.class, PktResearchTaskComplete.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktCellDriveStatusUpdate.class, PktCellDriveStatusUpdate.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktEStorageGUIData.class, PktEStorageGUIData.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktEFabricatorWorkerStatusUpdate.class, PktEFabricatorWorkerStatusUpdate.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktEFabricatorGUIData.class, PktEFabricatorGUIData.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktCProfilerRequest.class, PktCProfilerRequest.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktECalculatorGUIData.class, PktECalculatorGUIData.class, start++, Side.CLIENT);
+
+        start = 64;
+
+        NET_CHANNEL.registerMessage(PktResearchTaskProvide.class, PktResearchTaskProvide.class, start++, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktResearchTaskReset.class, PktResearchTaskReset.class, start++, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktResearchTaskProvideCreative.class, PktResearchTaskProvideCreative.class, start++, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktPatternTermUploadPattern.class, PktPatternTermUploadPattern.class, start++, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktEFabricatorGUIAction.class, PktEFabricatorGUIAction.class, start++, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktCProfilerReply.class, PktCProfilerReply.class, start++, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktGeocentricDrillControl.class, PktGeocentricDrillControl.class, start++, Side.SERVER);
 
         proxy.preInit();
     }

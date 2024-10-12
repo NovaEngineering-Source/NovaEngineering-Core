@@ -5,16 +5,16 @@ import github.kasuminova.mmce.client.gui.util.RenderPos;
 import github.kasuminova.mmce.client.gui.util.RenderSize;
 import github.kasuminova.mmce.client.gui.util.TextureProperties;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
-import github.kasuminova.mmce.client.gui.widget.container.Row;
 import github.kasuminova.novaeng.client.gui.GuiSingularityCore;
 import github.kasuminova.novaeng.client.gui.widget.ProgressBar;
+import github.kasuminova.novaeng.client.gui.widget.SizedRow;
 import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 
 import java.util.Collections;
 
-public class StatusPanel extends Row {
+public class StatusPanel extends SizedRow {
 
     public static final int WIDTH = 93;
     public static final int HEIGHT = 129;
@@ -37,8 +37,7 @@ public class StatusPanel extends Row {
 
     public StatusPanel(final GuiSingularityCore coreGUI) {
         this.coreGUI = coreGUI;
-        this.width = WIDTH;
-        this.height = HEIGHT;
+        this.setWidthHeight(WIDTH, HEIGHT);
         this.addWidgets(
                 new ProgressBar()
                         .setVertical(true)

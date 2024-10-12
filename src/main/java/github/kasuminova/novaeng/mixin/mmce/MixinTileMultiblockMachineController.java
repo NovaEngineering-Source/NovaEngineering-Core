@@ -19,7 +19,9 @@ import javax.annotation.Nullable;
 @Mixin(TileMultiblockMachineController.class)
 public abstract class MixinTileMultiblockMachineController extends TileEntity {
 
-    @Shadow(remap = false) @Nullable public abstract DynamicMachine getFoundMachine();
+    @Nullable
+    @Shadow(remap = false)
+    public abstract DynamicMachine getFoundMachine();
 
     @Shadow(remap = false)
     public abstract TileMultiblockMachineController getController();
