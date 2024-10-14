@@ -74,6 +74,9 @@ public class NovaEngUtils {
 
     @ZenMethod
     public static String formatPercent(double num1, double num2) {
+        if (num2 == 0) {
+            return "0%";
+        }
         return formatDouble((num1 / num2) * 100D, 2) + "%";
     }
 

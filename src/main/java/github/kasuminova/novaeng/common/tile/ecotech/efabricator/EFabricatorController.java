@@ -537,6 +537,10 @@ public class EFabricatorController extends EPartController<EFabricatorPart> {
         return total;
     }
 
+    public BlockEFabricatorController getParentController() {
+        return parentController;
+    }
+
     @Override
     protected Class<? extends Block> getControllerBlock() {
         return BlockEFabricatorController.class;

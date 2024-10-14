@@ -16,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -70,10 +69,6 @@ public class BlockECalculatorController extends BlockController {
     }
 
     @Override
-    public void getDrops(@Nonnull final NonNullList<ItemStack> drops, @Nonnull final IBlockAccess world, @Nonnull final BlockPos pos, @Nonnull final IBlockState state, final int fortune) {
-    }
-
-    @Override
     public void breakBlock(World worldIn, @Nonnull BlockPos pos, @Nonnull IBlockState state) {
         Random rand = worldIn.rand;
         TileEntity te = worldIn.getTileEntity(pos);
@@ -98,8 +93,7 @@ public class BlockECalculatorController extends BlockController {
             spawnAsEntity(worldIn, pos, stackCtrl);
         }
 
-        // TODO MM warn.
-        super.breakBlock(worldIn, pos, state);
+        worldIn.removeTileEntity(pos);
     }
 
     @Override

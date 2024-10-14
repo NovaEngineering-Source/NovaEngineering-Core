@@ -3,6 +3,7 @@ package github.kasuminova.novaeng.common.item.ecalculator;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.ecotech.ecalculator.prop.DriveStorageLevel;
 import github.kasuminova.novaeng.common.core.CreativeTabNovaEng;
+import github.kasuminova.novaeng.common.crafttweaker.util.NovaEngUtils;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -10,6 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.input.Keyboard;
 
 import javax.annotation.Nonnull;
 import java.util.List;
@@ -40,6 +42,10 @@ public class ECalculatorCell extends Item {
         tooltip.add(I18n.format("novaeng.ecalculator_cell.tip.1"));
         tooltip.add(I18n.format("novaeng.ecalculator_cell.tip.2"));
         final ECalculatorCell cell = (ECalculatorCell) stack.getItem();
+        final boolean shiftPressed = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT);
+        tooltip.add(I18n.format("novaeng.ecalculator_cell.tip.3", 
+                shiftPressed ? NovaEngUtils.formatNumber(cell.totalBytes) : NovaEngUtils.formatDecimal(cell.totalBytes))
+        );
         if (cell == L6) {
             tooltip.add(I18n.format("novaeng.ecalculator_cell.l6.tip"));
         } else if (cell == L9) {

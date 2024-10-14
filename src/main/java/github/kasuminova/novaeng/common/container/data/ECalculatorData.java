@@ -19,9 +19,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Desugar
-public record ECalculatorData(long totalStorage, long usedExtraStorage, int accelerators, List<ThreadCoreData> threadCores, List<ECPUData> ecpuList, int cpuUsagePerSecond) {
+public record ECalculatorData(long totalStorage, long usedExtraStorage, int accelerators,
+                              List<ThreadCoreData> threadCores, List<ECPUData> ecpuList, int cpuUsagePerSecond) {
 
-    @SuppressWarnings("DataFlowIssue")
     public static ECalculatorData from(final ECalculatorController controller) {
         final long totalStorage = controller.getTotalBytes();
         final int accelerators = controller.getSharedParallelism();
@@ -29,13 +29,14 @@ public record ECalculatorData(long totalStorage, long usedExtraStorage, int acce
         final List<ThreadCoreData> dataList = new ArrayList<>();
         for (final ECalculatorThreadCore threadCore : threadCores) {
             final int hyperThreads = (int) threadCore.getCpus().stream()
-                    .map(cpus -> (ECPUCluster) (Object) cpus)
+                    .map(ECPUCluster::from)
                     .filter(ecpuCluster -> ecpuCluster.novaeng_ec$getUsedExtraStorage() > 0)
                     .count();
             dataList.add(new ThreadCoreData(threadCore.getControllerLevel(), threadCore.getCpus().size() - hyperThreads, hyperThreads, threadCore.getMaxThreads(), threadCore.getMaxHyperThreads()));
         }
         final List<ECPUData> ecpuData = getEcpuData(controller);
-        return new ECalculatorData(totalStorage, ecpuData.stream().mapToLong(ECPUData::usedExtraMemory).sum(), accelerators, dataList, ecpuData, 0);
+        final int cpuUsagePerSecond = ecpuData.stream().mapToInt(ECPUData::cpuUsagePerSecond).sum();
+        return new ECalculatorData(totalStorage, ecpuData.stream().mapToLong(ECPUData::usedExtraMemory).sum(), accelerators, dataList, ecpuData, cpuUsagePerSecond);
     }
 
     @Nonnull
@@ -50,12 +51,20 @@ public record ECalculatorData(long totalStorage, long usedExtraStorage, int acce
             final ICraftingGrid crafting = channel.getProxy().getCrafting();
             final List<ECalculatorThreadCore> threadCores = controller.getThreadCores();
             for (ICraftingCPU cpu : crafting.getCpus()) {
-                if (cpu instanceof ECPUCluster ecpu) {
-                    ECalculatorThreadCore core = ecpu.novaeng_ec$getController();
-                    if (core != null && threadCores.contains(core)) {
-                        ecpuData.add(new ECPUData(cpu.getFinalOutput(), cpu.getAvailableStorage(), ecpu.novaeng_ec$getUsedExtraStorage(), 0, 0));
-                    }
+                if (!(cpu instanceof ECPUCluster ecpu)) {
+                    continue;
                 }
+
+                ECalculatorThreadCore core = ecpu.novaeng_ec$getController();
+                if (core == null || !threadCores.contains(core)) {
+                    continue;
+                }
+
+                ecpuData.add(new ECPUData(
+                        cpu.getFinalOutput(), cpu.getAvailableStorage(), ecpu.novaeng_ec$getUsedExtraStorage(),
+                        ecpu.novaeng_ec$getParallelismRecorder().usedTimeAvg(),
+                        ecpu.novaeng_ec$getTimeRecorder().usedTimeAvg()
+                ));
             }
         } catch (GridAccessException ignored) {
         }

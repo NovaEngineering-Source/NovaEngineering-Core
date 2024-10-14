@@ -42,8 +42,14 @@ public class ECalculatorThreadCore extends ECalculatorPart {
             }
         }
 
-        ((ECPUCluster) (Object) cluster).novaeng_ec$setThreadCore(this);
+        final boolean prevEmpty = cpus.isEmpty();
+
+        ECPUCluster.from(cluster).novaeng_ec$setThreadCore(this);
         cpus.add(cluster);
+
+        if (prevEmpty) {
+            markForUpdateSync();
+        }
         return true;
     }
 
@@ -66,17 +72,21 @@ public class ECalculatorThreadCore extends ECalculatorPart {
         return maxHyperThreads;
     }
 
-    @SuppressWarnings("DataFlowIssue")
     public void refreshCPUSource() {
         for (final CraftingCPUCluster cluster : cpus) {
-            ECPUCluster eCluster = (ECPUCluster) (Object) cluster;
+            ECPUCluster eCluster = ECPUCluster.from(cluster);
             // Refresh machine source.
             eCluster.novaeng_ec$setThreadCore(this);
         }
     }
 
     public void onBlockDestroyed() {
-        cpus.clone().forEach(CraftingCPUCluster::cancel);
+        cpus.forEach(cluster -> ECPUCluster.from(cluster).novaeng_ec$markDestroyed());
+        cpus.clear();
+        ECalculatorController controller = getController();
+        if (controller != null && controller.getChannel() != null) {
+            controller.onClusterChanged();
+        }
     }
 
     public void onCPUDestroyed(final CraftingCPUCluster cluster) {
@@ -84,6 +94,9 @@ public class ECalculatorThreadCore extends ECalculatorPart {
         ECalculatorController controller = getController();
         if (controller != null) {
             controller.onClusterChanged();
+        }
+        if (cpus.isEmpty()) {
+            markForUpdateSync();
         }
     }
 
@@ -128,6 +141,11 @@ public class ECalculatorThreadCore extends ECalculatorPart {
         }
         this.threads = compound.getByte("threads");
 
+        readCPUNBT(compound);
+        updateContainingBlockInfo();
+    }
+
+    public void readCPUNBT(final NBTTagCompound compound) {
         cpus.clone().forEach(CraftingCPUCluster::destroy);
         cpus.clear();
 
@@ -137,7 +155,7 @@ public class ECalculatorThreadCore extends ECalculatorPart {
 
             WorldCoord coord = new WorldCoord(getPos());
             CraftingCPUCluster cluster = new CraftingCPUCluster(coord, coord);
-            ECPUCluster eCluster = (ECPUCluster) (Object) cluster;
+            ECPUCluster eCluster = ECPUCluster.from(cluster);
 
             eCluster.novaeng_ec$setThreadCore(this);
             eCluster.novaeng_ec$setAvailableStorage(clusterTag.getLong("availableStorage"));
@@ -145,8 +163,6 @@ public class ECalculatorThreadCore extends ECalculatorPart {
             cluster.readFromNBT(clusterTag);
             cpus.add(cluster);
         }
-
-        updateContainingBlockInfo();
     }
 
     @Override
@@ -158,17 +174,21 @@ public class ECalculatorThreadCore extends ECalculatorPart {
         compound.setByte("threads", (byte) this.cpus.size());
 
         if (Sides.isRunningOnClient() || (Sides.isRunningOnServer() && WRITE_CPU_NBT.get())) {
-            final NBTTagList clustersTag = new NBTTagList();
-            cpus.forEach(cluster -> {
-                ECPUCluster eCluster = (ECPUCluster) (Object) cluster;
-                NBTTagCompound clusterTag = new NBTTagCompound();
-                cluster.writeToNBT(clusterTag);
-                clusterTag.setLong("availableStorage", cluster.getAvailableStorage());
-                clusterTag.setLong("usedExtraStorage", eCluster.novaeng_ec$getUsedExtraStorage());
-                clustersTag.appendTag(clusterTag);
-            });
-            compound.setTag("clusters", clustersTag);
+            writeCPUNBT(compound);
         }
+    }
+
+    public void writeCPUNBT(final NBTTagCompound compound) {
+        final NBTTagList clustersTag = new NBTTagList();
+        cpus.forEach(cluster -> {
+            ECPUCluster eCluster = ECPUCluster.from(cluster);
+            NBTTagCompound clusterTag = new NBTTagCompound();
+            cluster.writeToNBT(clusterTag);
+            clusterTag.setLong("availableStorage", cluster.getAvailableStorage());
+            clusterTag.setLong("usedExtraStorage", eCluster.novaeng_ec$getUsedExtraStorage());
+            clustersTag.appendTag(clusterTag);
+        });
+        compound.setTag("clusters", clustersTag);
     }
 
     @Override

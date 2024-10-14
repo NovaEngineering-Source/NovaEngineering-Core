@@ -1,5 +1,7 @@
 package github.kasuminova.novaeng.common.ecalculator;
 
+import appeng.me.cluster.implementations.CraftingCPUCluster;
+import github.kasuminova.mmce.common.util.TimeRecorder;
 import github.kasuminova.novaeng.common.block.ecotech.ecalculator.prop.Levels;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorController;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorThreadCore;
@@ -7,6 +9,10 @@ import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorThre
 import javax.annotation.Nullable;
 
 public interface ECPUCluster {
+
+    static ECPUCluster from(final CraftingCPUCluster cluster) {
+        return (ECPUCluster) (Object) cluster;
+    }
 
     void novaeng_ec$setAvailableStorage(final long availableStorage);
 
@@ -23,5 +29,11 @@ public interface ECPUCluster {
     long novaeng_ec$getUsedExtraStorage();
 
     void novaeng_ec$setUsedExtraStorage(final long usedExtraStorage);
+
+    void novaeng_ec$markDestroyed();
+
+    TimeRecorder novaeng_ec$getTimeRecorder();
+
+    TimeRecorder novaeng_ec$getParallelismRecorder();
 
 }

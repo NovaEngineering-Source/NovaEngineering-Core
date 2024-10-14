@@ -16,7 +16,7 @@ import appeng.me.cluster.implementations.CraftingCPUCluster;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import appeng.me.helpers.MachineSource;
-import github.kasuminova.novaeng.common.block.ecotech.efabricator.BlockEFabricatorMEChannel;
+import github.kasuminova.novaeng.common.block.ecotech.ecalculator.BlockECalculatorMEChannel;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -43,8 +43,9 @@ public class ECalculatorMEChannel extends ECalculatorPart implements IActionHost
         return source;
     }
 
-    public static ItemStack getVisualItemStack() {
-        return new ItemStack(Item.getItemFromBlock(BlockEFabricatorMEChannel.INSTANCE), 1, 0);
+    public ItemStack getVisualItemStack() {
+        ECalculatorController controller = getController();
+        return new ItemStack(Item.getItemFromBlock(controller == null ? BlockECalculatorMEChannel.INSTANCE : controller.getParentController()), 1, 0);
     }
 
     @MENetworkEventSubscribe
@@ -156,12 +157,14 @@ public class ECalculatorMEChannel extends ECalculatorPart implements IActionHost
     @Override
     public void onAssembled() {
         super.onAssembled();
+        proxy.setVisualRepresentation(getVisualItemStack());
         ModularMachinery.EXECUTE_MANAGER.addSyncTask(proxy::onReady);
     }
 
     @Override
     public void onDisassembled() {
         super.onDisassembled();
+        proxy.setVisualRepresentation(getVisualItemStack());
         proxy.invalidate();
     }
 

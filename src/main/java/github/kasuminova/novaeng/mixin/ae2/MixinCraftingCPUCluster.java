@@ -1,6 +1,7 @@
 package github.kasuminova.novaeng.mixin.ae2;
 
 import appeng.api.networking.IGrid;
+import appeng.api.networking.IGridNode;
 import appeng.api.networking.crafting.ICraftingJob;
 import appeng.api.networking.crafting.ICraftingLink;
 import appeng.api.networking.crafting.ICraftingRequester;
@@ -13,12 +14,14 @@ import appeng.me.helpers.MachineSource;
 import appeng.tile.crafting.TileCraftingTile;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import github.kasuminova.mmce.common.util.TimeRecorder;
 import github.kasuminova.novaeng.common.block.ecotech.ecalculator.prop.Levels;
 import github.kasuminova.novaeng.common.ecalculator.ECPUCluster;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorController;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorMEChannel;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorThreadCore;
 import net.minecraft.world.World;
+import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -37,9 +40,15 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
 
     @Unique
     private ECalculatorController novaeng_ec$virtualCPUOwner = null;
-    
+
     @Unique
     private long novaeng_ec$usedExtraStorage = 0;
+
+    @Unique
+    private final TimeRecorder novaeng_ec$timeRecorder = new TimeRecorder();
+
+    @Unique
+    private final TimeRecorder novaeng_ec$parallelismRecorder = new TimeRecorder();
 
     @Shadow
     private long availableStorage;
@@ -67,6 +76,8 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
 
     @Shadow
     public abstract void cancel();
+
+    @Shadow @Final private int[] usedOps;
 
     @Inject(method = "submitJob", at = @At(value = "INVOKE", target = "Lappeng/api/networking/crafting/ICraftingJob;getOutput()Lappeng/api/storage/data/IAEItemStack;"))
     private void injectSubmitJob(final IGrid g, final ICraftingJob job, final IActionSource src, final ICraftingRequester requestingMachine, final CallbackInfoReturnable<ICraftingLink> cir) {
@@ -105,6 +116,12 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
                 ci.cancel();
             }
         }
+    }
+
+    @Inject(method = "updateCraftingLogic", at = @At("TAIL"))
+    private void injectUpdateCraftingLogicTail(final IGrid grid, final IEnergyGrid eg, final CraftingGridCache cc, final CallbackInfo ci) {
+        int currentParallelism = this.usedOps[0];
+        novaeng_ec$parallelismRecorder.addUsedTime(currentParallelism);
     }
 
     @WrapOperation(
@@ -164,14 +181,16 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
             if (channel == null) {
                 return;
             }
-            cir.setReturnValue(channel.getProxy().getNode().getGrid());
+            IGridNode node = channel.getProxy().getNode();
+            cir.setReturnValue(node == null ? null : node.getGrid());
         }
         if (this.novaeng_ec$virtualCPUOwner != null) {
             final ECalculatorMEChannel channel = novaeng_ec$virtualCPUOwner.getChannel();
             if (channel == null) {
                 return;
             }
-            cir.setReturnValue(channel.getProxy().getNode().getGrid());
+            IGridNode node = channel.getProxy().getNode();
+            cir.setReturnValue(node == null ? null : node.getGrid());
         }
     }
 
@@ -279,6 +298,25 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
     @Override
     public long novaeng_ec$getUsedExtraStorage() {
         return novaeng_ec$usedExtraStorage;
+    }
+
+    @Unique
+    @Override
+    public void novaeng_ec$markDestroyed() {
+        this.isDestroyed = true;
+        this.isComplete = true;
+    }
+
+    @Unique
+    @Override
+    public TimeRecorder novaeng_ec$getTimeRecorder() {
+        return novaeng_ec$timeRecorder;
+    }
+
+    @Unique
+    @Override
+    public TimeRecorder novaeng_ec$getParallelismRecorder() {
+        return novaeng_ec$parallelismRecorder;
     }
 
 }

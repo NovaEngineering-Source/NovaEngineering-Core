@@ -154,9 +154,14 @@ public class MonitorPanel extends SizedRow {
 
                 // Total Parallelism
                 GlStateManager.pushMatrix();
-                GlStateManager.translate(53, 56, 0);
+                if (this.totalParallelism >= 100_000) {
+                    GlStateManager.translate(53, 56 + 1, 0);
+                    GlStateManager.scale(.8F, .8F, .8F);
+                } else {
+                    GlStateManager.translate(53, 56, 0);
+                }
                 {
-                    final String totalParallelism = String.format("%d", this.totalParallelism);
+                    final String totalParallelism = String.valueOf(this.totalParallelism);
                     fr.drawStringWithShadow(totalParallelism, 0, 0, 0xFFFFFF);
                 }
                 GlStateManager.popMatrix();
@@ -291,6 +296,9 @@ public class MonitorPanel extends SizedRow {
                 GlStateManager.pushMatrix();
                 GlStateManager.translate(renderPos.posX() + 24, renderPos.posY() + 2, 0);
                 {
+                    MEMORY_ICON.render(new RenderPos(0, 0), gui);
+                    PARALLELISM_ICON.render(new RenderPos(0, 8), gui);
+
                     GlStateManager.pushMatrix();
                     GlStateManager.scale(.8F, .8F, .8F);
                     {
@@ -302,10 +310,6 @@ public class MonitorPanel extends SizedRow {
                         fr.drawStringWithShadow(cpuUsage, width - strWidth, 19, 0xFFFFFFFF);
                     }
                     GlStateManager.popMatrix();
-                    {
-                        MEMORY_ICON.render(new RenderPos(0, 1), gui);
-                        PARALLELISM_ICON.render(new RenderPos(0, 9), gui);
-                    }
                 }
                 GlStateManager.popMatrix();
             }

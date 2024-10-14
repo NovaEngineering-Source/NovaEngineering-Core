@@ -97,7 +97,7 @@ public abstract class MixinGuiCraftingStatus extends AEBaseGui {
     }
 
     @Unique
-    @SuppressWarnings("RedundantCast")
+    @SuppressWarnings({"RedundantCast"})
     private void novaeng_ec$renderECPUStatus(final CraftingCPUStatus cpu, final Levels ecLevel, final int i, final int firstCpu, final CraftingCPUStatus hoveredCpu) {
         final FontRenderer font = fontRenderer;
         final int textColor = 0x202020;
@@ -115,23 +115,18 @@ public abstract class MixinGuiCraftingStatus extends AEBaseGui {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         TextFormatting color = TextFormatting.WHITE;
-        switch (ecLevel) {
-            case L4 -> {
-                novaeng_ec$L4.render(new RenderPos(x, y), (AEBaseGui) (Object) this);
-                color = TextFormatting.AQUA;
-            }
-            case L6 -> {
-                novaeng_ec$L6.render(new RenderPos(x, y), (AEBaseGui) (Object) this);
-                color = TextFormatting.GOLD;
-            }
-            case L9 -> {
-                novaeng_ec$L9.render(new RenderPos(x, y), (AEBaseGui) (Object) this);
-                color = TextFormatting.DARK_PURPLE;
-            }
-            case L11 -> {
-                novaeng_ec$L11.render(new RenderPos(x, y), (AEBaseGui) (Object) this);
-                color = TextFormatting.RED;
-            }
+        if (ecLevel == Levels.L4) {
+            novaeng_ec$L4.render(new RenderPos(x, y), (AEBaseGui) (Object) this);
+            color = TextFormatting.AQUA;
+        } else if (ecLevel == Levels.L6) {
+            novaeng_ec$L6.render(new RenderPos(x, y), (AEBaseGui) (Object) this);
+            color = TextFormatting.GOLD;
+        } else if (ecLevel == Levels.L9) {
+            novaeng_ec$L9.render(new RenderPos(x, y), (AEBaseGui) (Object) this);
+            color = TextFormatting.DARK_PURPLE;
+        } else if (ecLevel == Levels.L11) {
+            novaeng_ec$L11.render(new RenderPos(x, y), (AEBaseGui) (Object) this);
+            color = TextFormatting.RED;
         }
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
@@ -154,10 +149,12 @@ public abstract class MixinGuiCraftingStatus extends AEBaseGui {
         if (craftingStack != null) {
             GL11.glScalef(0.5f, 0.5f, 1.0f);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            switch (ecLevel) {
-                case L4 -> novaeng_ec$L4_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
-                case L6 -> novaeng_ec$L6_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
-                case L9 -> novaeng_ec$L9_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
+            if (ecLevel == Levels.L4) {
+                novaeng_ec$L4_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
+            } else if (ecLevel == Levels.L6) {
+                novaeng_ec$L6_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
+            } else if (ecLevel == Levels.L9) {
+                novaeng_ec$L9_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
             }
             GL11.glTranslatef(18.0f, 3.5f, 0.0f);
             String amount = Long.toString(craftingStack.getStackSize());
@@ -173,10 +170,12 @@ public abstract class MixinGuiCraftingStatus extends AEBaseGui {
         } else {
             GL11.glScalef(0.5f, 0.5f, 1.0f);
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            switch (ecLevel) {
-                case L4 -> novaeng_ec$L4_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
-                case L6 -> novaeng_ec$L6_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
-                case L9 -> novaeng_ec$L9_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
+            if (ecLevel == Levels.L4) {
+                novaeng_ec$L4_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
+            } else if (ecLevel == Levels.L6) {
+                novaeng_ec$L6_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
+            } else if (ecLevel == Levels.L9) {
+                novaeng_ec$L9_CELL.render(new RenderPos(2, 0), (AEBaseGui) (Object) this);
             }
             GL11.glTranslatef(18.0f, 3.5f, 0.0f);
             GL11.glScalef(1.5f, 1.5f, 1.0f);

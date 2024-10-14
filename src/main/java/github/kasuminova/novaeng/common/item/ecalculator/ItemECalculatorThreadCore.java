@@ -2,7 +2,6 @@ package github.kasuminova.novaeng.common.item.ecalculator;
 
 import github.kasuminova.novaeng.common.block.ecotech.ecalculator.BlockECalculatorThreadCore;
 import github.kasuminova.novaeng.common.block.ecotech.ecalculator.BlockECalculatorThreadCoreHyper;
-import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemBlock;
@@ -14,8 +13,9 @@ import java.util.List;
 
 public class ItemECalculatorThreadCore extends ItemBlock {
 
-    public ItemECalculatorThreadCore(final Block block) {
+    public ItemECalculatorThreadCore(final BlockECalculatorThreadCore block) {
         super(block);
+        block.setItem(this);
     }
 
     @Override

@@ -50,8 +50,9 @@ public class EFabricatorMEChannel extends EFabricatorPart implements ICraftingPr
         return source;
     }
 
-    public static ItemStack getVisualItemStack() {
-        return new ItemStack(Item.getItemFromBlock(BlockEFabricatorMEChannel.INSTANCE), 1, 0);
+    public ItemStack getVisualItemStack() {
+        EFabricatorController controller = getController();
+        return new ItemStack(Item.getItemFromBlock(controller == null ? BlockEFabricatorMEChannel.INSTANCE : controller.getParentController()), 1, 0);
     }
 
     @MENetworkEventSubscribe
@@ -213,6 +214,7 @@ public class EFabricatorMEChannel extends EFabricatorPart implements ICraftingPr
     @Override
     public void onAssembled() {
         super.onAssembled();
+        proxy.setVisualRepresentation(getVisualItemStack());
         ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> {
             proxy.onReady();
             partController.recalculateEnergyUsage();
@@ -222,6 +224,7 @@ public class EFabricatorMEChannel extends EFabricatorPart implements ICraftingPr
     @Override
     public void onDisassembled() {
         super.onDisassembled();
+        proxy.setVisualRepresentation(getVisualItemStack());
         proxy.invalidate();
     }
 

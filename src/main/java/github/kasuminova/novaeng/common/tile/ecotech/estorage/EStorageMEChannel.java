@@ -20,7 +20,7 @@ import appeng.me.GridAccessException;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.me.helpers.IGridProxyable;
 import appeng.me.helpers.MachineSource;
-import github.kasuminova.novaeng.common.block.ecotech.estorage.BlockEStorageMEChannel;
+import github.kasuminova.novaeng.common.block.ecotech.efabricator.BlockEFabricatorMEChannel;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -67,8 +67,9 @@ public class EStorageMEChannel extends EStoragePart implements ICellContainer, I
         return priority;
     }
 
-    public static ItemStack getVisualItemStack() {
-        return new ItemStack(Item.getItemFromBlock(BlockEStorageMEChannel.INSTANCE), 1, 0);
+    public ItemStack getVisualItemStack() {
+        EStorageController controller = getController();
+        return new ItemStack(Item.getItemFromBlock(controller == null ? BlockEFabricatorMEChannel.INSTANCE : controller.getParentController()), 1, 0);
     }
 
     @MENetworkEventSubscribe
@@ -217,6 +218,7 @@ public class EStorageMEChannel extends EStoragePart implements ICellContainer, I
     @Override
     public void onAssembled() {
         super.onAssembled();
+        proxy.setVisualRepresentation(getVisualItemStack());
         ModularMachinery.EXECUTE_MANAGER.addSyncTask(() -> {
             proxy.onReady();
             partController.recalculateEnergyUsage();
@@ -233,6 +235,7 @@ public class EStorageMEChannel extends EStoragePart implements ICellContainer, I
     @Override
     public void onDisassembled() {
         super.onDisassembled();
+        proxy.setVisualRepresentation(getVisualItemStack());
         proxy.invalidate();
     }
 

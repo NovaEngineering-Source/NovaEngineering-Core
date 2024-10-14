@@ -131,7 +131,7 @@ public class CPUStatusPanel extends SizedColumn {
             final boolean hyper = core.maxHyperThreads() > 0;
             final boolean working = core.threads() > 0;
             this.hyper = hyper;
-            this.cpus = core.threads();
+            this.cpus = core.threads() + core.hyperThreads();
             this.maxThreads = core.maxThreads();
             this.maxHyperThreads = core.maxHyperThreads();
             switch (core.type()) {

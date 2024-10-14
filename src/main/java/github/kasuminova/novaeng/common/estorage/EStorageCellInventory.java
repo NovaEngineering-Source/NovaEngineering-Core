@@ -217,9 +217,13 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
                 return r;
             } else {
                 if (mode == Actionable.MODULATE) {
+                    long prev = l.getStackSize();
                     l.setStackSize(l.getStackSize() + input.getStackSize());
                     // Update Count.
                     AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
+                    if (prev == 0) {
+                        inv.setStoredItemTypes((short) (inv.getStoredItemTypes() + 1));
+                    }
                     inv.setStoredItemCount(inv.getStoredItemCount() + input.getStackSize());
                     this.saveChangesES();
                 }
@@ -295,11 +299,7 @@ public class EStorageCellInventory<T extends IAEStack<T>> extends AbstractCellIn
                 results.setStackSize(size);
                 if (mode == Actionable.MODULATE) {
                     l.setStackSize(l.getStackSize() - size);
-
-                    // Update Count.
-                    AccessorAbstractCellInventory inv = (AccessorAbstractCellInventory) this;
-                    inv.setStoredItemCount(inv.getStoredItemCount() - results.getStackSize());
-                    this.saveChangesES();
+                    this.saveChanges();
                 }
             }
         }

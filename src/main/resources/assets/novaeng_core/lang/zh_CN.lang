@@ -22,8 +22,9 @@ item.novaeng_core.ecalculator_cell_16384m.name=§9ECO - §5CE9 §b闪存晶阵
 novaeng.ecalculator_cell.insert.tip=蹲下时手持矩阵并右击驱动器以插入晶阵。
 novaeng.ecalculator_cell.extract.tip=蹲下时空手并右击驱动器以取出晶阵。
 novaeng.ecalculator_cell.tip.0=§b闪存晶阵§7为§9计算子系统§7提供§a内存存储§7。
-novaeng.ecalculator_cell.tip.1=§b闪存晶阵§7是存储矩阵的高速读取特化版本。
-novaeng.ecalculator_cell.tip.2=相比§9存储矩阵§7，其内部规模要§a更加宏大§7，但即便如此存储容量也远§c不如§9存储矩阵§7。
+novaeng.ecalculator_cell.tip.1=§b闪存晶阵§7是存储矩阵的高速存取特化版本。
+novaeng.ecalculator_cell.tip.2=相比§9存储矩阵§7，其内部规模要§a更加宏大§7，但作为代价，其存储容量也远§c不如§9存储矩阵§7。
+novaeng.ecalculator_cell.tip.3=§b字节数提供：§a%sB
 novaeng.ecalculator_cell.l6.tip=§c只有 §6C6§c 等级及以上的主机可以驱动此晶阵。
 novaeng.ecalculator_cell.l9.tip=§c只有 §6C9§c 等级的主机可以驱动此晶阵。
 
@@ -38,7 +39,7 @@ novaeng.estorage_cell_drive.player.no_permission=§c访问被拒绝（原因：�
 
 novaeng.ecalculator_thread_core.info.0=§b线程核心§7是计算子系统的主要部分，为主机提供§5线程数§7。
 novaeng.ecalculator_thread_core.info.1=§b线程核心§7提供的§9线程§7为子系统提供最大§b虚拟合成处理器（vCPU）§7数量。
-novaeng.ecalculator_thread_core.info.2=拆除时首先会尝试§e返还并取消§7当前任务的物品至 ME 网络，如果返还失败则§a保存数据至掉落物§7。
+novaeng.ecalculator_thread_core.info.2=拆除时会直接§a保存压缩后的 CPU 数据至掉落物§7。
 novaeng.ecalculator_thread_core.modifiers=§b线程数§7修正：
 novaeng.ecalculator_thread_core.modifier.add=  最大线程数：§a+%s
 
@@ -188,6 +189,15 @@ top.efabricator.worker.status.online=§a在线
 top.efabricator.worker.queue_status=§9队列状态：
 top.efabricator.worker.current_crafting=§9正在合成：
 top.efabricator.worker.enqueued_crafting=§9排队中：
+
+top.ecalculator.controller.storage=§9字节使用：
+top.ecalculator.controller.threads=§9线程状态：
+top.ecalculator.controller.parallelism=§9最大并行数：
+top.ecalculator.thread_core.status=§9核心状态：
+top.ecalculator.thread_core.status.offline=§c离线
+top.ecalculator.thread_core.status.online=§a在线
+top.ecalculator.thread_core.threads=§9线程状态：
+top.ecalculator.thread_core.crafting=§9正在合成：
 
 tile.novaeng_core.hypernet_terminal_controller.name=HyperNet 网络终端
 tile.novaeng_core.modular_server_assembler.name=模块服务器组装台（未实装）

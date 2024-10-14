@@ -9,6 +9,7 @@ public class IntegrationTOP {
         TheOneProbe.theOneProbeImp.registerProvider(SpecialMachineInfoProvider.INSTANCE);
         TheOneProbe.theOneProbeImp.registerProvider(EStorageInfoProvider.INSTANCE);
         TheOneProbe.theOneProbeImp.registerProvider(EFabricatorInfoProvider.INSTANCE);
+        TheOneProbe.theOneProbeImp.registerProvider(ECalculatorInfoProvider.INSTANCE);
     }
 
 }

@@ -12,12 +12,14 @@ import github.kasuminova.novaeng.common.container.ContainerECalculatorController
 import github.kasuminova.novaeng.common.item.ecalculator.ECalculatorCell;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorCellDrive;
 import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorController;
+import github.kasuminova.novaeng.common.tile.ecotech.ecalculator.ECalculatorMEChannel;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
@@ -92,12 +94,12 @@ public class ECalculatorEventHandler {
 
         ECalculatorController controller = drive.getController();
         if (controller != null) {
-//            EStorageMEChannel channel = controller.getChannel();
-//            if (channel != null && !canInteract(player, channel)) {
-////                player.sendMessage(new TextComponentTranslation("novaeng.estorage_cell_drive.player.no_permission"));
-//                event.setCanceled(true);
-//                return;
-//            }
+            ECalculatorMEChannel channel = controller.getChannel();
+            if (channel != null && !canInteract(player, channel)) {
+                player.sendMessage(new TextComponentTranslation("novaeng.ecalculator_cell_drive.player.no_permission"));
+                event.setCanceled(true);
+                return;
+            }
         }
 
         ItemStack stackInHand = player.getHeldItem(hand);
@@ -109,7 +111,7 @@ public class ECalculatorEventHandler {
                 return;
             }
             player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, inv.insertItem(0, stackInHand.copy(), false));
-//            player.sendMessage(new TextComponentTranslation("novaeng.estorage_cell_drive.player.inserted"));
+            player.sendMessage(new TextComponentTranslation("novaeng.ecalculator_cell_drive.player.inserted"));
             event.setCanceled(true);
             return;
         }
@@ -119,7 +121,7 @@ public class ECalculatorEventHandler {
         }
 
         player.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, inv.extractItem(0, stackInSlot.getCount(), false));
-//        player.sendMessage(new TextComponentTranslation("novaeng.estorage_cell_drive.player.removed"));
+        player.sendMessage(new TextComponentTranslation("novaeng.ecalculator_cell_drive.player.removed"));
         event.setCanceled(true);
     }
 

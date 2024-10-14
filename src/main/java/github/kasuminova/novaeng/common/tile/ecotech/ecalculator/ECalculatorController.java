@@ -128,7 +128,7 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
 
         // Update accelerators
         getThreadCores().forEach(threadCore -> threadCore.getCpus().stream()
-                .map(cpus -> (ECPUCluster) (Object) cpus)
+                .map(ECPUCluster::from)
                 .forEach(ecpuCluster -> ecpuCluster.novaeng_ec$setAccelerators(this.parallelism))
         );
     }
@@ -145,6 +145,10 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
     public long getAvailableBytes() {
         List<ECalculatorThreadCore> threadCores = getThreadCores();
         return totalBytes - threadCores.stream().mapToLong(ECalculatorThreadCore::getUsedStorage).sum();
+    }
+
+    public long getUsedBytes() {
+        return totalBytes - getAvailableBytes();
     }
 
     private List<ECalculatorCellDrive> getCellDrives() {
@@ -164,7 +168,7 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
         List<ECalculatorThreadCore> threadCores = getThreadCores();
         for (final ECalculatorThreadCore threadCore : threadCores) {
             if (threadCore.addCPU(virtualCPU, false)) {
-                ECPUCluster ecpuCluster = (ECPUCluster) (Object) this.virtualCPU;
+                ECPUCluster ecpuCluster = ECPUCluster.from(this.virtualCPU);
                 ecpuCluster.novaeng_ec$setAvailableStorage(usedBytes);
                 ecpuCluster.novaeng_ec$setVirtualCPUOwner(null);
                 this.virtualCPU = null;
@@ -174,7 +178,7 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
         }
         for (final ECalculatorThreadCore threadCore : threadCores) {
             if (threadCore.addCPU(virtualCPU, true)) {
-                ECPUCluster ecpuCluster = (ECPUCluster) (Object) this.virtualCPU;
+                ECPUCluster ecpuCluster = ECPUCluster.from(this.virtualCPU);
                 final long usedExtraBytes = (long) (usedBytes * 0.1F);
                 ecpuCluster.novaeng_ec$setAvailableStorage(usedBytes + usedExtraBytes);
                 ecpuCluster.novaeng_ec$setUsedExtraStorage(usedExtraBytes);
@@ -198,7 +202,7 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
         }
 
         if (this.virtualCPU != null) {
-            ECPUCluster eCluster = (ECPUCluster) (Object) virtualCPU;
+            ECPUCluster eCluster = ECPUCluster.from(this.virtualCPU);
             eCluster.novaeng_ec$setAvailableStorage(availableBytes);
             eCluster.novaeng_ec$setAccelerators(parallelism);
             return;
@@ -218,7 +222,7 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
 
         WorldCoord pos = new WorldCoord(getPos());
         this.virtualCPU = new CraftingCPUCluster(pos, pos);
-        ECPUCluster eCluster = (ECPUCluster) (Object) virtualCPU;
+        ECPUCluster eCluster = ECPUCluster.from(this.virtualCPU);
         eCluster.novaeng_ec$setVirtualCPUOwner(this);
         eCluster.novaeng_ec$setAvailableStorage(availableBytes);
         eCluster.novaeng_ec$setAccelerators(parallelism);
@@ -237,7 +241,7 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
         }
         if (this.virtualCPU != null) {
             // Refresh machine source.
-            ((ECPUCluster) (Object) this.virtualCPU).novaeng_ec$setVirtualCPUOwner(this);
+            ECPUCluster.from(this.virtualCPU).novaeng_ec$setVirtualCPUOwner(this);
             clusters.add(this.virtualCPU);
         }
         return clusters;
@@ -363,6 +367,10 @@ public class ECalculatorController extends EPartController<ECalculatorPart> {
                 posList.add(offset.add(tailHidePos));
             }
         }
+    }
+
+    public BlockECalculatorController getParentController() {
+        return parentController;
     }
 
     @Override
