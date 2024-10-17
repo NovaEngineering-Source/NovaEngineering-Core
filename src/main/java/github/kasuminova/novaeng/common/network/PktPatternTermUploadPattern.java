@@ -58,7 +58,12 @@ public class PktPatternTermUploadPattern implements IMessage, IMessageHandler<Pk
                 for (final IGridNode channelNode : channelNodes) {
                     EFabricatorMEChannel channel = (EFabricatorMEChannel) channelNode.getMachine();
                     if (channel.insertPattern(patternStack)) {
-                        patternSlotOUT.putStack(ItemStack.EMPTY);
+                        patternStack.shrink(1);
+                        if (patternStack.isEmpty()) {
+                            patternSlotOUT.putStack(ItemStack.EMPTY);
+                        } else {
+                            patternSlotOUT.putStack(patternStack);
+                        }
                         break;
                     }
                 }

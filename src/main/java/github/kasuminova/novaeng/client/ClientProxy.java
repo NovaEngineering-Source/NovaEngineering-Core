@@ -117,6 +117,7 @@ public class ClientProxy extends CommonProxy {
             case ESTORAGE_CONTROLLER -> new GuiEStorageController((EStorageController) present, player);
             case SINGULARITY_CORE -> new GuiSingularityCore((SingularityCore) present, player);
             case EFABRICATOR_CONTROLLER -> new GuiEFabricatorController((EFabricatorController) present, player);
+            case EFABRICATOR_PATTERN_SEARCH -> new GuiEFabricatorPatternSearch((EFabricatorController) present, player);
             case EFABRICATOR_PATTERN_BUS -> new GuiEFabricatorPatternBus((EFabricatorPatternBus) present, player);
             case GEOCENTRIC_DRILL_CONTROLLER -> new GuiGeocentricDrill((GeocentricDrillController) present, player);
             case ECALCULATOR_CONTROLLER -> new GuiECalculatorController((ECalculatorController) present, player);

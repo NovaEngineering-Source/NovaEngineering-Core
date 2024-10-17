@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Slot;
 
 public class ContainerEFabricatorController extends ContainerBase<EFabricatorController> {
-    
+
     protected int tickExisted = 0;
 
     public ContainerEFabricatorController(final EFabricatorController owner, final EntityPlayer opening) {

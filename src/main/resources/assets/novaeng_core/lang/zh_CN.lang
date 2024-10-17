@@ -496,8 +496,8 @@ gui.efabricator.total_parallelism.overflow_speedup.coolants.0=冷却液消耗：
 gui.efabricator.total_parallelism.overflow_speedup.coolants.1=%s mB/t
 
 gui.geocentric_drill.ore_control=矿物控制表
-gui.geocentric_drill.dive=单击使钻探机下潜 §a100m§f，最大值 §e10000m§f。
-gui.geocentric_drill.dive.ctrl_down=单击使钻探机下潜 §a1000m§f，最大值 §e10000m§f。
+gui.geocentric_drill.dive=单击使钻探机下潜 §a100m§f，最大值 §e20000m§f。
+gui.geocentric_drill.dive.ctrl_down=单击使钻探机下潜 §a1000m§f，最大值 §e20000m§f。
 gui.geocentric_drill.ascend=单击使钻探机上浮 §a100m§f，最小值 §e1000m§f。
 gui.geocentric_drill.ascend.ctrl_down=单击使钻探机上浮 §a1000m§f，最小值 §e1000m§f。
 

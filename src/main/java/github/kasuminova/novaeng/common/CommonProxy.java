@@ -131,6 +131,13 @@ public class CommonProxy implements IGuiHandler {
                 }
                 yield new ContainerEFabricatorController(efController, player);
             }
+            case EFABRICATOR_PATTERN_SEARCH -> {
+                EFabricatorController efController = (EFabricatorController) present;
+                if (efController.getChannel() != null && ModIntegrationAE2.securityCheck(player, efController.getChannel().getProxy())) {
+                    yield null;
+                }
+                yield new ContainerEFabricatorPatternSearch(efController, player);
+            }
             case EFABRICATOR_PATTERN_BUS -> {
                 EFabricatorPatternBus efPatternBus = (EFabricatorPatternBus) present;
                 EFabricatorController efController = efPatternBus.getController();
@@ -140,7 +147,13 @@ public class CommonProxy implements IGuiHandler {
                 yield new ContainerEFabricatorPatternBus(efPatternBus, player);
             }
             case GEOCENTRIC_DRILL_CONTROLLER -> new ContainerGeocentricDrill((GeocentricDrillController) present, player);
-            case ECALCULATOR_CONTROLLER -> new ContainerECalculatorController((ECalculatorController) present, player);
+            case ECALCULATOR_CONTROLLER -> {
+                ECalculatorController ecController = (ECalculatorController) present;
+                if (ecController.getChannel() != null && ModIntegrationAE2.securityCheck(player, ecController.getChannel().getProxy())) {
+                    yield null;
+                }
+                yield new ContainerECalculatorController((ECalculatorController) present, player);
+            }
         };
     }
 
@@ -157,6 +170,7 @@ public class CommonProxy implements IGuiHandler {
         ESTORAGE_CONTROLLER(EStorageController.class),
         SINGULARITY_CORE(github.kasuminova.novaeng.common.tile.machine.SingularityCore.class),
         EFABRICATOR_CONTROLLER(EFabricatorController.class),
+        EFABRICATOR_PATTERN_SEARCH(EFabricatorController.class),
         EFABRICATOR_PATTERN_BUS(EFabricatorPatternBus.class),
         GEOCENTRIC_DRILL_CONTROLLER(GeocentricDrillController.class),
         ECALCULATOR_CONTROLLER(ECalculatorController.class),

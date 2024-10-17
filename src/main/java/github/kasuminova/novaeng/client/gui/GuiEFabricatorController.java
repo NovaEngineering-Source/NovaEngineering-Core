@@ -4,10 +4,7 @@ import github.kasuminova.mmce.client.gui.GuiContainerDynamic;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetController;
 import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.novaeng.NovaEngineeringCore;
-import github.kasuminova.novaeng.client.gui.widget.efabricator.ControlPanel;
-import github.kasuminova.novaeng.client.gui.widget.efabricator.CraftingStatusPanel;
-import github.kasuminova.novaeng.client.gui.widget.efabricator.HeatStatisticPanel;
-import github.kasuminova.novaeng.client.gui.widget.efabricator.TotalCraftedLabel;
+import github.kasuminova.novaeng.client.gui.widget.efabricator.*;
 import github.kasuminova.novaeng.client.gui.widget.efabricator.event.EFGUIDataUpdateEvent;
 import github.kasuminova.novaeng.common.container.ContainerEFabricatorController;
 import github.kasuminova.novaeng.common.container.data.EFabricatorData;
@@ -39,6 +36,8 @@ public class GuiEFabricatorController extends GuiContainerDynamic<ContainerEFabr
         this.widgetController.addWidget(new CraftingStatusPanel().setAbsXY(7, 15));
         this.widgetController.addWidget(new ControlPanel().setAbsXY(7, 77));
         this.widgetController.addWidget(new HeatStatisticPanel().setAbsXY(184, 117));
+        final TitleButtonLine buttonLine = new TitleButtonLine(false);
+        this.widgetController.addWidget(buttonLine.setAbsXY(this.xSize - buttonLine.getWidth() - 1, 1));
     }
 
     @Override
@@ -47,7 +46,7 @@ public class GuiEFabricatorController extends GuiContainerDynamic<ContainerEFabr
         this.mc.getTextureManager().bindTexture(TEXTURES_BACKGROUND_DARK);
         final int x = (this.width - this.xSize) / 2;
         final int y = (this.height - this.ySize) / 2;
-        Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, 256, 207, 256, 256);
+        Gui.drawModalRectWithCustomSizedTexture(x, y, 0, 0, 256, 202, 256, 256);
         this.mc.getTextureManager().bindTexture(TEXTURES_INVENTORY);
         Gui.drawModalRectWithCustomSizedTexture(x + 17, y + 118, 1, 120, 162, 76, 256, 256);
         super.drawGuiContainerBackgroundLayer(partialTicks, mouseX, mouseY);

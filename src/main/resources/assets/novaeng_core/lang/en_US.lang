@@ -498,10 +498,16 @@ gui.efabricator.total_parallelism.overflow=溢出：%s (%s%%)
 gui.efabricator.total_parallelism.overflow_speedup=加速：%s Tick (%s%%)
 gui.efabricator.total_parallelism.overflow_speedup.coolants.0=冷却液消耗：
 gui.efabricator.total_parallelism.overflow_speedup.coolants.1=%s mB/t
+gui.efabricator.switch.pattern_search=单击切换到§9样板管理器§f。
+gui.efabricator.switch.default=单击切换到§9合成监控器§f。
+gui.efabricator.pattern_search.title=样板管理器
+gui.efabricator.pattern_search.input=§7§o搜索材料...
+gui.efabricator.pattern_search.output=§7§o搜索产物...
+gui.efabricator.pattern_search.put_pattern=单击将鼠标持有的样板插入样板总线（如果可用）。
 
 gui.geocentric_drill.ore_control=矿物控制表
-gui.geocentric_drill.dive=单击使钻探机下潜 §a100m§f，最大值 §e10000m§f。
-gui.geocentric_drill.dive.ctrl_down=单击使钻探机下潜 §a1000m§f，最大值 §e10000m§f。
+gui.geocentric_drill.dive=单击使钻探机下潜 §a100m§f，最大值 §e20000m§f。
+gui.geocentric_drill.dive.ctrl_down=单击使钻探机下潜 §a1000m§f，最大值 §e20000m§f。
 gui.geocentric_drill.ascend=单击使钻探机上浮 §a100m§f，最小值 §e1000m§f。
 gui.geocentric_drill.ascend.ctrl_down=单击使钻探机上浮 §a1000m§f，最小值 §e1000m§f。
 

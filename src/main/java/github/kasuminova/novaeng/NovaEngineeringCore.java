@@ -31,7 +31,7 @@ import static github.kasuminova.novaeng.mixin.NovaEngCoreEarlyMixinLoader.LOG_PR
                        "required:mixinbooter@[8.0,);" +
                        "required:lumenized@[1.0.2,);",
         acceptedMinecraftVersions = "[1.12, 1.13)",
-        acceptableRemoteVersions = "[1.20.0, 1.21.0)"
+        acceptableRemoteVersions = "[1.21.0, 1.22.0)"
 )
 @SuppressWarnings("MethodMayBeStatic")
 public class NovaEngineeringCore {
@@ -86,8 +86,10 @@ public class NovaEngineeringCore {
         NET_CHANNEL.registerMessage(PktEStorageGUIData.class, PktEStorageGUIData.class, start++, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktEFabricatorWorkerStatusUpdate.class, PktEFabricatorWorkerStatusUpdate.class, start++, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktEFabricatorGUIData.class, PktEFabricatorGUIData.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktEFabricatorPatternSearchGUIUpdate.class, PktEFabricatorPatternSearchGUIUpdate.class, start++, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktCProfilerRequest.class, PktCProfilerRequest.class, start++, Side.CLIENT);
         NET_CHANNEL.registerMessage(PktECalculatorGUIData.class, PktECalculatorGUIData.class, start++, Side.CLIENT);
+        NET_CHANNEL.registerMessage(PktMouseItemUpdate.class, PktMouseItemUpdate.class, start++, Side.CLIENT);
 
         start = 64;
 
@@ -96,6 +98,7 @@ public class NovaEngineeringCore {
         NET_CHANNEL.registerMessage(PktResearchTaskProvideCreative.class, PktResearchTaskProvideCreative.class, start++, Side.SERVER);
         NET_CHANNEL.registerMessage(PktPatternTermUploadPattern.class, PktPatternTermUploadPattern.class, start++, Side.SERVER);
         NET_CHANNEL.registerMessage(PktEFabricatorGUIAction.class, PktEFabricatorGUIAction.class, start++, Side.SERVER);
+        NET_CHANNEL.registerMessage(PktEFabricatorPatternSearchGUIAction.class, PktEFabricatorPatternSearchGUIAction.class, start++, Side.SERVER);
         NET_CHANNEL.registerMessage(PktCProfilerReply.class, PktCProfilerReply.class, start++, Side.SERVER);
         NET_CHANNEL.registerMessage(PktGeocentricDrillControl.class, PktGeocentricDrillControl.class, start++, Side.SERVER);
 

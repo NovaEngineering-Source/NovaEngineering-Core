@@ -8,6 +8,7 @@ import github.kasuminova.mmce.client.gui.widget.base.WidgetGui;
 import github.kasuminova.novaeng.common.util.BiFunction2Bool;
 import github.kasuminova.novaeng.common.util.NumberUtils;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
@@ -17,6 +18,7 @@ import java.util.List;
 import java.util.OptionalDouble;
 import java.util.OptionalInt;
 import java.util.OptionalLong;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import static github.kasuminova.mmce.client.gui.widget.MultiLineLabel.DEFAULT_FONT_HEIGHT;
@@ -27,11 +29,15 @@ public class InputBox extends DynamicWidget {
 
     protected InputType inputType = InputType.STRING;
 
+    protected String prompt = "";
+
     protected BiFunction2Bool<InputBox, Character> onUserKeyTyped = null;
     protected BiFunction2Bool<InputBox, String> onUserConfirm = null;
     protected BiFunction2Bool<InputBox, Integer> onUserConfirmInt = null;
     protected BiFunction2Bool<InputBox, Long> onUserConfirmLong = null;
     protected BiFunction2Bool<InputBox, Double> onUserConfirmDouble = null;
+
+    protected BiConsumer<InputBox, String> onContentChange = null;
 
     protected Function<InputBox, List<String>> tooltipFunction = null;
 
@@ -41,11 +47,16 @@ public class InputBox extends DynamicWidget {
         int heightOffset = height > DEFAULT_FONT_HEIGHT ? (height - DEFAULT_FONT_HEIGHT) / 2 : 0;
 
         field.width = renderSize.width();
-        field.height =  Math.min(height, DEFAULT_FONT_HEIGHT);
+        field.height = Math.min(height, DEFAULT_FONT_HEIGHT);
         field.x = renderPos.posX();
         field.y = renderPos.posY() + heightOffset;
         field.drawTextBox();
-        GlStateManager.color(1, 1, 1, 1);
+        if (!field.isFocused() && field.getText().isEmpty()) {
+            FontRenderer fr = Minecraft.getMinecraft().fontRenderer;
+            fr.drawStringWithShadow(prompt, field.x, field.y, 0xFFFFFF);
+        }
+        GlStateManager.color(1F, 1F, 1F, 1F);
+        GlStateManager.enableBlend();
     }
 
     @Override
@@ -56,7 +67,13 @@ public class InputBox extends DynamicWidget {
 
         String text = field.getText();
         if (!text.isEmpty() && keyCode == Keyboard.KEY_RETURN) {
-            return processUserConfirm(text);
+            if (processUserConfirm(text)) {
+                if (onContentChange != null) {
+                    onContentChange.accept(this, field.getText());
+                }
+                return true;
+            }
+            return false;
         }
 
         if (GuiScreen.isKeyComboCtrlC(keyCode) ||
@@ -70,14 +87,21 @@ public class InputBox extends DynamicWidget {
             keyCode == Keyboard.KEY_HOME ||
             keyCode == Keyboard.KEY_END)
         {
-            return field.textboxKeyTyped(typedChar, keyCode);
+            final String prev = field.getText();
+            final boolean success = field.textboxKeyTyped(typedChar, keyCode);
+            if (success && !prev.equals(field.getText())) {
+                if (onContentChange != null) {
+                    onContentChange.accept(this, field.getText());
+                }
+            }
+            return success;
         }
 
         if (onUserKeyTyped != null && onUserKeyTyped.apply(this, typedChar)) {
             return true;
         }
 
-        return switch (inputType) {
+        if (switch (inputType) {
             case STRING -> field.textboxKeyTyped(typedChar, keyCode);
             case NUMBER -> {
                 boolean result = processNumberTypeInput(typedChar, keyCode);
@@ -89,7 +113,13 @@ public class InputBox extends DynamicWidget {
                 }
                 yield result;
             }
-        };
+        }) {
+            if (onContentChange != null) {
+                onContentChange.accept(this, field.getText());
+            }
+            return true;
+        }
+        return false;
     }
 
     protected boolean processNumberTypeInput(final char typedChar, final int keyCode) {
@@ -163,14 +193,31 @@ public class InputBox extends DynamicWidget {
         return false;
     }
 
+    // Text
+
+    public String getText() {
+        return field.getText();
+    }
+
     // Input type
-    
+
     public InputType getInputType() {
         return inputType;
     }
 
     public InputBox setInputType(final InputType inputType) {
         this.inputType = inputType;
+        return this;
+    }
+
+    // Prompt
+
+    public String getPrompt() {
+        return prompt;
+    }
+
+    public InputBox setPrompt(final String prompt) {
+        this.prompt = prompt;
         return this;
     }
 
@@ -227,6 +274,11 @@ public class InputBox extends DynamicWidget {
         return this;
     }
 
+    public InputBox setOnContentChange(final BiConsumer<InputBox, String> onContentChange) {
+        this.onContentChange = onContentChange;
+        return this;
+    }
+
     // Tooltip function
 
     public InputBox setTooltipFunction(final Function<InputBox, List<String>> tooltipFunction) {
@@ -250,6 +302,9 @@ public class InputBox extends DynamicWidget {
         }
         if (field.isFocused() && mouseButton == 1) {
             field.setText("");
+            if (onContentChange != null) {
+                onContentChange.accept(this, "");
+            }
             return true;
         }
         return super.onMouseClick(mousePos, renderPos, mouseButton);

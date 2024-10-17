@@ -25,6 +25,7 @@ import github.kasuminova.novaeng.common.util.MachineCoolants;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import hellfirepvp.modularmachinery.client.ClientProxy;
 import hellfirepvp.modularmachinery.common.machine.MachineRegistry;
+import hellfirepvp.modularmachinery.common.util.ItemUtils;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -321,9 +322,13 @@ public class EFabricatorController extends EPartController<EFabricatorPart> {
 
     public void recalculateEnergyUsage() {
         double newIdleDrain = 64;
-        this.idleDrain = newIdleDrain;
-        if (this.channel != null) {
-            this.channel.getProxy().setIdlePowerUsage(idleDrain);
+        final int allPatterns = this.getPatternBuses().stream().mapToInt(EFabricatorPatternBus::getValidPatterns).sum();
+        newIdleDrain += allPatterns;
+        if (this.idleDrain != newIdleDrain) {
+            this.idleDrain = newIdleDrain;
+            if (this.channel != null) {
+                this.channel.getProxy().setIdlePowerUsage(idleDrain);
+            }
         }
     }
 
@@ -332,7 +337,7 @@ public class EFabricatorController extends EPartController<EFabricatorPart> {
             AppEngInternalInventory patternInv = patternBus.getPatterns();
             for (int i = 0; i < patternInv.getSlots(); i++) {
                 if (patternInv.getStackInSlot(i).isEmpty()) {
-                    patternInv.setStackInSlot(i, patternStack.copy());
+                    patternInv.setStackInSlot(i, ItemUtils.copyStackWithSize(patternStack, 1));
                     return true;
                 }
             }

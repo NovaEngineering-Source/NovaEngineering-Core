@@ -9,8 +9,13 @@ import appeng.util.inv.IAEAppEngInventory;
 import appeng.util.inv.InvOperation;
 import com.glodblock.github.util.FluidCraftingPatternDetails;
 import github.kasuminova.mmce.common.util.PatternItemFilter;
+import github.kasuminova.novaeng.NovaEngineeringCore;
+import github.kasuminova.novaeng.common.container.ContainerEFabricatorPatternSearch;
+import github.kasuminova.novaeng.common.container.data.EFabricatorPatternData;
+import github.kasuminova.novaeng.common.network.PktEFabricatorPatternSearchGUIUpdate;
 import hellfirepvp.modularmachinery.ModularMachinery;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,6 +27,7 @@ import net.minecraftforge.items.IItemHandler;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -71,6 +77,10 @@ public class EFabricatorPatternBus extends EFabricatorPart implements IAEAppEngI
                 .collect(Collectors.toList());
     }
 
+    public int getValidPatterns() {
+        return (int) details.stream().filter(Objects::nonNull).count();
+    }
+
     @Override
     public void saveChanges() {
         markNoUpdateSync();
@@ -80,6 +90,7 @@ public class EFabricatorPatternBus extends EFabricatorPart implements IAEAppEngI
     public void onChangeInventory(final IItemHandler inv, final int slot, final InvOperation mc, final ItemStack removedStack, final ItemStack newStack) {
         refreshPattern(slot);
         notifyPatternChanged();
+        sendPatternSearchGUIUpdateToClient(slot);
     }
 
     private void notifyPatternChanged() {
@@ -92,6 +103,35 @@ public class EFabricatorPatternBus extends EFabricatorPart implements IAEAppEngI
                 channel.getProxy().getGrid().postEvent(new MENetworkCraftingPatternChange(channel, channel.getProxy().getNode()));
             }
         } catch (GridAccessException ignored) {
+        }
+        this.partController.recalculateEnergyUsage();
+    }
+
+    private void sendPatternSearchGUIUpdateToClient(final int slot) {
+        if (this.partController == null) {
+            return;
+        }
+
+        List<EntityPlayerMP> players = new ArrayList<>();
+        world.playerEntities.stream()
+                .filter(EntityPlayerMP.class::isInstance)
+                .map(EntityPlayerMP.class::cast)
+                .forEach(playerMP -> {
+                    if (playerMP.openContainer instanceof ContainerEFabricatorPatternSearch efPatternSearch) {
+                        if (efPatternSearch.getOwner() == this.partController) {
+                            players.add(playerMP);
+                        }
+                    }
+                });
+
+        if (!players.isEmpty()) {
+            PktEFabricatorPatternSearchGUIUpdate pktUpdate = new PktEFabricatorPatternSearchGUIUpdate(
+                    PktEFabricatorPatternSearchGUIUpdate.UpdateType.SINGLE,
+                    EFabricatorPatternData.of(
+                            new EFabricatorPatternData.PatternData(getPos(), slot, patterns.getStackInSlot(slot))
+                    )
+            );
+            players.forEach(player -> NovaEngineeringCore.NET_CHANNEL.sendTo(pktUpdate, player));
         }
     }
 
