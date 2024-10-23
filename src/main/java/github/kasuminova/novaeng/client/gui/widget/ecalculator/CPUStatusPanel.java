@@ -186,6 +186,7 @@ public class CPUStatusPanel extends SizedColumn {
                         text = String.format("§b%d§r / §9%d§r", cpus, maxThreads);
                     }
                     fr.drawStringWithShadow(text, 0, 0, 0xFFFFFFFF);
+                    GlStateManager.color(1F, 1F, 1F, 1F);
                 }
                 GlStateManager.popMatrix();
             }

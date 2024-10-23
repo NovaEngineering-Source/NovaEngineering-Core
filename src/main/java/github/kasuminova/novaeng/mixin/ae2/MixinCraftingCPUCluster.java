@@ -77,7 +77,9 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
     @Shadow
     public abstract void cancel();
 
-    @Shadow @Final private int[] usedOps;
+    @Final
+    @Shadow
+    private int[] usedOps;
 
     @Inject(method = "submitJob", at = @At(value = "INVOKE", target = "Lappeng/api/networking/crafting/ICraftingJob;getOutput()Lappeng/api/storage/data/IAEItemStack;"))
     private void injectSubmitJob(final IGrid g, final ICraftingJob job, final IActionSource src, final ICraftingRequester requestingMachine, final CallbackInfoReturnable<ICraftingLink> cir) {
@@ -99,7 +101,7 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
     }
 
     @Inject(method = "updateCraftingLogic", at = @At("HEAD"), cancellable = true)
-    private void injectUpdateCraftingLogicStoreItems(final IGrid grid, final IEnergyGrid eg, final CraftingGridCache cc, final CallbackInfo ci) {
+    private void injectUpdateCraftingLogicStoreItems(final IGrid grid, final IEnergyGrid eg, final CraftingGridCache cgc, final CallbackInfo ci) {
         if (this.novaeng_ec$core == null) {
             return;
         }
@@ -119,7 +121,7 @@ public abstract class MixinCraftingCPUCluster implements ECPUCluster {
     }
 
     @Inject(method = "updateCraftingLogic", at = @At("TAIL"))
-    private void injectUpdateCraftingLogicTail(final IGrid grid, final IEnergyGrid eg, final CraftingGridCache cc, final CallbackInfo ci) {
+    private void injectUpdateCraftingLogicTail(final IGrid grid, final IEnergyGrid eg, final CraftingGridCache cgc, final CallbackInfo ci) {
         int currentParallelism = this.usedOps[0];
         novaeng_ec$parallelismRecorder.addUsedTime(currentParallelism);
     }

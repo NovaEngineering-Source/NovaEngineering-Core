@@ -7,6 +7,7 @@ import appeng.api.networking.energy.IEnergyGrid;
 import appeng.api.storage.IMEMonitor;
 import appeng.api.storage.channels.IItemStorageChannel;
 import appeng.api.storage.data.IAEItemStack;
+import appeng.api.storage.data.IItemList;
 import appeng.me.GridAccessException;
 import appeng.me.helpers.AENetworkProxy;
 import appeng.tile.inventory.AppEngInternalInventory;
@@ -83,7 +84,7 @@ public class EFabricatorController extends EPartController<EFabricatorPart> {
     protected final List<IFluidHandler> coolantOutputHandlers = new ArrayList<>();
 
     protected final IItemStorageChannel itemChannel = AEApi.instance().storage().getStorageChannel(IItemStorageChannel.class);
-    protected ItemList outputBuffer = new ItemList();
+    protected IItemList<IAEItemStack> outputBuffer = new ItemList();
 
     protected BlockEFabricatorController parentController = null;
     protected double idleDrain = 64;
@@ -441,7 +442,7 @@ public class EFabricatorController extends EPartController<EFabricatorPart> {
         return Math.max(0, parallelism - consumedParallelism);
     }
 
-    public ItemList getOutputBuffer() {
+    public IItemList<IAEItemStack> getOutputBuffer() {
         return outputBuffer;
     }
 

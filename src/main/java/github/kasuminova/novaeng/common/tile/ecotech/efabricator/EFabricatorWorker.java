@@ -1,7 +1,8 @@
 package github.kasuminova.novaeng.common.tile.ecotech.efabricator;
 
+import appeng.api.storage.data.IAEItemStack;
+import appeng.api.storage.data.IItemList;
 import appeng.util.item.AEItemStack;
-import appeng.util.item.ItemList;
 import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.common.block.ecotech.efabricator.prop.WorkerStatus;
 import github.kasuminova.novaeng.common.network.PktEFabricatorWorkerStatusUpdate;
@@ -49,7 +50,7 @@ public class EFabricatorWorker extends EFabricatorPart {
         }
 
         int completed = 0;
-        ItemList outputBuffer = controller.getOutputBuffer();
+        IItemList<IAEItemStack> outputBuffer = controller.getOutputBuffer();
         CraftWork craftWork;
         synchronized (outputBuffer) {
             while ((parallelism > completed) && (craftWork = queue.poll()) != null) {

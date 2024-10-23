@@ -166,6 +166,7 @@ public class MonitorPanel extends SizedRow {
                 }
                 GlStateManager.popMatrix();
             }
+            GlStateManager.color(1F, 1F, 1F, 1F);
             GlStateManager.popMatrix();
         }
 
