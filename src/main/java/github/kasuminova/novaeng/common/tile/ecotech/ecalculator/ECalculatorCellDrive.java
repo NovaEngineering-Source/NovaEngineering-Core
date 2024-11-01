@@ -187,6 +187,9 @@ public class ECalculatorCellDrive extends ECalculatorPart implements IAEAppEngIn
     @Override
     public void notifyUpdate() {
         super.notifyUpdate();
+        if (world == null) {
+            return;
+        }
         world.notifyNeighborsOfStateChange(getPos(), world.getBlockState(getPos()).getBlock(), false);
     }
 
