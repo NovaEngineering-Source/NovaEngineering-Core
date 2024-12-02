@@ -225,7 +225,7 @@ dependencies {
     compileOnly(rfg.deobf("curse.maven:nuclearcraft-overhauled-336895:3862197"))
     compileOnly(rfg.deobf("curse.maven:industrialcraft-2-242638:3078604"))
 //    implementation(rfg.deobf("sddsd233:mekceu-9.8.11.185"))
-    implementation(rfg.deobf("curse.maven:mekanism-ce-unofficial-840735:5397944"))
+    implementation(rfg.deobf("curse.maven:mekanism-ce-unofficial-840735:5946841"))
     implementation(rfg.deobf("curse.maven:RedstoneFlux-270789:2920436"))
     implementation(rfg.deobf("software.bernie.geckolib:geckolib-forge-1.12.2:3.0.31"))
     implementation(rfg.deobf("curse.maven:botania-225643:3330934"))
