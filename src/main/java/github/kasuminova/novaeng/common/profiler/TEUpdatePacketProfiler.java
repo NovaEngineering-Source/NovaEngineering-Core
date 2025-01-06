@@ -21,6 +21,9 @@ public class TEUpdatePacketProfiler {
 
     public static void onPacketReceived(SPacketUpdateTileEntity packet, int packetSize) {
         WorldClient world = Minecraft.getMinecraft().world;
+        if (world == null) {
+            return;
+        }
         BlockPos pos = packet.getPos();
         if (world.isBlockLoaded(pos)) {
             TileEntity te = world.getTileEntity(pos);

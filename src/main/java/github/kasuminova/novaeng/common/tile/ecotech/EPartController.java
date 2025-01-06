@@ -68,10 +68,15 @@ public abstract class EPartController<P extends EPart<?>> extends TileCustomCont
             if (!(te instanceof AbstractEPart<?>)) {
                 return;
             }
-            P part = (P) te;
-            part.setController(this);
-            parts.addPart(part);
-            onAddPart(part);
+            try {
+                P part = (P) te;
+                part.setController(this);
+                parts.addPart(part);
+                onAddPart(part);
+            } catch (ClassCastException e) {
+                NovaEngineeringCore.log.error("Invalid EPart found at {} !", realPos);
+                NovaEngineeringCore.log.error(e);
+            }
         });
     }
 
