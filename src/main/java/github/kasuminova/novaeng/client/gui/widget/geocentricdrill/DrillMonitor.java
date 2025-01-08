@@ -67,12 +67,12 @@ public class DrillMonitor extends SizedColumn {
         if (node != null && node.isConnected()) {
             String connected = I18n.format("gui.hypernet.controller.connected");
             subContents.addAll(fr.listFormattedStringToWidth(connected, TEXT_WIDTH));
+            String calculation = I18n.format("gui.hypernet.controller.computation_point_consumption") + NovaEngUtils.formatFLOPS(node.getComputationPointConsumption());
+            subContents.addAll(fr.listFormattedStringToWidth(calculation, TEXT_WIDTH));
         } else {
             String disconnected = I18n.format("gui.hypernet.controller.disconnected");
             subContents.addAll(fr.listFormattedStringToWidth(disconnected, TEXT_WIDTH));
         }
-        String calculation = I18n.format("gui.hypernet.controller.computation_point_consumption") + NovaEngUtils.formatFLOPS(node.getComputationPointConsumption());
-        subContents.addAll(fr.listFormattedStringToWidth(calculation, TEXT_WIDTH));
         contents.add(subContents);
 
         ry = 0;
