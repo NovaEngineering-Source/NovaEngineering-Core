@@ -59,10 +59,10 @@ public class NetNodeImpl extends NetNode {
             return;
         }
 
-        int currentParallelism = event.getActiveRecipe().getParallelism();
+        int currentParallelism = event.getActiveRecipe().getMaxParallelism();
         if (currentParallelism > 1) {
             int max = (int) Math.min(currentParallelism, generation / pointRequired);
-            event.setParallelism(max);
+            event.getActiveRecipe().setMaxParallelism(max);
         }
     }
 
