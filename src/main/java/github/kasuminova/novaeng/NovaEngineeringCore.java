@@ -112,7 +112,7 @@ public class NovaEngineeringCore {
 
     @Mod.EventHandler
     public void postInit(FMLPostInitializationEvent event) {
-        PARALLEL_NETWORK_MANAGER.init();
+//        PARALLEL_NETWORK_MANAGER.init();
         proxy.postInit();
     }
 
