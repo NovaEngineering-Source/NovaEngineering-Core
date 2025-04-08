@@ -12,9 +12,5 @@
       "AccessorParticleManager",
       "MixinFontRenderer",
       "MixinNettyCompressionDecoder"
-    ],
-    "server": [
-        "forge.MixinFMLEventChannel",
-        "forge.MixinSimpleNetworkWrapper"
     ]
 }

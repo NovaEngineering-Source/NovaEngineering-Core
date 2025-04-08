@@ -2,10 +2,8 @@ package github.kasuminova.novaeng.mixin.mmce;
 
 import com.google.common.collect.Sets;
 import github.kasuminova.mmce.common.concurrent.TaskExecutor;
-import github.kasuminova.novaeng.NovaEngineeringCore;
 import github.kasuminova.novaeng.mixin.util.ITaskExecutor;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -23,21 +21,21 @@ public abstract class MixinTaskExecutor implements ITaskExecutor {
     @Unique
     private final Set<TileEntity> novaeng$requireMarkDirtyTEQueue = Sets.newIdentityHashSet();
 
-    @Inject(
-            method = "onServerTick",
-            at = @At(
-                    value = "INVOKE",
-                    target = "Lgithub/kasuminova/mmce/common/concurrent/TaskExecutor;executeActions()I"
-            ),
-            remap = false
-    )
-    private void injectOnServerTickExecuteActions(final TickEvent.ServerTickEvent event, final CallbackInfo ci) {
-        if (event.phase != TickEvent.Phase.END) {
-            return;
-        }
-        NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.execute();
+//    @Inject(
+//            method = "onServerTick",
+//            at = @At(
+//                    value = "INVOKE",
+//                    target = "Lgithub/kasuminova/mmce/common/concurrent/TaskExecutor;executeActions()I"
+//            ),
+//            remap = false
+//    )
+//    private void injectOnServerTickExecuteActions(final TickEvent.ServerTickEvent event, final CallbackInfo ci) {
+//        if (event.phase != TickEvent.Phase.END) {
+//            return;
+//        }
+//        NovaEngineeringCore.PARALLEL_NETWORK_MANAGER.execute();
 //        TaskExecutor.totalExecuted += this.executeActions();
-    }
+//    }
 
     @Inject(method = "updateTileEntity", at = @At("HEAD"), remap = false)
     private void injectUpdateTE(final CallbackInfo ci) {
