@@ -1,0 +1,16 @@
+{
+    "name": "技术细节",
+    "icon": "modularrouters:augment:5",
+    "category": "eco_ae/factum",
+    "sortnum": 3,
+    "pages": [
+        {
+            "type": "texttl",
+            "text": "$(e)注意：本篇介绍了详细的工作机制，但它不是必会的。$(br)对多数用户而言，只需要不断换上更好的部件，不停供应冷却剂即可。"
+        },
+        {
+            "type": "texttl",
+            "text": "等待更新（没写完捏）"
+        }
+    ]
+}

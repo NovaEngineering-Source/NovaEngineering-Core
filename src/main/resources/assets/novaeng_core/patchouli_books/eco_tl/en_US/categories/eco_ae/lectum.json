@@ -1,0 +1,7 @@
+{
+	"name": "§bECO-L存储阵列",
+	"description": "升级版驱动器",
+	"icon": "novaeng_core:extendable_digital_storage_subsystem_l4",
+	"sortnum": 0,
+	"parent": "eco_ae"
+}

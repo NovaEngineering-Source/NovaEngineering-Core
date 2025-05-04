@@ -1,0 +1,20 @@
+{
+    "name": "ECO-C4",
+    "icon": "novaeng_core:ecalculator_cell_64m",
+    "category": "eco_ae/computatum",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "3",
+            "item1": "novaeng_core:extendable_calculator_subsystem_l4",
+            "item2": "novaeng_core:ecalculator_thread_core_l4",
+            "item3": "novaeng_core:ecalculator_parallel_proc_l4",
+            "text": "对应位置安装这套部件，使阵列升级至C4。$(br)每大小提供：$(br)$(a)└ +2晶阵槽位$(br)└ +128并行数$(br)└ +1线程/+2超线程"
+        },
+        {
+            "type": "texttl",
+            "text": "7355608$(br)$()你不知为何想起了这样的数字"
+        }
+
+    ]
+}

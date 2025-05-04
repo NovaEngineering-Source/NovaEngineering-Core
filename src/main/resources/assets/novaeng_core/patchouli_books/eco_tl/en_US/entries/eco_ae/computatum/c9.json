@@ -1,0 +1,15 @@
+{
+    "name": "ECO-C9",
+    "icon": "novaeng_core:ecalculator_cell_16384m",
+    "category": "eco_ae/computatum",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "3",
+            "item1": "novaeng_core:extendable_calculator_subsystem_l9",
+            "item2": "novaeng_core:ecalculator_thread_core_l9",
+            "item3": "novaeng_core:ecalculator_parallel_proc_l9",
+            "text": "对应位置安装这套部件，使阵列升级至C9。$(br)每大小提供：$(br)$(a)└ +2晶阵槽位$(br)└ +1152并行数$(br)└ +4线程/+1线程 & 8超线程"
+        }
+    ]
+}
