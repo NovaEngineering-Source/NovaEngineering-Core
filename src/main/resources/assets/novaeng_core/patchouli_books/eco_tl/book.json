@@ -4,8 +4,8 @@
 	"landing_text": "用于指导某些机器的搭建与使用",
 	"version": 0,
 	"pause_game": true,
-	"book_texture": "terminalis:facies.png",
-	"model": "contenttweaker:terminalis",
+	"book_texture": "novaeng_core:textures/gui/terminalis/facies.png",
+	"model": "novaeng_core:terminalis",
 	"show_toasts": "false",
 	"text_color": "ffffff"
 }
