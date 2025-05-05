@@ -12,7 +12,7 @@
         {
             "type": "image",
             "images": [
-                "terminalis:eco_ae/manualis.png"
+                "novaeng_core:textures/gui/terminalis/eco_ae/manualis.png"
             ],
             "text": "$(6)注意：大小上限为12，大部分方块有方向要求"
         },
@@ -26,7 +26,7 @@
         {
             "type": "image",
             "images":[
-                "terminalis:eco_ae/manualis_lecti.png"
+                "novaeng_core:textures/gui/terminalis/eco_ae/manualis_lecti.png"
             ],
             "text": "上：空的驱动器（左）和安装元件后（右）$(br)下：连接线缆的LC"
         }

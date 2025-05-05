@@ -12,7 +12,7 @@
         {
             "type": "image",
             "images": [
-                "terminalis:eco_ae/manualis.png"
+                "novaeng_core:textures/gui/terminalis/eco_ae/manualis.png"
             ],
             "text": "$(6)注意：最大大小12，大部分方块有方向要求"
         },

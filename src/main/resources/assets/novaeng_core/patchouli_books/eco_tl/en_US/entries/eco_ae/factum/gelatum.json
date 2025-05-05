@@ -7,7 +7,7 @@
         {
             "type": "image",
             "images": [
-                "terminalis:eco_ae/manualis_facti.png"
+                "novaeng_core:textures/gui/terminalis/eco_ae/manualis_facti.png"
             ]
         },
         {
