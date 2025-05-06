@@ -1,0 +1,29 @@
+{
+    "name": "初始阶段",
+    "icon": "redstonearsenal:tool.wrench_flux",
+    "category": "novaeng_core:hypernet",
+    "sortnum": 0,
+    "pages": [
+        {
+            "type": "texttl",
+            "text": "Hypernet用于算力（单位TFloPs，千亿次浮点运算每秒）的生产与发配。算力用于解锁科技以及维持高级机器运行。"
+        },
+        {
+            "type": "1",
+            "item": "contenttweaker:hypernet_connect_card",
+            "text": "密钥卡用于设备联网。$(br)右键网络中心控制器以储存配置，之后右键其他机器以连接，连接后卡内的配置不会清空。$(br)通常每个人能得到两张密钥卡，一张放入研究终端，一张用于设备连接。$(br)第二张密钥卡在获得网络中心后从任务书获得。"
+        },
+        {
+            "type": "1",
+            "item": "modularmachinery:computation_center_t1_factory_controller",
+            "text": "网络中心用于创建Hypernet，每个网络限一个。$(br)不同等级网络中心提供不同的带宽上限与连接上限：$(br)带宽上限：$(a)400T（1级）$(9)5P（2级）$(d)700P（3级）$(br)$()连接上限：$(a)30（1级）$(9)90（2级）$(br)$(d)180（3级）"
+        },
+        {
+            "type": "3",
+            "item1": "contenttweaker:industrial_circuit_v1",
+            "item2": "contenttweaker:industrial_circuit_v2",
+            "item3": "contenttweaker:industrial_circuit_v3",
+            "text": "网络中心有耐久，耗尽时无法运行，需要用以上三种电路修复。$(br)$(e)只能使用小于等于网络中心等级的电路。$(br)$(a)+1000耐久（1级）$(br)$(9)+4000耐久（2级）$(br)$(6)+150000耐久（3级）"
+        }
+    ]
+}

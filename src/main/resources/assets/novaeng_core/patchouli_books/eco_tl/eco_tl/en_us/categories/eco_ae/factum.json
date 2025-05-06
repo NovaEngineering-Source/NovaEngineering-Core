@@ -1,0 +1,7 @@
+{
+	"name": "§bECO-F合成子系统",
+	"description": "升级版分子装配室",
+	"icon": "novaeng_core:extendable_fabricator_subsystem_l4",
+	"sortnum": 1,
+	"parent": "novaeng_core:eco_ae"
+}

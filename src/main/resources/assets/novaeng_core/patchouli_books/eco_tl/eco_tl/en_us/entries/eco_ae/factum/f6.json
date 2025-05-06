@@ -1,0 +1,18 @@
+{
+    "name": "ECO-F6",
+    "icon": "novaeng_core:extendable_fabricator_subsystem_l6",
+    "category": "novaeng_core:eco_ae/factum",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "2_ad",
+            "item1": "novaeng_core:extendable_fabricator_subsystem_l6",
+            "item2": "novaeng_core:efabricator_parallel_proc_l6",
+            "text": "对应位置安装这套部件，使阵列升级至F6。$(br)每大小提供：$(br)$(a)└ +144并行数$(br)└ +144样板位"
+        },
+        {
+            "type": "texttl",
+            "text": "启动超频时：$(br)$(a)└ +192并行数$(br)└ +144样板位$(br)$(c)└ x8能量消耗|不叠加|$(br)└ -4%总并行数$(br)$()启动主动冷却与超频时：$(br)$(a)└ +192并行数$(br)└ +144样板位"
+        }
+    ]
+}

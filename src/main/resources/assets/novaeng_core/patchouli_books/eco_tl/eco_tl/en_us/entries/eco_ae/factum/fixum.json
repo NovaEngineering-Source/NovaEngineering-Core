@@ -1,0 +1,27 @@
+{
+    "name": "安装指南",
+    "icon": "redstonearsenal:tool.wrench_flux",
+    "category": "novaeng_core:eco_ae/factum",
+    "sortnum": 0,
+    "pages": [
+        {
+            "type": "1",
+            "item": "novaeng_core:extendable_fabricator_subsystem_l4",
+            "text": "升级版的分子装配室，包含样板搜索器。$(br)模块化设计，不同等级的结构相同，只有部件等级不同，因此安装方法通用。$(br)JEI查询控制器配方，在“结构预览”一栏能看到结构图。$(br)调整至合适大小后点击“投影至世界”。"
+        },
+        {
+            "type": "image",
+            "images": [
+                "novaeng_core:textures/gui/terminalis/eco_ae/manualis.png"
+            ],
+            "text": "$(6)注意：最大大小12，大部分方块有方向要求"
+        },
+        {
+            "type": "2_com",
+            "item1": "novaeng_core:efabricator_pattern_bus",
+            "text1": "将样板放入LD样板总线，支持流体装配室样板",
+            "item2": "novaeng_core:efabricator_me_channel",
+            "text2": "该方块用于连接AE线缆，使EF如同分子装配室一样接入AE。"
+        }
+    ]
+}

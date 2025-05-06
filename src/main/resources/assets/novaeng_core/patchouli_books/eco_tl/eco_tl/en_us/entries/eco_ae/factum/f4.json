@@ -1,0 +1,18 @@
+{
+    "name": "ECO-F4",
+    "icon": "novaeng_core:extendable_fabricator_subsystem_l4",
+    "category": "novaeng_core:co_ae/factum",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "2_ad",
+            "item1": "novaeng_core:extendable_fabricator_subsystem_l4",
+            "item2": "novaeng_core:efabricator_parallel_proc_l4",
+            "text": "对应位置安装这套部件，使阵列升级至F4。$(br)每大小提供：$(br)$(a)└ +48并行数$(br)└ +144样板位"
+        },
+        {
+            "type": "texttl",
+            "text": "启动超频时：$(br)$(a)└ +64并行数$(br)└ +144样板位$(br)$(c)└ x4能量消耗|不叠加$(br)└ -2%总并行数$(br)$()启动主动冷却与超频时：$(br)$(a)└ +64并行数$(br)└ +144样板位"
+        }
+    ]
+}

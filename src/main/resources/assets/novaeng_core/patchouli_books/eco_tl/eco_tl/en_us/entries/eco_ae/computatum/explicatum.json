@@ -1,0 +1,19 @@
+{
+    "name": "使用说明",
+    "icon": "appliedenergistics2:part:180",
+    "category": "novaeng_core:eco_ae/computatum",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "texttl",
+            "text": "待机时，只会显示一个CPU，但EC会根据任务数量，按需生成CPU。$(br)所有字节与并行数也将共享，按需分配。"
+        },
+        {
+            "type": "2_com",
+            "item1": "novaeng_core:ecalculator_thread_core_l4",
+            "text1": "线程核心提供线程，线程数决定最多能存在的CPU数量。",
+            "item2": "novaeng_core:ecalculator_thread_core_hyper_l4",
+            "text2": "每个超线程核心能提供两倍于普通核心的线程数，但每个线程将占用10%额外字节。"
+        }
+    ]
+}

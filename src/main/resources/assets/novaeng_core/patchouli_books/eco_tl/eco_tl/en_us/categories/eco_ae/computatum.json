@@ -1,0 +1,7 @@
+{
+	"name": "§bECO-C计算子系统",
+	"description": "升级版合成处理器",
+	"icon": "novaeng_core:extendable_calculator_subsystem_l4",
+	"sortnum": 2,
+	"parent": "novaeng_core:eco_ae"
+}

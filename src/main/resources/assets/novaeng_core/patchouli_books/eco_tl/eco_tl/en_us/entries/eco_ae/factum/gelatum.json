@@ -1,0 +1,28 @@
+{
+    "name": "超频与冷却系统",
+    "icon": "ic2:overclocked_heat_vent",
+    "category": "novaeng_core:eco_ae/factum",
+    "sortnum": 1,
+    "pages": [
+        {
+            "type": "image",
+            "images": [
+                "novaeng_core:textures/gui/terminalis/eco_ae/manualis_facti.png"
+            ]
+        },
+        {
+            "type": "texttl",
+            "text": "红框处是超频开关。超频效果：$(br)$(a)+并行数$(br)$(c)-百分比减少总并行数$(br)$(c)+能量消耗$(br)蓝框处是冷却系统开关，冷却系统效果：$(br)$(a)-消除超频的负面效果$(br)$(a)+溢出的并行将减少工作时间"
+        },
+        {
+            "type": "image",
+            "images": [
+                "terminalis:eco_ae/manualis_gelati_facti.png"
+            ]
+        },
+        {
+            "type": "texttl",
+            "text": "蓝色口输入冷却液，红色口输出废液，可用的冷却液具体参数如下：$(br)1mB水→1mB蒸气 -15热量$(br)1mB碎冰→1mB水 -30热量$(br)1mB IC2冷却液→1mB IC2热冷却液 -90热量$(br)1mB液氦→320mB氦 -170热量$(br)1mB液氮→320mB氮 -190热量$(br)1mB极寒之凛冰→ -240热量"
+        }
+    ]
+}

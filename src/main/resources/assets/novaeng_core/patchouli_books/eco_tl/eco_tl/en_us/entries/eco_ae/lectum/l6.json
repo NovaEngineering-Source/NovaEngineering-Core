@@ -1,0 +1,21 @@
+{
+    "name": "ECO-L6",
+    "icon": "novaeng_core:estorage_cell_item_16m",
+    "category": "novaeng_core:eco_ae/lectum",
+    "sortnum": 2,
+    "pages": [
+        {
+            "type": "2_ad",
+            "item1": "novaeng_core:estorage_energy_cell_l6",
+            "item2": "novaeng_core:extendable_digital_storage_subsystem_l6",
+            "text": "对应位置安装这套部件，使阵列最高支持LE6级存储元件。"
+        },
+        {
+            "type": "2_com",
+            "item1": "novaeng_core:estorage_cell_item_64m",
+            "text1": "容量：$(a)315类型 8388608K个物品",
+            "item2": "novaeng_core:estorage_cell_fluid_64m",
+            "text2": "容量：$(b)25类型 8388608K桶液体"
+        }
+    ]
+}
